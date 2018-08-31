@@ -1,0 +1,94 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'pmd'
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'de.smartsquare'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 8
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	runtime 'org.springframework.boot:spring-boot-devtools'
+	runtime 'com.h2database:h2'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+
+findbugs {
+	findbugsTest.enabled = false
+}
+
+pmd {
+	pmdTest.enabled = false
+	ruleSets = [
+			'java-basic',
+			'java-braces',
+			'java-clone',
+			'java-codesize',
+			'java-comments',
+			'java-controversial',
+			'java-coupling',
+			'java-design',
+			'java-empty',
+			'java-finalizers',
+			'java-imports',
+			'java-optimizations',
+			'java-strictexception',
+			'java-strings',
+			'java-typeresolution',
+			'java-unnecessary',
+			'java-unusedcode'
+	]
+}
+
+findbugs {
+	ignoreFailures = true
+	findbugsTest.enabled = false
+}
+
+tasks.withType(FindBugs) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+
+tasks.withType(Pmd) {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+
+pmd {
+	ignoreFailures = true
+	pmdTest.enabled = false
+}
