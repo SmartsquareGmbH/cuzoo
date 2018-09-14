@@ -38,12 +38,17 @@ dependencies {
 	runtime 'org.springframework.boot:spring-boot-devtools'
 
 	testImplementation 'com.jayway.jsonpath:json-path'
+	testImplementation 'org.assertj:assertj-core:3.11.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 findbugs {
 	findbugsTest.enabled = false
+}
+
+checkstyle {
+	checkstyleTest.enabled = false
 }
 
 pmd {
