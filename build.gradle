@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '2.0.4.RELEASE'
+		jsefaVersion = '1.1.0.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -36,6 +37,8 @@ dependencies {
 
 	runtime 'com.h2database:h2'
 	runtime 'org.springframework.boot:spring-boot-devtools'
+
+	implementation "net.sf.jsefa:jsefa:$jsefaVersion"
 
 	testImplementation 'com.jayway.jsonpath:json-path'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
