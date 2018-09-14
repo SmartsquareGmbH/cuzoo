@@ -31,16 +31,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	runtime 'org.springframework.boot:spring-boot-devtools'
 	runtime 'com.h2database:h2'
+	runtime 'org.springframework.boot:spring-boot-devtools'
 
+	testImplementation 'com.jayway.jsonpath:json-path'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
-
 
 findbugs {
 	findbugsTest.enabled = false
