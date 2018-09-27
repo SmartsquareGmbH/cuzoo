@@ -21,7 +21,7 @@ public class Contact {
     private String mail;
 
     @CsvField(pos = 6)
-    private String tel;
+    private String telephone;
 
     public String getName() {
         return name;
@@ -64,10 +64,10 @@ public class Contact {
     }
 
     public String getTel() {
-        return tel;
+        return telephone;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setTel(String telephone) {
+        this.telephone = telephone;
     }
 }
