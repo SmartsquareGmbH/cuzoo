@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class CustomerRepositorySpecification {
+public class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
