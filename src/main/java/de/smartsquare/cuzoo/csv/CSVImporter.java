@@ -10,22 +10,22 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class CSVImporter<T> {
-    private Deserializer deserializer;
+class CSVImporter {
+    private CsvConfiguration config;
 
-    CSVImporter(Class<T> typeClass) {
-        CsvConfiguration config = new CsvConfiguration();
+    CSVImporter() {
+        config = new CsvConfiguration();
 
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.getDefaultNoValueString();
-
-        deserializer = CsvIOFactory
-                .createFactory(config, typeClass)
-                .createDeserializer();
     }
 
-    List<T> importFrom(InputStream stream) {
+    <T> List<T> importFrom(InputStream stream, Class<T> typeClass) {
         List<T> results = new ArrayList<>();
+
+        Deserializer deserializer = CsvIOFactory
+                .createFactory(config, typeClass)
+                .createDeserializer();
 
          try {
             deserializer.open(new InputStreamReader(stream));

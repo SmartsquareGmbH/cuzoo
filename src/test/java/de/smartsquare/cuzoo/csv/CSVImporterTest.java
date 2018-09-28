@@ -14,18 +14,18 @@ public class CSVImporterTest {
 
     @Test
     public void that_deserializer_imports_as_much_as_needed(){
-        CSVImporter<Company> csvImporter = new CSVImporter<>(Company.class);
+        CSVImporter csvImporter = new CSVImporter();
 
-        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"));
+        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
 
         assertThat(companies.size()).isEqualTo(3);
     }
 
     @Test
     public void that_deserializer_imports_companies_correctly() {
-        CSVImporter<Company> csvImporter = new CSVImporter<>(Company.class);
+        CSVImporter csvImporter = new CSVImporter();
 
-        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"));
+        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
 
         companies.forEach(d -> System.out.println(d.getUnternehmen()));
 
@@ -38,9 +38,9 @@ public class CSVImporterTest {
 
     @Test
     public void that_deserializer_imports_contacts_correctly() {
-        CSVImporter<Contact> csvImporter = new CSVImporter<>(Contact.class);
+        CSVImporter csvImporter = new CSVImporter();
 
-        List<Contact> contacts = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestContacts.csv"));
+        List<Contact> contacts = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestContacts.csv"), Contact.class);
 
         assertThat(contacts, containsInAnyOrder(
                 hasProperty("name", is("Alfred Anders")),
