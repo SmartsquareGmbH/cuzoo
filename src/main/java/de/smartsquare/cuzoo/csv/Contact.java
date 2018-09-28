@@ -1,4 +1,4 @@
-package de.smartsquare.cuzoo.csv.contact;
+package de.smartsquare.cuzoo.csv;
 
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;

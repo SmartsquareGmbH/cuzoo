@@ -1,4 +1,4 @@
-package de.smartsquare.cuzoo.csv.contact;
+package de.smartsquare.cuzoo.csv;
 
 import net.sf.jsefa.Deserializer;
 import net.sf.jsefa.common.lowlevel.filter.HeaderAndFooterFilter;
@@ -10,37 +10,37 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class ContactImporter {
-    private List<Contact> contacts;
+class CSVImporter<T> {
     private Deserializer deserializer;
 
-    ContactImporter() {
-        contacts = new ArrayList<>();
+    CSVImporter(Class<T> typeClass) {
         CsvConfiguration config = new CsvConfiguration();
 
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.getDefaultNoValueString();
 
         deserializer = CsvIOFactory
-                .createFactory(config, Contact.class)
+                .createFactory(config, typeClass)
                 .createDeserializer();
     }
 
-    List<Contact> importFrom(InputStream stream) {
-        try {
+    List<T> importFrom(InputStream stream) {
+        List<T> results = new ArrayList<>();
+
+         try {
             deserializer.open(new InputStreamReader(stream));
 
             while(deserializer.hasNext()) {
-                Contact nextContact = deserializer.next();
+                T nextType = deserializer.next();
 
-                if (nextContact != null) {
-                    contacts.add(nextContact);
+                if (nextType != null) {
+                    results.add(nextType);
                 }
             }
         } finally {
             deserializer.close(true);
         }
 
-        return contacts;
+        return results;
     }
 }
