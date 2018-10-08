@@ -6,56 +6,56 @@ import net.sf.jsefa.csv.annotation.CsvField;
 @CsvDataType()
 public class Company {
     @CsvField(pos = 1)
-    private String unternehmen;
+    private String company;
 
     @CsvField(pos = 2)
-    private String strasse;
+    private String street;
 
     @CsvField(pos = 3)
-    private String postleitzahl;
+    private String zipCode;
 
     @CsvField(pos = 4)
-    private String ort;
+    private String place;
 
     @CsvField(pos = 5)
     private String homepage;
 
     @CsvField(pos = 6)
-    private String unternehmenszweck;
+    private String purpose;
 
     @CsvField(pos = 7)
-    private String sonstiges;
+    private String other;
 
-    public String getUnternehmen() {
-        return unternehmen;
+    public String getCompany() {
+        return company;
     }
 
-    public void setUnternehmen(String unternehmen) {
-        this.unternehmen = unternehmen;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public String getStrasse() {
-        return strasse;
+    public String getStreet() {
+        return street;
     }
 
-    public void setStrasse(String strasse) {
-        this.strasse = strasse;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getPostleitzahl() {
-        return postleitzahl;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setPostleitzahl(String postleitzahl) {
-        this.postleitzahl = postleitzahl;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public String getOrt() {
-        return ort;
+    public String getPlace() {
+        return place;
     }
 
-    public void setOrt(String ort) {
-        this.ort = ort;
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public String getHomepage() {
@@ -66,19 +66,19 @@ public class Company {
         this.homepage = homepage;
     }
 
-    public String getUnternehmenszweck() {
-        return unternehmenszweck;
+    public String getPurpose() {
+        return purpose;
     }
 
-    public void setUnternehmenszweck(String unternehmenszweck) {
-        this.unternehmenszweck = unternehmenszweck;
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
-    public String getSonstiges() {
-        return sonstiges;
+    public String getOther() {
+        return other;
     }
 
-    public void setSonstiges(String sonstiges) {
-        this.sonstiges = sonstiges;
+    public void setOther(String other) {
+        this.other = other;
     }
 }
