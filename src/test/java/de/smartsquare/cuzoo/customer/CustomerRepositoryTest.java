@@ -17,7 +17,7 @@ public class CustomerRepositoryTest {
 
     @Test
     public final void save_customer() {
-        Customer darius = new Customer("Tack", "Darius");
+        Customer darius = new Customer("Tack GmbH", "", "", "", "", "", "");
 
         customerRepository.save(darius);
 
