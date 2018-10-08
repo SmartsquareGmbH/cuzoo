@@ -14,29 +14,91 @@ public class Customer {
     private Long id;
     @NotNull
     @NotBlank
-    private String name;
-    @NotNull
-    @NotBlank
-    private String firstname;
+    private String company;
+
+    private String street;
+    private String zipCode;
+    private String place;
+    private String homepage;
+    private String purpose;
+    private String other;
 
     public Customer() {
     }
 
-    Customer(@NotNull @NotBlank final String name,
-             @NotNull @NotBlank final String firstname) {
-        this.name = name;
-        this.firstname = firstname;
+    Customer(@NotNull @NotBlank final String company,
+             String street, String zipCode, String place,
+             String homepage, String purpose, String other) {
+        this.company = company;
+        this.street = street;
+        this.zipCode = zipCode;
+        this.place = place;
+        this.homepage = homepage;
+        this.purpose = purpose;
+        this.other = other;
     }
 
-    public final Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public final String getName() {
-        return name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public final String getFirstname() {
-        return firstname;
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
     }
 }
