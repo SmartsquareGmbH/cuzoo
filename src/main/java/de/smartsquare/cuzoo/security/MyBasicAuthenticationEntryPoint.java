@@ -1,4 +1,4 @@
-package de.smartsquare.cuzoo.login;
+package de.smartsquare.cuzoo.security;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;

@@ -1,6 +1,5 @@
-package de.smartsquare.cuzoo.login;
+package de.smartsquare.cuzoo.security;
 
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

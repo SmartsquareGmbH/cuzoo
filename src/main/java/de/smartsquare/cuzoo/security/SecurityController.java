@@ -1,6 +1,5 @@
-package de.smartsquare.cuzoo.login;
+package de.smartsquare.cuzoo.security;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
