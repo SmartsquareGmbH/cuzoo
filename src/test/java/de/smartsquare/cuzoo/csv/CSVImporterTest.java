@@ -28,9 +28,9 @@ public class CSVImporterTest {
         List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
 
         assertThat(companies, containsInAnyOrder(
-                hasProperty("unternehmen", is("Anders GmbH")),
-                hasProperty("unternehmen", is("Ben & Biggs AG")),
-                hasProperty("unternehmen", is("Chlor Claud"))
+                hasProperty("company", is("Anders GmbH")),
+                hasProperty("company", is("Ben & Biggs AG")),
+                hasProperty("company", is("Chlor Claud"))
         ));
     }
 
