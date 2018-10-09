@@ -26,6 +26,7 @@ public class CustomerControllerTest {
     @Test
     public void that_imported_companies_getting_inserted_correctly() {
         CSVImporter csvImporter = new CSVImporter();
+
         List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
 
         customerController.insertImportedCompanies(companies);
