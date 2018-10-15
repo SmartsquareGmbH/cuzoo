@@ -22,17 +22,32 @@ public class CustomerController {
         this.repository = repository;
     }
 
+    @PostMapping("/add")
+    public final String postCompany(@RequestBody Company company) throws Exception {
+        if (!company.getCompany().isEmpty()) {
+            Customer customer = new Customer(
+                    company.getCompany(),
+                    company.getStreet(),
+                    company.getZipCode(),
+                    company.getPlace(),
+                    company.getHomepage(),
+                    company.getPurpose(),
+                    company.getOther());
+
+            repository.save(customer);
+            return "OK";
+        } else return "NOT OK";
+    }
+
     @PostMapping("/import")
     public final String postCompanyCSV(@RequestParam("file") MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return "NOT OK";
-        } else {
+        if (!file.isEmpty()) {
             CSVImporter csvImporter = new CSVImporter();
             InputStream inputFile = new BufferedInputStream(file.getInputStream());
 
             insertImportedCompanies(csvImporter.importFrom(inputFile, Company.class));
             return "OK";
-        }
+        } else return "NOT OK";
     }
 
     void insertImportedCompanies(List<Company> importedEntity) {
@@ -50,7 +65,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("/get")
     public final List<Customer> getCustomers() {
         return repository.findAll();
     }
