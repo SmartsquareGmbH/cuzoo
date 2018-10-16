@@ -9,7 +9,7 @@ public class SecurityController {
 
     @RequestMapping("/login")
     public String checkAuthorization() {
-        return "OK";
+        return "LOGIN SUCCEEDED";
     }
 
 }
