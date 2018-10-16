@@ -22,14 +22,6 @@ public class CustomerController {
         this.repository = repository;
     }
 
-    @PostMapping("/submit")
-    public final String postCompany(@RequestBody Customer customer) {
-        if (!customer.getCompany().isEmpty()) {
-            repository.save(customer);
-            return "ADDING/UPDATING NEW CUSTOMER SUCCEEDED";
-        } else return "ADDING/UPDATING NEW CUSTOMER FAILED: Company field is empty!";
-    }
-
     @PostMapping("/import")
     public final String postCompanyCSV(@RequestParam("file") MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
@@ -38,7 +30,20 @@ public class CustomerController {
 
             insertImportedCompanies(csvImporter.importFrom(inputFile, Company.class));
             return "IMPORTING CUSTOMER CSV SUCCEEDED";
-        } else return "IMPORTING CUSTOMER CSV FAILED: File is empty!";
+        } else
+            return "IMPORTING CUSTOMER CSV FAILED: File is empty!";
+    }
+
+    @PostMapping("/submit")
+    public final String submitCompany(@RequestBody Customer customer) {
+        repository.save(customer);
+        return "ADDING/UPDATING NEW CUSTOMER SUCCEEDED";
+    }
+
+    @PostMapping("/delete")
+    public final String deleteCustomer(@RequestBody Customer customer) {
+        repository.delete(customer);
+        return "DELETING CUSTOMER SUCCEEDED";
     }
 
     void insertImportedCompanies(List<Company> importedEntity) {
