@@ -35,15 +35,23 @@ public class CustomerController {
     }
 
     @PostMapping("/submit")
-    public final String submitCompany(@RequestBody Customer customer) {
-        repository.save(customer);
-        return "ADDING/UPDATING NEW CUSTOMER SUCCEEDED";
+    public final String submitCustomer(@RequestBody Customer customer) {
+        try {
+            repository.save(customer);
+            return "ADDING/UPDATING CUSTOMER SUCCEEDED";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @PostMapping("/delete")
     public final String deleteCustomer(@RequestBody Customer customer) {
-        repository.delete(customer);
-        return "DELETING CUSTOMER SUCCEEDED";
+        try {
+            repository.delete(customer);
+            return "DELETING CUSTOMER SUCCEEDED";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     void insertImportedCompanies(List<Company> importedEntity) {
