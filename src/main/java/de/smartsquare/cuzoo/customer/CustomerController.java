@@ -38,7 +38,7 @@ public class CustomerController {
     public final String submitCustomer(@RequestBody Customer customer) {
         try {
             repository.save(customer);
-            return "ADDING/UPDATING CUSTOMER SUCCEEDED";
+            return "SUBMITTING CUSTOMER SUCCEEDED";
         } catch (Exception e) {
             return e.getMessage();
         }
