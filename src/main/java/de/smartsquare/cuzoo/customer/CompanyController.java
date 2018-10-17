@@ -19,11 +19,11 @@ import java.util.List;
 @RequestMapping("/company")
 public class CompanyController {
 
-    private final CompanyRepository repository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public CompanyController(final CompanyRepository repository) {
-        this.repository = repository;
+    public CompanyController(final CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
     }
 
     @PostMapping("/import")
@@ -46,11 +46,11 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
-                if (repository.existsById(company.getId())) {
-                    repository.save(company);
+                if (companyRepository.existsById(company.getId())) {
+                    companyRepository.save(company);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    repository.save(company);
+                    companyRepository.save(company);
                     return new ResponseEntity<>(HttpStatus.CREATED);
                 }
             } catch (DataAccessException e) {
@@ -62,7 +62,7 @@ public class CompanyController {
     @PostMapping("/delete")
     public final ResponseEntity<?> deleteCompany(@RequestBody @Valid Company company) {
         try {
-            repository.delete(company);
+            companyRepository.delete(company);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -70,22 +70,22 @@ public class CompanyController {
     }
 
     void insertImportedCompanies(List<CSVCompany> importedEntity) {
-        for (CSVCompany CSVCompany : importedEntity) {
+        for (CSVCompany csvCompany : importedEntity) {
             Company company = new Company(
-                    CSVCompany.getCompany(),
-                    CSVCompany.getStreet(),
-                    CSVCompany.getZipCode(),
-                    CSVCompany.getPlace(),
-                    CSVCompany.getHomepage(),
-                    CSVCompany.getPurpose(),
-                    CSVCompany.getOther());
+                    csvCompany.getCompany(),
+                    csvCompany.getStreet(),
+                    csvCompany.getZipCode(),
+                    csvCompany.getPlace(),
+                    csvCompany.getHomepage(),
+                    csvCompany.getPurpose(),
+                    csvCompany.getOther());
 
-            repository.save(company);
+            companyRepository.save(company);
         }
     }
 
     @GetMapping("/get")
     public final ResponseEntity<List<Company>> getCompanies() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(companyRepository.findAll());
     }
 }
