@@ -23,7 +23,18 @@ public class Contact {
     @CsvField(pos = 6)
     private String telephone;
 
-    public String getName() { return name; }
+    @CsvField(pos = 11)
+    private String lastContact;
+
+    @CsvField(pos = 12)
+    private String lastAnswer;
+
+    @CsvField(pos = 13)
+    private String comment;
+
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -67,5 +78,29 @@ public class Contact {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getLastContact() {
+        return lastContact;
+    }
+
+    public void setLastContact(String lastContact) {
+        this.lastContact = lastContact;
+    }
+
+    public String getLastAnswer() {
+        return lastAnswer;
+    }
+
+    public void setLastAnswer(String lastAnswer) {
+        this.lastAnswer = lastAnswer;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
