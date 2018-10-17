@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/company")
 public class CompanyController {
 
     private final CompanyRepository repository;
