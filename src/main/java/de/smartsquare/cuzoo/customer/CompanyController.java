@@ -40,8 +40,8 @@ public class CompanyController {
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitCustomer(@RequestBody @Valid Company company,
-                                                  BindingResult bindingResult) {
+    public final ResponseEntity<?> sumbitCompany(@RequestBody @Valid Company company,
+                                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
@@ -60,7 +60,7 @@ public class CompanyController {
     }
 
     @PostMapping("/delete")
-    public final ResponseEntity<?> deleteCustomer(@RequestBody @Valid Company company) {
+    public final ResponseEntity<?> deleteCompany(@RequestBody @Valid Company company) {
         try {
             repository.delete(company);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -85,7 +85,7 @@ public class CompanyController {
     }
 
     @GetMapping("/get")
-    public final ResponseEntity<List<Company>> getCustomers() {
+    public final ResponseEntity<List<Company>> getCompanies() {
         return ResponseEntity.ok(repository.findAll());
     }
 }
