@@ -2,7 +2,7 @@ package de.smartsquare.cuzoo.customer;
 
 import de.smartsquare.cuzoo.csv.CSVImporter;
 import de.smartsquare.cuzoo.csv.CSVImporterTest;
-import de.smartsquare.cuzoo.csv.Company;
+import de.smartsquare.cuzoo.csv.CSVCompany;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,22 +16,22 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerControllerTest {
+public class CompanyControllerTest {
 
     @Mock
-    private CustomerRepository mockCustomerRepository;
+    private CompanyRepository mockCompanyRepository;
     @InjectMocks
-    private CustomerController customerController;
+    private CompanyController companyController;
 
     @Test
     public void that_imported_companies_getting_inserted_correctly() {
         CSVImporter csvImporter = new CSVImporter();
 
-        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
+        List<CSVCompany> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), CSVCompany.class);
 
-        customerController.insertImportedCompanies(companies);
+        companyController.insertImportedCompanies(companies);
 
-        verify(mockCustomerRepository, times(3)).save(any(Customer.class));
+        verify(mockCompanyRepository, times(3)).save(any(Company.class));
     }
 
 }

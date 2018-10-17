@@ -1,7 +1,6 @@
 package de.smartsquare.cuzoo.customer;
 
-import de.smartsquare.cuzoo.csv.CSVImporter;
-import de.smartsquare.cuzoo.csv.Company;
+import de.smartsquare.cuzoo.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,38 +17,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class CompanyController {
 
-    private final CustomerRepository repository;
+    private final CompanyRepository repository;
 
     @Autowired
-    public CustomerController(final CustomerRepository repository) {
+    public CompanyController(final CompanyRepository repository) {
         this.repository = repository;
     }
 
     @PostMapping("/import")
-    public final ResponseEntity<?> postCompanyCSV(@RequestParam("file") MultipartFile file) throws IOException {
+    public final ResponseEntity<?> postCSV(@RequestParam("file") MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             CSVImporter csvImporter = new CSVImporter();
             InputStream inputFile = new BufferedInputStream(file.getInputStream());
 
-            insertImportedCompanies(csvImporter.importFrom(inputFile, Company.class));
+            insertImportedCompanies(csvImporter.importFrom(inputFile, CSVCompany.class));
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } else
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitCustomer(@RequestBody @Valid Customer customer, BindingResult bindingResult) {
+    public final ResponseEntity<?> submitCustomer(@RequestBody @Valid Company company,
+                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
-                if (repository.existsById(customer.getId())) {
-                    repository.save(customer);
+                if (repository.existsById(company.getId())) {
+                    repository.save(company);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    repository.save(customer);
+                    repository.save(company);
                     return new ResponseEntity<>(HttpStatus.CREATED);
                 }
             } catch (DataAccessException e) {
@@ -59,32 +60,32 @@ public class CustomerController {
     }
 
     @PostMapping("/delete")
-    public final ResponseEntity<?> deleteCustomer(@RequestBody @Valid Customer customer) {
+    public final ResponseEntity<?> deleteCustomer(@RequestBody @Valid Company company) {
         try {
-            repository.delete(customer);
+            repository.delete(company);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    void insertImportedCompanies(List<Company> importedEntity) {
-        for (Company company : importedEntity) {
-            Customer customer = new Customer(
-                    company.getCompany(),
-                    company.getStreet(),
-                    company.getZipCode(),
-                    company.getPlace(),
-                    company.getHomepage(),
-                    company.getPurpose(),
-                    company.getOther());
+    void insertImportedCompanies(List<CSVCompany> importedEntity) {
+        for (CSVCompany CSVCompany : importedEntity) {
+            Company company = new Company(
+                    CSVCompany.getCompany(),
+                    CSVCompany.getStreet(),
+                    CSVCompany.getZipCode(),
+                    CSVCompany.getPlace(),
+                    CSVCompany.getHomepage(),
+                    CSVCompany.getPurpose(),
+                    CSVCompany.getOther());
 
-            repository.save(customer);
+            repository.save(company);
         }
     }
 
     @GetMapping("/get")
-    public final List<Customer> getCustomers() {
-        return repository.findAll();
+    public final ResponseEntity<List<Company>> getCustomers() {
+        return ResponseEntity.ok(repository.findAll());
     }
 }

@@ -8,13 +8,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Customer {
+public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull
     @NotBlank
-    private String company;
+    private String name;
 
     private String street;
     private String zipCode;
@@ -23,13 +23,13 @@ public class Customer {
     private String purpose;
     private String other;
 
-    public Customer() {
+    public Company() {
     }
 
-    Customer(@NotNull @NotBlank final String company,
-             String street, String zipCode, String place,
-             String homepage, String purpose, String other) {
-        this.company = company;
+    Company(@NotNull @NotBlank final String name,
+            String street, String zipCode, String place,
+            String homepage, String purpose, String other) {
+        this.name = name;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
@@ -46,12 +46,14 @@ public class Customer {
         this.id = id;
     }
 
-    public String getCompany() {
-        return company;
+    @NotNull
+    public String getName() {
+        return name;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    @NotNull
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStreet() {

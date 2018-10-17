@@ -10,18 +10,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class CustomerRepositoryTest {
+public class CompanyRepositoryTest {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CompanyRepository companyRepository;
 
     @Test
     public final void save_customer() {
-        Customer darius = new Customer("Tack GmbH", "", "", "", "", "", "");
+        Company darius = new Company("Tack GmbH", "", "", "", "", "", "");
 
-        customerRepository.save(darius);
+        companyRepository.save(darius);
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(1);
+        assertThat(companyRepository.findAll().size()).isEqualTo(1);
     }
 
 }
