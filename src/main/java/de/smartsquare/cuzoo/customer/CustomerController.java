@@ -3,9 +3,14 @@ package de.smartsquare.cuzoo.customer;
 import de.smartsquare.cuzoo.csv.CSVImporter;
 import de.smartsquare.cuzoo.csv.Company;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,34 +28,43 @@ public class CustomerController {
     }
 
     @PostMapping("/import")
-    public final String postCompanyCSV(@RequestParam("file") MultipartFile file) throws IOException {
+    public final ResponseEntity<?> postCompanyCSV(@RequestParam("file") MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             CSVImporter csvImporter = new CSVImporter();
             InputStream inputFile = new BufferedInputStream(file.getInputStream());
 
             insertImportedCompanies(csvImporter.importFrom(inputFile, Company.class));
-            return "IMPORTING CUSTOMER CSV SUCCEEDED";
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } else
-            return "IMPORTING CUSTOMER CSV FAILED: File is empty!";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/submit")
-    public final String submitCustomer(@RequestBody Customer customer) {
-        try {
-            repository.save(customer);
-            return "SUBMITTING CUSTOMER SUCCEEDED";
-        } catch (Exception e) {
-            return e.getMessage();
+    @PutMapping("/submit")
+    public final ResponseEntity<?> submitCustomer(@RequestBody @Valid Customer customer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                if (repository.existsById(customer.getId())) {
+                    repository.save(customer);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    repository.save(customer);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            } catch (DataAccessException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
     @PostMapping("/delete")
-    public final String deleteCustomer(@RequestBody Customer customer) {
+    public final ResponseEntity<?> deleteCustomer(@RequestBody @Valid Customer customer) {
         try {
             repository.delete(customer);
-            return "DELETING CUSTOMER SUCCEEDED";
-        } catch (Exception e) {
-            return e.getMessage();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

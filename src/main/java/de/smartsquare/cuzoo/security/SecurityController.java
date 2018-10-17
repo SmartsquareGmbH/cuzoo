@@ -1,5 +1,7 @@
 package de.smartsquare.cuzoo.security;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecurityController {
 
     @RequestMapping("/login")
-    public String checkAuthorization() {
-        return "LOGIN SUCCEEDED";
+    public ResponseEntity<?> checkAuthorization() {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
