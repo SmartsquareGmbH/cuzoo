@@ -16,7 +16,7 @@ public class CSVImporterTest {
     public void that_deserializer_imports_as_much_as_needed(){
         CSVImporter csvImporter = new CSVImporter();
 
-        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
+        List<CSVCompany> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), CSVCompany.class);
 
         assertThat(companies.size()).isEqualTo(3);
     }
@@ -25,7 +25,7 @@ public class CSVImporterTest {
     public void that_deserializer_imports_companies_correctly() {
         CSVImporter csvImporter = new CSVImporter();
 
-        List<Company> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), Company.class);
+        List<CSVCompany> companies = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestCompanies.csv"), CSVCompany.class);
 
         assertThat(companies, containsInAnyOrder(
                 hasProperty("company", is("Anders GmbH")),
@@ -38,9 +38,9 @@ public class CSVImporterTest {
     public void that_deserializer_imports_contacts_correctly() {
         CSVImporter csvImporter = new CSVImporter();
 
-        List<Contact> contacts = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestContacts.csv"), Contact.class);
+        List<CSVContact> CSVContacts = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestContacts.csv"), CSVContact.class);
 
-        assertThat(contacts, containsInAnyOrder(
+        assertThat(CSVContacts, containsInAnyOrder(
                 hasProperty("name", is("Alfred Anders")),
                 hasProperty("name", is("Ben Big")),
                 hasProperty("name", is("Claudia Chlor"))

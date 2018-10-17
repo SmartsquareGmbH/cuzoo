@@ -4,7 +4,7 @@ import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
 
 @CsvDataType()
-public class Contact {
+public class CSVContact {
     @CsvField(pos = 1)
     private String name;
 
