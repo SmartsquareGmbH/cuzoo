@@ -16,7 +16,7 @@ public class CompanyRepositoryTest {
     private CompanyRepository companyRepository;
 
     @Test
-    public final void save_customer() {
+    public final void that_saves_company_correctly() {
         Company darius = new Company("Tack GmbH", "", "", "", "", "", "");
 
         companyRepository.save(darius);

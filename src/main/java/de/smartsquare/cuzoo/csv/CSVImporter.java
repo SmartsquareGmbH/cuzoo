@@ -10,17 +10,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class CSVImporter {
+public class CSVImporter {
     private CsvConfiguration config;
 
-    CSVImporter() {
+    public CSVImporter() {
         config = new CsvConfiguration();
 
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.getDefaultNoValueString();
     }
 
-    <T> List<T> importFrom(InputStream stream, Class<T> typeClass) {
+    public <T> List<T> importFrom(InputStream stream, Class<T> typeClass) {
         List<T> results = new ArrayList<>();
 
         Deserializer deserializer = CsvIOFactory
