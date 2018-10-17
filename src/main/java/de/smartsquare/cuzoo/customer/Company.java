@@ -46,12 +46,10 @@ public class Company {
         this.id = id;
     }
 
-    @NotNull
     public String getName() {
         return name;
     }
 
-    @NotNull
     public void setName(String name) {
         this.name = name;
     }
