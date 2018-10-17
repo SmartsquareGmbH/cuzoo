@@ -15,7 +15,6 @@ public class Company {
     @NotNull
     @NotBlank
     private String name;
-
     private String street;
     private String zipCode;
     private String place;
