@@ -32,6 +32,18 @@ public class CSVContact {
     @CsvField(pos = 13)
     private String comment;
 
+    @CsvField(pos = 7)
+    private String jug;
+
+    @CsvField(pos = 8)
+    private String cloudLab;
+
+    @CsvField(pos = 9)
+    private String cioDay;
+
+    @CsvField(pos = 10)
+    private String cloudFlyer;
+
     public String getName() {
         return name;
     }
