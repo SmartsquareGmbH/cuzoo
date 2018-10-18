@@ -15,8 +15,7 @@ public class Contact {
     @NotNull
     @NotBlank
     private String name;
-    @NotNull
-    @NotBlank
+
     private String company;
     private String role;
     private String address;
@@ -29,8 +28,7 @@ public class Contact {
     public Contact() {
     }
 
-    Contact(@NotNull @NotBlank final String name,
-            @NotNull @NotBlank final String company,
+    Contact(@NotNull @NotBlank final String name, String company,
             String role, String address, String mail, String telephone,
             String lastContact, String lastAnswer, String comment) {
         this.name = name;
