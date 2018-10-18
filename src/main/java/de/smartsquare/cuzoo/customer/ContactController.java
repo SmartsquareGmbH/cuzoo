@@ -3,8 +3,10 @@ package de.smartsquare.cuzoo.customer;
 import de.smartsquare.cuzoo.csv.CSVContact;
 import de.smartsquare.cuzoo.csv.CSVImporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +37,26 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/submit")
+    public final ResponseEntity<?> sumbitContact(@RequestBody @Valid Contact contact,
+                                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                if (contactRepository.existsById(contact.getId())) {
+                    contactRepository.save(contact);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    contactRepository.save(contact);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            } catch (DataAccessException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
