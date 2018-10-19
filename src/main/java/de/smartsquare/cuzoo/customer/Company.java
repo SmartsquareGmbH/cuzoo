@@ -1,16 +1,14 @@
 package de.smartsquare.cuzoo.customer;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_generator")
+    @SequenceGenerator(name ="company_generator", sequenceName = "company_seq")
     private Long id;
     @NotNull
     @NotBlank
