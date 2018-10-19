@@ -23,15 +23,6 @@ public class CSVContact {
     @CsvField(pos = 6)
     private String telephone;
 
-    @CsvField(pos = 11)
-    private String lastContact;
-
-    @CsvField(pos = 12)
-    private String lastAnswer;
-
-    @CsvField(pos = 13)
-    private String comment;
-
     @CsvField(pos = 7)
     private String jug;
 
@@ -43,6 +34,15 @@ public class CSVContact {
 
     @CsvField(pos = 10)
     private String cloudFlyer;
+
+    @CsvField(pos = 11)
+    private String lastContact;
+
+    @CsvField(pos = 12)
+    private String lastAnswer;
+
+    @CsvField(pos = 13)
+    private String comment;
 
     public String getName() {
         return name;
@@ -114,5 +114,38 @@ public class CSVContact {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+
+    public String getJug() {
+        return jug;
+    }
+
+    public void setJug(String jug) {
+        this.jug = jug;
+    }
+
+    public String getCloudLab() {
+        return cloudLab;
+    }
+
+    public void setCloudLab(String cloudLab) {
+        this.cloudLab = cloudLab;
+    }
+
+    public String getCioDay() {
+        return cioDay;
+    }
+
+    public void setCioDay(String cioDay) {
+        this.cioDay = cioDay;
+    }
+
+    public String getCloudFlyer() {
+        return cloudFlyer;
+    }
+
+    public void setCloudFlyer(String cloudFlyer) {
+        this.cloudFlyer = cloudFlyer;
     }
 }

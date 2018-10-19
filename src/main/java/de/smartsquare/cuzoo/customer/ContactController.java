@@ -79,6 +79,10 @@ public class ContactController {
                     csvContact.getAddress(),
                     csvContact.getMail(),
                     csvContact.getTelephone(),
+                    csvContact.getJug(),
+                    csvContact.getCloudLab(),
+                    csvContact.getCioDay(),
+                    csvContact.getCloudFlyer(),
                     csvContact.getLastContact(),
                     csvContact.getLastAnswer(),
                     csvContact.getComment());
