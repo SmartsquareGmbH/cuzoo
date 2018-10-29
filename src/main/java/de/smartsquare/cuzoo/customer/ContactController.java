@@ -21,10 +21,12 @@ import java.util.List;
 public class ContactController {
 
     private final ContactRepository contactRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public ContactController(final ContactRepository contactRepository) {
+    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository) {
         this.contactRepository = contactRepository;
+        this.companyRepository = companyRepository;
     }
 
     @PostMapping("/import")
@@ -47,6 +49,10 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
+                if (contact.getCompany() != null) {
+                    checkCompanyEntry(contact.getCompany());
+                }
+
                 if (contactRepository.existsById(contact.getId())) {
                     contactRepository.save(contact);
                     return new ResponseEntity<>(HttpStatus.OK);
@@ -87,7 +93,17 @@ public class ContactController {
                     csvContact.getLastAnswer(),
                     csvContact.getComment());
 
+            if (contact.getCompany() != null) {
+                checkCompanyEntry(contact.getCompany());
+            }
+
             contactRepository.save(contact);
+        }
+    }
+
+    private void checkCompanyEntry(String companyName) {
+        if (!companyRepository.existsByName(companyName)) {
+            companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
         }
     }
 
