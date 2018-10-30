@@ -36,11 +36,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
-
-	runtime 'com.h2database:h2'
-	runtime 'org.springframework.boot:spring-boot-devtools'
-
 	implementation "net.sf.jsefa:jsefa:$jsefaVersion"
+
+	runtime 'org.postgresql:postgresql'
+	runtime 'org.springframework.boot:spring-boot-devtools'
+	testRuntime 'com.h2database:h2'
 
 	testImplementation 'com.jayway.jsonpath:json-path'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
