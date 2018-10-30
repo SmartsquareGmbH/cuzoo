@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer;
 
-import de.smartsquare.cuzoo.csv.*;
+import de.smartsquare.cuzoo.csv.CSVCompany;
+import de.smartsquare.cuzoo.csv.CSVImporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
