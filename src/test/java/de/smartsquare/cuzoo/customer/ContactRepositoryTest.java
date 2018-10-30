@@ -17,7 +17,7 @@ public class ContactRepositoryTest {
 
     @Test
     public final void  that_saves_contact_correctly() {
-        Contact darius = new Contact("Darius Tack", "Tack GmbH", "", "", "", "", "", "", "");
+        Contact darius = new Contact("Darius Tack", "Tack GmbH", "", "", "", "", "", "", "", "", "", "", "");
 
         contactRepository.save(darius);
 
