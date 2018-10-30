@@ -49,7 +49,7 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
-                if (contact.getCompany() != null) {
+                if (contact.getCompany() != null && !contact.getCompany().equals("")) {
                     checkCompanyEntry(contact.getCompany());
                 }
 
@@ -102,7 +102,7 @@ public class ContactController {
     }
 
     private void checkCompanyEntry(String companyName) {
-        if (!companyRepository.existsByName(companyName)) {
+        if (companyRepository != null && !companyRepository.existsByName(companyName)) {
             companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
         }
     }
