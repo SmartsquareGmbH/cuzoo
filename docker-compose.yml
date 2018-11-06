@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  cuzoo-frontend:
+    build: frontend
+    container_name: cuzoo-frontend
+    ports:
+    - "80:8080"
+
+  cuzoo-backend:
+    build: backend
+    container_name: cuzoo-backend
+    depends_on:
+    - "postgre-db"
+    ports:
+    - "8080:5000"
+
+  postgre-db:
+    image: postgres:9.5
+    container_name: postgre-db
+    ports:
+    - "5432:5432"
