@@ -20,3 +20,7 @@ services:
     container_name: postgre-db
     ports:
     - "5432:5432"
+    environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=secure
+    - POSTGRES_DB=postgre-db
