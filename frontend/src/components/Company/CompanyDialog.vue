@@ -133,7 +133,7 @@ export default {
             this.$refs.form.reset();
         },
         submitCompany() {
-            axios.put('http://localhost:8080/company/submit', {
+            axios.put('api/company/submit', {
                 name: this.editedCompany.name,
                 id: this.editedCompany.id,
                 street: this.editedCompany.street,

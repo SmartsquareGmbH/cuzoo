@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/api/contact")
 public class ContactController {
 
     private final ContactRepository contactRepository;

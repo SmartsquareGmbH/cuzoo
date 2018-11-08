@@ -82,7 +82,7 @@ export default new Vuex.Store({
   },
   actions: {
     getCompanies() {
-      axios.get('http://localhost:8080/company/get', { 
+      axios.get('api/company/get', { 
         auth: {
           username: this.getters.getLogName,
           password: this.getters.getLogPass
@@ -97,7 +97,7 @@ export default new Vuex.Store({
       });
     },
     getContacts() {
-      axios.get('http://localhost:8080/contact/get', { 
+      axios.get('api/contact/get', { 
         auth: {
           username: this.getters.getLogName,
           password: this.getters.getLogPass

@@ -118,7 +118,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
 
-      axios.post('http://localhost:8080/company/import', formData, {
+      axios.post('api/company/import', formData, {
           auth: {
             username: this.$store.getters.getLogName,
             password: this.$store.getters.getLogPass
@@ -148,7 +148,7 @@ export default {
       this.editedCompany = Object.assign({}, item);
 
       if (confirm("Bist du dir sicher, dass du das Unternehmen löschen willst?")) {
-        axios.post('http://localhost:8080/company/delete', {
+        axios.post('api/company/delete', {
           name: this.editedCompany.name,
           id: this.editedCompany.id,
           street: this.editedCompany.street,

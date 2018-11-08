@@ -146,7 +146,7 @@ export default {
                 this.editedContact.role = "Freiberufler";
             }
 
-            axios.put('http://localhost:8080/contact/submit', {
+            axios.put('api/contact/submit', {
                 name: this.editedContact.name,
                 id: this.editedContact.id,
                 company: this.editedContact.company,
