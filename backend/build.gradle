@@ -38,7 +38,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation "net.sf.jsefa:jsefa:$jsefaVersion"
 
-	runtime 'org.postgresql:postgresql'
+	if (project.hasProperty('env') && project.getProperty('env') == 'prod') {
+		runtime 'org.postgresql:postgresql'
+	} else {
+		runtime 'com.h2database:h2'
+	}
 	runtime 'org.springframework.boot:spring-boot-devtools'
 	testRuntime 'com.h2database:h2'
 
