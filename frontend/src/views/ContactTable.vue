@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 import axios from 'axios';
 import ContactDialog from "@/components/Contact/ContactDialog.vue"; 
 
@@ -105,7 +105,7 @@ export default {
         get () {
             return this.$store.state.contacts
         },
-        set (contatcs) {
+        set (contacts) {
           this.$store.commit('storeContacts', contacts)
         }
     }
