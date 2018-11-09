@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import axios from 'axios';
 import CompanyDialog from "@/components/Company/CompanyDialog.vue"; 
 
@@ -96,7 +97,6 @@ export default {
   return {
       file: '',
       search: '',
-      companies: [],
       headers: [
           { text: 'Unternehmen', value: 'name', align: 'left' },
           { text: 'Straße', value: 'street' },
@@ -107,6 +107,17 @@ export default {
           { text: 'Sonstiges', value: 'other' },
           { text: 'Aktionen', value: 'name', sortable: false }
       ]
+    }
+  },
+  computed: {
+    ...mapState(['companies']),
+    companies: {
+        get () {
+            return this.$store.state.companies
+        },
+        set (companies) {
+          this.$store.commit('storeCompanies', companies)
+        }
     }
   },
   methods: {
