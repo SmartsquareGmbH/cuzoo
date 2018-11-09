@@ -5,6 +5,7 @@ import Search from "./views/Search.vue";
 import CompanyTable from "./views/CompanyTable.vue";
 import ContactTable from "./views/ContactTable.vue";
 import ContactView from "./components/Contact/View/ContactView.vue";
+import CompanyView from "./components/Company/CompanyView.vue";
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export default new Router({
       path: "/contacts/:id",
       name: "contactview",
       component: ContactView
+    },
+    {
+      path: "/companies/:id",
+      name: "companyview",
+      component: CompanyView
     }
   ]
 });

@@ -62,15 +62,28 @@
         <td class="text-xs-left">{{ props.item.purpose }}</td>
         <td class="text-xs-left">{{ props.item.other }}</td>
         <td class="justify-center layout px-0">
-        <v-icon size="22px" class="mr-2"
-          v-on:click="editCompany(props.item)">
-            edit
-        </v-icon>
-        <v-icon size="22px" color="red lighten-1"
-          v-on:click="deleteCompany(props.item)">
-            delete
-        </v-icon>
-      </td>
+          <v-tooltip top>
+            <v-btn
+            @click="viewCompany(props.item)"
+            color="transparent"
+            slot="activator" 
+            class="pt-1 mt-2"
+            flat icon small>
+              <v-icon size="22px" color="white">
+                info
+              </v-icon>
+            </v-btn>
+            <span>Informationen</span>
+          </v-tooltip>
+          <v-icon size="22px" class="mr-2"
+            v-on:click="editCompany(props.item)">
+              edit
+          </v-icon>
+          <v-icon size="22px" color="red lighten-1" class="mr-2"
+            v-on:click="deleteCompany(props.item)">
+              delete
+          </v-icon>
+        </td>
     </template>
     <template slot="no-data">
       <v-alert :value="true" color="error" icon="warning">
@@ -186,6 +199,10 @@ export default {
         type: 'storeDialogState',
         dialog: true
       })
+    },
+    viewCompany: function(item) {
+      const index = this.companies.findIndex(company => company.id == item.id);
+      this.$router.replace('/companies/' + (index));
     }
   }
 }
