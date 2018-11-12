@@ -47,18 +47,22 @@
             </v-flex>
             <v-flex xs12>
                 <v-textarea
-                v-model="editedCompany.purpose" 
+                v-model="editedCompany.purpose"
+                counter="255"
+                maxlength='255'
                 name="input-7-4"
                 label="Unternehmenszweck"
-                rows="3" hide-details
+                rows="3"
                 ></v-textarea>
             </v-flex>
             <v-flex xs12>
                 <v-textarea
                 v-model="editedCompany.other"
+                counter="255"
+                maxlength="255"
                 name="input-7-4"
                 label="Sonstiges"
-                rows="3" hide-details
+                rows="3"
                 ></v-textarea>
             </v-flex>
             </v-layout>
