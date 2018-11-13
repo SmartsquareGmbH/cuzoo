@@ -25,9 +25,9 @@
       </v-card>
     </v-flex>
     <v-flex xs5>
-      <v-card dark color="secondary" v-if="this.contacts[contactId].company != null && this.contacts[contactId].company != ''">
+      <v-card dark color="secondary" v-if="this.contacts[contactId].company.name != null && this.contacts[contactId].company.name != ''">
         <v-card-text class="headline text-xs-center">
-          <span>{{ this.contacts[contactId].company }}</span>
+          <span>{{ this.contacts[contactId].company.name }}</span>
         </v-card-text>
       </v-card>
       <v-card v-else dark color="error">

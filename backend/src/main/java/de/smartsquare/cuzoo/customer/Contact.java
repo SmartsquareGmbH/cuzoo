@@ -1,6 +1,14 @@
 package de.smartsquare.cuzoo.customer;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -14,15 +22,15 @@ public class Contact {
     @NotBlank
     private String name;
 
-    private String company;
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    @JsonManagedReference
+    private Company company;
+
     private String role;
     private String address;
     private String mail;
     private String telephone;
-    private String jug;
-    private String cloudLab;
-    private String cioDay;
-    private String cloudFlyer;
     private String lastContact;
     private String lastAnswer;
     private String comment;
@@ -30,7 +38,7 @@ public class Contact {
     public Contact() {
     }
 
-    Contact(@NotNull @NotBlank final String name, String company,
+    Contact(@NotNull @NotBlank final String name, Company company,
             String role, String address, String mail, String telephone,
             String jug, String cloudLab, String cioDay, String cloudFlyer,
             String lastContact, String lastAnswer, String comment) {
@@ -40,10 +48,20 @@ public class Contact {
         this.address = address;
         this.mail = mail;
         this.telephone = telephone;
-        this.jug = jug;
-        this.cloudLab = cloudLab;
-        this.cioDay = cioDay;
-        this.cloudFlyer = cloudFlyer;
+        this.lastContact = lastContact;
+        this.lastAnswer = lastAnswer;
+        this.comment = comment;
+    }
+
+    Contact(@NotNull @NotBlank final String name,
+            String role, String address, String mail, String telephone,
+            String jug, String cloudLab, String cioDay, String cloudFlyer,
+            String lastContact, String lastAnswer, String comment) {
+        this.name = name;
+        this.role = role;
+        this.address = address;
+        this.mail = mail;
+        this.telephone = telephone;
         this.lastContact = lastContact;
         this.lastAnswer = lastAnswer;
         this.comment = comment;
@@ -65,11 +83,11 @@ public class Contact {
         this.name = name;
     }
 
-    public String getCompany() {
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
@@ -103,38 +121,6 @@ public class Contact {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public String getJug() {
-        return jug;
-    }
-
-    public void setJug(String jug) {
-        this.jug = jug;
-    }
-
-    public String getCloudLab() {
-        return cloudLab;
-    }
-
-    public void setCloudLab(String cloudLab) {
-        this.cloudLab = cloudLab;
-    }
-
-    public String getCioDay() {
-        return cioDay;
-    }
-
-    public void setCioDay(String cioDay) {
-        this.cioDay = cioDay;
-    }
-
-    public String getCloudFlyer() {
-        return cloudFlyer;
-    }
-
-    public void setCloudFlyer(String cloudFlyer) {
-        this.cloudFlyer = cloudFlyer;
     }
 
     public String getLastContact() {

@@ -41,13 +41,14 @@
   >
     <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.company }}</td>
+        <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
+        <td v-else class="text-xs-left">-</td>
         <td class="text-xs-left">{{ props.item.role }}</td>
         <td class="text-xs-left">{{ props.item.address }}</td>
         <td class="text-xs-left">{{ props.item.comment }}</td>
         <td class="justify-center layout px-0">
         <v-icon size="22px" class="mr-2"
-          v-on:click="viewContact(props.item)">
+          @click="viewContact(props.item)">
             account_box
         </v-icon>
         <v-icon size="22px" class="mr-2"
@@ -88,7 +89,7 @@ export default {
       companyNames: [],
       headers: [
           { text: 'Name', align: 'left', value: 'name' },
-          { text: 'Unternehmen', value: 'company' },
+          { text: 'Unternehmen', value: "company.name" },
           { text: 'Rolle', value: 'role' },
           { text: 'Adresse', value: 'address' },
           { text: 'Bemerkung', value: 'comment'},

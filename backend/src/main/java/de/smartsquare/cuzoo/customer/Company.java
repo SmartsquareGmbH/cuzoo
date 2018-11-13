@@ -1,12 +1,16 @@
 package de.smartsquare.cuzoo.customer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Company {
@@ -17,6 +21,11 @@ public class Company {
     @NotNull
     @NotBlank
     private String name;
+
+    @OneToMany(mappedBy = "company")
+    @JsonBackReference
+    private List<Contact> contacts;
+
     private String street;
     private String zipCode;
     private String place;
@@ -27,10 +36,11 @@ public class Company {
     public Company() {
     }
 
-    Company(@NotNull @NotBlank final String name,
+    Company(@NotNull @NotBlank final String name, List<Contact> contacts,
             String street, String zipCode, String place,
             String homepage, String purpose, String other) {
         this.name = name;
+        this.contacts = contacts;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
@@ -53,6 +63,14 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     public String getStreet() {
