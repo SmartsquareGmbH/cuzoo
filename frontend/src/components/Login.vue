@@ -5,6 +5,12 @@
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
             <v-toolbar-title>Login</v-toolbar-title>
+            <v-spacer/>
+            <v-img
+              :src=kazookid
+              max-height="64px"
+              max-width="64px"
+            />
           </v-toolbar>
           <v-card-text>
             <v-form>
@@ -29,11 +35,12 @@ export default {
   data: () => ({
     logName: null,
     logPass: null,
-    drawer: null
+    drawer: null,
+    kazookid: require('@/assets/rsz_kazoo-kid.png')
   }),
   methods: {
     doLogin: function (event) {
-      axios.post('api/security/login', {}, { 
+      axios.post('http://localhost:8080/api/security/login', {}, { 
         auth: {
           username: this.logName,
           password: this.logPass
