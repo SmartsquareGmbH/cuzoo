@@ -42,7 +42,7 @@ public class ContactController {
             CSVImporter csvImporter = new CSVImporter();
             InputStream inputFile = new BufferedInputStream(file.getInputStream());
 
-            insertImportedContactsWithNewCompanies(csvImporter.importFrom(inputFile, CSVContact.class));
+            insertImportedContactsWithMissingCompanies(csvImporter.importFrom(inputFile, CSVContact.class));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -87,7 +87,7 @@ public class ContactController {
         }
     }
 
-    private void insertImportedContactsWithNewCompanies(List<CSVContact> importedEntity) {
+    private void insertImportedContactsWithMissingCompanies(List<CSVContact> importedEntity) {
         for (CSVContact csvContact : importedEntity) {
             Company companyOfContact;
             Contact contact;
@@ -96,13 +96,8 @@ public class ContactController {
                 contact = new Contact(
                         csvContact.getName(),
                         csvContact.getRole(),
-                        csvContact.getAddress(),
                         csvContact.getMail(),
                         csvContact.getTelephone(),
-                        csvContact.getJug(),
-                        csvContact.getCloudLab(),
-                        csvContact.getCioDay(),
-                        csvContact.getCloudFlyer(),
                         csvContact.getLastContact(),
                         csvContact.getLastAnswer(),
                         csvContact.getComment());
@@ -117,13 +112,8 @@ public class ContactController {
                         csvContact.getName(),
                         companyOfContact,
                         csvContact.getRole(),
-                        csvContact.getAddress(),
                         csvContact.getMail(),
                         csvContact.getTelephone(),
-                        csvContact.getJug(),
-                        csvContact.getCloudLab(),
-                        csvContact.getCioDay(),
-                        csvContact.getCloudFlyer(),
                         csvContact.getLastContact(),
                         csvContact.getLastAnswer(),
                         csvContact.getComment());

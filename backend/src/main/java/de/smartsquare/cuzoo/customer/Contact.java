@@ -28,7 +28,6 @@ public class Contact {
     private Company company;
 
     private String role;
-    private String address;
     private String mail;
     private String telephone;
     private String lastContact;
@@ -39,13 +38,11 @@ public class Contact {
     }
 
     Contact(@NotNull @NotBlank final String name, Company company,
-            String role, String address, String mail, String telephone,
-            String jug, String cloudLab, String cioDay, String cloudFlyer,
+            String role, String mail, String telephone,
             String lastContact, String lastAnswer, String comment) {
         this.name = name;
         this.company = company;
         this.role = role;
-        this.address = address;
         this.mail = mail;
         this.telephone = telephone;
         this.lastContact = lastContact;
@@ -54,12 +51,10 @@ public class Contact {
     }
 
     Contact(@NotNull @NotBlank final String name,
-            String role, String address, String mail, String telephone,
-            String jug, String cloudLab, String cioDay, String cloudFlyer,
+            String role, String mail, String telephone,
             String lastContact, String lastAnswer, String comment) {
         this.name = name;
         this.role = role;
-        this.address = address;
         this.mail = mail;
         this.telephone = telephone;
         this.lastContact = lastContact;
@@ -97,14 +92,6 @@ public class Contact {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getMail() {
