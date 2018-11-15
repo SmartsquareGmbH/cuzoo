@@ -22,6 +22,7 @@ export default new Vuex.Store({
       zipCode: "",
       place: "",
       homepage: "",
+      status: "",
       purpose: "",
       other: ""
     },
@@ -31,13 +32,8 @@ export default new Vuex.Store({
       name: "",
       company: "",
       role: "",
-      address: "",
       mail: "",
       telephone: "",
-      jug: "",
-      cloudLab: "",
-      cioDay: "",
-      cloudFlyer: "",
       lastContact: "",
       lastAnswer: "",
       comment: ""
@@ -82,12 +78,13 @@ export default new Vuex.Store({
   },
   actions: {
     getCompanies() {
-      axios.get('api/company/get', { 
+      axios.get('http://localhost:8080/api/company/get', { 
         auth: {
           username: this.getters.getLogName,
           password: this.getters.getLogPass
         }
       }).then(response => {
+        console.log(response.data);
         this.commit({
           type: 'storeCompanies',
           companies: response.data
@@ -97,12 +94,13 @@ export default new Vuex.Store({
       });
     },
     getContacts() {
-      axios.get('api/contact/get', { 
+      axios.get('http://localhost:8080/api/contact/get', { 
         auth: {
           username: this.getters.getLogName,
           password: this.getters.getLogPass
         }
       }).then(response => {
+        console.log(response.data);
         this.commit({
           type: 'storeContacts',
           contacts: response.data

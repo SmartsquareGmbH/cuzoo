@@ -97,6 +97,7 @@ export default {
                 zipCode: "",
                 place: "",
                 homepage: "",
+                status: "",
                 purpose: "",
                 other: ""
             }
@@ -137,13 +138,14 @@ export default {
             this.$refs.form.reset();
         },
         submitCompany() {
-            axios.put('api/company/submit', {
+            axios.put('http://localhost:8080/api/company/submit', {
                 name: this.editedCompany.name,
                 id: this.editedCompany.id,
                 street: this.editedCompany.street,
                 zipCode: this.editedCompany.zipCode,
                 place: this.editedCompany.place,
                 homepage: this.editedCompany.homepage,
+                status: this.editedCompany.status,
                 purpose: this.editedCompany.purpose,
                 other: this.editedCompany.other
             }, {
