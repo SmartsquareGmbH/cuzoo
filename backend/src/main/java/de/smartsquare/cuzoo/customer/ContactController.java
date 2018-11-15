@@ -58,7 +58,7 @@ public class ContactController {
             try {
                 if (contact.getCompany() != null && !contact.getCompany().getName().equals("")) {
                     if (companyRepository != null && !companyRepository.existsByName(contact.getCompany().getName())) {
-                        Company company = new Company(contact.getCompany().getName(), com.sun.tools.javac.util.List.of(contact), "", "", "", "", "", "");
+                        Company company = new Company(contact.getCompany().getName(), com.sun.tools.javac.util.List.of(contact), "", "", "", "", "", "", "");
 
                         companyRepository.save(company);
                     }
@@ -103,7 +103,7 @@ public class ContactController {
                         csvContact.getComment());
             } else {
                 if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
-                    companyOfContact = new Company(csvContact.getCompany(), Collections.emptyList(), "", "", "", "", "", "");
+                    companyOfContact = new Company(csvContact.getCompany(), Collections.emptyList(), "", "", "", "", "", "", "");
                 } else {
                     companyOfContact = companyRepository.findByName(csvContact.getCompany());
                 }

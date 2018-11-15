@@ -30,6 +30,7 @@ public class Company {
     private String zipCode;
     private String place;
     private String homepage;
+    private String status;
     private String purpose;
     private String other;
 
@@ -37,14 +38,15 @@ public class Company {
     }
 
     Company(@NotNull @NotBlank final String name, List<Contact> contacts,
-            String street, String zipCode, String place,
-            String homepage, String purpose, String other) {
+            String street, String zipCode, String place, String homepage,
+            String status, String purpose, String other) {
         this.name = name;
         this.contacts = contacts;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
         this.homepage = homepage;
+        this.status = status;
         this.purpose = purpose;
         this.other = other;
     }
@@ -103,6 +105,14 @@ public class Company {
 
     public void setHomepage(String homepage) {
         this.homepage = homepage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getPurpose() {

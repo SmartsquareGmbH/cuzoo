@@ -86,6 +86,7 @@ public class CompanyController {
                     csvCompany.getZipCode(),
                     csvCompany.getPlace(),
                     csvCompany.getHomepage(),
+                    "Lead",
                     csvCompany.getPurpose(),
                     csvCompany.getOther());
 
