@@ -5,7 +5,6 @@ import Search from "./views/Search.vue";
 import CompanyTable from "./views/CompanyTable.vue";
 import ContactTable from "./views/ContactTable.vue";
 import CompanyView from "./components/Company/CompanyView.vue";
-import GoogleMaps from "vue2-google-maps"
 
 Vue.use(Router);
 
