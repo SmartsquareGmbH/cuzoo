@@ -4,8 +4,8 @@ import Store from "./store";
 import Search from "./views/Search.vue";
 import CompanyTable from "./views/CompanyTable.vue";
 import ContactTable from "./views/ContactTable.vue";
-import ContactView from "./components/Contact/View/ContactView.vue";
 import CompanyView from "./components/Company/CompanyView.vue";
+import GoogleMaps from "vue2-google-maps"
 
 Vue.use(Router);
 
@@ -36,11 +36,6 @@ export default new Router({
       beforeEnter: function(to, from, next) {
         Store.dispatch('getContacts').then(next());
       }
-    },
-    {
-      path: "/contacts/:id",
-      name: "contactview",
-      component: ContactView
     },
     {
       path: "/companies/:id",
