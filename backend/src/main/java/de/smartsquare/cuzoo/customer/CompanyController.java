@@ -81,7 +81,6 @@ public class CompanyController {
         for (CSVCompany csvCompany : importedEntity) {
             Company company = new Company(
                     csvCompany.getCompany(),
-                    Collections.emptyList(),
                     csvCompany.getStreet(),
                     csvCompany.getZipCode(),
                     csvCompany.getPlace(),

@@ -22,10 +22,6 @@ public class Company {
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "company")
-    @JsonBackReference
-    private List<Contact> contacts;
-
     private String street;
     private String zipCode;
     private String place;
@@ -37,11 +33,10 @@ public class Company {
     public Company() {
     }
 
-    Company(@NotNull @NotBlank final String name, List<Contact> contacts,
+    Company(@NotNull @NotBlank final String name,
             String street, String zipCode, String place, String homepage,
             String status, String purpose, String other) {
         this.name = name;
-        this.contacts = contacts;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
@@ -66,15 +61,6 @@ public class Company {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<Contact> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
-    }
-
     public String getStreet() {
         return street;
     }

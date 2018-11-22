@@ -24,7 +24,6 @@ public class Contact {
 
     @ManyToOne
     @JoinColumn(name="company_id")
-    @JsonManagedReference
     private Company company;
 
     private String role;

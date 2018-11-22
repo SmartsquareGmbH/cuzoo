@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,23 +51,19 @@ public class ContactController {
         }
     }
 
-    @PutMapping("/submit")
+    @PutMapping("/submit/{companyName}")
     public final ResponseEntity<?> sumbitContact(@RequestBody @Valid Contact contact,
-                                                 BindingResult bindingResult) {
+                                                 BindingResult bindingResult, @PathVariable String companyName) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
-                if (contact.getCompany() != null && !contact.getCompany().getName().equals("")) {
-                    if (companyRepository != null && !companyRepository.existsByName(contact.getCompany().getName())) {
-                        List<Contact> contactList = new ArrayList<>();
-                        contactList.add(contact);
-
-                        Company company = new Company(contact.getCompany().getName(), contactList, "", "", "", "", "", "", "");
-
-                        companyRepository.save(company);
-                    }
-                }
+                Company contactsCompany = companyRepository.findByName(companyName);
+                contact.setCompany(contactsCompany);
 
                 if (contactRepository.existsById(contact.getId())) {
                     contactRepository.save(contact);
@@ -107,7 +104,7 @@ public class ContactController {
                         csvContact.getComment());
             } else {
                 if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
-                    companyOfContact = new Company(csvContact.getCompany(), Collections.emptyList(), "", "", "", "", "", "", "");
+                    companyOfContact = new Company(csvContact.getCompany(),"", "", "", "", "", "", "");
                 } else {
                     companyOfContact = companyRepository.findByName(csvContact.getCompany());
                 }
