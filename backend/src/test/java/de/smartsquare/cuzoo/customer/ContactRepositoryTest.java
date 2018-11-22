@@ -1,5 +1,6 @@
 package de.smartsquare.cuzoo.customer;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,22 @@ public class ContactRepositoryTest {
 
     @Autowired
     private ContactRepository contactRepository;
+
     @Autowired
     private CompanyRepository companyRepository;
 
-    @Test
-    public final void  that_saves_contact_correctly() {
-        Company smartsquare = new Company("Smartsquare GmbH", Collections.emptyList(), "", "", "", "", "", "", "");
-        companyRepository.save(smartsquare);
+    @After
+    public void tearDown() {
+        contactRepository.deleteAll();
+        companyRepository.deleteAll();
+    }
 
+    @Test
+    public final void that_saves_contact_correctly() {
+        Company smartsquare = new Company("Smartsquare GmbH", Collections.emptyList(), "", "", "", "", "", "", "");
         Contact darius = new Contact("Darius Tack", smartsquare, "", "", "", "", "", "");
 
+        companyRepository.save(smartsquare);
         contactRepository.save(darius);
 
         assertThat(contactRepository.findAll().size()).isEqualTo(1);

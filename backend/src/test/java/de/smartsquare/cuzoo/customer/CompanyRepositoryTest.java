@@ -1,5 +1,6 @@
 package de.smartsquare.cuzoo.customer;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,14 @@ public class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @After
+    public void tearDown() throws Exception {
+        companyRepository.deleteAll();
+    }
+
     @Test
     public final void that_saves_company_correctly() {
-        Company darius = new Company("Tack GmbH", Collections.emptyList(), "",  "", "", "", "", "", "");
+        Company darius = new Company("Tack GmbH", Collections.emptyList(), "", "", "", "", "", "", "");
 
         companyRepository.save(darius);
 
