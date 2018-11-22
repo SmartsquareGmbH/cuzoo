@@ -36,35 +36,36 @@ public class CompanyController {
 
     @PostMapping("/import")
     public final ResponseEntity<?> postCSV(@RequestParam("file") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            CSVImporter csvImporter = new CSVImporter();
-            InputStream inputFile = new BufferedInputStream(file.getInputStream());
-
-            insertImportedCompanies(csvImporter.importFrom(inputFile, CSVCompany.class));
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
+        if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        CSVImporter csvImporter = new CSVImporter();
+        InputStream inputFile = new BufferedInputStream(file.getInputStream());
+
+        insertImportedCompanies(csvImporter.importFrom(inputFile, CSVCompany.class));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> sumbitCompany(@RequestBody @Valid Company company,
+    public final ResponseEntity<?> submitCompany(@RequestBody @Valid Company company,
                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            try {
-                if (companyRepository.existsById(company.getId())) {
-                    companyRepository.save(company);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else {
-                    companyRepository.save(company);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                }
-            } catch (DataAccessException e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
         }
+
+        try {
+            companyRepository.save(company);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(company.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
     }
 
     @PostMapping("/delete")

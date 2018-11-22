@@ -21,8 +21,6 @@ import javax.validation.Valid;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,41 +38,37 @@ public class ContactController {
 
     @PostMapping("/import")
     public final ResponseEntity<?> postCSV(@RequestParam("file") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            CSVImporter csvImporter = new CSVImporter();
-            InputStream inputFile = new BufferedInputStream(file.getInputStream());
-
-            insertImportedContactsWithMissingCompanies(csvImporter.importFrom(inputFile, CSVContact.class));
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
+        if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        CSVImporter csvImporter = new CSVImporter();
+        InputStream inputFile = new BufferedInputStream(file.getInputStream());
+
+        insertImportedContactsWithMissingCompanies(csvImporter.importFrom(inputFile, CSVContact.class));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/submit/{companyName}")
-    public final ResponseEntity<?> sumbitContact(@RequestBody @Valid Contact contact,
+    public final ResponseEntity<?> submitContact(@RequestBody @Valid Contact contact,
                                                  BindingResult bindingResult, @PathVariable String companyName) {
-        if (!companyRepository.existsByName(companyName)) {
+        if (!companyRepository.existsByName(companyName) || bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            try {
-                Company contactsCompany = companyRepository.findByName(companyName);
-                contact.setCompany(contactsCompany);
+        Company contactsCompany = companyRepository.findByName(companyName);
+        contact.setCompany(contactsCompany);
 
-                if (contactRepository.existsById(contact.getId())) {
-                    contactRepository.save(contact);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else {
-                    contactRepository.save(contact);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                }
-            } catch (DataAccessException e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        try {
+            contactRepository.save(contact);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(contact.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
