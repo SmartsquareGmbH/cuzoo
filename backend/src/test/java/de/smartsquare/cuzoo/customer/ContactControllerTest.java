@@ -20,6 +20,8 @@ public class ContactControllerTest {
 
     @Mock
     private ContactRepository mockContactRepository;
+    @Mock
+    private CompanyRepository mockCompanyRepository;
     @InjectMocks
     private ContactController contactController;
 
@@ -29,7 +31,7 @@ public class ContactControllerTest {
 
         List<CSVContact> contacts = csvImporter.importFrom(CSVImporterTest.class.getResourceAsStream("/TestContacts.csv"), CSVContact.class);
 
-        contactController.insertImportedContacts(contacts);
+        contactController.insertImportedContactsWithMissingCompanies(contacts);
 
         verify(mockContactRepository, times(3)).save(any(Contact.class));
     }

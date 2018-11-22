@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,7 +59,10 @@ public class ContactController {
             try {
                 if (contact.getCompany() != null && !contact.getCompany().getName().equals("")) {
                     if (companyRepository != null && !companyRepository.existsByName(contact.getCompany().getName())) {
-                        Company company = new Company(contact.getCompany().getName(), com.sun.tools.javac.util.List.of(contact), "", "", "", "", "", "", "");
+                        List<Contact> contactList = new ArrayList<>();
+                        contactList.add(contact);
+
+                        Company company = new Company(contact.getCompany().getName(), contactList, "", "", "", "", "", "", "");
 
                         companyRepository.save(company);
                     }
@@ -87,7 +91,7 @@ public class ContactController {
         }
     }
 
-    private void insertImportedContactsWithMissingCompanies(List<CSVContact> importedEntity) {
+    void insertImportedContactsWithMissingCompanies(List<CSVContact> importedEntity) {
         for (CSVContact csvContact : importedEntity) {
             Company companyOfContact;
             Contact contact;
