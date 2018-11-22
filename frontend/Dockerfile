@@ -1,23 +1,28 @@
-FROM node:9.11.1-alpine
+#
+# Builder Container
+#
+FROM node:11-alpine as builder
 
-# install simple http server for serving static content
-RUN yarn global add http-server
-
-# make the 'app' folder the current working directory
 WORKDIR /app
 
 # copy both 'package.json' and 'package-lock.json' (if available)
 COPY package*.json ./
+
 COPY yarn.lock ./
 
-# install project dependencies
 RUN yarn
 
-# copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
-# build app for production with minification
 RUN yarn build
 
+#
+# Run Container
+#
+FROM node:11-alpine
+# install simple http server for serving static content
+RUN yarn global add http-server
+WORKDIR /app/
+COPY --from=builder /app/dist .
 EXPOSE 8080
-CMD [ "http-server", "dist" ]
+CMD [ "http-server" ]
