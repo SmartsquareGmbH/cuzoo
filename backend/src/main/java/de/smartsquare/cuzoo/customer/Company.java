@@ -23,6 +23,10 @@ public class Company {
     @NotBlank
     private String name;
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Contact> contacts;
+
     private String street;
     private String zipCode;
     private String place;
