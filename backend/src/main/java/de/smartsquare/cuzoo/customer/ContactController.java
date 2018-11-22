@@ -98,7 +98,7 @@ public class ContactController {
                         csvContact.getComment());
             } else {
                 if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
-                    companyOfContact = new Company(csvContact.getCompany(),"", "", "", "", "", "", "");
+                    companyOfContact = new Company(csvContact.getCompany(), "", "", "", "", "", "");
                 } else {
                     companyOfContact = companyRepository.findByName(csvContact.getCompany());
                 }

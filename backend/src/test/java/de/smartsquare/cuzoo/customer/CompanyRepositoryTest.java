@@ -23,7 +23,7 @@ public class CompanyRepositoryTest {
 
     @Test
     public final void that_saves_company_correctly() {
-        Company darius = new Company("Tack GmbH", "",  "", "", "", "", "", "");
+        Company darius = new Company("Tack GmbH",  "", "", "", "", "", "");
 
         companyRepository.save(darius);
 

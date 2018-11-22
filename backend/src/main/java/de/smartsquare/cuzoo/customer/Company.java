@@ -1,12 +1,17 @@
 package de.smartsquare.cuzoo.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Company {
@@ -30,14 +35,13 @@ public class Company {
     }
 
     Company(@NotNull @NotBlank final String name,
-            String street, String zipCode, String place, String homepage,
-            String status, String purpose, String other) {
+            String street, String zipCode, String place,
+            String homepage, String purpose, String other) {
         this.name = name;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
         this.homepage = homepage;
-        this.status = status;
         this.purpose = purpose;
         this.other = other;
     }

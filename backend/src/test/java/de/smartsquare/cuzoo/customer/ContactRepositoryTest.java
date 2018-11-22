@@ -29,7 +29,7 @@ public class ContactRepositoryTest {
 
     @Test
     public final void that_saves_contact_correctly() {
-        Company smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "", "");
+        Company smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         Contact darius = new Contact("Darius Tack", smartsquare, "", "", "", "", "", "");
 
         companyRepository.save(smartsquare);
