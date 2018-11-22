@@ -70,10 +70,14 @@ public class CompanyController {
 
     }
 
-    @PostMapping("/delete")
-    public final ResponseEntity<?> deleteCompany(@RequestBody @Valid Company company) {
+    @DeleteMapping("/delete/{companyId}")
+    public final ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
+        if (!companyRepository.existsById(companyId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         try {
-            companyRepository.delete(company);
+            companyRepository.deleteById(companyId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
