@@ -1,5 +1,5 @@
 <template>
-<v-container grid-list-md text-xs-center>
+<v-container grid-list-md text-xs-center fill-height fluid>
   <v-layout row wrap>
     <v-flex xs12>
       <v-text-field
@@ -83,13 +83,8 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
 export default {
   name: "home",
-  components: {
-    HelloWorld
-  },
   data() {
     return {
       search: '',
