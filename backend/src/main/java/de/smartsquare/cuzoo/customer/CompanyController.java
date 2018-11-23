@@ -37,8 +37,8 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        CustomerInserter customerInserter = new CustomerInserter(file);
-        List<Company> insertedCompanies = customerInserter.getInsertedCompanies();
+        CSVConverter CSVConverter = new CSVConverter(file);
+        List<Company> insertedCompanies = CSVConverter.getConvertedCompanies();
 
         insertedCompanies.forEach(companyRepository::save);
 

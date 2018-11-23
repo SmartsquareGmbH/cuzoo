@@ -1,7 +1,6 @@
 package de.smartsquare.cuzoo.customer;
 
 import de.smartsquare.cuzoo.csv.CSVCompany;
-import de.smartsquare.cuzoo.csv.CSVContact;
 import de.smartsquare.cuzoo.csv.CSVImporter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,24 +10,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-class CustomerInserter {
+class CSVConverter {
     private final CSVImporter csvImporter;
     private InputStream inputFile;
-    private List<Company> insertedCompanies;
-    private List<Contact> insertedContacts;
+    private List<Company> convertedCompanies;
 
-    CustomerInserter(MultipartFile file) throws IOException {
+    CSVConverter(MultipartFile file) throws IOException {
         inputFile = new BufferedInputStream(file.getInputStream());
         csvImporter = new CSVImporter();
 
-        insertedCompanies = new ArrayList<>();
-        insertedContacts = new ArrayList<>();
+        convertedCompanies = new ArrayList<>();
     }
 
-    List<Company> getInsertedCompanies() {
-        List<CSVCompany> companiesToInsert = csvImporter.importFrom(inputFile, CSVCompany.class);
+    List<Company> getConvertedCompanies() {
+        List<CSVCompany> companiesToConvert = csvImporter.importFrom(inputFile, CSVCompany.class);
 
-        for (CSVCompany csvCompany : companiesToInsert) {
+        for (CSVCompany csvCompany : companiesToConvert) {
             Company company = new Company(
                     csvCompany.getCompany(),
                     csvCompany.getStreet(),
@@ -39,9 +36,9 @@ class CustomerInserter {
                     csvCompany.getOther());
 
             company.setStatus("Lead");
-            insertedCompanies.add(company);
+            convertedCompanies.add(company);
         }
 
-        return insertedCompanies;
+        return convertedCompanies;
     }
 }
