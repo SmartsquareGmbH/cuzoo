@@ -36,6 +36,14 @@
       </v-tooltip>
     </v-btn>
     <company-dialog></company-dialog>
+  <v-layout row wrap class="pl-2 pt-1">
+  <v-flex xs2>
+      <v-checkbox v-model="selectedStatus" label="Leads" value="Lead" color="teal accent-2" class=""/>
+  </v-flex>
+  <v-flex xs2>
+      <v-checkbox v-model="selectedStatus" label="Bestandskunden" value="Bestandskunde" color="teal accent-2"/>
+  </v-flex>
+  </v-layout>
     <v-spacer></v-spacer>
     <v-text-field
       v-model="search"
@@ -47,7 +55,7 @@
   </v-card-title>
   <v-data-table
   :headers="headers"
-  :items="this.$store.getters.getCompanies"
+  :items="filteredCompanies"
   :search="search"
   rows-per-page-text="Unternehmen pro Seite"
   :rows-per-page-items=[10,25,50,100]
@@ -94,7 +102,8 @@
       Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
     </v-alert>
   </v-data-table>
-</v-container>
+ 
+  </v-container>
 </template>
 
 <script>
@@ -107,7 +116,8 @@ export default {
     CompanyDialog
   },
   data () {
-  return {
+    return {
+      selectedStatus: ["Lead", "Bestandskunde"],
       file: '',
       search: '',
       headers: [
@@ -131,6 +141,19 @@ export default {
         set (companies) {
           this.$store.commit('storeCompanies', companies)
         }
+    },
+    filteredCompanies() {
+      return this.companies.filter((company) => {
+        if (this.selectedStatus.indexOf("Lead") > -1 && this.selectedStatus.indexOf("Bestandskunde") > -1) {
+          return company;
+        } else if (this.selectedStatus.indexOf("Lead") > -1) {
+          return company.status === "Lead";
+        } else if (this.selectedStatus.indexOf("Bestandskunde") > -1) {
+          return company.status === "Bestandskunde";
+        } else {
+          return company;
+        }
+      })
     }
   },
   methods: {
@@ -202,7 +225,7 @@ export default {
     },
     viewCompany: function(item) {
       const index = this.companies.findIndex(company => company.id == item.id);
-      this.$router.replace('/companies/' + (index));
+      this.$router.push('/companies/' + (index));
     }
   }
 }
@@ -215,10 +238,10 @@ export default {
 	opacity: 0;
 	overflow: hidden;
 	position: absolute;
-	z-index: -1;
+  z-index: -1;
 }
 
 .input-file + label {
-	cursor: pointer;
+  cursor: pointer;
 }
 </style>
