@@ -40,7 +40,7 @@ export default {
   }),
   methods: {
     doLogin: function (event) {
-      axios.post('api/security/login', {}, {
+      axios.post(`${process.env.VUE_APP_API_URL}security/login`, {}, {
         auth: {
           username: this.logName,
           password: this.logPass

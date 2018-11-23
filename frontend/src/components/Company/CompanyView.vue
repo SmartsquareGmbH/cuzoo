@@ -133,7 +133,7 @@
                     <v-card dark>
                         <v-card-text 
                         v-if="this.companies[this.companyId].purpose != null &&
-                        this.companies[this.companyId].purpose != ''" 
+                        this.companies[this.companyId].purpose !== ''"
                         class="headline text-xs-left">
                             {{ this.companies[this.companyId].purpose }}
                         </v-card-text>
@@ -156,7 +156,7 @@
                     </v-card>
                 </v-flex>
                 <v-flex xs3>
-                    <v-card dark v-if="this.companies[this.companyId].status == 'Bestandskunde'" color="info">
+                    <v-card dark v-if="this.companies[this.companyId].status === 'Bestandskunde'" color="info">
                         <v-card-text class="headline text-xs-center font-italic">
                             Bestandskunde
                         </v-card-text>
@@ -171,7 +171,7 @@
                     <v-card dark>
                         <v-card-text 
                         v-if="this.companies[this.companyId].other != null &&
-                        this.companies[this.companyId].other != ''" 
+                        this.companies[this.companyId].other !== ''"
                         class="headline text-xs-left">
                             {{ this.companies[this.companyId].other }}
                         </v-card-text>
@@ -217,7 +217,7 @@
                         <v-flex xs10>
                             <v-card dark>
                                 <v-card-text 
-                                v-if="contact.mail != null && contact.mail != ''"
+                                v-if="contact.mail != null && contact.mail !== ''"
                                 class="headline text-xs-left">
                                     {{ contact.mail }}
                                 </v-card-text>
@@ -238,7 +238,7 @@
                         <v-flex xs10>
                             <v-card dark>
                                 <v-card-text 
-                                v-if="contact.telephone != null && contact.telephone != ''"
+                                v-if="contact.telephone != null && contact.telephone !== ''"
                                 class="headline text-xs-left">
                                     {{ contact.telephone }}
                                 </v-card-text>
@@ -264,7 +264,7 @@
                             <v-card dark>
                                 <v-card-text 
                                 v-if="contact.comment != null &&
-                                contact.comment != ''" 
+                                contact.comment !== ''"
                                 class="headline text-xs-left">
                                     {{ contact.comment }}
                                 </v-card-text>
@@ -302,7 +302,7 @@ export default {
             return this.$store.getters.getCompanies;
         },
         homepage() {
-            return "http://" + this.companies[this.companyId].homepage;
+            return `http://${this.companies[this.companyId].homepage}`;
         },
         ...mapState(['contacts']),
         contacts: {
@@ -315,7 +315,7 @@ export default {
         },
         contactsOfCompany() {
             return this.contacts.filter((contact) => {
-                if (contact.company != null && this.companies[this.companyId].id == contact.company.id) {
+                if (contact.company != null && this.companies[this.companyId].id === contact.company.id) {
                     return contact;
                 }
             })

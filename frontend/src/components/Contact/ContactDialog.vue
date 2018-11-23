@@ -130,13 +130,12 @@ export default {
             this.$refs.form.reset();
         },
         submitContact() {
-            if (this.editedContact.company == null || this.editedContact.company == "") {
+            if (this.editedContact.company == null || this.editedContact.company === "") {
                 this.editedContact.role = "Freiberufler";
             }
 
             let company = this.editedContact.company;
-            console.log(company)
-            axios.put(`api/contact/submit/${company}`, {
+            axios.put(`${process.env.VUE_APP_API_URL}contact/submit/${company}`, {
                 name: this.editedContact.name,
                 id: this.editedContact.id,
                 role: this.editedContact.role,

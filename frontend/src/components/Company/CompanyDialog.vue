@@ -144,7 +144,7 @@ export default {
             this.$refs.form.reset();
         },
         submitCompany() {
-            axios.put('api/company/submit', {
+            axios.put(`${process.env.VUE_APP_API_URL}company/submit`, {
                 name: this.editedCompany.name,
                 id: this.editedCompany.id,
                 street: this.editedCompany.street,
