@@ -33,13 +33,6 @@
                 label="Rolle"
                 hide-details></v-text-field>
             </v-flex>
-            <v-flex xs12>
-                <v-text-field 
-                v-model="editedContact.address" 
-                prepend-icon="place"
-                label="Adresse"  
-                hide-details></v-text-field>
-            </v-flex>
             <v-flex xs6>
                 <v-text-field 
                 v-model="editedContact.mail" 
@@ -91,13 +84,8 @@ export default {
                 name: "",
                 company: "",
                 role: "",
-                address: "",
                 mail: "",
                 telephone: "",
-                jug: "",
-                cloudLab: "",
-                cioDay: "",
-                cloudFlyer: "",
                 lastContact: "",
                 lastAnswer: "",
                 comment: ""
