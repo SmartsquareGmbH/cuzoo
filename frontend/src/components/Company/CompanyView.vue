@@ -17,6 +17,11 @@
             <h1 class="display-1 text-xs-center">Ansprechpartner</h1>
         </v-flex>
         <v-flex xs1>
+            <v-card>
+                <v-btn block color="secondary" @click="editContacts()">
+                    <v-icon large dark>edit</v-icon>
+                </v-btn>
+            </v-card>
         </v-flex>
         <v-flex xs6>
             <v-layout row wrap>
@@ -188,14 +193,14 @@
                 <v-tab-item v-bind:key="contact.id" v-for="contact in contactsOfCompany">
                     <v-layout row wrap class="mt-1">
                         <v-flex xs2>
-                            <v-card dark color="green">
+                            <v-card dark color="green" height="100%">
                                 <v-card-text class="headline text-xs-center">
                                     <v-icon size="30px">work</v-icon>
                                 </v-card-text>
                             </v-card>
                         </v-flex>
                         <v-flex xs10>
-                            <v-card dark>
+                            <v-card dark height="100%">
                                 <v-card-text 
                                 class="headline text-xs-left">
                                     {{ contact.role }}
@@ -236,6 +241,32 @@
                                 v-if="contact.telephone != null && contact.telephone != ''"
                                 class="headline text-xs-left">
                                     {{ contact.telephone }}
+                                </v-card-text>
+                                <v-card-text
+                                v-else
+                                class="headline text-xs-left font-weight-light font-italic error--text">
+                                    N/A
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-card dark color="transparent" class="elevation-0">
+                                <v-card-text class="headline text-xs-left">
+                                    <v-tooltip top>
+                                    <v-icon color="info" size="36px" slot="activator">info</v-icon>
+                                        Sonstige Angaben zur Kontaktperson
+                                    </v-tooltip>
+                                    Sonstiges
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-card dark>
+                                <v-card-text 
+                                v-if="contact.comment != null &&
+                                contact.comment != ''" 
+                                class="headline text-xs-left">
+                                    {{ contact.comment }}
                                 </v-card-text>
                                 <v-card-text
                                 v-else
@@ -292,7 +323,7 @@ export default {
     },
     methods : {
         goPageBack() {
-            this.$router.back();
+            this.$router.go(-1);
         }
     }
 }
