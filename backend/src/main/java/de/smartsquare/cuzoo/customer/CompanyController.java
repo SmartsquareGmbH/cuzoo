@@ -25,10 +25,12 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyRepository companyRepository;
+    private final CSVConverter csvConverter;
 
     @Autowired
-    public CompanyController(final CompanyRepository companyRepository) {
+    public CompanyController(final CompanyRepository companyRepository, CSVConverter csvConverter) {
         this.companyRepository = companyRepository;
+        this.csvConverter = csvConverter;
     }
 
     @PostMapping("/import")
@@ -36,9 +38,7 @@ public class CompanyController {
         if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        CSVConverter CSVConverter = new CSVConverter(file);
-        List<Company> insertedCompanies = CSVConverter.getConvertedCompanies();
+        List<Company> insertedCompanies = csvConverter.getConvertedCompanies(file.getInputStream());
 
         insertedCompanies.forEach(companyRepository::save);
 
