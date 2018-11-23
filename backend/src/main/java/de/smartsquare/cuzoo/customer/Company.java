@@ -65,6 +65,7 @@ public class Company {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getStreet() {
         return street;
     }
