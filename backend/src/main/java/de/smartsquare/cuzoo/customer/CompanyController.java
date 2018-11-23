@@ -1,7 +1,5 @@
 package de.smartsquare.cuzoo.customer;
 
-import de.smartsquare.cuzoo.csv.CSVCompany;
-import de.smartsquare.cuzoo.csv.CSVImporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,10 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -42,10 +37,11 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        CSVImporter csvImporter = new CSVImporter();
-        InputStream inputFile = new BufferedInputStream(file.getInputStream());
+        CustomerInserter customerInserter = new CustomerInserter(file);
+        List<Company> insertedCompanies = customerInserter.getInsertedCompanies();
 
-        insertImportedCompanies(csvImporter.importFrom(inputFile, CSVCompany.class));
+        insertedCompanies.forEach(companyRepository::save);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -81,21 +77,6 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    void insertImportedCompanies(List<CSVCompany> importedEntity) {
-        for (CSVCompany csvCompany : importedEntity) {
-            Company company = new Company(
-                    csvCompany.getCompany(),
-                    csvCompany.getStreet(),
-                    csvCompany.getZipCode(),
-                    csvCompany.getPlace(),
-                    csvCompany.getHomepage(),
-                    csvCompany.getPurpose(),
-                    csvCompany.getOther());
-
-            companyRepository.save(company);
         }
     }
 
