@@ -12,13 +12,13 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify, {
-  theme: {
-    primary: '#4FC3F7'
-  }
+    theme: {
+        primary: '#4FC3F7'
+    }
 });
 
 const app = new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount("#app");
