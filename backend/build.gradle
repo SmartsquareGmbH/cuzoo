@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.4.RELEASE'
+		springBootVersion = '2.1.0.RELEASE'
 		jsefaVersion = '1.1.0.RELEASE'
 	}
 	repositories {
@@ -38,11 +38,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation "net.sf.jsefa:jsefa:$jsefaVersion"
 
-	if (project.hasProperty('env') && project.getProperty('env') == 'prod') {
-		runtime 'org.postgresql:postgresql'
-	} else {
-		runtime 'com.h2database:h2'
-	}
+	runtime 'com.h2database:h2'
+	runtime 'org.postgresql:postgresql'
+	
 	runtime 'org.springframework.boot:spring-boot-devtools'
 	testRuntime 'com.h2database:h2'
 
