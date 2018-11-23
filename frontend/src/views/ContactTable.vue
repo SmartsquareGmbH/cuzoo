@@ -44,10 +44,11 @@
         <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
         <td v-else class="text-xs-left">-</td>
         <td class="text-xs-left">{{ props.item.role }}</td>
-        <td class="text-xs-left">{{ props.item.address }}</td>
+        <td class="text-xs-left">{{ props.item.mail }}</td>
+        <td class="text-xs-left">{{ props.item.telephone }}</td>
         <td class="text-xs-left">{{ props.item.comment }}</td>
         <td class="justify-center layout px-0">
-        <v-icon size="22px" class="mr-2"
+        <v-icon size="22px" class="mr-2" v-if="props.item.role == 'Freiberufler'"
           @click="viewContact(props.item)">
             account_box
         </v-icon>
@@ -91,7 +92,8 @@ export default {
           { text: 'Name', align: 'left', value: 'name' },
           { text: 'Unternehmen', value: "company.name" },
           { text: 'Rolle', value: 'role' },
-          { text: 'Adresse', value: 'address' },
+          { text: 'E-Mail', value: 'mail' },
+          { text: 'Telefon', value: 'telephone' },
           { text: 'Bemerkung', value: 'comment'},
           { text: 'Aktionen', value: 'name', sortable: false }
       ]
