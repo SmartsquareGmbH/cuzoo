@@ -151,23 +151,8 @@ export default {
     deleteContact: function(item) {
       this.editedContact = Object.assign({}, item);
 
-      if (confirm("Bist du dir sicher, dass du das Unternehmen löschen willst?")) {
-        axios.post('api/contact/delete', {
-          name: this.editedContact.name,
-          id: this.editedContact.id,
-          company: this.editedContact.company,
-          role: this.editedContact.role,
-          address: this.editedContact.address,
-          mail: this.editedContact.mail,
-          telephone: this.editedContact.telephone,
-          jug: this.editedContact.jug,
-          cloudLab: this.editedContact.cloudLab,
-          cioDay: this.editedContact.cioDay,
-          cloudFlyer: this.editedContact.cloudFlyer,
-          lastContact: this.editedContact.lastContact,
-          lastAnswer: this.editedContact.lastAnswer,
-          comment: this.editedContact.comment
-        }, {
+      if (confirm("Bist du dir sicher, dass du diese Kontaktperson löschen willst?")) {
+        axios.delete(`api/contact/delete/${this.editedContact.id}`, {
           auth: {
             username: this.$store.getters.getLogName,
             password: this.$store.getters.getLogPass

@@ -40,7 +40,7 @@ export default {
   }),
   methods: {
     doLogin: function (event) {
-      axios.post('http://localhost:8080/api/security/login', {}, { 
+      axios.post('api/security/login', {}, {
         auth: {
           username: this.logName,
           password: this.logPass

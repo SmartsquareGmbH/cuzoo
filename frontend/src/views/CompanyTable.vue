@@ -194,17 +194,8 @@ export default {
     deleteCompany: function (item) {
       this.editedCompany = Object.assign({}, item);
 
-      if (confirm("Bist du dir sicher, dass du das Unternehmen löschen willst?")) {
-        axios.post('api/company/delete', {
-          name: this.editedCompany.name,
-          id: this.editedCompany.id,
-          street: this.editedCompany.street,
-          zipCode: this.editedCompany.zipCode,
-          place: this.editedCompany.place,
-          homepage: this.editedCompany.homepage,
-          purpose: this.editedCompany.purpose,
-          other: this.editedCompany.other
-        }, {
+      if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {
+        axios.delete(`api/company/delete/${this.editedCompany.id}`, {
           auth: {
             username: this.$store.getters.getLogName,
             password: this.$store.getters.getLogPass

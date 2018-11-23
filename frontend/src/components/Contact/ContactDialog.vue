@@ -134,18 +134,15 @@ export default {
                 this.editedContact.role = "Freiberufler";
             }
 
-            axios.put('api/contact/submit', {
+            let company = this.editedContact.company;
+            console.log(company)
+            axios.put(`api/contact/submit/${company}`, {
                 name: this.editedContact.name,
                 id: this.editedContact.id,
-                company: this.editedContact.company,
                 role: this.editedContact.role,
                 address: this.editedContact.address,
                 mail: this.editedContact.mail,
                 telephone: this.editedContact.telephone,
-                jug: this.editedContact.jug,
-                cloudLab: this.editedContact.cloudLab,
-                cioDay: this.editedContact.cioDay,
-                cloudFlyer: this.editedContact.cloudFlyer,
                 lastContact: this.editedContact.lastContact,
                 lastAnswer: this.editedContact.lastAnswer,
                 comment: this.editedContact.comment
