@@ -46,6 +46,12 @@
                 prepend-icon="home"></v-text-field>
             </v-flex>
             <v-flex xs12>
+                <v-radio-group v-model="editedCompany.status" required row>
+                    <v-radio label="Lead" value="Lead" color="primary"/>
+                    <v-radio label="Bestandskunde" value="Bestandskunde" color="primary"/>
+                </v-radio-group>
+            </v-flex>
+            <v-flex xs12>
                 <v-textarea
                 v-model="editedCompany.purpose"
                 counter="255"
@@ -72,7 +78,7 @@
     <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" flat v-on:click="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat v-on:click="clearDialog()">Löschen</v-btn>
+        <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
         <v-btn color="primary" flat v-on:click="submitCompany()" :disabled="!valid">Speichern</v-btn>
     </v-card-actions>
     </v-card>
@@ -97,7 +103,7 @@ export default {
                 zipCode: "",
                 place: "",
                 homepage: "",
-                status: "",
+                status: "Lead",
                 purpose: "",
                 other: ""
             }
@@ -121,7 +127,7 @@ export default {
         }
     },
     methods: {
-        closeDialog() {
+        closeDialog() { 
             this.$store.commit({
                 type: 'storeDialogState',
                 dialog: false
