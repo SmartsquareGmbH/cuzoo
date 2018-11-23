@@ -2,27 +2,30 @@ package de.smartsquare.cuzoo.customer;
 
 import de.smartsquare.cuzoo.csv.CSVCompany;
 import de.smartsquare.cuzoo.csv.CSVImporter;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 class CSVConverter {
     private final CSVImporter csvImporter;
-    private InputStream inputFile;
     private List<Company> convertedCompanies;
 
-    CSVConverter(MultipartFile file) throws IOException {
-        inputFile = new BufferedInputStream(file.getInputStream());
-        csvImporter = new CSVImporter();
+    private final CompanyRepository companyRepository;
 
+    CSVConverter(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+
+        csvImporter = new CSVImporter();
         convertedCompanies = new ArrayList<>();
     }
 
-    List<Company> getConvertedCompanies() {
+    List<Company> getConvertedCompanies(InputStream file) {
+        InputStream inputFile = new BufferedInputStream(file);
+
         List<CSVCompany> companiesToConvert = csvImporter.importFrom(inputFile, CSVCompany.class);
 
         for (CSVCompany csvCompany : companiesToConvert) {
