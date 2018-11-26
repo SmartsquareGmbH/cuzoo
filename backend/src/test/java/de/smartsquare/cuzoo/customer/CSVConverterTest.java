@@ -52,6 +52,19 @@ public class CSVConverterTest {
     }
 
     @Test
+    public void that_csv_contacts_getting_converted_correctly_when_company_do_not_exists() {
+        CSVConverter csvConverter = new CSVConverter(mockCompanyRepository);
+
+        List<Contact> contactsToConvert = csvConverter.getConvertedContacts(CSVConverterTest.class.getResourceAsStream("/TestContacts.csv"));
+
+        assertThat(contactsToConvert, containsInAnyOrder(
+                hasProperty("name", is("Alfred Anders")),
+                hasProperty("name", is("Ben Big")),
+                hasProperty("name", is("Claudia Chlor"))
+        ));
+    }
+
+    @Test
     public void that_missing_companies_of_csv_contacts_getting_inserted_correctly() {
         CSVConverter csvConverter = new CSVConverter(mockCompanyRepository);
 
