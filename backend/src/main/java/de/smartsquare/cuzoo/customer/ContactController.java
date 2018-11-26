@@ -1,7 +1,5 @@
 package de.smartsquare.cuzoo.customer;
 
-import de.smartsquare.cuzoo.csv.CSVContact;
-import de.smartsquare.cuzoo.csv.CSVImporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -30,11 +26,13 @@ public class ContactController {
 
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
+    private final CSVConverter csvConverter;
 
     @Autowired
-    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository) {
+    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository, CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
+        this.csvConverter = csvConverter;
     }
 
     @PostMapping("/import")
@@ -42,11 +40,10 @@ public class ContactController {
         if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
 
-        CSVImporter csvImporter = new CSVImporter();
-        InputStream inputFile = new BufferedInputStream(file.getInputStream());
+        insertedContacts.forEach(contactRepository::save);
 
-        insertImportedContactsWithMissingCompanies(csvImporter.importFrom(inputFile, CSVContact.class));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -83,42 +80,6 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    void insertImportedContactsWithMissingCompanies(List<CSVContact> importedEntity) {
-        for (CSVContact csvContact : importedEntity) {
-            Company companyOfContact;
-            Contact contact;
-
-            if (csvContact.getCompany() == null && csvContact.getRole().equals("Freiberufler")) {
-                contact = new Contact(
-                        csvContact.getName(),
-                        csvContact.getRole(),
-                        csvContact.getMail(),
-                        csvContact.getTelephone(),
-                        csvContact.getLastContact(),
-                        csvContact.getLastAnswer(),
-                        csvContact.getComment());
-            } else {
-                if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
-                    companyOfContact = new Company(csvContact.getCompany(), "", "", "", "", "", "");
-                    companyOfContact.setStatus("Lead");
-                } else {
-                    companyOfContact = companyRepository.findByName(csvContact.getCompany());
-                }
-                companyRepository.save(companyOfContact);
-                contact = new Contact(
-                        csvContact.getName(),
-                        companyOfContact,
-                        csvContact.getRole(),
-                        csvContact.getMail(),
-                        csvContact.getTelephone(),
-                        csvContact.getLastContact(),
-                        csvContact.getLastAnswer(),
-                        csvContact.getComment());
-            }
-            contactRepository.save(contact);
         }
     }
 
