@@ -15,7 +15,7 @@ services:
     depends_on:
       - "postgre-db"
     ports:
-      - "8080:8080"
+      - "5000:5000"
     command:
       ["java", "-jar", "app.jar",
        "--spring.datasource.url=jdbc:postgresql://postgre-db:5432/postgre-db",
@@ -24,13 +24,12 @@ services:
        "--spring.datasource.driver-class-name=org.postgresql.Driver",
        "--spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect",
        "--spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true",
+       "--server.port=5000"
       ]
 
   postgre-db:
     image: postgres:9.5
     container_name: postgre-db
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secure
