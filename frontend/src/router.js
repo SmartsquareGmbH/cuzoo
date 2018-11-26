@@ -13,28 +13,17 @@ export default new Router({
         {
             path: "/search",
             name: "search",
-            component: Search,
-            beforeEnter: function (to, from, next) {
-                Store.dispatch('getCompanies').then(
-                    Store.dispatch('getContacts').then(next())
-                );
-            }
+            component: Search
         },
         {
             path: "/companies",
             name: "companies",
-            component: CompanyTable,
-            beforeEnter: function (to, from, next) {
-                Store.dispatch('getCompanies').then(next());
-            }
+            component: CompanyTable
         },
         {
             path: "/contacts",
             name: "contacts",
-            component: ContactTable,
-            beforeEnter: function (to, from, next) {
-                Store.dispatch('getContacts').then(next());
-            }
+            component: ContactTable
         },
         {
             path: "/companies/:id",

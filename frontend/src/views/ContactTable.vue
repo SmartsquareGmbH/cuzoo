@@ -113,6 +113,9 @@
                 }
             }
         },
+        mounted() {
+            this.refreshTable()
+        },
         methods: {
             handleUpload() {
                 this.file = this.$refs.file.files[0];

@@ -157,6 +157,9 @@
                 })
             }
         },
+        mounted() {
+            this.refreshTable()
+        },
         methods: {
             handleUpload() {
                 this.file = this.$refs.file.files[0];
@@ -180,10 +183,12 @@
                 }).catch(error => {
                     console.log(error);
                 });
-            },
+            }
+            ,
             refreshTable() {
                 this.$store.dispatch('getCompanies');
-            },
+            }
+            ,
             editCompany: function (item) {
                 this.$store.commit({
                     type: 'storeEditedCompanyDetails',
@@ -191,7 +196,8 @@
                     editedCompany: Object.assign({}, item)
                 });
                 this.openDialog();
-            },
+            }
+            ,
             deleteCompany: function (item) {
                 this.editedCompany = Object.assign({}, item);
 
@@ -208,13 +214,15 @@
                         alert(error);
                     });
                 }
-            },
+            }
+            ,
             openDialog() {
                 this.$store.commit({
                     type: 'storeDialogState',
                     dialog: true
                 })
-            },
+            }
+            ,
             viewCompany: function (item) {
                 const index = this.companies.findIndex(company => company.id == item.id);
                 this.$router.push('/companies/' + (index));
