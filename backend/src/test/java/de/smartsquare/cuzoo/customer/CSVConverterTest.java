@@ -70,6 +70,6 @@ public class CSVConverterTest {
 
         List<Contact> contactsToConvert = csvConverter.getConvertedContacts(CSVConverterTest.class.getResourceAsStream("/TestContacts.csv"));
 
-        verify(mockCompanyRepository, times(3)).save(any(Company.class));
+        verify(mockCompanyRepository, times(2)).save(any(Company.class));
     }
 }
