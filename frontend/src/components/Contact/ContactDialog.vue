@@ -70,7 +70,7 @@
 
 <script>
     import {mapState} from 'vuex'
-    import axios from 'axios';
+    import api from '../../utils/http-common'
 
     export default {
         data() {
@@ -134,7 +134,7 @@
                 }
 
                 let company = this.editedContact.company;
-                axios.put(`${process.env.VUE_APP_API_URL}contact/submit/${company}`, {
+                api.put(`contact/submit/${company}`, {
                     name: this.editedContact.name,
                     id: this.editedContact.id,
                     role: this.editedContact.role,

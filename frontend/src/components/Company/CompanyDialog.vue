@@ -87,7 +87,7 @@
 
 <script>
     import {mapState} from 'vuex'
-    import axios from 'axios';
+    import api from '../../utils/http-common'
 
     export default {
         data() {
@@ -143,7 +143,7 @@
                 this.$refs.form.reset();
             },
             submitCompany() {
-                axios.put(`${process.env.VUE_APP_API_URL}company/submit`, {
+                api.put('company/submit', {
                     name: this.editedCompany.name,
                     id: this.editedCompany.id,
                     street: this.editedCompany.street,

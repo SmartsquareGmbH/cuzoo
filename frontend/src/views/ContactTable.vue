@@ -76,7 +76,7 @@
 
 <script>
     import {mapState} from 'vuex';
-    import axios from 'axios';
+    import api from '../utils/http-common'
     import ContactDialog from "@/components/Contact/ContactDialog.vue";
 
     export default {
@@ -124,8 +124,7 @@
             submitFile() {
                 let formData = new FormData();
                 formData.append('file', this.file);
-
-                axios.post(`${process.env.VUE_APP_API_URL}contact/import`, formData, {
+                api.post('contact/import', formData, {
                     auth: {
                         username: this.$store.getters.getLogName,
                         password: this.$store.getters.getLogPass
@@ -155,7 +154,7 @@
                 this.editedContact = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du diese Kontaktperson löschen willst?")) {
-                    axios.delete(`${process.env.VUE_APP_API_URL}contact/delete/${this.editedContact.id}`, {
+                    api.delete(`contact/delete/${this.editedContact.id}`, {
                         auth: {
                             username: this.$store.getters.getLogName,
                             password: this.$store.getters.getLogPass

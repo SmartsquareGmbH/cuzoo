@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import api from '../utils/http-common'
 
     export default {
         name: "login",
@@ -43,7 +43,7 @@
         }),
         methods: {
             doLogin: function (event) {
-                axios.post(`${process.env.VUE_APP_API_URL}security/login`, {}, {
+                api.post('security/login', {}, {
                     auth: {
                         username: this.logName,
                         password: this.logPass

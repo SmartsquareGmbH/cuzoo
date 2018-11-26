@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from 'axios';
+import api from './utils/http-common'
 
 Vue.use(Vuex);
 
@@ -78,7 +78,7 @@ export default new Vuex.Store({
     },
     actions: {
         getCompanies() {
-            axios.get(`${process.env.VUE_APP_API_URL}company/get`, {
+            api.get('company/get', {
                 auth: {
                     username: this.getters.getLogName,
                     password: this.getters.getLogPass
@@ -94,7 +94,7 @@ export default new Vuex.Store({
             });
         },
         getContacts() {
-            axios.get(`${process.env.VUE_APP_API_URL}contact/get`, {
+            api.get('contact/get', {
                 auth: {
                     username: this.getters.getLogName,
                     password: this.getters.getLogPass

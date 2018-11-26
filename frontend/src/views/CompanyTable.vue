@@ -109,7 +109,7 @@
 
 <script>
     import {mapState} from 'vuex';
-    import axios from 'axios';
+    import api from '../utils/http-common'
     import CompanyDialog from "@/components/Company/CompanyDialog.vue";
 
     export default {
@@ -169,7 +169,7 @@
                 let formData = new FormData();
                 formData.append('file', this.file);
 
-                axios.post(`${process.env.VUE_APP_API_URL}company/import`, formData, {
+                api.post('company/import', formData, {
                     auth: {
                         username: this.$store.getters.getLogName,
                         password: this.$store.getters.getLogPass
@@ -202,7 +202,7 @@
                 this.editedCompany = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {
-                    axios.delete(`${process.env.VUE_APP_API_URL}company/delete/${this.editedCompany.id}`, {
+                    api.delete(`company/delete/${this.editedCompany.id}`, {
                         auth: {
                             username: this.$store.getters.getLogName,
                             password: this.$store.getters.getLogPass
