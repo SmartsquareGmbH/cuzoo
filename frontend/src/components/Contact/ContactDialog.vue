@@ -20,7 +20,7 @@
                             </v-flex>
                             <v-flex xs6>
                                 <v-combobox
-                                        v-model="editedContact.company"
+                                        v-model="editedContact.company.name"
                                         :items="companyNames"
                                         label="Unternehmen"
                                         prepend-icon="business_center"
@@ -133,7 +133,7 @@
                     this.editedContact.role = "Freiberufler";
                 }
 
-                let company = this.editedContact.company;
+                let company = this.editedContact.company.name;
                 api.put(`contact/submit/${company}`, {
                     name: this.editedContact.name,
                     id: this.editedContact.id,

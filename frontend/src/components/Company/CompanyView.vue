@@ -18,11 +18,12 @@
             </v-flex>
             <v-flex xs1>
                 <v-card>
-                    <v-btn block color="secondary" @click="editContacts()">
+                    <v-btn block color="secondary" @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
                         <v-icon large dark>edit</v-icon>
                     </v-btn>
                 </v-card>
             </v-flex>
+            <contact-dialog></contact-dialog>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -293,8 +294,12 @@
 
 <script>
     import {mapState} from 'vuex';
+    import ContactDialog from "@/components/Contact/ContactDialog.vue";
 
     export default {
+        components: {
+            ContactDialog
+        },
         computed: {
             companyId() {
                 return this.$route.params.id;
@@ -325,6 +330,24 @@
         methods: {
             goPageBack() {
                 this.$router.go(-1);
+            },
+            editContact: function (item) {
+                console.log(item);
+                this.$store.commit({
+                    type: 'storeEditedContactDetails',
+                    editedIndex: this.contacts.indexOf(item),
+                    editedContact: Object.assign({}, item)
+                });
+                this.openDialog();
+            },
+            openDialog() {
+                this.$store.commit({
+                    type: 'storeDialogState',
+                    dialog: true
+                })
+            },
+            refreshTable() {
+                this.$store.dispatch('getContacts');
             }
         }
     }
