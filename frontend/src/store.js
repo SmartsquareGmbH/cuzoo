@@ -78,7 +78,7 @@ export default new Vuex.Store({
     },
     actions: {
         getCompanies() {
-            api.get('company/get', {
+            return api.get('company/get', {
                 auth: {
                     username: this.getters.getLogName,
                     password: this.getters.getLogPass
@@ -94,7 +94,7 @@ export default new Vuex.Store({
             });
         },
         getContacts() {
-            api.get('contact/get', {
+            return api.get('contact/get', {
                 auth: {
                     username: this.getters.getLogName,
                     password: this.getters.getLogPass
