@@ -115,7 +115,6 @@
         },
         mounted() {
             this.refreshTable()
-            this.loading = false
         },
         methods: {
             handleUpload() {
@@ -141,7 +140,8 @@
                 });
             },
             refreshTable() {
-                this.$store.dispatch('getContacts');
+                this.$store.dispatch('getContacts')
+                    .then(() => this.loading = false)
             },
             editContact: function (item) {
                 this.$store.commit({

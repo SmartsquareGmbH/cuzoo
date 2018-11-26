@@ -158,7 +158,6 @@
         },
         mounted() {
             this.refreshTable()
-            this.loading = false
         },
         methods: {
             handleUpload() {
@@ -183,12 +182,11 @@
                 }).catch(error => {
                     console.log(error);
                 });
-            }
-            ,
+            },
             refreshTable() {
-                this.$store.dispatch('getCompanies');
-            }
-            ,
+                this.$store.dispatch('getCompanies')
+                    .then(() => this.loading = false)
+            },
             editCompany: function (item) {
                 this.$store.commit({
                     type: 'storeEditedCompanyDetails',
@@ -196,8 +194,7 @@
                     editedCompany: Object.assign({}, item)
                 });
                 this.openDialog();
-            }
-            ,
+            },
             deleteCompany: function (item) {
                 this.editedCompany = Object.assign({}, item);
 
@@ -214,15 +211,13 @@
                         alert(error);
                     });
                 }
-            }
-            ,
+            },
             openDialog() {
                 this.$store.commit({
                     type: 'storeDialogState',
                     dialog: true
                 })
-            }
-            ,
+            },
             viewCompany: function (item) {
                 const index = this.companies.findIndex(company => company.id === item.id);
                 this.$router.push('/companies/' + (index));
