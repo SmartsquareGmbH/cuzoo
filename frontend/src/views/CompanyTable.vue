@@ -37,10 +37,10 @@
             </v-btn>
             <company-dialog></company-dialog>
             <v-layout row wrap class="pl-2 pt-1">
-                <v-flex xs2>
+                <v-flex xl2 lg3 md4 xs5>
                     <v-checkbox v-model="selectedStatus" label="Leads" value="Lead" color="teal accent-2" class=""/>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xl2 lg3 md4 xs5>
                     <v-checkbox v-model="selectedStatus" label="Bestandskunden" value="Bestandskunde"
                                 color="teal accent-2"/>
                 </v-flex>
