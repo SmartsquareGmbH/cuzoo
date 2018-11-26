@@ -35,10 +35,14 @@
                 :headers="headers"
                 :items="contacts"
                 :search="search"
+                :loading=loading
                 rows-per-page-text="Unternehmen pro Seite"
                 :rows-per-page-items=[10,25,50,100]
                 dark
         >
+
+            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
@@ -62,11 +66,6 @@
                     </v-icon>
                 </td>
             </template>
-            <template slot="no-data">
-                <v-alert :value="true" color="error" icon="warning">
-                    Keine Daten verfügbar :'(
-                </v-alert>
-            </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
             </v-alert>
@@ -88,6 +87,7 @@
                 file: '',
                 search: '',
                 companyNames: [],
+                loading: true,
                 headers: [
                     {text: 'Name', align: 'left', value: 'name'},
                     {text: 'Unternehmen', value: "company.name"},
@@ -115,6 +115,7 @@
         },
         mounted() {
             this.refreshTable()
+            this.loading = false
         },
         methods: {
             handleUpload() {

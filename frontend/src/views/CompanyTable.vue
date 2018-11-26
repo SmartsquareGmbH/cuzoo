@@ -57,11 +57,14 @@
         <v-data-table
                 :headers="headers"
                 :items="filteredCompanies"
+                :loading=loading
                 :search="search"
                 rows-per-page-text="Unternehmen pro Seite"
                 :rows-per-page-items=[10,25,50,100]
                 dark
         >
+            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-left">{{ props.item.street }}</td>
@@ -94,11 +97,6 @@
                     </v-icon>
                 </td>
             </template>
-            <template slot="no-data">
-                <v-alert :value="true" color="error" icon="warning">
-                    Keine Daten verfügbar :'(
-                </v-alert>
-            </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
             </v-alert>
@@ -121,6 +119,7 @@
                 selectedStatus: ["Lead", "Bestandskunde"],
                 file: '',
                 search: '',
+                loading: true,
                 headers: [
                     {text: 'Unternehmen', value: 'name', align: 'left'},
                     {text: 'Straße', value: 'street'},
@@ -159,6 +158,7 @@
         },
         mounted() {
             this.refreshTable()
+            this.loading = false
         },
         methods: {
             handleUpload() {
@@ -224,7 +224,7 @@
             }
             ,
             viewCompany: function (item) {
-                const index = this.companies.findIndex(company => company.id == item.id);
+                const index = this.companies.findIndex(company => company.id === item.id);
                 this.$router.push('/companies/' + (index));
             }
         }
