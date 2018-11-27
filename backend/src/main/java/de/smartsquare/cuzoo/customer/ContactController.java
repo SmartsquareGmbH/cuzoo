@@ -63,13 +63,15 @@ public class ContactController {
             contact.setCompany(contactsCompany);
         }
 
+        Long contactIdBeforeSaving = contact.getId();
+
         try {
             contactRepository.save(contact);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(contact.getId() == null) {
+        if(contactIdBeforeSaving == null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
