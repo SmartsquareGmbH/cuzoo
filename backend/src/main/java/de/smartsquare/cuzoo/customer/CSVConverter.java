@@ -33,7 +33,7 @@ class CSVConverter {
 
         for (CSVCompany csvCompany : companiesToConvert) {
             Company company = new Company(
-                    csvCompany.getCompany(),
+                    csvCompany.getCompany().trim(),
                     csvCompany.getStreet(),
                     csvCompany.getZipCode(),
                     csvCompany.getPlace(),
