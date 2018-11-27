@@ -47,15 +47,21 @@ public class ContactController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/submit/{companyName}")
-    public final ResponseEntity<?> submitContact(@RequestBody @Valid Contact contact,
-                                                 BindingResult bindingResult, @PathVariable String companyName) {
-        if (!companyRepository.existsByName(companyName) || bindingResult.hasErrors()) {
+    @PutMapping("/submit")
+    public final ResponseEntity<?> submitContact(@RequestBody @Valid Contact contact, BindingResult bindingResult,
+                                                 @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Company contactsCompany = companyRepository.findByName(companyName);
-        contact.setCompany(contactsCompany);
+        if (isFreelancer(maybeCompanyName)) {
+            if (!companyRepository.existsByName(maybeCompanyName)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            Company contactsCompany = companyRepository.findByName(maybeCompanyName);
+            contact.setCompany(contactsCompany);
+        }
 
         try {
             contactRepository.save(contact);
@@ -68,6 +74,10 @@ public class ContactController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    private boolean isFreelancer(String maybeCompanyName) {
+        return maybeCompanyName != null;
     }
 
     @DeleteMapping("/delete/{contactId}")

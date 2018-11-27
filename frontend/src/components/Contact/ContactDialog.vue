@@ -81,7 +81,9 @@
                     value: false,
                     id: 0,
                     name: "",
-                    company: "",
+                    company: {
+                        name: ""
+                    },
                     role: "",
                     mail: "",
                     telephone: "",
@@ -109,6 +111,9 @@
             },
             companyNames() {
                 return this.$store.getters.getCompanyNames;
+            },
+            companyName() {
+                return this.editedContact.company.name;
             }
         },
         methods: {
@@ -129,12 +134,17 @@
                 this.$refs.form.reset();
             },
             submitContact() {
-                if (this.editedContact.company == null || this.editedContact.company === "") {
+                console.log(this.companyName);
+                console.log(this.editedContact.company.name);
+
+                if (this.companyName == null || this.companyName === "") {
+                    this.editedContact.companyName = "";
                     this.editedContact.role = "Freiberufler";
                 }
 
-                let company = this.editedContact.company.name;
-                api.put(`contact/submit/${company}`, {
+                let company = this.companyName;
+                let companyOrFreelancer = company ? `?companyName=${company}` : ''
+                api.put(`contact/submit${companyOrFreelancer}`, {
                     name: this.editedContact.name,
                     id: this.editedContact.id,
                     role: this.editedContact.role,
