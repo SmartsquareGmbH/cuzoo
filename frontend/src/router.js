@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Store from "./store";
 import Search from "./views/Search.vue";
+import Points from "./views/Points.vue";
 import CompanyTable from "./views/CompanyTable.vue";
 import ContactTable from "./views/ContactTable.vue";
 import CompanyView from "./components/Company/CompanyView.vue";
@@ -14,6 +15,11 @@ export default new Router({
             path: "/search",
             name: "search",
             component: Search
+        },
+        {
+            path: "/points",
+            name: "points",
+            component: Points
         },
         {
             path: "/companies",
