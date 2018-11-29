@@ -52,13 +52,15 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        Long companyIdBeforeSaving = company.getId();
+
         try {
             companyRepository.save(company);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(company.getId() == null) {
+        if(companyIdBeforeSaving == null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
