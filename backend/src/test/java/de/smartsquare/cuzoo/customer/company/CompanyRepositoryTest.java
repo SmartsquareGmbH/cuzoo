@@ -1,5 +1,7 @@
-package de.smartsquare.cuzoo.customer;
+package de.smartsquare.cuzoo.customer.company;
 
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

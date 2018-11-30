@@ -1,13 +1,15 @@
-package de.smartsquare.cuzoo.customer;
+package de.smartsquare.cuzoo.customer.contact;
 
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

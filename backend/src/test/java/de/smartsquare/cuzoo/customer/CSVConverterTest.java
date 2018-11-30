@@ -1,5 +1,8 @@
 package de.smartsquare.cuzoo.customer;
 
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.contact.Contact;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

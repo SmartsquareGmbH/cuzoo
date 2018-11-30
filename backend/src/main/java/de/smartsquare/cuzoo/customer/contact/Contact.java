@@ -1,6 +1,6 @@
-package de.smartsquare.cuzoo.customer;
+package de.smartsquare.cuzoo.customer.contact;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import de.smartsquare.cuzoo.customer.company.Company;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +36,7 @@ public class Contact {
     public Contact() {
     }
 
-    Contact(@NotNull @NotBlank final String name, Company company,
+    public Contact(@NotNull @NotBlank final String name, Company company,
             String role, String mail, String telephone,
             String lastContact, String lastAnswer, String comment) {
         this.name = name;
@@ -49,7 +49,7 @@ public class Contact {
         this.comment = comment;
     }
 
-    Contact(@NotNull @NotBlank final String name,
+    public Contact(@NotNull @NotBlank final String name,
             String role, String mail, String telephone,
             String lastContact, String lastAnswer, String comment) {
         this.name = name;

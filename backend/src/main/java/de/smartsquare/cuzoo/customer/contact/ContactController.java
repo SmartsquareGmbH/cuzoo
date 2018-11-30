@@ -1,5 +1,8 @@
-package de.smartsquare.cuzoo.customer;
+package de.smartsquare.cuzoo.customer.contact;
 
+import de.smartsquare.cuzoo.customer.CSVConverter;
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,14 +24,16 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/company")
-public class CompanyController {
+@RequestMapping("/api/contact")
+public class ContactController {
 
+    private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
     private final CSVConverter csvConverter;
 
     @Autowired
-    public CompanyController(final CompanyRepository companyRepository, CSVConverter csvConverter) {
+    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository, CSVConverter csvConverter) {
+        this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.csvConverter = csvConverter;
     }
@@ -38,44 +43,55 @@ public class CompanyController {
         if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Company> insertedCompanies = csvConverter.getConvertedCompanies(file.getInputStream());
+        List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
 
-        insertedCompanies.forEach(companyRepository::save);
+        insertedContacts.forEach(contactRepository::save);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitCompany(@RequestBody @Valid Company company,
-                                                 BindingResult bindingResult) {
+    public final ResponseEntity<?> submitContact(@RequestBody @Valid Contact contact, BindingResult bindingResult,
+                                                 @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Long companyIdBeforeSaving = company.getId();
+        if (isFreelancer(maybeCompanyName)) {
+            if (!companyRepository.existsByName(maybeCompanyName)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            Company contactsCompany = companyRepository.findByName(maybeCompanyName);
+            contact.setCompany(contactsCompany);
+        }
+
+        Long contactIdBeforeSaving = contact.getId();
 
         try {
-            companyRepository.save(company);
+            contactRepository.save(contact);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(companyIdBeforeSaving == null) {
+        if(contactIdBeforeSaving == null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-
     }
 
-    @DeleteMapping("/delete/{companyId}")
-    public final ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
-        if (!companyRepository.existsById(companyId)) {
+    private boolean isFreelancer(String maybeCompanyName) {
+        return maybeCompanyName != null;
+    }
+
+    @DeleteMapping("/delete/{contactId}")
+    public final ResponseEntity<?> deleteContact(@PathVariable Long contactId) {
+        if (!contactRepository.existsById(contactId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         try {
-            companyRepository.deleteById(companyId);
+            contactRepository.deleteById(contactId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,7 +99,7 @@ public class CompanyController {
     }
 
     @GetMapping("/get")
-    public final ResponseEntity<List<Company>> getCompanies() {
-        return ResponseEntity.ok(companyRepository.findAll());
+    public final ResponseEntity<List<Contact>> getContacts() {
+        return ResponseEntity.ok(contactRepository.findAll());
     }
 }

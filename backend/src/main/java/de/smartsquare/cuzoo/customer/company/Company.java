@@ -1,6 +1,7 @@
-package de.smartsquare.cuzoo.customer;
+package de.smartsquare.cuzoo.customer.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.smartsquare.cuzoo.customer.contact.Contact;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -38,7 +39,7 @@ public class Company {
     public Company() {
     }
 
-    Company(@NotNull @NotBlank final String name,
+    public Company(@NotNull @NotBlank final String name,
             String street, String zipCode, String place,
             String homepage, String purpose, String other) {
         this.name = name;
