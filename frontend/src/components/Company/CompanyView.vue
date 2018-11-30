@@ -2,28 +2,33 @@
     <v-container grid-list-md text-xs-center fluid>
         <v-layout row wrap>
             <v-flex xs1>
-                <v-card>
-                    <v-btn block color="secondary" @click="goPageBack()">
-                        <v-icon large dark>arrow_back</v-icon>
-                    </v-btn>
-                </v-card>
+                <v-btn block color="secondary" @click="goPageBack()">
+                    <v-icon large dark>arrow_back</v-icon>
+                </v-btn>
             </v-flex>
             <v-flex xs4>
                 <h1 class="display-1 text-xs-center">Unternehmen</h1>
             </v-flex>
-            <v-flex xs2>
+            <v-flex xs1>
+                <v-btn block color="secondary" @click="editCompany(companies[companyId])">
+                    <v-icon large dark>edit</v-icon>
+                </v-btn>
+            </v-flex>
+            <company-dialog/>
+            <v-flex xs1>
+                <v-btn block color="secondary" @click="addContact()">
+                    <v-icon large dark>add</v-icon>
+                </v-btn>
             </v-flex>
             <v-flex xs4>
                 <h1 class="display-1 text-xs-center">Ansprechpartner</h1>
             </v-flex>
             <v-flex xs1>
-                <v-card>
-                    <v-btn block color="secondary" @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
-                        <v-icon large dark>edit</v-icon>
-                    </v-btn>
-                </v-card>
+                <v-btn v-if="contactsOfCompany.length > 0" block color="secondary" @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
+                    <v-icon large dark>edit</v-icon>
+                </v-btn>
             </v-flex>
-            <contact-dialog></contact-dialog>
+            <contact-dialog/>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -294,10 +299,12 @@
 
 <script>
     import {mapState} from 'vuex';
+    import CompanyDialog from "@/components/Company/CompanyDialog.vue";
     import ContactDialog from "@/components/Contact/ContactDialog.vue";
 
     export default {
         components: {
+            CompanyDialog,
             ContactDialog
         },
         computed: {
@@ -331,6 +338,20 @@
             goPageBack() {
                 this.$router.go(-1);
             },
+            editCompany: function (item) {
+                this.$store.commit({
+                    type: 'storeEditedCompanyDetails',
+                    editedIndex: this.companies.indexOf(item),
+                    editedCompany: Object.assign({}, item)
+                });
+                this.openCompanyDialog();
+            },
+            openCompanyDialog() {
+                this.$store.commit({
+                    type: 'storeCompanyDialogState',
+                    companyDialog: true
+                })
+            },
             editContact: function (item) {
                 console.log(item);
                 this.$store.commit({
@@ -338,15 +359,22 @@
                     editedIndex: this.contacts.indexOf(item),
                     editedContact: Object.assign({}, item)
                 });
-                this.openDialog();
+                this.openContactDialog();
             },
-            openDialog() {
+            openContactDialog() {
                 this.$store.commit({
-                    type: 'storeDialogState',
-                    dialog: true
+                    type: 'storeContactDialogState',
+                    contactDialog: true
                 })
             },
+            addContact() {
+                this.$store.commit({
+                    type: 'storeContactDialogState',
+                    contactDialog: true
+                });
+            },
             refreshTable() {
+                this.$store.dispatch('getCompanies');
                 this.$store.dispatch('getContacts');
             }
         }
