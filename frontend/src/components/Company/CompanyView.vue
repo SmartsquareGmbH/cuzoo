@@ -261,7 +261,7 @@
                                         <v-card-text class="headline text-xs-left">
                                             <v-tooltip top>
                                                 <v-icon color="info" size="36px" slot="activator">info</v-icon>
-                                                Sonstige Angaben zur Kontaktperson
+                                                Sonstige Angaben zum Ansprechpartner
                                             </v-tooltip>
                                             Sonstiges
                                         </v-card-text>

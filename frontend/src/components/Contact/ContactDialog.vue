@@ -95,7 +95,7 @@
         },
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'Kontaktperson hinzufügen' : 'Kontaktperson bearbeiten'
+                return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
             },
             contactDialogState() {
                 return this.$store.getters.getContactDialogState;

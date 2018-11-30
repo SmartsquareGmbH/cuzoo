@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-card-title>
-            <h1 class="mr-3">KONTAKTPERSONEN</h1>
+            <h1 class="mr-3">ANSPRECHPARTNER</h1>
             <input 
             class="input-file"
             type="file"
@@ -19,7 +19,7 @@
             <v-btn v-on:click="openDialog()" fab light small color="transparent" depressed flat>
                 <v-tooltip top>
                     <v-icon x-large color="light-green accent-2" slot="activator">add</v-icon>
-                    <span>Kontaktperson hinzufügen</span>
+                    <span>Ansprechpartner hinzufügen</span>
                 </v-tooltip>
             </v-btn>
             <contact-dialog></contact-dialog>
@@ -156,7 +156,7 @@
             deleteContact: function (item) {
                 this.editedContact = Object.assign({}, item);
 
-                if (confirm("Bist du dir sicher, dass du diese Kontaktperson löschen willst?")) {
+                if (confirm("Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?")) {
                     api.delete(`contact/delete/${this.editedContact.id}`, {
                         auth: {
                             username: this.$store.getters.getLogName,
