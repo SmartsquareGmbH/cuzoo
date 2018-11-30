@@ -11,13 +11,13 @@
                     clipped-left
                     fixed
                     app>
-                <v-toolbar-title class="mr-3">
+                <v-toolbar-title class="mr-2">
                     CUZOO
                 </v-toolbar-title>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn flat href="#/points">
-                        <v-icon>share</v-icon>
-                        <span class="ml-2">Kontaktpunkte</span>
+                    <v-btn flat href="#/search">
+                        <v-icon>search</v-icon>
+                        <span class="ml-2">Suche</span>
                     </v-btn>
                     <v-btn flat href="#/companies">
                         <v-icon>business_center</v-icon>
@@ -26,10 +26,6 @@
                     <v-btn flat href="#/contacts">
                         <v-icon>people</v-icon>
                         <span class="ml-2">Ansprechpartner</span>
-                    </v-btn>
-                    <v-btn flat href="#/search">
-                        <v-icon>search</v-icon>
-                        <span class="ml-2">Suche</span>
                     </v-btn>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
