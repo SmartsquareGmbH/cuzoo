@@ -21,22 +21,22 @@
                 class="mt-3"
                 indeterminate/>
             </v-flex>
-            <v-flex xs2></v-flex>
-            <v-flex xs2></v-flex>
+            <v-flex xs2/>
+            <v-flex xs2/>
             <v-flex xs8>
                 <v-card 
                 class="secondary mt-3 clickable"
                 @click.native="viewCompany(company)"
                 v-bind:key="company.id"
-                v-for="company in filteredCompanies">
+                v-for="company in searchResults">
                     <v-card-text class="headline text-xs-left">
                         {{ company.name }}
                         <v-spacer/>
                         <v-chip
-                        color="white"
+                        :color="randomColor(contact.id)"
                         class="mt-3"
                         v-bind:key="contact.id"
-                        v-for="contact in contactsOfCompany(company.name)">
+                        v-for="contact in getContactsOfCompany(company.name)">
                             <span class="headline black--text">
                                 {{ contact.name }}
                             </span>
@@ -50,13 +50,16 @@
 
 <script>
 import { mapState } from 'vuex';
+import { clearInterval } from 'timers';
 
 export default {
     data() {
         return {
             search: '',
             loading: true,
-            colorCache: {}
+            colorCache: {},
+            contactsOfCompany: [],
+            namesToFilter: []
         }
     },
     mounted() {
@@ -81,23 +84,30 @@ export default {
                 this.$store.commit('storeContacts', contacts)
             }
         },
-        filteredCompanies() {
+        searchResults() {
             return this.companies.filter(company => {
+                this.contactsOfCompany = this.getContactsOfCompany(company.name);
+                this.namesToFilter = [];
+
+                this.contactsOfCompany.forEach(contact => {
+                    this.namesToFilter.push(contact.name.toLowerCase());
+                })
+
                 if (this.search != '') {
-                    return company.name.toLowerCase().includes(this.search.toLowerCase());
+                    if (this.namesToFilter.length > 0) {
+                        return company.name.toLowerCase().includes(this.search.toLowerCase()) || 
+                            this.namesToFilter.some(name => name.includes(this.search.toLowerCase()))
+                    } else {
+                        return company.name.toLowerCase().includes(this.search.toLowerCase());
+                    }
                 } else {
                     return null;
                 }
             })
-        },
-        filteredContacts() {
-            return this.contacts.filter(contact => {
-                return contact.name.toLowerCase().includes(this.search.toLowerCase());
-            })
         }
     },
     methods: {
-        contactsOfCompany: function (item) {
+        getContactsOfCompany: function (item) {
             return this.contacts.filter((contact) => {
                 if (contact.company != null) {
                     return contact.company.name === item;
@@ -107,7 +117,7 @@ export default {
             })
         },
         randomColor(id) {
-            const random = () => Math.floor(256 * Math.random()) + 32;
+            const random = () => Math.floor(256 * Math.random()) + 112;
 
             return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
         },
