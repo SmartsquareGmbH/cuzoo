@@ -3,6 +3,9 @@ package de.smartsquare.cuzoo.customer;
 import de.smartsquare.cuzoo.csv.CSVCompany;
 import de.smartsquare.cuzoo.csv.CSVContact;
 import de.smartsquare.cuzoo.csv.CSVImporter;
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.contact.Contact;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedInputStream;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-class CSVConverter {
+public class CSVConverter {
     private final CSVImporter csvImporter;
     private List<Company> convertedCompanies;
     private List<Contact> convertedContacts;
@@ -26,7 +29,15 @@ class CSVConverter {
         convertedContacts = new ArrayList<>();
     }
 
-    List<Company> getConvertedCompanies(InputStream file) {
+    public List<Company> getConvertedCompanies(InputStream file) {
+        return convertCompanies(file);
+    }
+
+    public List<Contact> getConvertedContacts(InputStream file) {
+        return convertContacts(file);
+    }
+
+    private List<Company> convertCompanies(InputStream file) {
         InputStream inputFile = new BufferedInputStream(file);
 
         List<CSVCompany> companiesToConvert = csvImporter.importFrom(inputFile, CSVCompany.class);
@@ -48,7 +59,7 @@ class CSVConverter {
         return convertedCompanies;
     }
 
-    List<Contact> getConvertedContacts(InputStream file) {
+    private List<Contact> convertContacts(InputStream file) {
         InputStream inputFile = new BufferedInputStream(file);
 
         List<CSVContact> contactsToConvert = csvImporter.importFrom(inputFile, CSVContact.class);
