@@ -2,11 +2,12 @@
     <v-container fluid>
         <v-card-title>
             <h1 class="mr-3">KONTAKTPERSONEN</h1>
-            <input class="input-file"
-                   type="file"
-                   id="file"
-                   ref="file"
-                   v-on:change="handleUpload()"/>
+            <input 
+            class="input-file"
+            type="file"
+            id="file"
+            ref="file"
+            v-on:change="handleUpload()">
             <label for="file">
                 <v-tooltip top>
                     <v-icon slot="activator" x-large color="primary">
@@ -118,6 +119,7 @@
         },
         methods: {
             handleUpload() {
+                this.loading = true;
                 this.file = this.$refs.file.files[0];
                 this.submitFile();
             },
@@ -178,8 +180,8 @@
                     companyNames: this.companyNames
                 });
                 this.$store.commit({
-                    type: 'storeDialogState',
-                    dialog: true
+                    type: 'storeContactDialogState',
+                    contactDialog: true
                 });
             },
             viewContact: function (item) {

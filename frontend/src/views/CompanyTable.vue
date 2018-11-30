@@ -47,24 +47,21 @@
             </v-layout>
             <v-spacer></v-spacer>
             <v-text-field
-                    v-model="search"
-                    append-icon="search"
-                    label="Suche ..."
-                    single-line
-                    hide-details
-            ></v-text-field>
+            v-model="search"
+            append-icon="search"
+            label="Suche ..."
+            single-line
+            hide-details/>
         </v-card-title>
         <v-data-table
-                :headers="headers"
-                :items="filteredCompanies"
-                :loading=loading
-                :search="search"
-                rows-per-page-text="Unternehmen pro Seite"
-                :rows-per-page-items=[10,25,50,100]
-                dark
-        >
-            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
-
+        :headers="headers"
+        :items="filteredCompanies"
+        :loading=loading
+        :search="search"
+        rows-per-page-text="Unternehmen pro Seite"
+        :rows-per-page-items=[10,25,50,100]
+        dark>
+            <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-left">{{ props.item.street }}</td>
@@ -76,11 +73,11 @@
                 <td class="justify-center layout px-0">
                     <v-tooltip top>
                         <v-btn
-                                @click="viewCompany(props.item)"
-                                color="transparent"
-                                slot="activator"
-                                class="pt-1 mt-2"
-                                flat icon small>
+                        @click="viewCompany(props.item)"
+                        color="transparent"
+                        slot="activator"
+                        class="pt-1 mt-2"
+                        flat icon small>
                             <v-icon size="22px" color="white">
                                 info
                             </v-icon>
@@ -161,6 +158,7 @@
         },
         methods: {
             handleUpload() {
+                this.loading = true;
                 this.file = this.$refs.file.files[0];
                 this.submitFile();
             },
@@ -214,8 +212,8 @@
             },
             openDialog() {
                 this.$store.commit({
-                    type: 'storeDialogState',
-                    dialog: true
+                    type: 'storeCompanyDialogState',
+                    companyDialog: true
                 })
             },
             viewCompany: function (item) {
