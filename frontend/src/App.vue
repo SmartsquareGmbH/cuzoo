@@ -12,13 +12,16 @@
                     fixed
                     app>
                 <v-toolbar-title class="mr-2">
-                    CUZOO
+                    <v-chip 
+                    @click.native="goHome"
+                    outline
+                    color="black">
+                    <span class="headline font-weight-light">
+                        CUZOO
+                    </span>
+                    </v-chip>
                 </v-toolbar-title>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn flat href="#/search">
-                        <v-icon>search</v-icon>
-                        <span class="ml-2">Suche</span>
-                    </v-btn>
                     <v-btn flat href="#/companies">
                         <v-icon>business_center</v-icon>
                         <span class="ml-2">Unternehmen</span>
@@ -26,6 +29,10 @@
                     <v-btn flat href="#/contacts">
                         <v-icon>people</v-icon>
                         <span class="ml-2">Ansprechpartner</span>
+                    </v-btn>
+                    <v-btn flat href="#/search">
+                        <v-icon>search</v-icon>
+                        <span class="ml-2">Suche</span>
                     </v-btn>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
@@ -74,6 +81,11 @@
         computed: {
             authorized() {
                 return this.$store.getters.getAuthorized
+            }
+        },
+        methods: {
+            goHome() {
+                this.$router.push('/search');
             }
         }
     }
