@@ -12,7 +12,8 @@ export default new Vuex.Store({
         companies: [],
         companyNames: [],
         contacts: [],
-        dialog: false,
+        companyDialog: false,
+        contactDialog: false,
         editedIndex: -1,
         editedCompany: {
             value: false,
@@ -30,7 +31,9 @@ export default new Vuex.Store({
             value: false,
             id: 0,
             name: "",
-            company: "",
+            company: {
+                name: ""
+            },
             role: "",
             mail: "",
             telephone: "",
@@ -45,15 +48,16 @@ export default new Vuex.Store({
         getLogPass: state => state.logPass,
         getCompanies: state => state.companies,
         getContacts: state => state.contacts,
-        getDialogState: state => state.dialog,
+        getCompanyDialogState: state => state.companyDialog,
+        getContactDialogState: state => state.contactDialog,
         getCompanyNames: state => state.companyNames,
         getEditedIndex: state => state.editedIndex
     },
     mutations: {
         storeLogData(state, payload) {
             state.authorized = payload.authorized,
-                state.logName = payload.username,
-                state.logPass = payload.password
+            state.logName = payload.username,
+            state.logPass = payload.password
         },
         storeCompanies(state, payload) {
             state.companies = payload.companies
@@ -64,16 +68,19 @@ export default new Vuex.Store({
         storeCompanyNames(state, payload) {
             state.companyNames = payload.companyNames
         },
-        storeDialogState(state, payload) {
-            state.dialog = payload.dialog
+        storeCompanyDialogState(state, payload) {
+            state.companyDialog = payload.companyDialog
+        },
+        storeContactDialogState(state, payload) {
+            state.contactDialog = payload.contactDialog
         },
         storeEditedCompanyDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-                state.editedCompany = payload.editedCompany
+            state.editedCompany = payload.editedCompany
         },
         storeEditedContactDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-                state.editedContact = payload.editedContact
+            state.editedContact = payload.editedContact
         }
     },
     actions: {

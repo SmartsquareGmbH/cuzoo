@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialogState" persistent max-width="750">
+    <v-dialog v-model="companyDialogState" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -92,7 +92,7 @@
     export default {
         data() {
             return {
-                dialog: false,
+                companyDialog: false,
                 valid: true,
                 defaultCompany: {
                     value: false,
@@ -112,8 +112,8 @@
             formTitle() {
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
             },
-            dialogState() {
-                return this.$store.getters.getDialogState;
+            companyDialogState() {
+                return this.$store.getters.getCompanyDialogState;
             },
             editedIndex() {
                 return this.$store.getters.getEditedIndex;
@@ -128,8 +128,8 @@
         methods: {
             closeDialog() {
                 this.$store.commit({
-                    type: 'storeDialogState',
-                    dialog: false
+                    type: 'storeCompanyDialogState',
+                    companyDialog: false
                 })
                 setTimeout(() => {
                     this.$store.commit({

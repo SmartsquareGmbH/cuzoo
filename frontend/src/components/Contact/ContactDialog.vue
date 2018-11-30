@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialogState" persistent max-width="750">
+    <v-dialog v-model="contactDialogState" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -75,7 +75,7 @@
     export default {
         data() {
             return {
-                dialog: false,
+                contactDialog: false,
                 valid: true,
                 defaultContact: {
                     value: false,
@@ -97,8 +97,8 @@
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktperson hinzufügen' : 'Kontaktperson bearbeiten'
             },
-            dialogState() {
-                return this.$store.getters.getDialogState;
+            contactDialogState() {
+                return this.$store.getters.getContactDialogState;
             },
             editedIndex() {
                 return this.$store.getters.getEditedIndex;
@@ -119,8 +119,8 @@
         methods: {
             closeDialog() {
                 this.$store.commit({
-                    type: 'storeDialogState',
-                    dialog: false
+                    type: 'storeContactDialogState',
+                    contactDialog: false
                 })
                 setTimeout(() => {
                     this.$store.commit({
