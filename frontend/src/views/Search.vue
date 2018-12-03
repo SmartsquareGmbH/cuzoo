@@ -110,10 +110,6 @@ export default {
                 }
             }
         },
-        viewCompany: function (item) {
-            const index = this.companies.findIndex(company => company.id === item.id);
-            this.$router.push('/companies/' + (index));
-        },
         refreshData() {
             this.$store.dispatch('getCompanies');
             this.$store.dispatch('getContacts')
