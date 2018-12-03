@@ -79,7 +79,7 @@ public class CSVConverter {
                         csvContact.getComment());
             } else {
                 if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
-                    companyOfContact = new Company(csvContact.getCompany(), "", "", "", "", "", "");
+                    companyOfContact = new Company(csvContact.getCompany().trim(), "", "", "", "", "", "");
                     companyOfContact.setStatus("Lead");
                 } else {
                     companyOfContact = companyRepository.findByName(csvContact.getCompany());
