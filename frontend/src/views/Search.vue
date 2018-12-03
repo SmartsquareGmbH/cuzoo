@@ -8,6 +8,7 @@
             <v-flex xs8>
                 <v-text-field
                 color="primary"
+                ref="search"
                 v-model="search"
                 append-icon="search"
                 label="Suche nach Unternehmen oder Ansprechpartnern"
@@ -128,7 +129,13 @@ export default {
         refreshData() {
             this.$store.dispatch('getCompanies');
             this.$store.dispatch('getContacts')
-                .then(() => this.loading = false);
+            .then(() => {
+                this.loading = false;
+                this.doFocus();
+            });
+        },
+        doFocus() {
+            this.$refs.search.focus();
         }
     }
 }
