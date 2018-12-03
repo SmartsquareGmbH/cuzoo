@@ -1,15 +1,16 @@
 <template>
-    <v-card 
-    class="secondary mt-3 clickable"
-    @click.native="viewCompany(company)">
+    <v-card
+    class="secondary mt-3 mb-4 clickable rounded"
+    @click.native="viewCompany(company)"
+    hover>
         <v-card-text 
         class="headline text-xs-left">
             {{ company.name }}
+            <v-divider 
+            class="mt-2 mb-3"/>
             <div
             v-if="company.zipCode || company.place || company.street"
             class="headline font-weight-light text-xs-left">
-                <v-divider 
-                class="mt-2 mb-3"/>
                 <v-icon 
                 color="primary"
                 class="mr-1" 
@@ -20,7 +21,7 @@
             </div>
         </v-card-text>
         <v-card 
-        class="blue-grey darken-1"
+        color="#377D93"
         v-if="company.purpose || company.other">
             <v-card-text 
             class="headline text-xs-left font-weight-light">
@@ -74,3 +75,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.rounded {
+    border-radius: 20px;
+}
+</style>
