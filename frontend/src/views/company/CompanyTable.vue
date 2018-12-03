@@ -104,8 +104,8 @@
 
 <script>
     import {mapState} from 'vuex';
-    import api from '../utils/http-common'
-    import CompanyDialog from "@/components/Company/CompanyDialog.vue";
+    import api from '@/utils/http-common'
+    import CompanyDialog from "@/components/company/CompanyDialog.vue";
 
     export default {
         components: {

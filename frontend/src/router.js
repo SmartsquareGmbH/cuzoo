@@ -2,9 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import Store from "./store";
 import Search from "./views/Search.vue";
-import CompanyTable from "./views/CompanyTable.vue";
-import ContactTable from "./views/ContactTable.vue";
-import CompanyView from "./components/Company/CompanyView.vue";
+import CompanyTable from "./views/company/CompanyTable.vue";
+import ContactTable from "./views/contact/ContactTable.vue";
+import CompanyView from "./views/company/CompanyView.vue";
 
 Vue.use(Router);
 

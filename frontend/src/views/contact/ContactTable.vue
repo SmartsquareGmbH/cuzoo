@@ -61,6 +61,19 @@
                             v-on:click="editContact(props.item)">
                         edit
                     </v-icon>
+                    <v-tooltip top>
+                        <v-btn
+                        @click="downloadInfo(props.item)"
+                        color="transparent"
+                        class="pt-1 mt-2"
+                        slot="activator"
+                        flat icon small>
+                            <v-icon size="22px" color="white" style="transform: rotate(180deg)" dark>
+                                publish
+                            </v-icon>
+                        </v-btn>
+                        <span>Export Informationen</span>
+                    </v-tooltip>
                     <v-icon size="22px" class="mr-2" color="red lighten-1"
                             v-on:click="deleteContact(props.item)">
                         delete
@@ -76,8 +89,8 @@
 
 <script>
     import {mapState} from 'vuex';
-    import api from '../utils/http-common'
-    import ContactDialog from "@/components/Contact/ContactDialog.vue";
+    import api from '@/utils/http-common'
+    import ContactDialog from "@/components/contact/ContactDialog.vue";
 
     export default {
         components: {

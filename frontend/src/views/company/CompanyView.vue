@@ -299,8 +299,8 @@
 
 <script>
     import {mapState} from 'vuex';
-    import CompanyDialog from "@/components/Company/CompanyDialog.vue";
-    import ContactDialog from "@/components/Contact/ContactDialog.vue";
+    import CompanyDialog from "@/components/company/CompanyDialog.vue";
+    import ContactDialog from "@/components/contact/ContactDialog.vue";
 
     export default {
         components: {
