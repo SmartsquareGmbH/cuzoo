@@ -8,7 +8,7 @@
             <v-flex xs8>
                 <v-text-field
                 color="primary"
-                ref="search"
+                ref="searchBar"
                 v-model="search"
                 append-icon="search"
                 label="Suche nach Unternehmen oder Ansprechpartnern"
@@ -25,25 +25,10 @@
             <v-flex xs2/>
             <v-flex xs2/>
             <v-flex xs8>
-                <v-card 
-                class="secondary mt-3 clickable"
-                @click.native="viewCompany(company)"
+                <result-company
+                :company="company"
                 v-bind:key="company.id"
-                v-for="company in searchResults">
-                    <v-card-text class="headline text-xs-left">
-                        {{ company.name }}
-                        <v-spacer/>
-                        <v-chip
-                        :color="randomColor(contact.id)"
-                        class="mt-3"
-                        v-bind:key="contact.id"
-                        v-for="contact in getContactsOfCompany(company.name)">
-                            <span class="headline black--text">
-                                {{ contact.name }}
-                            </span>
-                        </v-chip>
-                    </v-card-text>
-                </v-card>
+                v-for="company in searchResults"/>
             </v-flex>
         </v-layout>
     </v-container>
@@ -53,18 +38,22 @@
 import { mapState } from 'vuex';
 import { clearInterval } from 'timers';
 
+import ResultCompany from "@/components/company/ResultCompany.vue";
+
 export default {
+    components: {
+        ResultCompany
+    },
     data() {
         return {
             search: '',
             loading: true,
-            colorCache: {},
             contactsOfCompany: [],
             searchTermsOfCompany: []
         }
     },
     mounted() {
-        this.refreshData()
+        this.refreshData();
     },
     computed: {
         ...mapState(['companies']),
@@ -90,11 +79,7 @@ export default {
                 this.defineSearchTerms(company);
 
                 if (this.search != '') {
-                    if (this.searchTermsOfCompany.length > 0) {
-                        return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
-                    } else {
-                        return company.name.toLowerCase().includes(this.search.toLowerCase());
-                    }
+                    return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
                 } else {
                     return null;
                 }
@@ -125,11 +110,6 @@ export default {
                 }
             }
         },
-        randomColor(id) {
-            const random = () => Math.floor(256 * Math.random()) + 112;
-
-            return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
-        },
         viewCompany: function (item) {
             const index = this.companies.findIndex(company => company.id === item.id);
             this.$router.push('/companies/' + (index));
@@ -143,7 +123,7 @@ export default {
             });
         },
         doFocus() {
-            this.$refs.search.focus();
+            this.$refs.searchBar.focus();
         }
     }
 }
