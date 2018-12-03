@@ -134,16 +134,14 @@
                 this.$refs.form.reset();
             },
             submitContact() {
-                console.log(this.companyName);
-                console.log(this.editedContact.company.name);
-
                 if (this.companyName == null || this.companyName === "") {
                     this.editedContact.companyName = "";
                     this.editedContact.role = "Freiberufler";
                 }
 
-                let company = this.companyName;
+                let company = this.companyName.replace("&", "%26");
                 let companyOrFreelancer = company ? `?companyName=${company}` : ''
+                
                 api.put(`contact/submit${companyOrFreelancer}`, {
                     name: this.editedContact.name,
                     id: this.editedContact.id,
