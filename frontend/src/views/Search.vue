@@ -60,7 +60,7 @@ export default {
             loading: true,
             colorCache: {},
             contactsOfCompany: [],
-            namesToFilter: []
+            searchTermsOfCompany: []
         }
     },
     mounted() {
@@ -87,17 +87,11 @@ export default {
         },
         searchResults() {
             return this.companies.filter(company => {
-                this.contactsOfCompany = this.getContactsOfCompany(company.name);
-                this.namesToFilter = [];
-
-                this.contactsOfCompany.forEach(contact => {
-                    this.namesToFilter.push(contact.name.toLowerCase());
-                })
+                this.defineSearchTerms(company);
 
                 if (this.search != '') {
-                    if (this.namesToFilter.length > 0) {
-                        return company.name.toLowerCase().includes(this.search.toLowerCase()) || 
-                            this.namesToFilter.some(name => name.includes(this.search.toLowerCase()))
+                    if (this.searchTermsOfCompany.length > 0) {
+                        return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
                     } else {
                         return company.name.toLowerCase().includes(this.search.toLowerCase());
                     }
@@ -116,6 +110,20 @@ export default {
                     return null;
                 }
             })
+        },
+        defineSearchTerms: function (company) {
+            this.searchTermsOfCompany = [];
+            this.contactsOfCompany = this.getContactsOfCompany(company.name);
+
+            this.contactsOfCompany.forEach(contact => {
+                this.searchTermsOfCompany.push(contact.name.toLowerCase());
+            })
+
+            for (var key in company) {
+                if (company.hasOwnProperty(key) && company[key] != null) {
+                    this.searchTermsOfCompany.push(company[key].toString().toLowerCase());
+                }
+            }
         },
         randomColor(id) {
             const random = () => Math.floor(256 * Math.random()) + 112;
