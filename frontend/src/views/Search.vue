@@ -75,7 +75,8 @@ export default {
             }
         },
         searchResults() {
-            return this.companies.filter(company => {
+            return this.companies
+            .filter(company => {
                 this.defineSearchTerms(company);
 
                 if (this.search != '') {
@@ -84,6 +85,7 @@ export default {
                     return null;
                 }
             })
+            .splice(0, 10);
         }
     },
     methods: {
