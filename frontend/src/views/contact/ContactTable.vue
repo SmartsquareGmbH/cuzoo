@@ -80,6 +80,9 @@
                     </v-icon>
                 </td>
             </template>
+            <span slot="no-data">
+                Keine Daten verfügbar :'(
+            </span>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
             </v-alert>
