@@ -101,7 +101,7 @@ public class ContactControllerTest {
         assertThat(contactRepository.findAll()
                 .stream()
                 .anyMatch(contact -> contact.getName()
-                        .equals("Darius Tack")))
+                        .equals("Freddy Faulig")))
                 .isTrue();
     }
 
@@ -123,7 +123,47 @@ public class ContactControllerTest {
     }
 
     private String getContactInJson() {
-        return "{\"name\":\"Darius Tack\", \"role\":\"Azubi\"}";
+        return "{\"name\":\"Freddy Faulig\", \"role\":\"Boesewicht\"}";
+    }
+
+    @Test
+    public void that_contact_is_getting_updated() throws Exception {
+        String companyName = "Smartsquare GmbH";
+        companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
+
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getOutdatedContactInJson());
+
+        MockHttpServletRequestBuilder updatedBuilder =
+                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getUpdatedContactInJson());
+
+        this.mockMvc.perform(builder);
+        this.mockMvc.perform(updatedBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactRepository.findAll()
+                .stream()
+                .anyMatch(contact -> contact.getRole()
+                        .equals("Softwareentwickler")))
+                .isTrue();
+    }
+
+    private String getOutdatedContactInJson() {
+        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Azubi\"}";
+    }
+
+    private String getUpdatedContactInJson() {
+        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Softwareentwickler\"}";
     }
 
     @Test

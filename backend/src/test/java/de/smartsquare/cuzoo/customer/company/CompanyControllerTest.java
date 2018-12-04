@@ -94,12 +94,49 @@ public class CompanyControllerTest {
         assertThat(companyRepository.findAll()
                 .stream()
                 .anyMatch(company -> company.getName()
-                        .equals("Smartsquare GmbH")))
+                        .equals("Fidea Development")))
                 .isTrue();
     }
 
     private String getCompanyInJson() {
-        return "{\"name\":\"Smartsquare GmbH\"}";
+        return "{\"name\":\"Fidea Development\"}";
+    }
+
+    @Test
+    public void that_company_is_getting_updated() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/company/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getOutdatedCompanyInJson());
+
+        MockHttpServletRequestBuilder updatedBuilder =
+                MockMvcRequestBuilders.put("/api/company/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getUpdatedCompanyInJson());
+
+        this.mockMvc.perform(builder);
+        this.mockMvc.perform(updatedBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(companyRepository.findAll()
+                .stream()
+                .anyMatch(company -> company.getName()
+                        .equals("Smartsquare GmbH")))
+                .isTrue();
+    }
+
+    private String getOutdatedCompanyInJson() {
+        return "{\"id\":\"1\", \"name\":\"Smartsquare GmbH\", \"status\":\"Lead\"}";
+    }
+
+    private String getUpdatedCompanyInJson() {
+        return "{\"id\":\"1\", \"name\":\"Smartsquare GmbH\", \"status\":\"Bestandskunde\"}";
     }
 
     @Test
