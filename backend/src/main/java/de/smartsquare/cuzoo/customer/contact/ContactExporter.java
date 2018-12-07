@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.contact;
 
 import com.sun.org.apache.xml.internal.serialize.LineSeparator;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,25 +10,37 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Service
 class ContactExporter {
     private static final String LINE_SEPARATOR = LineSeparator.Web;
+    private final ContactRepository contactRepository;
+    private String filename;
+    private Path file;
+    private Charset charset;
+    private String content;
 
-    Path exportContactToTxt(Contact contact) {
-        String filename = contact.getName()
-                .replace(' ', '_')
-                .toLowerCase() + ".txt";
+    ContactExporter(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
 
-        Path path = Paths.get("src/main/resources/" + filename);
-        Charset charset = Charset.forName("UTF-8");
-        String content = getContactContent(contact);
+    Path exportContactToTxt(Long contactId) {
+        contactRepository.findById(contactId).ifPresent(contact -> {
+            filename = contact.getName()
+                    .replace(' ', '_')
+                    .toLowerCase() + ".txt";
 
-        try (BufferedWriter writer = Files.newBufferedWriter(path, charset)) {
+            file = Paths.get("src/main/resources/" + filename);
+            charset = Charset.forName("UTF-8");
+            content = getContactContent(contact);
+        });
+
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
             writer.write(content);
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }
 
-        return path;
+        return file;
     }
 
     private String getContactContent(Contact contact) {
