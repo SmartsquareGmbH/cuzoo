@@ -15,22 +15,26 @@ public class ContactExporterTest {
     private Path file;
     private Contact darius;
 
+    private ContactExporter contactExporter;
+
     @Before
     public void initialize() {
-        ContactExporter contactExporter = new ContactExporter();
+        contactExporter = new ContactExporter();
         Company smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "", "", "Kommentar");
-
-        file = contactExporter.exportContactToTxt(darius);
     }
 
     @Test
     public void that_file_of_contact_is_getting_created() {
+        file = contactExporter.exportContactToTxt(darius);
+
         assertThat(file.getFileName().toString()).isEqualTo("darius_tack.txt");
     }
 
     @Test
     public void that_information_is_getting_written_to_text_file() throws IOException {
+        file = contactExporter.exportContactToTxt(darius);
+
         List<String> contents = Files.readAllLines(file);
 
         assertThat(contents.get(0).contains(darius.getName())).isTrue();
@@ -40,5 +44,4 @@ public class ContactExporterTest {
         assertThat(contents.get(4).contains(darius.getTelephone())).isTrue();
         assertThat(contents.get(5).contains(darius.getComment())).isTrue();
     }
-
 }

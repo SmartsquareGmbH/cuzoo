@@ -13,26 +13,15 @@ import java.nio.file.Paths;
 @Service
 class ContactExporter {
     private static final String LINE_SEPARATOR = LineSeparator.Web;
-    private final ContactRepository contactRepository;
-    private String filename;
-    private Path file;
-    private Charset charset;
-    private String content;
 
-    ContactExporter(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+    Path exportContactToTxt(Contact contact) {
+        String filename = contact.getName()
+                .replace(' ', '_')
+                .toLowerCase() + ".txt";
 
-    Path exportContactToTxt(Long contactId) {
-        contactRepository.findById(contactId).ifPresent(contact -> {
-            filename = contact.getName()
-                    .replace(' ', '_')
-                    .toLowerCase() + ".txt";
-
-            file = Paths.get("src/main/resources/" + filename);
-            charset = Charset.forName("UTF-8");
-            content = getContactContent(contact);
-        });
+        Path file = Paths.get("src/main/resources/" + filename);
+        Charset charset = Charset.forName("UTF-8");
+        String content = getContactContent(contact);
 
         try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
             writer.write(content);
