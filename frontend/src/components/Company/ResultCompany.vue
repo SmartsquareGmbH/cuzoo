@@ -2,7 +2,7 @@
     <v-card
     style="border-radius: 10px"
     class="secondary mt-3 mb-4 clickable"
-    @click.native="viewCompany(company)"
+    @click.native="viewContactPoints(company)"
     hover>
         <v-card-text 
         class="headline text-xs-left">
@@ -69,9 +69,9 @@ export default {
 
             return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
         },
-        viewCompany: function (item) {
-            const index = this.$parent.companies.findIndex(company => company.id === item.id);
-            this.$router.push('/companies/' + (index));
+        viewContactPoints: function (item) {
+            const index = this.companies.findIndex(company => company.id === item.id);
+            this.$router.push('/' + (index));
         }
     }
 }

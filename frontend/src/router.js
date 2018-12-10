@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Store from "./store";
 import Search from "./views/Search.vue";
 import CompanyTable from "./views/company/CompanyTable.vue";
-import ContactTable from "./views/contact/ContactTable.vue";
 import CompanyView from "./views/company/CompanyView.vue";
+import ContactTable from "./views/contact/ContactTable.vue";
+import CPoints from "./views/CPoints.vue";
 
 Vue.use(Router);
 
@@ -29,6 +29,11 @@ export default new Router({
             path: "/companies/:id",
             name: "companyview",
             component: CompanyView
+        },
+        {
+            path: "/:id",
+            name: "contactpoints",
+            component: CPoints
         }
     ]
 });
