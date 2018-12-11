@@ -12,8 +12,10 @@ export default new Vuex.Store({
         companies: [],
         companyNames: [],
         contacts: [],
+        contactNames: [],
         companyDialog: false,
         contactDialog: false,
+        cPointDialog: false,
         editedIndex: -1,
         editedCompany: {
             value: false,
@@ -40,6 +42,14 @@ export default new Vuex.Store({
             lastContact: "",
             lastAnswer: "",
             comment: ""
+        },
+        editedCPoint: {
+            value: false,
+            id: 0,
+            title: "",
+            contact: {},
+            date: "",
+            comment: ""
         }
     },
     getters: {
@@ -50,10 +60,15 @@ export default new Vuex.Store({
         getContacts: state => state.contacts,
         getCompanyDialogState: state => state.companyDialog,
         getContactDialogState: state => state.contactDialog,
+        getCPointDialogState: state => state.cPointDialog,
         getCompanyNames: state => state.companyNames,
+        getContactNames: state => state.contactNames,
         getEditedIndex: state => state.editedIndex
     },
     mutations: {
+        storeDarkState(state, payload) {
+            state.darkState = payload.darkState
+        },
         storeLogData(state, payload) {
             state.authorized = payload.authorized,
             state.logName = payload.username,
@@ -74,6 +89,10 @@ export default new Vuex.Store({
         storeContactDialogState(state, payload) {
             state.contactDialog = payload.contactDialog
         },
+        storeCPointDialogState(state, payload) {
+            state.contactNames = payload.contactNames,
+            state.cPointDialog = payload.cPointDialog
+        },
         storeEditedCompanyDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedCompany = payload.editedCompany
@@ -81,6 +100,10 @@ export default new Vuex.Store({
         storeEditedContactDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedContact = payload.editedContact
+        },
+        storeEditedCPointDetails(state, payload) {
+            state.editedIndex = payload.editedIndex,
+            state.editedCPoint = payload.editedCPoint
         }
     },
     actions: {

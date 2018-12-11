@@ -28,6 +28,7 @@
                             <span>Kontaktpunkt hinzufügen</span>
                         </v-tooltip>
                     </v-btn>
+                    <c-point-dialog></c-point-dialog>
                 </h1>
             </v-flex>
             <v-flex xs4>
@@ -182,11 +183,16 @@
 
 <script>
 import { mapState } from 'vuex';
+import CPointDialog from "@/components/CPointDialog.vue";
 
 export default {
+    components: {
+        CPointDialog
+    },
     data() {
         return {
-            companyId: this.$route.params.id
+            companyId: this.$route.params.id,
+            contactNames: []
         }
     },
     computed: {
@@ -213,13 +219,24 @@ export default {
         }
     },
     methods: {
-        getContactsOfCompany: function (item) {
+        getContactsOfCompany() {
             return this.contacts.filter((contact) => {
                 if (contact.company != null) {
-                    return contact.company.name === item;
+                    return contact.company.name === this.company.name;
                 } else {
                     return null;
                 }
+            })
+        },
+        addCPoint() {
+            this.getContactsOfCompany().forEach(contact => {
+                this.contactNames.push(contact.name);
+            })
+
+            this.$store.commit({
+                type: 'storeCPointDialogState',
+                contactNames: this.contactNames,
+                cPointDialog: true
             })
         }
     }
