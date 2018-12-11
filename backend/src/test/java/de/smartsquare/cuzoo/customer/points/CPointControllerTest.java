@@ -41,6 +41,7 @@ public class CPointControllerTest {
     @After
     public void tearDown() throws Exception {
         cPointRepository.deleteAll();
+        contactRepository.deleteAll();
     }
 
     @Test
@@ -65,7 +66,8 @@ public class CPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"1\", \"name\":\"Darius Tack\"}}";
+        Long id = contactRepository.findByName("Darius Tack").getId();
+        return "{\"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
     }
 
     @Test
@@ -98,11 +100,13 @@ public class CPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"1\", \"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"1\", \"name\":\"Darius Tack\"}}";
+        Long id = contactRepository.findByName("Darius Tack").getId();
+        return "{\"id\":\"2\", \"title\":\"BeratungsgespraechZwei\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
     }
 
     private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"1\", \"title\":\"Auftrag\", \"contact\":{\"id\":\"1\", \"name\":\"Darius Tack\"}}";
+        Long id = contactRepository.findByName("Darius Tack").getId();
+        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
     }
 
     @Test
