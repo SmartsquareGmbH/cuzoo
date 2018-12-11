@@ -32,10 +32,12 @@ public class CPointControllerTest {
     private CPointRepository cPointRepository;
     @Autowired
     private ContactRepository contactRepository;
+    private Contact contact;
 
     @Before
     public void initialize() {
-        contactRepository.save(new Contact("Darius Tack", "", "", "", "", "", ""));
+        contact = new Contact("Darius Tack", "", "", "", "", "", "");
+        contactRepository.save(contact);
     }
 
     @After
@@ -101,7 +103,7 @@ public class CPointControllerTest {
 
     private String getOutdatedContactPointInJson() {
         Long id = contactRepository.findByName("Darius Tack").getId();
-        return "{\"id\":\"2\", \"title\":\"BeratungsgespraechZwei\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
     }
 
     private String getUpdatedContactPointInJson() {
@@ -147,5 +149,50 @@ public class CPointControllerTest {
         return "{\"title\":\"Beratung\", \"contact\":{\"name\":\"Fred Feuerstein\"}}";
     }
 
+    @Test
+    public void that_contact_point_is_getting_deleted() throws Exception {
+        CPoint cPoint = new CPoint("Beratung", contact, "", "");
+        cPointRepository.save(cPoint);
 
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.delete("/api/point/delete/" + cPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(cPointRepository.existsById(cPoint.getId())).isFalse();
+    }
+
+    @Test
+    public void that_deleting_contact_point_with_non_existing_id_is_not_found() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.delete("/api/point/delete/" + -1)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_contact_points_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/point/get")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }
