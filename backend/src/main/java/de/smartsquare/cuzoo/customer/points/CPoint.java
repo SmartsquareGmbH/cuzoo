@@ -23,7 +23,6 @@ public class CPoint {
     @NotBlank
     private String title;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "contact_id")
     private Contact contact;

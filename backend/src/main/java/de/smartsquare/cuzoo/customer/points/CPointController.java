@@ -1,5 +1,7 @@
 package de.smartsquare.cuzoo.customer.points;
 
+import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -20,18 +23,24 @@ import java.util.List;
 @RequestMapping("/api/point")
 public class CPointController {
     private final CPointRepository cPointRepository;
+    private final ContactRepository contactRepository;
 
     @Autowired
-    public CPointController(final CPointRepository cPointRepository) {
+    public CPointController(final CPointRepository cPointRepository, final ContactRepository contactRepository) {
         this.cPointRepository = cPointRepository;
+        this.contactRepository = contactRepository;
     }
 
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContactPoint(@RequestBody @Valid CPoint cPoint,
+                                                      @RequestParam(name = "contactName") String contactName,
                                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Contact cPointsContact = contactRepository.findByName(contactName);
+        cPoint.setContact(cPointsContact);
 
         Long cPointIdBeforeSaving = cPoint.getId();
 

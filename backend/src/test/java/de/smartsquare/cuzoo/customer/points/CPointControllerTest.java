@@ -49,7 +49,7 @@ public class CPointControllerTest {
     @Test
     public void that_contact_point_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit")
+                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -66,23 +66,36 @@ public class CPointControllerTest {
                         .equals("Beratungsgespraech")))
                 .isTrue();
     }
+    @Test
+    public void that_submitting_contact_point_without_existing_contact_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit?contactName=")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
 
     private String getContactPointInJson() {
-        Long id = contactRepository.findByName("Darius Tack").getId();
-        return "{\"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
+        return "{\"title\":\"Beratungsgespraech\"}";
     }
 
     @Test
     public void that_contact_point_is_getting_updated() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit")
+                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(getOutdatedContactPointInJson());
 
         MockHttpServletRequestBuilder updatedBuilder =
-                MockMvcRequestBuilders.put("/api/point/submit")
+                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -102,19 +115,17 @@ public class CPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        Long id = contactRepository.findByName("Darius Tack").getId();
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\"}";
     }
 
     private String getUpdatedContactPointInJson() {
-        Long id = contactRepository.findByName("Darius Tack").getId();
-        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"contact\":{\"id\":\"" + id + "\", \"name\":\"Darius Tack\"}}";
+        return "{\"id\":\"2\", \"title\":\"Auftrag\"}";
     }
 
     @Test
     public void that_submitting_invalid_contact_point_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit")
+                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -128,25 +139,6 @@ public class CPointControllerTest {
 
     private String getInvalidContactPointInJson() {
         return "{\"title\":\"\"}";
-    }
-
-    @Test
-    public void that_submitting_contact_point_without_contact_is_data_access_exception() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactPointWithoutValidContactInJson());
-
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isInternalServerError())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    private String getContactPointWithoutValidContactInJson() {
-        return "{\"title\":\"Beratung\", \"contact\":{\"name\":\"Fred Feuerstein\"}}";
     }
 
     @Test
