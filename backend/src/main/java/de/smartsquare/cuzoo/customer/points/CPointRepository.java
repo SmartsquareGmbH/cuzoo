@@ -1,8 +1,8 @@
-package de.smartsquare.cuzoo.customer.contact;
+package de.smartsquare.cuzoo.customer.points;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContactRepository extends JpaRepository<Contact, Long> {
+interface CPointRepository extends JpaRepository<CPoint, Long> {
 }
