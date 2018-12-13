@@ -85,6 +85,9 @@
                                     v-bind:key="contact.id"
                                     class="mb-2"
                                     color="white">
+                                        <v-avatar class="info white--text" size="35px">
+                                            <v-icon>person</v-icon>
+                                        </v-avatar>
                                         <span class="headline secondary--text">
                                             {{ contact.name }}
                                         </span>
@@ -126,6 +129,9 @@
                                     color="white"
                                     v-bind:key="contact.id"
                                     v-for="contact in this.getContactsOfCompany(company.name)">
+                                        <v-avatar class="info white--text" size="35px">
+                                            <v-icon>person</v-icon>
+                                        </v-avatar>
                                         <span class="headline secondary--text">
                                             {{ contact.name }}
                                         </span>
