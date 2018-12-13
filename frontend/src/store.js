@@ -13,6 +13,7 @@ export default new Vuex.Store({
         companyNames: [],
         contacts: [],
         contactNames: [],
+        cPoints: [],
         companyDialog: false,
         contactDialog: false,
         cPointDialog: false,
@@ -49,7 +50,8 @@ export default new Vuex.Store({
             title: "",
             contact: {},
             date: "",
-            comment: ""
+            comment: "",
+            type: ""
         }
     },
     getters: {
@@ -58,6 +60,7 @@ export default new Vuex.Store({
         getLogPass: state => state.logPass,
         getCompanies: state => state.companies,
         getContacts: state => state.contacts,
+        getCPoints: state => state.cPoints,
         getCompanyDialogState: state => state.companyDialog,
         getContactDialogState: state => state.contactDialog,
         getCPointDialogState: state => state.cPointDialog,
@@ -79,6 +82,9 @@ export default new Vuex.Store({
         },
         storeContacts(state, payload) {
             state.contacts = payload.contacts
+        },
+        storeCPoints(state, payload) {
+            state.cPoints = payload.cPoints
         },
         storeCompanyNames(state, payload) {
             state.companyNames = payload.companyNames
@@ -134,6 +140,22 @@ export default new Vuex.Store({
                 this.commit({
                     type: 'storeContacts',
                     contacts: response.data
+                })
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        getCPoints() {
+            return api.get('point/get', {
+                auth: {
+                    username: this.getters.getLogName,
+                    password: this.getters.getLogPass
+                }
+            }).then(response => {
+                console.log(response.data);
+                this.commit({
+                    type: 'storeCPoints',
+                    cPoints: response.data
                 })
             }).catch(error => {
                 console.log(error);

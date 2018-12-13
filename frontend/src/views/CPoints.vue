@@ -67,7 +67,7 @@
                             <v-card 
                             style="border-radius: 15px"
                             height="100%">
-                                <v-card-title class="headline font-weight-light">
+                                <v-card-title class="secondary headline font-weight-light">
                                     Auftrag •                                     
                                     <span class="ml-2 mt-1 primary--text mr-2">
                                         06.12.18
@@ -222,9 +222,21 @@ export default {
             set(contacts) {
                 this.$store.commit('storeContacts', contacts)
             }
+        },
+        ...mapState(['cPoints']),
+        cPoints: {
+            get() {
+                return this.$store.state.cPoints
+            },
+            set(cPoints) {
+                this.$store.commit('storeCPoints', cPoints)
+            }
         }
     },
     methods: {
+        refreshData() {
+            this.$store.dispatch('getCPoints')
+        },
         getContactsOfCompany() {
             return this.contacts.filter((contact) => {
                 if (contact.company != null) {

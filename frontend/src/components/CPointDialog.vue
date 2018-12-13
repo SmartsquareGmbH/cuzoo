@@ -11,21 +11,41 @@
                             <v-flex xs8>
                                 <v-text-field
                                 v-model="editedCPoint.title"
+                                :rules="titleRules"
+                                prepend-icon="title"
                                 label="Titel"
+                                suffix="*"/>
+                            </v-flex>
+                            <v-flex xs4>
+                                <v-combobox
+                                v-model="editedCPoint.type"
+                                :items="this.pointTypes"
+                                :rules="pointRules"
                                 prepend-icon="share"
-                                hide-details
-                                suffix="*"
-                                required
-                                :rules="[v => !!v]"/>
+                                label="Art">
+                                    <template slot="item" slot-scope="data">
+                                        <v-icon class="mr-1">
+                                            {{ getPointTypeIconOf(data.item) }}
+                                        </v-icon> 
+                                        {{ data.item }}
+                                    </template>
+                                </v-combobox>
+                            </v-flex>
+                            <v-flex xs8>
+                                <v-combobox
+                                v-model="editedCPoint.contactName"
+                                :items="this.contactNames"
+                                :rules="contactRules"
+                                prepend-icon="person"
+                                label="Ansprechpartner"/>
                             </v-flex>
                             <v-flex xs4>
                                 <v-menu
                                 ref="menu"
-                                :close-on-content-click="false"
                                 v-model="menu"
-                                :nudge-right="40"
+                                :close-on-content-click="false"
+                                :nudge-right="35"
                                 :return-value.sync="date"
-                                lazy
                                 transition="scale-transition"
                                 offset-y
                                 full-width
@@ -33,11 +53,16 @@
                                     <v-text-field
                                     slot="activator"
                                     v-model="dateFormatted"
+                                    :rules="dateRules"
                                     prepend-icon="event"
-                                    hide-details
                                     label="Datum"
+                                    suffix="*"
                                     readonly/>
-                                    <v-date-picker v-model="date" scrollable locale="de" :max="new Date().toISOString().substr(0, 10)">
+                                    <v-date-picker
+                                    v-model="date"
+                                    :max="new Date().toISOString().substr(0, 10)"
+                                    scrollable
+                                    locale="de">
                                         <v-spacer/>
                                         <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
                                         <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -45,12 +70,11 @@
                                 </v-menu>
                             </v-flex>
                             <v-flex xs12>
-                                <v-combobox
-                                v-model="editedCPoint.contactName"
-                                :items="this.contactNames"
-                                label="Ansprechpartner"
-                                prepend-icon="person"
-                                hide-details/>
+                                <v-textarea
+                                v-model="editedCPoint.comment"
+                                prepend-icon="comment"
+                                label="Kommentar"
+                                rows="10"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -67,22 +91,36 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
+import api from '@/utils/http-common'
 
 export default {
     data() {
         return {
+            editedIndex: this.$store.getters.getEditedIndex,
             date: new Date().toISOString().substr(0, 10),
             menu: false,
-            editedIndex: this.$store.getters.getEditedIndex,
             valid: true,
+            pointTypes: [ "Telefon", "E-Mail", "Social Media" ],    
+            pointTypeIcons: [ "phone", "mail", "share" ],
+            pointRules: [
+                v => !!v || "Bitte geben Sie eine Kontaktpunktart an",
+                v => this.pointTypes.includes(v) || "Diese Kontaktpunktart existiert nicht"
+            ],
+            contactRules: [
+                v => !!v || "Bitte geben Sie einen Ansprechpartner an",
+                v => this.contactNames.includes(v) || "Dieser Ansprechpartner existiert nicht"
+            ],
+            titleRules: [ v => !!v || "Bitte geben Sie einen Titel an" ],
+            dateRules: [ v => !!v || "Bitte geben Sie ein Datum an" ],
             defaultCPoint: {
                 value: false,
                 id: 0,
                 title: "",
                 contactName: "",
                 date: "",
-                comment: ""
+                comment: "",
+                type: ""
             }
         }
     },
@@ -93,20 +131,29 @@ export default {
                 return this.$store.state.editedCPoint
             }
         },
+        formTitle() {
+            return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
+        },
         contactNames() {
             return this.$store.getters.getContactNames
         },
         cPointDialogState() {
             return this.$store.getters.getCPointDialogState
         },
-        formTitle() {
-            return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
-        },
         dateFormatted() {
             return this.formatDate(this.date)
         }
     },
     methods: {
+        formatDate (date) {
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${day}.${month}.${year}`
+        },
+        getPointTypeIconOf: function (type) {
+            return this.pointTypeIcons[this.pointTypes.indexOf(type)];
+        },
         clearDialog() {
             this.$refs.form.reset();
         },
@@ -123,11 +170,25 @@ export default {
                 })
             }, 300)
         },
-        formatDate (date) {
-            if (!date) return null
-
-            const [year, month, day] = date.split('-')
-            return `${day}.${month}.${year}`
+        submitCPoint() {
+            api.put(`point/submit?contactName=${this.editedCPoint.contactName}`, {
+                title: this.editedCPoint.title,
+                id: this.editedCPoint.id,
+                type: this.editedCPoint.type,
+                date: this.dateFormatted,
+                comment: this.editedCPoint.comment
+            }, {
+                auth: {
+                    username: this.$store.getters.getLogName,
+                    password: this.$store.getters.getLogPass
+                }
+            }).then(response => {
+                this.$parent.refreshData();
+                this.closeDialog();
+            }).catch(error => {
+                console.log(error);
+                alert(error);
+            });
         },
     }
 }
