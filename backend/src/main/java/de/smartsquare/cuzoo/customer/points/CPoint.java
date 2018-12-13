@@ -23,6 +23,10 @@ public class CPoint {
     @NotBlank
     private String title;
 
+    @NotNull
+    @NotBlank
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "contact_id")
     private Contact contact;
@@ -33,10 +37,10 @@ public class CPoint {
     public CPoint() {
     }
 
-    public CPoint(@NotNull @NotBlank String title,
-                  @NotNull Contact contact,
-                  String date, String comment) {
+    public CPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
+                  @NotNull Contact contact, String date, String comment) {
         this.title = title;
+        this.type = type;
         this.contact = contact;
         this.date = date;
         this.comment = comment;
@@ -56,6 +60,14 @@ public class CPoint {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Contact getContact() {

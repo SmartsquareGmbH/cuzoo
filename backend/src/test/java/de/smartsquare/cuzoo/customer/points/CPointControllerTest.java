@@ -82,7 +82,7 @@ public class CPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"title\":\"Beratungsgespraech\"}";
+        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\"}";
     }
 
     @Test
@@ -115,11 +115,11 @@ public class CPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\"}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\"}";
     }
 
     private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Auftrag\"}";
+        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"type\":\"Telefon\"}";
     }
 
     @Test
@@ -143,7 +143,7 @@ public class CPointControllerTest {
 
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
-        CPoint cPoint = new CPoint("Beratung", contact, "", "");
+        CPoint cPoint = new CPoint("Beratung", "Telefon", contact, "", "");
         cPointRepository.save(cPoint);
 
         MockHttpServletRequestBuilder builder =
