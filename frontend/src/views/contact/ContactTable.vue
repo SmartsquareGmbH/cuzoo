@@ -57,7 +57,7 @@
                             @click="viewContact(props.item)">
                         account_box
                     </v-icon>
-                    <v-icon size="22px" class="mr-2"
+                    <v-icon size="22px" class="mr-0"
                             v-on:click="editContact(props.item)">
                         edit
                     </v-icon>
