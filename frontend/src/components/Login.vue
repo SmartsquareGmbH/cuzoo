@@ -15,10 +15,10 @@
                     <v-card-text>
                         <v-form>
                             <v-text-field 
-                            @keyup.enter="doLogin" v-model="logName" prepend-icon="person"
+                            @keyup.enter="doLogin" v-model="username" prepend-icon="person"
                             name="username" label="User" type="text" :rules="usernameRules"/>
                             <v-text-field 
-                            @keyup.enter="doLogin" v-model="logPass" prepend-icon="lock"
+                            @keyup.enter="doLogin" v-model="password" prepend-icon="lock"
                             name="password" label="Passwort" type="password" :rules="passwordRules"/>
                         </v-form>
                     </v-card-text>
@@ -44,27 +44,26 @@
     export default {
         name: "login",
         data: () => ({
-            logName: null,
+            username: null,
+            password: null,
             usernameRules: [ v => !!v || "Ein Username wird benötigt" ],
             passwordRules: [ v => !!v || "Ein Passwort wird benötigt" ],
             wrongCredentials: false,
-            logPass: null,
-            drawer: null,
             kazookid: require('@/assets/rsz_kazoo-kid.png')
         }),
         methods: {
             doLogin: function (event) {
                 api.post('security/login', {}, {
                     auth: {
-                        username: this.logName,
-                        password: this.logPass
+                        username: this.username,
+                        password: this.password
                     }
                 }).then(response => {
                     this.$store.commit({
                         type: 'storeLogData',
                         authorized: true,
-                        username: this.logName,
-                        password: this.logPass
+                        username: this.username,
+                        password: this.password
                     })
                 }).then(response => {
                     this.$router.replace('/search')
