@@ -7,24 +7,32 @@
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer/>
                         <v-img
-                                :src=kazookid
-                                max-height="64px"
-                                max-width="64px"
+                        :src=kazookid
+                        max-height="64px"
+                        max-width="64px"
                         />
                     </v-toolbar>
                     <v-card-text>
                         <v-form>
-                            <v-text-field v-on:keyup.enter="doLogin" v-model="logName" prepend-icon="person"
-                                          name="login" label="User" type="text"></v-text-field>
-                            <v-text-field v-on:keyup.enter="doLogin" v-model="logPass" id="password" prepend-icon="lock"
-                                          name="password" label="Passwort" type="password"></v-text-field>
+                            <v-text-field 
+                            @keyup.enter="doLogin" v-model="logName" prepend-icon="person"
+                            name="username" label="User" type="text" :rules="usernameRules"/>
+                            <v-text-field 
+                            @keyup.enter="doLogin" v-model="logPass" prepend-icon="lock"
+                            name="password" label="Passwort" type="password" :rules="passwordRules"/>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn v-on:click.native="doLogin" color="primary">Login</v-btn>
+                        <v-spacer/>
+                        <v-btn @click.native="doLogin" color="primary">Login</v-btn>
                     </v-card-actions>
                 </v-card>
+                <v-snackbar v-model="wrongCredentials" color="error" bottom>
+                    Die Anmeldedaten sind ungültig!
+                    <v-btn dark flat @click="wrongCredentials = false">
+                        Schließen
+                    </v-btn>
+                </v-snackbar>
             </v-flex>
         </v-layout>
     </v-container>
@@ -37,6 +45,9 @@
         name: "login",
         data: () => ({
             logName: null,
+            usernameRules: [ v => !!v || "Ein Username wird benötigt" ],
+            passwordRules: [ v => !!v || "Ein Passwort wird benötigt" ],
+            wrongCredentials: false,
             logPass: null,
             drawer: null,
             kazookid: require('@/assets/rsz_kazoo-kid.png')
@@ -59,7 +70,7 @@
                     this.$router.replace('/search')
                 }).catch(error => {
                     if (error.response.status === 401) {
-                        alert("Die Anmeldedaten sind ungültig!");
+                        this.wrongCredentials = true;
                     }
                     console.error(error)
                 });
