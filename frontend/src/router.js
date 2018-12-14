@@ -4,7 +4,7 @@ import Search from "./views/Search.vue";
 import CompanyTable from "./views/company/CompanyTable.vue";
 import CompanyView from "./views/company/CompanyView.vue";
 import ContactTable from "./views/contact/ContactTable.vue";
-import CPointList from "./views/CPointList.vue";
+import CPointList from "./views/point/CPointList.vue";
 
 Vue.use(Router);
 
