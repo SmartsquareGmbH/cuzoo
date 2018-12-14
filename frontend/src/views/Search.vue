@@ -25,7 +25,7 @@
             <v-flex xs2/>
             <v-flex xs2/>
             <v-flex xs8>
-                <result-company
+                <company-card
                 :company="company"
                 v-bind:key="company.id"
                 v-for="company in searchResults"/>
@@ -38,11 +38,11 @@
 import { mapState } from 'vuex';
 import { clearInterval } from 'timers';
 
-import ResultCompany from "@/components/company/ResultCompany.vue";
+import CompanyCard from "@/components/company/CompanyCard.vue";
 
 export default {
     components: {
-        ResultCompany
+        CompanyCard
     },
     data() {
         return {
