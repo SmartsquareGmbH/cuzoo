@@ -22,6 +22,10 @@
                     </v-chip>
                 </v-toolbar-title>
                 <v-toolbar-items class="hidden-sm-and-down">
+                    <v-btn flat href="#/dashboard" disabled>
+                        <v-icon>dashboard</v-icon>
+                        <span class="ml-2">Dashboard</span>
+                    </v-btn>
                     <v-btn flat href="#/companies">
                         <v-icon>business_center</v-icon>
                         <span class="ml-2">Unternehmen</span>
