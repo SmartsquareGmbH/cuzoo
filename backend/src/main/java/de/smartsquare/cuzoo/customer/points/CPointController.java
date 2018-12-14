@@ -87,13 +87,12 @@ public class CPointController {
         return ResponseEntity.ok(cPointRepository.findAll());
     }
 
-
-    @GetMapping("/get/{companyId}")
-    public final ResponseEntity<List<CPoint>> getCPointsOfCompany(@PathVariable Long companyId) {
+    @GetMapping("/get/{companyName}")
+    public final ResponseEntity<List<CPoint>> getCPointsOfCompany(@PathVariable String companyName) {
         return ResponseEntity.ok(cPointRepository
                 .findAll()
                 .stream()
-                .filter(cPoint -> cPoint.getContact().getCompany().getId().equals(companyId))
+                .filter(cPoint -> cPoint.getContact().getCompany().getName().equals(companyName))
                 .collect(Collectors.toList()));
     }
 }
