@@ -1,4 +1,5 @@
 import Vuetify from 'vuetify'
+import VueClip from 'vue-clip'
 import '@babel/polyfill'
 import Vue from "vue"
 import './plugins/vuetify'
@@ -16,6 +17,8 @@ Vue.use(Vuetify, {
         primary: '#4FC3F7'
     }
 });
+
+Vue.use(VueClip);
 
 const app = new Vue({
     router,
