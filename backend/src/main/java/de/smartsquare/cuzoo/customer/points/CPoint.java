@@ -3,6 +3,7 @@ package de.smartsquare.cuzoo.customer.points;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,8 +33,9 @@ public class CPoint {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    private String date;
+    @Column(length = 510)
     private String comment;
+    private String date;
     private MultipartFile[] files;
 
     public CPoint() {
