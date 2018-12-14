@@ -46,6 +46,7 @@ export default {
     },
     data() {
         return {
+            dark: this.$store.getters.getDarkState,
             search: '',
             loading: true,
             contactsOfCompany: [],

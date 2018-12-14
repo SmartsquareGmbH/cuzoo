@@ -16,9 +16,9 @@
                     @click.native="goHome"
                     outline
                     color="black">
-                    <span class="headline font-weight-light">
-                        CUZOO
-                    </span>
+                        <span class="headline font-weight-light">
+                            CUZOO
+                        </span>
                     </v-chip>
                 </v-toolbar-title>
                 <v-toolbar-items class="hidden-sm-and-down">
@@ -38,12 +38,9 @@
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                     <v-switch
-                            disabled
-                            class="dm-switch pt-1 mt-3"
-                            label="Darkmode"
-                            v-model="dark"
-                    >
-                    </v-switch>
+                    class="dm-switch pt-1 mt-3"
+                    label="Darkmode"
+                    v-model="dark"/>
                     <v-btn flat icon disabled>
                         <v-icon style="transform: rotate(90deg)" dark>publish</v-icon>
                     </v-btn>
@@ -72,7 +69,7 @@
         },
         data() {
             return {
-                dark: true,
+                dark: this.$store.getters.getDarkState,
                 drawer: null,
                 company: true,
                 conatct: false

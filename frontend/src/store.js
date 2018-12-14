@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        darkState: true,
         authorized: false,
         logName: '',
         logPass: '',
@@ -55,6 +56,7 @@ export default new Vuex.Store({
         }
     },
     getters: {
+        getDarkState: state => state.darkState,
         getAuthorized: state => state.authorized,
         getLogName: state => state.logName,
         getLogPass: state => state.logPass,
