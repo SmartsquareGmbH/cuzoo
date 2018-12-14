@@ -177,8 +177,21 @@ export default {
                 contactNames: this.contactNames,
                 cPointDialog: true
             })
-        }
+        },
     }
+}
+
+function compare(a,b) {
+    if (a.date === b.date) {
+        if (a.id < b.id)
+            return 1;
+        if (a.id > b.id)
+            return -1;
+    } else if (a.date < b.date) {
+        return 1;
+    } else if (a.date > b.date) {
+        return -1;
+    } else return 0;
 }
 
 </script>
