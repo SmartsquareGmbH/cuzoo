@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/point")
@@ -82,7 +83,17 @@ public class CPointController {
     }
 
     @GetMapping("/get")
-    public final ResponseEntity<List<CPoint>> getContacts() {
+    public final ResponseEntity<List<CPoint>> getAllCPoints() {
         return ResponseEntity.ok(cPointRepository.findAll());
+    }
+
+
+    @GetMapping("/get/{companyId}")
+    public final ResponseEntity<List<CPoint>> getCPointsOfCompany(@PathVariable Long companyId) {
+        return ResponseEntity.ok(cPointRepository
+                .findAll()
+                .stream()
+                .filter(cPoint -> cPoint.getContact().getCompany().getId().equals(companyId))
+                .collect(Collectors.toList()));
     }
 }
