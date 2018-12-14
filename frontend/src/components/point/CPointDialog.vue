@@ -87,6 +87,23 @@
                 <v-btn color="primary" flat v-on:click="submitCPoint()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
+    <vue-clip :options="options">
+        <template slot="clip-uploader-action">
+        <div>
+            <div class="dz-message">
+                <h2><v-icon>attach_file</v-icon> Drag & Drop</h2>
+            </div>
+        </div>
+        </template>
+
+        <template slot="clip-uploader-body" scope="props">
+            <div v-bind:key="file.name" v-for="file in props.files">
+                <img v-bind:src="file.dataUrl" />
+                {{ file.name }} {{ file.status }}
+            </div>
+        </template>
+
+    </vue-clip>
     </v-dialog>
 </template>
 
@@ -121,6 +138,10 @@ export default {
                 date: "",
                 comment: "",
                 type: ""
+            },
+            options: {
+                url: '/upload',
+                paramName: 'file'
             }
         }
     },
@@ -149,7 +170,7 @@ export default {
             if (!date) return null
 
             const [year, month, day] = date.split('-')
-            return `${day}.${month}.${year}`
+            return `${day}.${month}.${year.substr(2, 2)}`
         },
         getPointTypeIconOf: function (type) {
             return this.pointTypeIcons[this.pointTypes.indexOf(type)];
@@ -184,6 +205,10 @@ export default {
                 }
             }).then(response => {
                 this.$parent.refreshData();
+                this.$store.commit({
+                    type: 'storeCPointDialogState',
+                    companyDialog: false
+                })
                 this.closeDialog();
             }).catch(error => {
                 console.log(error);
