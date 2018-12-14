@@ -2,45 +2,35 @@
     <v-container grid-list-md fluid>
         <v-layout row wrap>
             <v-flex xs12>
-                <h1 
-                class="ml-1 text-xs-left display-2 font-weight-thin">
+                <h1 class="ml-1 text-xs-left display-2 font-weight-thin">
                     {{ company.name }}
                 </h1>
                 <v-divider class="mt-1"/>
             </v-flex>
             <v-flex xs8>
-                <h1 
-                class="ml-1 text-xs-left headline font-weight-light">
+                <h1 class="ml-1 text-xs-left headline font-weight-light">
                     Kontaktpunkte
-                    <v-btn
+                    <v-btn small flat fab
                     v-on:click="addCPoint()"
-                    color="transparent"
-                    small
-                    flat
-                    fab>
+                    color="transparent">
                         <v-tooltip top>
-                            <v-icon
+                            <v-icon large
                             color="light-green accent-2"
-                            slot="activator"
-                            large>
+                            slot="activator">
                                 add
                             </v-icon>
                             <span>Kontaktpunkt hinzufügen</span>
                         </v-tooltip>
                     </v-btn>
-                    <c-point-dialog></c-point-dialog>
                 </h1>
+                <c-point-dialog/>
             </v-flex>
             <v-flex xs4>
-                <h1 
-                class="text-xs-left headline font-weight-light">
+                <h1 class="text-xs-left headline font-weight-light">
                     TODOs
-                    <v-btn
+                    <v-btn small fab flat
                     v-on:click="addTODO()"
-                    color="transparent"
-                    small
-                    fab
-                    flat>
+                    color="transparent">
                         <v-tooltip top>
                             <v-icon
                             color="light-green accent-2"
@@ -54,151 +44,75 @@
                 </h1>
             </v-flex>
             <v-flex xs8>
-                <div>
-                    <v-layout row wrap>
-                        <v-flex xs1>
-                            <v-card color="info" height="100%" style="border-radius: 15px">
-                                <v-card-text class="pt-4">
-                                    <v-icon large class="pt-4">mail</v-icon>
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs11>
-                            <v-card 
-                            style="border-radius: 15px"
-                            height="100%">
-                                <v-card-title class="secondary headline font-weight-light">
-                                    Auftrag •                                     
-                                    <span class="ml-2 mt-1 primary--text mr-2">
-                                        06.12.18
-                                    </span>
-                                    •
-                                    <v-icon class="ml-1">
-                                        attach_file
-                                    </v-icon>
-                                    <span class="ml-1 mt-1 primary--text">
-                                        0
-                                    </span>
-                                    <v-spacer></v-spacer>
-                                    <v-chip
-                                    v-for="contact in this.getContactsOfCompany(company.name)"
-                                    v-bind:key="contact.id"
-                                    class="mb-2"
-                                    color="white">
-                                        <v-avatar class="info white--text" size="35px">
-                                            <v-icon>person</v-icon>
-                                        </v-avatar>
-                                        <span class="headline secondary--text">
-                                            {{ contact.name }}
-                                        </span>
-                                    </v-chip>
-                                </v-card-title>
-                                <v-card-text class="subheading text-xs-left text-truncate">
-                                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-                                    et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs1>
-                            <v-card color="info" height="100%" style="border-radius: 15px">
-                                <v-card-text class="pt-4">
-                                    <v-icon large class="pt-4">phone</v-icon>
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs11>
-                            <v-card 
-                            style="border-radius: 15px"
-                            height="100%">
-                                <v-card-title class="headline font-weight-light">
-                                    Beratungsgespräch •
-                                    <span class="ml-2 mt-1 primary--text mr-2">
-                                        03.12.18
-                                    </span>
-                                    •
-                                    <v-icon class="ml-1">
-                                        attach_file
-                                    </v-icon>
-                                    <span class="ml-1 mt-1 primary--text">
-                                        2
-                                    </span>
-                                    <v-spacer></v-spacer>
-                                    <v-chip
-                                    class="mb-2"
-                                    color="white"
-                                    v-bind:key="contact.id"
-                                    v-for="contact in this.getContactsOfCompany(company.name)">
-                                        <v-avatar class="info white--text" size="35px">
-                                            <v-icon>person</v-icon>
-                                        </v-avatar>
-                                        <span class="headline secondary--text">
-                                            {{ contact.name }}
-                                        </span>
-                                    </v-chip>
-                                </v-card-title>
-                                <v-card-text class="subheading text-xs-left text-truncate">
-                                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-                                    et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
-                </div>
+                <v-progress-linear
+                v-if="loading"
+                slot="progress"
+                :size="50"
+                color="primary"
+                class="mt-3"
+                indeterminate/>
+                <c-point-card
+                :cPoint="cPoint"
+                v-bind:key="cPoint.id"
+                v-for="cPoint in this.cPoints"/>
             </v-flex>
             <v-flex xs4>
-                <div>
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <v-card style="border-radius: 15px" height="100%" color="error">
-                                <v-card-text class="secondary--text headline text-xs-left">
-                                    <v-icon size="30px" class="mr-2" color="secondary">
-                                        error
-                                    </v-icon>
-                                    Michael anrufen
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-card style="border-radius: 15px" height="100%" color="warning">
-                                <v-card-text class="secondary--text headline text-xs-left">
-                                    <v-icon size="30px" class="mr-2" color="secondary">
-                                        warning
-                                    </v-icon>
-                                    Pflichtenheft schreiben
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-card style="border-radius: 15px" height="100%" color="secondary">
-                                <v-card-text class="headline text-xs-left">
-                                    <v-icon size="30px" class="mr-2">
-                                        warning
-                                    </v-icon>
-                                    Pflichtenheft schreiben
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
-                </div>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-card style="border-radius: 15px" height="100%" color="error">
+                            <v-card-text class="secondary--text headline text-xs-left">
+                                <v-icon size="30px" class="mr-2" color="secondary">
+                                    error
+                                </v-icon>
+                                Michael anrufen
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-card style="border-radius: 15px" height="100%" color="warning">
+                            <v-card-text class="secondary--text headline text-xs-left">
+                                <v-icon size="30px" class="mr-2" color="secondary">
+                                    warning
+                                </v-icon>
+                                Pflichtenheft schreiben
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-card style="border-radius: 15px" height="100%" color="secondary">
+                            <v-card-text class="headline text-xs-left">
+                                <v-icon size="30px" class="mr-2">
+                                    warning
+                                </v-icon>
+                                Pflichtenheft schreiben
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import CPointDialog from "@/components/CPointDialog.vue";
+import { mapState } from 'vuex'
+import store from '@/store.js'
+import api from '@/utils/http-common'
+
+import CPointDialog from "@/components/point/CPointDialog.vue"
+import CPointCard from "@/components/point/CPointCard.vue"
 
 export default {
     components: {
-        CPointDialog
+        CPointDialog,
+        CPointCard
     },
     data() {
         return {
+            loading: true,
             companyId: this.$route.params.id,
-            contactNames: []
+            contactNames: [],
+            cPoints: []
         }
     },
     computed: {
@@ -208,34 +122,41 @@ export default {
         ...mapState(['companies']),
         companies: {
             get() {
-                return this.$store.state.companies
+                return store.state.companies
             },
             set(companies) {
-                this.$store.commit('storeCompanies', companies)
+                store.commit('storeCompanies', companies)
             }
         },
         ...mapState(['contacts']),
         contacts: {
             get() {
-                return this.$store.state.contacts
+                return store.state.contacts
             },
             set(contacts) {
-                this.$store.commit('storeContacts', contacts)
-            }
-        },
-        ...mapState(['cPoints']),
-        cPoints: {
-            get() {
-                return this.$store.state.cPoints
-            },
-            set(cPoints) {
-                this.$store.commit('storeCPoints', cPoints)
+                store.commit('storeContacts', contacts)
             }
         }
     },
+    mounted() {
+        this.refreshData()
+    },
     methods: {
         refreshData() {
-            this.$store.dispatch('getCPoints')
+            api.get(`point/get/${this.company.name}`, {
+                auth: {
+                    username: store.getters.getLogName,
+                    password: store.getters.getLogPass
+                }
+            }).then(response => {
+                this.cPoints = response.data.sort(compare);
+                console.log(this.cPoints)
+            }).catch(error => {
+                console.log(error)
+                alert(error)
+            }).then(() => {
+                this.loading = false
+            })
         },
         getContactsOfCompany() {
             return this.contacts.filter((contact) => {
@@ -251,7 +172,7 @@ export default {
                 this.contactNames.push(contact.name);
             })
 
-            this.$store.commit({
+            store.commit({
                 type: 'storeCPointDialogState',
                 contactNames: this.contactNames,
                 cPointDialog: true
@@ -259,4 +180,5 @@ export default {
         }
     }
 }
+
 </script>

@@ -112,6 +112,11 @@ export default new Vuex.Store({
         storeEditedCPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedCPoint = payload.editedCPoint
+        },
+        addCPoints(state, cPointsToAdd) {
+            cPointsToAdd.forEach(cPoint => {
+                state.cPoints.push(cPoint);
+            });
         }
     },
     actions: {
