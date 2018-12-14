@@ -1,5 +1,5 @@
 <template>
-    <v-layout row wrap>
+    <v-layout row wrap class="clickable">
         <v-flex xs1>
             <v-card color="info" height="100%" style="border-radius: 15px">
                 <v-card-text class="pt-4">
@@ -9,6 +9,7 @@
         </v-flex>
         <v-flex xs11>
             <v-card 
+            @click.native="viewContactPoint(cPoint)"
             style="border-radius: 15px"
             height="100%">
                 <v-card-title class="secondary headline font-weight-light">
@@ -28,7 +29,7 @@
                         </span>
                     </v-chip>
                 </v-card-title>
-                <v-card-text class="subheading text-xs-left text-truncate">
+                <v-card-text class="subheading text-xs-left text-truncate" width="20%">
                     {{ cPoint.comment }}
                 </v-card-text>
             </v-card>
@@ -39,6 +40,11 @@
 <script>
 export default {
     props: ['cPoint'],
+    data() {
+        return {
+            cPoints: this.$parent.cPoints
+        }
+    },
     methods: {
         getPointTypeIconOf: function (type) {
             switch(type) {
@@ -47,6 +53,16 @@ export default {
                 case 'Social Media': return 'share'
             }
         },
+        viewContactPoint: function (item) {
+            const index = this.cPoints.findIndex(cPoint => cPoint.id === item.id);
+            this.$router.push(this.$route.fullPath + '/' + (index));
+        }
     }
 }
 </script>
+
+<style>
+.clickable {
+    cursor: pointer;
+}
+</style>

@@ -35,6 +35,11 @@ export default new Router({
             path: "/:id",
             name: "contactpoints",
             component: CPointList
+        },
+        {
+            path: "/:id/:id",
+            name: "contactpointview",
+            component: CPoint
         }
     ]
 });
