@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.points;
 
 import de.smartsquare.cuzoo.customer.contact.Contact;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,6 +34,7 @@ public class CPoint {
 
     private String date;
     private String comment;
+    private MultipartFile[] files;
 
     public CPoint() {
     }
@@ -92,5 +94,13 @@ public class CPoint {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public MultipartFile[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(MultipartFile[] files) {
+        this.files = files;
     }
 }

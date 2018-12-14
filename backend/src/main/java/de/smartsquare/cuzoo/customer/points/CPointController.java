@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -33,14 +34,24 @@ public class CPointController {
 
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContactPoint(@RequestBody @Valid CPoint cPoint,
-                                                      @RequestParam(name = "contactName") String contactName,
+                                                      @RequestParam("contactName") String contactName,
+                                                      @RequestParam(required = false, name = "files") MultipartFile[] files,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
         Contact cPointsContact = contactRepository.findByName(contactName);
         cPoint.setContact(cPointsContact);
+        cPoint.setFiles(files);
 
         Long cPointIdBeforeSaving = cPoint.getId();
 
