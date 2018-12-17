@@ -7,7 +7,7 @@
             type="file"
             id="file"
             ref="file"
-            v-on:change="handleUpload()">
+            @change="handleUpload()">
             <label for="file">
                 <v-tooltip top>
                     <v-icon slot="activator" x-large color="primary">
@@ -16,49 +16,52 @@
                     <span>CSV Import</span>
                 </v-tooltip>
             </label>
-            <v-btn v-on:click="openDialog()" fab light small color="transparent" depressed flat>
+            <v-btn @click="openDialog()" fab light small color="transparent" depressed flat>
                 <v-tooltip top>
                     <v-icon x-large color="light-green accent-2" slot="activator">add</v-icon>
                     <span>Ansprechpartner hinzufügen</span>
                 </v-tooltip>
             </v-btn>
-            <contact-dialog></contact-dialog>
+            <contact-dialog 
+            v-model="dialogState"
+            :companyNames="this.companyNames"/>
             <v-spacer></v-spacer>
             <v-text-field
-                    v-model="search"
-                    append-icon="search"
-                    label="Suche ..."
-                    single-line
-                    hide-details
-            ></v-text-field>
+            v-model="search"
+            append-icon="search"
+            label="Suche ..."
+            single-line
+            hide-details/>
         </v-card-title>
         <v-data-table
-                :headers="headers"
-                :items="contacts"
-                :search="search"
-                :loading=loading
-                rows-per-page-text="Unternehmen pro Seite"
-                :rows-per-page-items=[10,25,50,100]
-                dark
-        >
-
-            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
-
+        :headers="headers"
+        :items="contacts"
+        :search="search"
+        :loading=loading
+        rows-per-page-text="Unternehmen pro Seite"
+        :rows-per-page-items=[10,25,50,100]
+        dark>
+            <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
-                <td v-else class="text-xs-left">-</td>
+                <td v-else class="text-xs-center">-</td>
                 <td class="text-xs-left">{{ props.item.role }}</td>
                 <td class="text-xs-left">{{ props.item.mail }}</td>
                 <td class="text-xs-left">{{ props.item.telephone }}</td>
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="justify-center layout px-0">
-                    <v-icon size="22px" class="mr-2" v-if="props.item.role == 'Freiberufler'"
-                            @click="viewContact(props.item)">
+                    <v-icon 
+                    v-if="props.item.role == 'Freiberufler'"
+                    @click="viewContact(props.item)"
+                    size="22px" 
+                    class="mr-2">
                         account_box
                     </v-icon>
-                    <v-icon size="22px" class="mr-0"
-                            v-on:click="editContact(props.item)">
+                    <v-icon 
+                    @click="editContact(props.item)"
+                    size="22px" 
+                    class="mr-0">
                         edit
                     </v-icon>
                     <v-tooltip top>
@@ -74,8 +77,11 @@
                         </v-btn>
                         <span>Export Informationen</span>
                     </v-tooltip>
-                    <v-icon size="22px" class="mr-2" color="red lighten-1"
-                            v-on:click="deleteContact(props.item)">
+                    <v-icon 
+                    @click="deleteContact(props.item)"
+                    size="22px" 
+                    class="mr-2" 
+                    color="red lighten-1">
                         delete
                     </v-icon>
                 </td>
@@ -105,6 +111,7 @@
                 search: '',
                 companyNames: [],
                 loading: true,
+                dialogState: false,
                 headers: [
                     {text: 'Name', align: 'left', value: 'name'},
                     {text: 'Unternehmen', value: "company.name"},
@@ -191,14 +198,8 @@
                 this.companies.forEach(company => {
                     this.companyNames.push(company.name)
                 });
-                this.$store.commit({
-                    type: 'storeCompanyNames',
-                    companyNames: this.companyNames
-                });
-                this.$store.commit({
-                    type: 'storeContactDialogState',
-                    contactDialog: true
-                });
+                
+                this.dialogState = true;
             },
             viewContact: function (item) {
                 const index = this.contacts.findIndex(contact => contact.id == item.id);

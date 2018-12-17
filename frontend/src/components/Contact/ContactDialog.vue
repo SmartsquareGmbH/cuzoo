@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="contactDialogState" persistent max-width="750">
+    <v-dialog :value="value" @input="$emit('input')" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -10,49 +10,47 @@
                         <v-layout wrap>
                             <v-flex xs12>
                                 <v-text-field
-                                        v-model="editedContact.name"
-                                        label="Vor- und Nachname"
-                                        prepend-icon="people"
-                                        hide-details
-                                        suffix="*"
-                                        required
-                                        :rules="[v => !!v]"></v-text-field>
+                                v-model="editedContact.name"
+                                label="Vor- und Nachname"
+                                prepend-icon="people"
+                                hide-details
+                                suffix="*"
+                                required
+                                :rules="[v => !!v]"/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-combobox
-                                        v-model="editedContact.company.name"
-                                        :items="companyNames"
-                                        label="Unternehmen"
-                                        prepend-icon="business_center"
-                                        hide-details>
-                                </v-combobox>
+                                v-model="editedContact.company.name"
+                                :items="companyNames"
+                                label="Unternehmen"
+                                prepend-icon="business_center"
+                                hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
-                                        v-model="editedContact.role"
-                                        label="Rolle"
-                                        hide-details></v-text-field>
+                                v-model="editedContact.role"
+                                label="Rolle"
+                                hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
-                                        v-model="editedContact.mail"
-                                        prepend-icon="mail"
-                                        label="E-Mail"
-                                        hide-details></v-text-field>
+                                v-model="editedContact.mail"
+                                prepend-icon="mail"
+                                label="E-Mail"
+                                hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
-                                        v-model="editedContact.telephone"
-                                        label="Telefon"
-                                        hide-details></v-text-field>
+                                v-model="editedContact.telephone"
+                                label="Telefon"
+                                hide-details/>
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
-                                        v-model="editedContact.comment"
-                                        name="input-7-4"
-                                        label="Bemerkung"
-                                        rows="3" hide-details
-                                ></v-textarea>
+                                v-model="editedContact.comment"
+                                name="input-7-4"
+                                label="Bemerkung"
+                                rows="3" hide-details/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -73,6 +71,7 @@
     import api from '../../utils/http-common'
 
     export default {
+        props: ["value", "companyNames"],
         data() {
             return {
                 contactDialog: false,
@@ -97,9 +96,6 @@
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
             },
-            contactDialogState() {
-                return this.$store.getters.getContactDialogState;
-            },
             editedIndex() {
                 return this.$store.getters.getEditedIndex;
             },
@@ -109,19 +105,13 @@
                     return this.$store.state.editedContact;
                 }
             },
-            companyNames() {
-                return this.$store.getters.getCompanyNames;
-            },
             companyName() {
                 return this.editedContact.company.name;
             }
         },
         methods: {
             closeDialog() {
-                this.$store.commit({
-                    type: 'storeContactDialogState',
-                    contactDialog: false
-                })
+                this.$emit('input')
                 setTimeout(() => {
                     this.$store.commit({
                         type: 'storeEditedContactDetails',
