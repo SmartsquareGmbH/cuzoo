@@ -13,11 +13,8 @@ export default new Vuex.Store({
         companies: [],
         companyNames: [],
         contacts: [],
-        contactNames: [],
-        cPoints: [],
         companyDialog: false,
         contactDialog: false,
-        cPointDialog: false,
         editedIndex: -1,
         editedCompany: {
             value: false,
@@ -62,12 +59,9 @@ export default new Vuex.Store({
         getLogPass: state => state.logPass,
         getCompanies: state => state.companies,
         getContacts: state => state.contacts,
-        getCPoints: state => state.cPoints,
         getCompanyDialogState: state => state.companyDialog,
         getContactDialogState: state => state.contactDialog,
-        getCPointDialogState: state => state.cPointDialog,
         getCompanyNames: state => state.companyNames,
-        getContactNames: state => state.contactNames,
         getEditedIndex: state => state.editedIndex
     },
     mutations: {
@@ -85,9 +79,6 @@ export default new Vuex.Store({
         storeContacts(state, payload) {
             state.contacts = payload.contacts
         },
-        storeCPoints(state, payload) {
-            state.cPoints = payload.cPoints
-        },
         storeCompanyNames(state, payload) {
             state.companyNames = payload.companyNames
         },
@@ -96,10 +87,6 @@ export default new Vuex.Store({
         },
         storeContactDialogState(state, payload) {
             state.contactDialog = payload.contactDialog
-        },
-        storeCPointDialogState(state, payload) {
-            state.contactNames = payload.contactNames,
-            state.cPointDialog = payload.cPointDialog
         },
         storeEditedCompanyDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
@@ -112,11 +99,6 @@ export default new Vuex.Store({
         storeEditedCPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedCPoint = payload.editedCPoint
-        },
-        addCPoints(state, cPointsToAdd) {
-            cPointsToAdd.forEach(cPoint => {
-                state.cPoints.push(cPoint);
-            });
         }
     },
     actions: {
@@ -147,22 +129,6 @@ export default new Vuex.Store({
                 this.commit({
                     type: 'storeContacts',
                     contacts: response.data
-                })
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-        getCPoints() {
-            return api.get('point/get', {
-                auth: {
-                    username: this.getters.getLogName,
-                    password: this.getters.getLogPass
-                }
-            }).then(response => {
-                console.log(response.data);
-                this.commit({
-                    type: 'storeCPoints',
-                    cPoints: response.data
                 })
             }).catch(error => {
                 console.log(error);

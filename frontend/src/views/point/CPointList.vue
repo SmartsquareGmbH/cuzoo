@@ -31,7 +31,9 @@
                         </v-tooltip>
                     </v-btn>
                 </h1>
-                <c-point-dialog v-model="dialogState"/>
+                <c-point-dialog 
+                v-model="dialogState"
+                :contactNames="this.contactNames"/>
             </v-flex>
             <v-flex xs4>
                 <h1 class="text-xs-left headline font-weight-light">
@@ -191,11 +193,6 @@ export default {
         addCPoint() {
             this.getContactsOfCompany().forEach(contact => {
                 this.contactNames.push(contact.name);
-            })
-
-            points.commit({
-                type: 'storeContactNames',
-                contactNames: this.contactNames,
             })
 
             this.dialogState = true;

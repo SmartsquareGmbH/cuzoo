@@ -96,7 +96,7 @@ import points from '@/stores/points.js'
 import api from '@/utils/http-common'
 
 export default {
-    props: ["value"],
+    props: ["value", "contactNames"],
     data() {
         return {
             editedIndex: this.$store.getters.getEditedIndex,
@@ -123,10 +123,6 @@ export default {
                 date: "",
                 comment: "",
                 type: ""
-            },
-            options: {
-                url: '/upload',
-                paramName: 'file'
             }
         }
     },
@@ -139,9 +135,6 @@ export default {
         },
         formTitle() {
             return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
-        },
-        contactNames() {
-            return points.getters.getContactNames
         },
         dateFormatted() {
             return this.formatDate(this.date)
