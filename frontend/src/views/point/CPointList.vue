@@ -149,7 +149,7 @@ export default {
                     password: store.getters.getLogPass
                 }
             }).then(response => {
-                this.cPoints = response.data.sort(compare);
+                this.cPoints = response.data.sort(compareCPoints);
                 console.log(this.cPoints)
             }).catch(error => {
                 console.log(error)
@@ -181,7 +181,7 @@ export default {
     }
 }
 
-function compare(a,b) {
+function compareCPoints(a,b) {
     if (a.date === b.date) {
         if (a.id < b.id)
             return 1;
