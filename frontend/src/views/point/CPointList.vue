@@ -1,11 +1,19 @@
 <template>
     <v-container grid-list-md fluid>
         <v-layout row wrap>
-            <v-flex xs12>
-                <h1 class="ml-1 text-xs-left display-2 font-weight-thin">
+            <v-flex xs1>
+                <v-btn block color="secondary" @click="goPageBack()">
+                    <v-icon large dark>arrow_back</v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs11>
+                <h1 class="text-xs-left display-2 font-weight-thin">
                     {{ company.name }}
                 </h1>
-                <v-divider class="mt-1"/>
+            </v-flex>
+
+            <v-flex xs12>
+                <v-divider/>
             </v-flex>
             <v-flex xs8>
                 <h1 class="ml-1 text-xs-left headline font-weight-light">
@@ -44,17 +52,17 @@
                 </h1>
             </v-flex>
             <v-flex xs8>
-                <v-progress-linear
+                <v-progress-circular
                 v-if="loading"
                 slot="progress"
                 :size="50"
                 color="primary"
-                class="mt-3"
                 indeterminate/>
                 <c-point-card
+                v-if="!loading"
                 :cPoint="cPoint"
                 v-bind:key="cPoint.id"
-                v-for="cPoint in this.cPoints"/>
+                v-for="cPoint in this.contactPoints"/>
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
@@ -97,6 +105,8 @@
 <script>
 import { mapState } from 'vuex'
 import store from '@/store.js'
+import points from '@/stores/points.js'
+
 import api from '@/utils/http-common'
 
 import CPointDialog from "@/components/point/CPointDialog.vue"
@@ -111,8 +121,7 @@ export default {
         return {
             loading: true,
             companyId: this.$route.params.id,
-            contactNames: [],
-            cPoints: []
+            contactNames: []
         }
     },
     computed: {
@@ -136,6 +145,15 @@ export default {
             set(contacts) {
                 store.commit('storeContacts', contacts)
             }
+        },
+        ...mapState(['contactPoints']),
+        contactPoints: {
+            get() {
+                return points.state.contactPoints
+            },
+            set(contactPoints) {
+                points.commit('storeContactPoints', contactPoints)
+            }
         }
     },
     mounted() {
@@ -149,11 +167,13 @@ export default {
                     password: store.getters.getLogPass
                 }
             }).then(response => {
-                this.cPoints = response.data.sort(compareCPoints);
-                console.log(this.cPoints)
+                let sortedCPoints = response.data.sort(compareCPoints)
+                points.commit({
+                    type: 'storeContactPoints',
+                    contactPoints: sortedCPoints
+                })
             }).catch(error => {
                 console.log(error)
-                alert(error)
             }).then(() => {
                 this.loading = false
             })
@@ -178,6 +198,9 @@ export default {
                 cPointDialog: true
             })
         },
+        goPageBack() {
+            this.$router.go(-1)
+        }
     }
 }
 
