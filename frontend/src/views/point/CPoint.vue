@@ -98,11 +98,32 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs2>
-                        <v-card dark>
+                        <v-card dark height="100%">
                             <v-card-text class="headline text-xs-center font-weight-light">
                                 0
                             </v-card-text>
                         </v-card>
+                    </v-flex>
+                    <v-flex xs6>
+
+                    </v-flex>
+                    <v-flex xs12>
+                        <vue-clip :options="options">
+                            <template slot="clip-uploader-action">
+                                <v-card style="border-radius: 20px" class="pa-2">
+                                    <div id="drop-area" class="dz-message clickable">
+                                        <h2 class="mt-4 mb-4"><v-icon class="mb-1">attach_file</v-icon>Drag and Drop</h2>
+                                    </div>
+                                </v-card>
+                            </template>
+
+                            <template slot="clip-uploader-body" scope="props">
+                                <div v-bind:key="file.name" v-for="file in props.files" class="text-xs-left">
+                                    <img v-bind:src="file.dataUrl" />
+                                    {{ file.name }} {{ file.status }}
+                                </div>
+                            </template>
+                        </vue-clip>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -119,6 +140,10 @@ export default {
     data() {
         return {
             contactPointId: this.$route.params.id,
+            options: {
+                url: '/upload',
+                paramName: 'file'
+            }
         }
     },
     computed: {
@@ -149,6 +174,27 @@ export default {
         }
     }
 }
+function highlight(e) {
+  dropArea.classList.add('highlight')
+}
+
+function unhighlight(e) {
+  dropArea.classList.remove('highlight')
+}
 
 </script>
 
+<style>
+.clickable {
+    cursor: pointer;
+}
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  font-family: sans-serif;
+  padding: 30px;
+}
+#drop-area.highlight {
+  border-color: purple;
+}
+</style>
