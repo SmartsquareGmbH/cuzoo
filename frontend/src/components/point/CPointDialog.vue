@@ -118,8 +118,8 @@ export default {
             date: new Date().toISOString().substr(0, 10),
             menu: false,
             valid: true,
-            pointTypes: [ "Telefon", "E-Mail", "Social Media" ],    
-            pointTypeIcons: [ "phone", "mail", "share" ],
+            pointTypes: [ "Telefon", "E-Mail", "Social Media", "Persönlich" ],    
+            pointTypeIcons: [ "phone", "mail", "share", "people" ],
             pointRules: [
                 v => !!v || "Bitte geben Sie eine Kontaktpunktart an",
                 v => this.pointTypes.includes(v) || "Diese Kontaktpunktart existiert nicht"

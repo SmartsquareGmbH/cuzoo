@@ -51,6 +51,7 @@ export default {
                 case 'Telefon': return 'phone'
                 case 'E-Mail': return 'mail'
                 case 'Social Media': return 'share'
+                case 'Persönlich': return 'people'
             }
         },
         viewContactPoint: function (item) {
