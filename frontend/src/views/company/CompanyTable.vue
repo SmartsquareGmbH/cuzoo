@@ -2,47 +2,55 @@
     <v-container fluid>
         <v-card-title>
             <h1 class="mr-3">UNTERNEHMEN</h1>
-            <input class="input-file"
-                   type="file"
-                   id="file"
-                   ref="file"
-                   v-on:change="handleUpload()"/>
+            <input 
+            class="input-file"
+            type="file"
+            id="file"
+            ref="file"
+            @change="handleUpload()"/>
             <label for="file">
                 <v-tooltip top>
                     <v-icon
-                            slot="activator"
-                            color="primary"
-                            x-large>
+                    slot="activator"
+                    color="primary"
+                    x-large>
                         publish
                     </v-icon>
                     <span>CSV Import</span>
                 </v-tooltip>
             </label>
             <v-btn
-                    v-on:click="openDialog()"
-                    color="transparent"
-                    fab
-                    small
-                    depressed
-                    flat>
+            @click="openDialog()"
+            color="transparent"
+            fab
+            small
+            depressed
+            flat>
                 <v-tooltip top>
                     <v-icon
-                            color="light-green accent-2"
-                            slot="activator"
-                            x-large>
+                    color="light-green accent-2"
+                    slot="activator"
+                    x-large>
                         add
                     </v-icon>
                     <span>Unternehmen hinzufügen</span>
                 </v-tooltip>
             </v-btn>
-            <company-dialog></company-dialog>
+            <company-dialog v-model="dialogState"/>
             <v-layout row wrap class="pl-2 pt-1">
                 <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox v-model="selectedStatus" label="Leads" value="Lead" color="teal accent-2" class=""/>
+                    <v-checkbox 
+                    v-model="selectedStatus" 
+                    label="Leads" 
+                    value="Lead" 
+                    color="teal accent-2"/>
                 </v-flex>
                 <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox v-model="selectedStatus" label="Bestandskunden" value="Bestandskunde"
-                                color="teal accent-2"/>
+                    <v-checkbox 
+                    v-model="selectedStatus" 
+                    label="Bestandskunden" 
+                    value="Bestandskunde"
+                    color="teal accent-2"/>
                 </v-flex>
             </v-layout>
             <v-spacer></v-spacer>
@@ -84,12 +92,17 @@
                         </v-btn>
                         <span>Informationen</span>
                     </v-tooltip>
-                    <v-icon size="22px" class="mr-2"
-                            v-on:click="editCompany(props.item)">
+                    <v-icon 
+                    @click="editCompany(props.item)"
+                    size="22px" 
+                    class="mr-2">
                         edit
                     </v-icon>
-                    <v-icon size="22px" color="red lighten-1" class="mr-2"
-                            v-on:click="deleteCompany(props.item)">
+                    <v-icon
+                    @click="deleteCompany(props.item)"
+                    size="22px" 
+                    color="red lighten-1" 
+                    class="mr-2">
                         delete
                     </v-icon>
                 </td>
@@ -117,6 +130,7 @@
         data() {
             return {
                 selectedStatus: ["Lead", "Bestandskunde"],
+                dialogState: false,
                 file: '',
                 search: '',
                 loading: true,
@@ -214,10 +228,7 @@
                 }
             },
             openDialog() {
-                this.$store.commit({
-                    type: 'storeCompanyDialogState',
-                    companyDialog: true
-                })
+                this.dialogState = true
             },
             viewCompany: function (item) {
                 const index = this.companies.findIndex(company => company.id === item.id);

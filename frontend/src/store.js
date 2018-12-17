@@ -13,7 +13,6 @@ export default new Vuex.Store({
         companies: [],
         companyNames: [],
         contacts: [],
-        companyDialog: false,
         contactDialog: false,
         editedIndex: -1,
         editedCompany: {
@@ -59,7 +58,6 @@ export default new Vuex.Store({
         getLogPass: state => state.logPass,
         getCompanies: state => state.companies,
         getContacts: state => state.contacts,
-        getCompanyDialogState: state => state.companyDialog,
         getContactDialogState: state => state.contactDialog,
         getCompanyNames: state => state.companyNames,
         getEditedIndex: state => state.editedIndex
@@ -81,9 +79,6 @@ export default new Vuex.Store({
         },
         storeCompanyNames(state, payload) {
             state.companyNames = payload.companyNames
-        },
-        storeCompanyDialogState(state, payload) {
-            state.companyDialog = payload.companyDialog
         },
         storeContactDialogState(state, payload) {
             state.contactDialog = payload.contactDialog
