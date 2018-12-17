@@ -198,7 +198,8 @@
                 this.companies.forEach(company => {
                     this.companyNames.push(company.name)
                 });
-                
+
+                this.companyNames.sort();                
                 this.dialogState = true;
             },
             viewContact: function (item) {

@@ -184,18 +184,19 @@ export default {
         getContactsOfCompany() {
             return this.contacts.filter((contact) => {
                 if (contact.company != null) {
-                    return contact.company.name === this.company.name;
+                    return contact.company.name === this.company.name
                 } else {
-                    return null;
+                    return null
                 }
             })
         },
         addCPoint() {
             this.getContactsOfCompany().forEach(contact => {
-                this.contactNames.push(contact.name);
+                this.contactNames.push(contact.name)
             })
 
-            this.dialogState = true;
+            this.contactNames.sort()
+            this.dialogState = true
         },
         goPageBack() {
             this.$router.go(-1)
