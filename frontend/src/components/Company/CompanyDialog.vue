@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="companyDialogState" persistent max-width="750">
+    <v-dialog :value="value" @input="$emit('input')" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -90,6 +90,7 @@
     import api from '../../utils/http-common'
 
     export default {
+        props: ["value"],
         data() {
             return {
                 companyDialog: false,
@@ -127,10 +128,7 @@
         },
         methods: {
             closeDialog() {
-                this.$store.commit({
-                    type: 'storeCompanyDialogState',
-                    companyDialog: false
-                })
+                this.$emit('input')
                 setTimeout(() => {
                     this.$store.commit({
                         type: 'storeEditedCompanyDetails',
