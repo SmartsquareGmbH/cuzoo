@@ -35,10 +35,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { clearInterval } from 'timers';
+import { mapState } from 'vuex'
+import { clearInterval } from 'timers'
+import store from '@/store.js'
+import contactStore from '@/stores/contacts.js'
+import companyStore from '@/stores/companies.js'
 
-import CompanyCard from "@/components/company/CompanyCard.vue";
+import CompanyCard from "@/components/company/CompanyCard.vue"
 
 export default {
     components: {
@@ -46,7 +49,7 @@ export default {
     },
     data() {
         return {
-            dark: this.$store.getters.getDarkState,
+            dark: store.getters.getDarkState,
             search: '',
             loading: true,
             contactsOfCompany: [],
@@ -60,19 +63,19 @@ export default {
         ...mapState(['companies']),
         companies: {
             get() {
-                return this.$store.state.companies
+                return companyStore.state.companies
             },
             set(companies) {
-                this.$store.commit('storeCompanies', companies)
+                companyStore.commit('storeCompanies', companies)
             }
         },
         ...mapState(['contacts']),
         contacts: {
             get() {
-                return this.$store.state.contacts
+                return contactStore.state.contacts
             },
             set(contacts) {
-                this.$store.commit('storeContacts', contacts)
+                contactStore.commit('storeContacts', contacts)
             }
         },
         searchResults() {
@@ -114,8 +117,8 @@ export default {
             }
         },
         refreshData() {
-            this.$store.dispatch('getCompanies');
-            this.$store.dispatch('getContacts')
+            companyStore.dispatch('getCompanies');
+            contactStore.dispatch('getContacts')
             .then(() => {
                 this.loading = false;
                 this.doFocus();

@@ -99,6 +99,10 @@
 <script>
     import {mapState} from 'vuex';
     import api from '@/utils/http-common'
+    import store from '@/store.js'
+    import contactStore from '@/stores/contacts.js'
+    import companyStore from '@/stores/companies.js'
+
     import ContactDialog from "@/components/contact/ContactDialog.vue";
 
     export default {
@@ -125,15 +129,15 @@
         },
         computed: {
             companies() {
-                return this.$store.getters.getCompanies;
+                return companyStore.getters.getCompanies
             },
             ...mapState(['contacts']),
             contacts: {
                 get() {
-                    return this.$store.state.contacts
+                    return contactStore.state.contacts
                 },
                 set(contacts) {
-                    this.$store.commit('storeContacts', contacts)
+                    contactStore.commit('storeContacts', contacts)
                 }
             }
         },
@@ -151,8 +155,8 @@
                 formData.append('file', this.file);
                 api.post('contact/import', formData, {
                     auth: {
-                        username: this.$store.getters.getLogName,
-                        password: this.$store.getters.getLogPass
+                        username: store.getters.getUsername,
+                        password: store.getters.getPassword
                     },
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -165,11 +169,11 @@
                 });
             },
             refreshTable() {
-                this.$store.dispatch('getContacts')
+                contactStore.dispatch('getContacts')
                     .then(() => this.loading = false)
             },
             editContact: function (item) {
-                this.$store.commit({
+                contactStore.commit({
                     type: 'storeEditedContactDetails',
                     editedIndex: this.contacts.indexOf(item),
                     editedContact: Object.assign({}, item)
@@ -182,8 +186,8 @@
                 if (confirm("Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?")) {
                     api.delete(`contact/delete/${this.editedContact.id}`, {
                         auth: {
-                            username: this.$store.getters.getLogName,
-                            password: this.$store.getters.getLogPass
+                            username: store.getters.getUsername,
+                            password: store.getters.getPassword
                         }
                     }).then(response => {
                         console.log(response.data);

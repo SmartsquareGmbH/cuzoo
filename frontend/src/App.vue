@@ -65,7 +65,8 @@
 </template>
 
 <script>
-    import Login from "@/components/Login.vue";
+    import store from '@/store.js'
+    import Login from "@/components/Login.vue"
 
     export default {
         components: {
@@ -73,15 +74,13 @@
         },
         data() {
             return {
-                dark: this.$store.getters.getDarkState,
+                dark: store.getters.getDarkState,
                 drawer: null,
-                company: true,
-                conatct: false
             }
         },
         computed: {
             authorized() {
-                return this.$store.getters.getAuthorized
+                return store.getters.getAuthorized
             }
         },
         methods: {

@@ -14,9 +14,9 @@
                     <v-icon large dark>edit</v-icon>
                 </v-btn>
             </v-flex>
-            <company-dialog/>
+            <company-dialog v-model="companyDialogState"/>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="addContact()">
+                <v-btn block color="secondary" @click="openContactDialog()">
                     <v-icon large dark>add</v-icon>
                 </v-btn>
             </v-flex>
@@ -28,7 +28,9 @@
                     <v-icon large dark>edit</v-icon>
                 </v-btn>
             </v-flex>
-            <contact-dialog/>
+            <contact-dialog 
+            v-model="contactDialogState"
+            :companyNames="this.companyNames"/>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -298,21 +300,31 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
-    import CompanyDialog from "@/components/company/CompanyDialog.vue";
-    import ContactDialog from "@/components/contact/ContactDialog.vue";
+    import {mapState} from 'vuex'
+    import store from '@/store.js'
+    import companyStore from '@/stores/companies.js'
+    import contactStore from '@/stores/contacts.js'
+
+    import CompanyDialog from '@/components/company/CompanyDialog.vue'
+    import ContactDialog from '@/components/contact/ContactDialog.vue'
 
     export default {
         components: {
             CompanyDialog,
             ContactDialog
         },
+        data() {
+            return {
+                contactDialogState: false,
+                companyDialogState: false
+            }
+        },
         computed: {
             companyId() {
                 return this.$route.params.id;
             },
             companies() {
-                return this.$store.getters.getCompanies;
+                return companyStore.getters.getCompanies;
             },
             homepage() {
                 return `http://${this.companies[this.companyId].homepage}`;
@@ -320,10 +332,10 @@
             ...mapState(['contacts']),
             contacts: {
                 get() {
-                    return this.$store.state.contacts
+                    return contactStore.state.contacts
                 },
                 set(contacts) {
-                    this.$store.commit('storeContacts', contacts)
+                    contactStore.commit('storeContacts', contacts)
                 }
             },
             contactsOfCompany() {
@@ -339,43 +351,32 @@
                 this.$router.go(-1);
             },
             editCompany: function (item) {
-                this.$store.commit({
+                companyStore.commit({
                     type: 'storeEditedCompanyDetails',
                     editedIndex: this.companies.indexOf(item),
                     editedCompany: Object.assign({}, item)
-                });
-                this.openCompanyDialog();
-            },
-            openCompanyDialog() {
-                this.$store.commit({
-                    type: 'storeCompanyDialogState',
-                    companyDialog: true
                 })
+
+                this.openCompanyDialog()
             },
             editContact: function (item) {
-                console.log(item);
-                this.$store.commit({
+                contactStore.commit({
                     type: 'storeEditedContactDetails',
                     editedIndex: this.contacts.indexOf(item),
                     editedContact: Object.assign({}, item)
-                });
-                this.openContactDialog();
+                })
+
+                this.openContactDialog()
+            },
+            openCompanyDialog() {
+                this.companyDialogState = true
             },
             openContactDialog() {
-                this.$store.commit({
-                    type: 'storeContactDialogState',
-                    contactDialog: true
-                })
-            },
-            addContact() {
-                this.$store.commit({
-                    type: 'storeContactDialogState',
-                    contactDialog: true
-                });
+                this.contactDialogState = true
             },
             refreshTable() {
-                this.$store.dispatch('getCompanies');
-                this.$store.dispatch('getContacts');
+                companyStore.dispatch('getCompanies')
+                contactStore.dispatch('getContacts')
             }
         }
     }

@@ -88,6 +88,8 @@
 <script>
     import {mapState} from 'vuex'
     import api from '../../utils/http-common'
+    import companyStore from '@/stores/companies.js'
+    import store from '@/store.js'
 
     export default {
         props: ["value"],
@@ -114,15 +116,15 @@
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
             },
             companyDialogState() {
-                return this.$store.getters.getCompanyDialogState;
+                return companyStore.getters.getCompanyDialogState;
             },
             editedIndex() {
-                return this.$store.getters.getEditedIndex;
+                return companyStore.getters.getEditedIndex;
             },
             ...mapState(['editedCompany']),
             editedCompany: {
                 get() {
-                    return this.$store.state.editedCompany
+                    return companyStore.state.editedCompany
                 }
             }
         },
@@ -130,7 +132,7 @@
             closeDialog() {
                 this.$emit('input')
                 setTimeout(() => {
-                    this.$store.commit({
+                    companyStore.commit({
                         type: 'storeEditedCompanyDetails',
                         editedIndex: -1,
                         editedCompany: Object.assign({}, this.defaultCompany)
@@ -153,8 +155,8 @@
                     other: this.editedCompany.other
                 }, {
                     auth: {
-                        username: this.$store.getters.getLogName,
-                        password: this.$store.getters.getLogPass
+                        username: store.getters.getUsername,
+                        password: store.getters.getPassword
                     }
                 }).then(response => {
                     this.$parent.refreshTable();

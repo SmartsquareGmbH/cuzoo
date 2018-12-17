@@ -69,6 +69,8 @@
 <script>
     import {mapState} from 'vuex'
     import api from '../../utils/http-common'
+    import contactStore from '@/stores/contacts.js'
+    import store from '@/store.js'
 
     export default {
         props: ["value", "companyNames"],
@@ -80,9 +82,7 @@
                     value: false,
                     id: 0,
                     name: "",
-                    company: {
-                        name: ""
-                    },
+                    company: {},
                     role: "",
                     mail: "",
                     telephone: "",
@@ -97,12 +97,12 @@
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
             },
             editedIndex() {
-                return this.$store.getters.getEditedIndex;
+                return contactStore.getters.getEditedIndex;
             },
             ...mapState(['editedContact']),
             editedContact: {
                 get() {
-                    return this.$store.state.editedContact;
+                    return contactStore.state.editedContact;
                 }
             },
             companyName() {
@@ -113,7 +113,7 @@
             closeDialog() {
                 this.$emit('input')
                 setTimeout(() => {
-                    this.$store.commit({
+                    contactStore.commit({
                         type: 'storeEditedContactDetails',
                         editedIndex: -1,
                         editedContact: Object.assign({}, this.defaultContact)
@@ -144,8 +144,8 @@
                     comment: this.editedContact.comment
                 }, {
                     auth: {
-                        username: this.$store.getters.getLogName,
-                        password: this.$store.getters.getLogPass
+                        username: store.getters.getUsername,
+                        password: store.getters.getPassword
                     }
                 }).then(response => {
                     this.$parent.refreshTable();

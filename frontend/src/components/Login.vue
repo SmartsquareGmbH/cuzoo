@@ -40,6 +40,7 @@
 
 <script>
     import api from '../utils/http-common'
+    import store from '@/store.js'
 
     export default {
         name: "login",
@@ -59,7 +60,7 @@
                         password: this.password
                     }
                 }).then(response => {
-                    this.$store.commit({
+                    store.commit({
                         type: 'storeLogData',
                         authorized: true,
                         username: this.username,

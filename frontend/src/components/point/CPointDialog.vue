@@ -92,14 +92,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import points from '@/stores/points.js'
+import pointStore from '@/stores/points.js'
 import api from '@/utils/http-common'
 
 export default {
     props: ["value", "contactNames"],
     data() {
         return {
-            editedIndex: this.$store.getters.getEditedIndex,
+            editedIndex: pointStore.getters.getEditedIndex,
             date: new Date().toISOString().substr(0, 10),
             menu: false,
             valid: true,
@@ -130,7 +130,7 @@ export default {
         ...mapState(['editedCPoint']),
         editedCPoint: {
             get() {
-                return this.$store.state.editedCPoint
+                return pointStore.state.editedCPoint
             }
         },
         formTitle() {
@@ -156,7 +156,7 @@ export default {
         closeDialog() {
             this.$emit('input')
             setTimeout(() => {
-                this.$store.commit({
+                pointStore.commit({
                     type: 'storeEditedCPointDetails',
                     editedIndex: -1,
                     editedCPoint: Object.assign({}, this.defaultCPoint)
@@ -172,8 +172,8 @@ export default {
                 comment: this.editedCPoint.comment
             }, {
                 auth: {
-                    username: this.$store.getters.getLogName,
-                    password: this.$store.getters.getLogPass
+                    username: store.getters.getUsername,
+                    password: store.getters.getPassword
                 }
             }).then(response => {
                 this.$parent.refreshData();

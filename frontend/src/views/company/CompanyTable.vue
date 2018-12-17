@@ -121,6 +121,10 @@
 <script>
     import {mapState} from 'vuex';
     import api from '@/utils/http-common'
+    import store from '@/store.js'
+    import contactStore from '@/stores/contacts.js'
+    import companyStore from '@/stores/companies.js'
+
     import CompanyDialog from "@/components/company/CompanyDialog.vue";
 
     export default {
@@ -150,10 +154,10 @@
             ...mapState(['companies']),
             companies: {
                 get() {
-                    return this.$store.state.companies
+                    return companyStore.state.companies
                 },
                 set(companies) {
-                    this.$store.commit('storeCompanies', companies)
+                    companyStore.commit('storeCompanies', companies)
                 }
             },
             filteredCompanies() {
@@ -185,8 +189,8 @@
 
                 api.post('company/import', formData, {
                     auth: {
-                        username: this.$store.getters.getLogName,
-                        password: this.$store.getters.getLogPass
+                        username: store.getters.getUsername,
+                        password: store.getters.getPassword
                     },
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -199,11 +203,11 @@
                 });
             },
             refreshTable() {
-                this.$store.dispatch('getCompanies')
+                companyStore.dispatch('getCompanies')
                     .then(() => this.loading = false)
             },
             editCompany: function (item) {
-                this.$store.commit({
+                companyStore.commit({
                     type: 'storeEditedCompanyDetails',
                     editedIndex: this.companies.indexOf(item),
                     editedCompany: Object.assign({}, item)
@@ -216,8 +220,8 @@
                 if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {
                     api.delete(`company/delete/${this.editedCompany.id}`, {
                         auth: {
-                            username: this.$store.getters.getLogName,
-                            password: this.$store.getters.getLogPass
+                            username: store.getters.getUsername,
+                            password: store.getters.getPassword
                         }
                     }).then(response => {
                         this.refreshTable();

@@ -106,10 +106,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import store from '@/store.js'
-import points from '@/stores/points.js'
-
 import api from '@/utils/http-common'
+
+import store from '@/store.js'
+import pointStore from '@/stores/points.js'
+import companyStore from '@/stores/companies.js'
+import contactStore from '@/stores/contacts.js'
 
 import CPointDialog from "@/components/point/CPointDialog.vue"
 import CPointCard from "@/components/point/CPointCard.vue"
@@ -134,28 +136,22 @@ export default {
         ...mapState(['companies']),
         companies: {
             get() {
-                return store.state.companies
-            },
-            set(companies) {
-                store.commit('storeCompanies', companies)
+                return companyStore.state.companies
             }
         },
         ...mapState(['contacts']),
         contacts: {
             get() {
-                return store.state.contacts
-            },
-            set(contacts) {
-                store.commit('storeContacts', contacts)
+                return contactStore.state.contacts
             }
         },
         ...mapState(['contactPoints']),
         contactPoints: {
             get() {
-                return points.state.contactPoints
+                return pointStore.state.contactPoints
             },
             set(contactPoints) {
-                points.commit('storeContactPoints', contactPoints)
+                pointStore.commit('storeContactPoints', contactPoints)
             }
         }
     },
@@ -166,12 +162,12 @@ export default {
         refreshData() {
             api.get(`point/get/${this.company.name}`, {
                 auth: {
-                    username: store.getters.getLogName,
-                    password: store.getters.getLogPass
+                    username: store.getters.getUsername,
+                    password: store.getters.getPassword
                 }
             }).then(response => {
                 let sortedCPoints = response.data.sort(compareCPoints)
-                points.commit({
+                pointStore.commit({
                     type: 'storeContactPoints',
                     contactPoints: sortedCPoints
                 })
