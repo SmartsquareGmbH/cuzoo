@@ -42,19 +42,19 @@ export default {
     props: ['cPoint'],
     data() {
         return {
-            cPoints: this.$parent.cPoints
+            contactPoints: this.$parent.contactPoints
         }
     },
     methods: {
         getPointTypeIconOf: function (type) {
-            switch(type) {
+            switch (type) {
                 case 'Telefon': return 'phone'
                 case 'E-Mail': return 'mail'
                 case 'Social Media': return 'share'
             }
         },
         viewContactPoint: function (item) {
-            const index = this.cPoints.findIndex(cPoint => cPoint.id === item.id);
+            const index = this.contactPoints.findIndex(cPoint => cPoint.id === item.id);
             this.$router.push(this.$route.fullPath + '/' + (index));
         }
     }
