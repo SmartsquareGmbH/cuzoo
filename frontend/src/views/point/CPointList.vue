@@ -19,7 +19,7 @@
                 <h1 class="ml-1 text-xs-left headline font-weight-light">
                     Kontaktpunkte
                     <v-btn small flat fab
-                    v-on:click="addCPoint()"
+                    @click="addCPoint()"
                     color="transparent">
                         <v-tooltip top>
                             <v-icon large
@@ -31,7 +31,7 @@
                         </v-tooltip>
                     </v-btn>
                 </h1>
-                <c-point-dialog/>
+                <c-point-dialog v-model="dialogState"/>
             </v-flex>
             <v-flex xs4>
                 <h1 class="text-xs-left headline font-weight-light">
@@ -121,7 +121,8 @@ export default {
         return {
             loading: true,
             companyId: this.$route.params.id,
-            contactNames: []
+            contactNames: [],
+            dialogState: false
         }
     },
     computed: {
@@ -192,11 +193,12 @@ export default {
                 this.contactNames.push(contact.name);
             })
 
-            store.commit({
-                type: 'storeCPointDialogState',
+            points.commit({
+                type: 'storeContactNames',
                 contactNames: this.contactNames,
-                cPointDialog: true
             })
+
+            this.dialogState = true;
         },
         goPageBack() {
             this.$router.go(-1)

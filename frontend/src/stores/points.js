@@ -5,14 +5,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        contactPoints: []
+        contactPoints: [],
+        contactNames: []
     },
     getters: {
-        getContactPoints: state => state.contactPoints
+        getContactPoints: state => state.contactPoints,
+        getContactNames: state => state.contactNames
     },
     mutations: {
         storeContactPoints(state, payload) {
             state.contactPoints = payload.contactPoints
+        },
+        storeContactNames(state, payload) {
+            state.contactNames = payload.contactNames
         }
     }
 });

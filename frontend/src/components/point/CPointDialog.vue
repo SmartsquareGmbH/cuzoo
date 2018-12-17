@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="cPointDialogState" persistent max-width="950">
+    <v-dialog :value="value" @input="$emit('input')" persistent max-width="950">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -82,36 +82,21 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat v-on:click="closeDialog()">Abbrechen</v-btn>
+                <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
                 <v-btn color="primary" flat v-on:click="submitCPoint()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
-    <vue-clip :options="options">
-        <template slot="clip-uploader-action">
-        <div>
-            <div class="dz-message">
-                <h2><v-icon>attach_file</v-icon> Drag & Drop</h2>
-            </div>
-        </div>
-        </template>
-
-        <template slot="clip-uploader-body" scope="props">
-            <div v-bind:key="file.name" v-for="file in props.files">
-                <img v-bind:src="file.dataUrl" />
-                {{ file.name }} {{ file.status }}
-            </div>
-        </template>
-
-    </vue-clip>
     </v-dialog>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import points from '@/stores/points.js'
 import api from '@/utils/http-common'
 
 export default {
+    props: ["value"],
     data() {
         return {
             editedIndex: this.$store.getters.getEditedIndex,
@@ -156,10 +141,7 @@ export default {
             return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
         },
         contactNames() {
-            return this.$store.getters.getContactNames
-        },
-        cPointDialogState() {
-            return this.$store.getters.getCPointDialogState
+            return points.getters.getContactNames
         },
         dateFormatted() {
             return this.formatDate(this.date)
@@ -179,10 +161,7 @@ export default {
             this.$refs.form.reset();
         },
         closeDialog() {
-            this.$store.commit({
-                type: 'storeCPointDialogState',
-                companyDialog: false
-            })
+            this.$emit('input')
             setTimeout(() => {
                 this.$store.commit({
                     type: 'storeEditedCPointDetails',
@@ -205,10 +184,7 @@ export default {
                 }
             }).then(response => {
                 this.$parent.refreshData();
-                this.$store.commit({
-                    type: 'storeCPointDialogState',
-                    companyDialog: false
-                })
+
                 this.closeDialog();
             }).catch(error => {
                 console.log(error);
