@@ -13,9 +13,7 @@ export default new Vuex.Store({
             value: false,
             id: 0,
             name: "",
-            company: {
-                name: ""
-            },
+            company: {},
             role: "",
             mail: "",
             telephone: "",
