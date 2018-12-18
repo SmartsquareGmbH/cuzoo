@@ -1,12 +1,14 @@
 package de.smartsquare.cuzoo.customer.contact;
 
 import de.smartsquare.cuzoo.customer.company.Company;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +24,11 @@ public class ContactExporterTest {
         contactExporter = new ContactExporter();
         Company smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "", "", "Kommentar");
+    }
+
+    @After
+    public void delete_file() throws IOException {
+        Files.delete(Paths.get("src/main/resources/darius_tack.txt"));
     }
 
     @Test
