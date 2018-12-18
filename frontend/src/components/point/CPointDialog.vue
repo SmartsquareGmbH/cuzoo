@@ -92,6 +92,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import store from '@/store.js'
 import pointStore from '@/stores/points.js'
 import api from '@/utils/http-common'
 
