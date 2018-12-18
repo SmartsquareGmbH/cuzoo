@@ -27,8 +27,8 @@
                         <v-btn @click.native="doLogin" color="primary">Login</v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-snackbar v-model="wrongCredentials" color="error" bottom>
-                    Die Anmeldedaten sind ungültig!
+                <v-snackbar v-model="loginFailed" color="error" bottom>
+                    {{ this.loginFailedMessage }}
                     <v-btn dark flat @click="wrongCredentials = false">
                         Schließen
                     </v-btn>
@@ -49,7 +49,8 @@
             password: null,
             usernameRules: [ v => !!v || "Ein Username wird benötigt" ],
             passwordRules: [ v => !!v || "Ein Passwort wird benötigt" ],
-            wrongCredentials: false,
+            loginFailed: false,
+            loginFailedMessage: "Die Anmeldedaten sind ungültig!",
             kazookid: require('@/assets/rsz_kazoo-kid.png')
         }),
         methods: {
@@ -69,10 +70,13 @@
                 }).then(response => {
                     this.$router.replace('/search')
                 }).catch(error => {
-                    if (error.response.status === 401) {
-                        this.wrongCredentials = true;
+                    if (error.message === "Request failed with status code 401") {
+                        this.loginFailedMessage = "Die Anmeldedaten sind ungültig!"
+                    } else {
+                        this.loginFailedMessage = "Es konnte keine Verbindung zum Server hergestellt werden"
                     }
-                    console.error(error)
+
+                    this.loginFailed = true
                 });
             }
         }
