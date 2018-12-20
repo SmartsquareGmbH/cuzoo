@@ -1,8 +1,9 @@
 package de.smartsquare.cuzoo.customer.points;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,15 +11,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class CPoint {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "point_generator")
-    @SequenceGenerator(name = "point_generator", sequenceName = "point_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cpoint_generator")
+    @SequenceGenerator(name = "cpoint_generator", sequenceName = "cpoint_seq")
     private Long id;
 
     @NotNull
@@ -29,20 +33,28 @@ public class CPoint {
     @NotBlank
     private String type;
 
+    @NotNull
+    @NotBlank
+    private String date;
+
     @ManyToOne
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
     @Column(length = 510)
     private String comment;
-    private String date;
-    private MultipartFile[] files;
+
+    @OneToMany(mappedBy = "cPoint", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Attachment> files;
 
     public CPoint() {
+        this.files = new ArrayList<>();
     }
 
     public CPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
-                  @NotNull Contact contact, String date, String comment) {
+                  @NotNull @NotBlank String date, @NotNull Contact contact, String comment) {
+        this.files = new ArrayList<>();
         this.title = title;
         this.type = type;
         this.contact = contact;
@@ -98,11 +110,15 @@ public class CPoint {
         this.comment = comment;
     }
 
-    public MultipartFile[] getFiles() {
+    public List<Attachment> getFiles() {
         return files;
     }
 
-    public void setFiles(MultipartFile[] files) {
+    public void setFiles(List<Attachment> files) {
         this.files = files;
+    }
+
+    public void addFile(Attachment file) {
+        this.files.add(file);
     }
 }

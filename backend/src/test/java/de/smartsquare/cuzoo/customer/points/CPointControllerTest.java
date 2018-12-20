@@ -66,6 +66,7 @@ public class CPointControllerTest {
                         .equals("Beratungsgespraech")))
                 .isTrue();
     }
+
     @Test
     public void that_submitting_contact_point_without_existing_contact_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
@@ -82,7 +83,7 @@ public class CPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\"}";
+        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
     }
 
     @Test
@@ -115,11 +116,11 @@ public class CPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\"}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
     }
 
     private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"type\":\"Telefon\"}";
+        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
     }
 
     @Test
@@ -143,7 +144,7 @@ public class CPointControllerTest {
 
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
-        CPoint cPoint = new CPoint("Beratung", "Telefon", contact, "", "");
+        CPoint cPoint = new CPoint("Beratung", "Telefon", "01.01.1970", contact, "");
         cPointRepository.save(cPoint);
 
         MockHttpServletRequestBuilder builder =
