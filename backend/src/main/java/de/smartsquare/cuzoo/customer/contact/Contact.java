@@ -141,4 +141,12 @@ public class Contact {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public List<CPoint> getcPoints() {
+        return cPoints;
+    }
+
+    public void setcPoints(List<CPoint> cPoints) {
+        this.cPoints = cPoints;
+    }
 }
