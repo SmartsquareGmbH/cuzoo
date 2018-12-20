@@ -134,19 +134,25 @@
 <script>
 import { mapState } from 'vuex' 
 import api from '@/utils/http-common'
+import store from '@/store.js'
 import pointStore from '@/stores/points.js'
 
 export default {
     data() {
         return {
             contactPointId: this.$route.params.id,
-            options: {
-                url: '/upload',
-                paramName: 'file'
-            }
         }
     },
     computed: {
+        options() {
+            return {
+                url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.getContactPointId()}`,
+                headers: {
+                    "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
+                },
+                paramName: "file"
+            }
+        },
         contactPoint() {
             return this.contactPoints[this.contactPointId]
         },
@@ -158,7 +164,13 @@ export default {
             set(contactPoints) {
                 pointStore.commit('storeContactPoints', contactPoints)
             }
+        },
+        companyName() {
+            return this.contactPoint.contact.company.name
         }
+    },
+    mounted() {
+        console.log(this.companyName);
     },
     methods: {
         getPointTypeIconOf: function (type) {
@@ -171,6 +183,12 @@ export default {
         },
         goPageBack() {
             this.$router.go(-1)
+        },
+        getContactPointId() {
+            return this.$route.params.id
+        },
+        getCompany() {
+            return this.contactPoint.contact.company.name
         }
     }
 }
