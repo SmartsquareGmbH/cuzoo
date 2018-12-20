@@ -1,5 +1,6 @@
 package de.smartsquare.cuzoo.customer.points;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class Attachment {
     private String filename;
 
     @NotNull
+    @Column(length = 9999999)
     private byte[] content;
     private LocalDate uploadDate;
 
@@ -73,11 +75,11 @@ public class Attachment {
         this.uploadDate = uploadDate;
     }
 
-    public CPoint getcPoint() {
+    public CPoint getContactPoint() {
         return cPoint;
     }
 
-    public void setcPoint(CPoint cPoint) {
+    public void setContactPoint(CPoint cPoint) {
         this.cPoint = cPoint;
     }
 }

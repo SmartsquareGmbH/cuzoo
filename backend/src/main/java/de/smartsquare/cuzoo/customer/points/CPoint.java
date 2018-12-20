@@ -46,15 +46,14 @@ public class CPoint {
 
     @OneToMany(mappedBy = "cPoint", cascade = CascadeType.REMOVE)
     @JsonIgnore
+    @Column(length = 9999999)
     private List<Attachment> files;
 
     public CPoint() {
-        this.files = new ArrayList<>();
     }
 
     public CPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
                   @NotNull @NotBlank String date, @NotNull Contact contact, String comment) {
-        this.files = new ArrayList<>();
         this.title = title;
         this.type = type;
         this.contact = contact;
@@ -116,9 +115,5 @@ public class CPoint {
 
     public void setFiles(List<Attachment> files) {
         this.files = files;
-    }
-
-    public void addFile(Attachment file) {
-        this.files.add(file);
     }
 }
