@@ -4,6 +4,8 @@ import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/point")
 public class CPointController {
     private final CPointRepository cPointRepository;
+    private final AttachmentRepository attachmentRepository;
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
 
@@ -45,10 +49,10 @@ public class CPointController {
     };
 
     @Autowired
-    public CPointController(final CPointRepository cPointRepository,
-                            final ContactRepository contactRepository,
-                            final CompanyRepository companyRepository) {
+    public CPointController(final CPointRepository cPointRepository, final AttachmentRepository attachmentRepository,
+                            final ContactRepository contactRepository, final CompanyRepository companyRepository) {
         this.cPointRepository = cPointRepository;
+        this.attachmentRepository = attachmentRepository;
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
     }
@@ -106,15 +110,48 @@ public class CPointController {
                 .collect(Collectors.toList())
                 .get(contactPointId.intValue());
 
+        if (fileDestinationPoint.getFiles() == null) {
+            fileDestinationPoint.setFiles(new ArrayList<>());
+        }
+
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
-        fileDestinationPoint.addFile(attachment);
+        attachment.setContactPoint(fileDestinationPoint);
 
         try {
-            cPointRepository.save(fileDestinationPoint);
+            attachmentRepository.save(attachment);
+
+            cPointRepository.findAll().forEach(point -> point.getFiles().forEach(att -> System.out.println(att.getFilename())));
+
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/download/{companyName}/{contactPointId}/{filename}")
+    public final ResponseEntity<Resource> downloadFile(@PathVariable String companyName, @PathVariable Long contactPointId,
+                                                       @PathVariable String filename) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        cPointRepository.findAll().forEach(point -> point.getFiles().forEach(att -> System.out.println(att.getFilename())));
+
+        CPoint fileOriginPoint = cPointRepository.findAll()
+                .stream()
+                .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
+                .sorted(compareDates)
+                .collect(Collectors.toList())
+                .get(contactPointId.intValue());
+
+        for (Attachment file : fileOriginPoint.getFiles()) {
+            if (file.getFilename().equals(filename)) {
+                ByteArrayResource resource = new ByteArrayResource(file.getContent());
+                return ResponseEntity.ok(resource);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/get")

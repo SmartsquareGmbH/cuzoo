@@ -6,14 +6,18 @@
                     <v-icon large dark>arrow_back</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs11>
+            <v-flex xs5>
                 <h1 class="text-xs-left display-2 font-weight-thin">
                     {{ this.contactPoint.contact.company.name }}
                 </h1>
             </v-flex>
-            <v-flex xs12>
-                <v-divider/>
-            </v-flex>
+                <v-flex xs1>
+                    <v-btn id="dwn-btn" @click="downloadFile()" block color="secondary">
+                        <v-icon style="transform: rotate(180deg)" large dark>
+                            publish
+                        </v-icon>
+                    </v-btn>
+                </v-flex>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -104,15 +108,14 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs6>
-
+                    <v-flex xs8>
                     </v-flex>
                     <v-flex xs12>
                         <vue-clip :options="options">
                             <template slot="clip-uploader-action">
                                 <v-card style="border-radius: 20px" class="pa-2">
                                     <div id="drop-area" class="dz-message clickable">
-                                        <h2 class="mt-4 mb-4"><v-icon class="mb-1">attach_file</v-icon>Drag and Drop</h2>
+                                        <h2 class="mt-4 mb-4"><v-icon class="mb-1" size="24px">attach_file</v-icon>Dateien hochladen</h2>
                                     </div>
                                 </v-card>
                             </template>
@@ -167,10 +170,9 @@ export default {
         },
         companyName() {
             return this.contactPoint.contact.company.name
+        },
+        fileContent() {
         }
-    },
-    mounted() {
-        console.log(this.companyName);
     },
     methods: {
         getPointTypeIconOf: function (type) {
@@ -189,15 +191,38 @@ export default {
         },
         getCompany() {
             return this.contactPoint.contact.company.name
+        },
+        downloadFile: function (filename) {
+            let formData = new FormData();
+            return api.get(`point/download/${this.companyName}/${this.getContactPointId()}/${filename}`, {
+                auth: {
+                    username: store.getters.getUsername,
+                    password: store.getters.getPassword
+                }
+            }).then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch(error => {
+                console.log(error);
+            });
         }
     }
 }
-function highlight(e) {
-  dropArea.classList.add('highlight')
-}
 
-function unhighlight(e) {
-  dropArea.classList.remove('highlight')
+function download(filename, content) {
+    var element = document.createElement('a');
+
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
 }
 
 </script>
@@ -212,7 +237,11 @@ function unhighlight(e) {
   font-family: sans-serif;
   padding: 30px;
 }
-#drop-area.highlight {
-  border-color: purple;
+#drop-area:hover {
+  border-color: #4FC3F7;
+}
+
+#drop-area:hover h2 {
+  color: #4FC3F7;
 }
 </style>
