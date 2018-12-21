@@ -161,6 +161,10 @@ public class CPointController {
 
     @GetMapping("/get/{companyName}")
     public final ResponseEntity<List<CPoint>> getCPointsOfCompany(@PathVariable String companyName) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return ResponseEntity.ok(cPointRepository
                 .findAll()
                 .stream()
