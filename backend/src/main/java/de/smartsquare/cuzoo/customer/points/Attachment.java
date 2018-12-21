@@ -30,7 +30,7 @@ public class Attachment {
     private LocalDate uploadDate;
 
     @ManyToOne
-    @JoinColumn(name = "cpoint_id")
+    @JoinColumn(name = "cPoint_id")
     private CPoint cPoint;
 
     public Attachment() {
