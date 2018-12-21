@@ -12,7 +12,7 @@
                 </h1>
             </v-flex>
                 <v-flex xs1>
-                    <v-btn id="dwn-btn" @click="downloadFile()" block color="secondary">
+                    <v-btn id="dwn-btn" @click="downloadFile('kontaktpunkte.bmpr')" block color="secondary">
                         <v-icon style="transform: rotate(180deg)" large dark>
                             publish
                         </v-icon>
@@ -170,8 +170,6 @@ export default {
         },
         companyName() {
             return this.contactPoint.contact.company.name
-        },
-        fileContent() {
         }
     },
     methods: {
@@ -189,40 +187,29 @@ export default {
         getContactPointId() {
             return this.$route.params.id
         },
-        getCompany() {
-            return this.contactPoint.contact.company.name
-        },
         downloadFile: function (filename) {
-            let formData = new FormData();
             return api.get(`point/download/${this.companyName}/${this.getContactPointId()}/${filename}`, {
                 auth: {
                     username: store.getters.getUsername,
                     password: store.getters.getPassword
-                }
+                },
+                responseType: 'arraybuffer'
             }).then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
+                download(filename, response.data)
             }).catch(error => {
-                console.log(error);
+                console.log(error)
             });
         }
     }
 }
 
 function download(filename, content) {
-    var element = document.createElement('a');
-
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    const url = window.URL.createObjectURL(new Blob([content]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
 }
 
 </script>

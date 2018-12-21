@@ -4,8 +4,6 @@ import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,8 +127,8 @@ public class CPointController {
     }
 
     @GetMapping("/download/{companyName}/{contactPointId}/{filename}")
-    public final ResponseEntity<Resource> downloadFile(@PathVariable String companyName, @PathVariable Long contactPointId,
-                                                       @PathVariable String filename) {
+    public final ResponseEntity<byte[]> downloadFile(@PathVariable String companyName, @PathVariable Long contactPointId,
+                                                     @PathVariable String filename) {
         if (!companyRepository.existsByName(companyName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -146,8 +144,7 @@ public class CPointController {
 
         for (Attachment file : fileOriginPoint.getFiles()) {
             if (file.getFilename().equals(filename)) {
-                ByteArrayResource resource = new ByteArrayResource(file.getContent());
-                return ResponseEntity.ok(resource);
+                return ResponseEntity.ok(file.getContent());
             }
         }
 
