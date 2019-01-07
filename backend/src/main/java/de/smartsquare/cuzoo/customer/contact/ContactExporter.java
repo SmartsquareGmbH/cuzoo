@@ -1,6 +1,5 @@
 package de.smartsquare.cuzoo.customer.contact;
 
-import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -12,8 +11,6 @@ import java.nio.file.Paths;
 
 @Service
 class ContactExporter {
-    private static final String LINE_SEPARATOR = LineSeparator.Web;
-
     Path exportContactToTxt(Contact contact) {
         String filename = contact.getName()
                 .replace(' ', '_')
@@ -33,11 +30,11 @@ class ContactExporter {
     }
 
     private String getContactContent(Contact contact) {
-        return "Name:\t\t " + contact.getName() + LINE_SEPARATOR +
-                "Unternehmen: " + contact.getCompany().getName() + LINE_SEPARATOR +
-                "Rolle:\t\t " + contact.getRole() + LINE_SEPARATOR +
-                "E-Mail:\t\t " + contact.getMail() + LINE_SEPARATOR +
-                "Telefon:\t " + contact.getTelephone() + LINE_SEPARATOR +
-                "Kommentar:\t " + contact.getComment() + LINE_SEPARATOR;
+        return "Name:\t\t " + contact.getName() + System.lineSeparator() +
+                "Unternehmen: " + contact.getCompany().getName() + System.lineSeparator() +
+                "Rolle:\t\t " + contact.getRole() + System.lineSeparator() +
+                "E-Mail:\t\t " + contact.getMail() + System.lineSeparator() +
+                "Telefon:\t " + contact.getTelephone() + System.lineSeparator() +
+                "Kommentar:\t " + contact.getComment() + System.lineSeparator();
     }
 }
