@@ -19,7 +19,7 @@
                 <h1 class="ml-1 text-xs-left headline font-weight-light">
                     Kontaktpunkte
                     <v-btn small flat fab
-                    @click="addCPoint()"
+                    @click="addContactPoint()"
                     color="transparent">
                         <v-tooltip top>
                             <v-icon large
@@ -62,9 +62,9 @@
                 indeterminate/>
                 <c-point-card
                 v-if="!loading"
-                :cPoint="cPoint"
-                v-bind:key="cPoint.id"
-                v-for="cPoint in this.contactPoints"/>
+                :contactPoint="contactPoint"
+                v-bind:key="contactPoint.id"
+                v-for="contactPoint in this.contactPoints"/>
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
@@ -113,13 +113,13 @@ import pointStore from '@/stores/points.js'
 import companyStore from '@/stores/companies.js'
 import contactStore from '@/stores/contacts.js'
 
-import CPointDialog from "@/components/point/CPointDialog.vue"
-import CPointCard from "@/components/point/CPointCard.vue"
+import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
+import ContactPointCard from "@/components/point/ContactPointCard.vue"
 
 export default {
     components: {
-        CPointDialog,
-        CPointCard
+        ContactPointDialog,
+        ContactPointCard
     },
     data() {
         return {
@@ -162,10 +162,10 @@ export default {
         refreshData() {
             api.get(`point/get/${this.company.name}`).then(response => {
                 console.log(response);
-                let sortedCPoints = response.data.sort(compareCPoints)
+                let sortedContactPoints = response.data.sort(compareContactPoints)
                 pointStore.commit({
                     type: 'storeContactPoints',
-                    contactPoints: sortedCPoints
+                    contactPoints: sortedContactPoints
                 })
             }).catch(error => {
                 console.log(error)
@@ -182,7 +182,7 @@ export default {
                 }
             })
         },
-        addCPoint() {
+        addContactPoint() {
             this.getContactsOfCompany().forEach(contact => {
                 this.contactNames.push(contact.name)
             })
@@ -196,7 +196,7 @@ export default {
     }
 }
 
-function compareCPoints(a,b) {
+function compareContactPoints(a,b) {
     if (a.date === b.date) {
         if (a.id < b.id)
             return 1;

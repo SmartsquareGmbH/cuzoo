@@ -8,7 +8,7 @@ export default new Vuex.Store({
         contactPoints: [],
         contactNames: [],
         editedIndex: -1,
-        editedCPoint: {
+        editedContactPoint: {
             value: false,
             id: 0,
             title: "",
@@ -30,9 +30,9 @@ export default new Vuex.Store({
         storeContactNames(state, payload) {
             state.contactNames = payload.contactNames
         },
-        storeEditedCPointDetails(state, payload) {
+        storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-            state.editedCPoint = payload.editedCPoint
+            state.editedContactPoint = payload.editedContactPoint
         }
     }
 });

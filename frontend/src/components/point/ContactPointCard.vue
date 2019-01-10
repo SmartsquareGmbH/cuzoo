@@ -3,18 +3,18 @@
         <v-flex xs1>
             <v-card color="info" height="100%" style="border-radius: 15px">
                 <v-card-text class="pt-4">
-                    <v-icon large class="pt-4">{{ getPointTypeIconOf(cPoint.type) }}</v-icon>
+                    <v-icon large class="pt-4">{{ getPointTypeIconOf(contactPoint.type) }}</v-icon>
                 </v-card-text>
             </v-card>
         </v-flex>
         <v-flex xs11>
             <v-card 
-            @click.native="viewContactPoint(cPoint)"
+            @click.native="viewContactPoint(contactPoint)"
             style="border-radius: 15px"
             height="100%">
                 <v-card-title class="secondary headline font-weight-light">
-                    {{ cPoint.title }} •                                     
-                    <span class="ml-2 mt-1 primary--text mr-2">{{ cPoint.date }}</span> •
+                    {{ contactPoint.title }} •
+                    <span class="ml-2 mt-1 primary--text mr-2">{{ contactPoint.date }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
                     <span class="ml-1 mt-1 primary--text">0</span>
                     <v-spacer></v-spacer>
@@ -25,12 +25,12 @@
                             <v-icon>person</v-icon>
                         </v-avatar>
                         <span class="headline secondary--text">
-                            {{ cPoint.contact.name }}
+                            {{ contactPoint.contact.name }}
                         </span>
                     </v-chip>
                 </v-card-title>
                 <v-card-text class="subheading text-xs-left text-truncate" width="20%">
-                    {{ cPoint.comment }}
+                    {{ contactPoint.comment }}
                 </v-card-text>
             </v-card>
         </v-flex>
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    props: ['cPoint'],
+    props: ['contactPoint'],
     data() {
         return {
             contactPoints: this.$parent.contactPoints
@@ -55,7 +55,7 @@ export default {
             }
         },
         viewContactPoint: function (item) {
-            const index = this.contactPoints.findIndex(cPoint => cPoint.id === item.id);
+            const index = this.contactPoints.findIndex(contactPoint => contactPoint.id === item.id);
             this.$router.push(this.$route.fullPath + '/' + (index));
         }
     }

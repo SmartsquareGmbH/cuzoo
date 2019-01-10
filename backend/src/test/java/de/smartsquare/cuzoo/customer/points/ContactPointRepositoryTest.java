@@ -13,28 +13,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class CPointRepositoryTest {
+public class ContactPointRepositoryTest {
 
     @Autowired
-    private CPointRepository cPointRepository;
+    private ContactPointRepository contactPointRepository;
 
     @Autowired
     private ContactRepository contactRepository;
 
     @After
     public void tearDown() throws Exception {
-        cPointRepository.deleteAll();
+        contactPointRepository.deleteAll();
         contactRepository.deleteAll();
     }
 
     @Test
     public final void that_saves_contact_point_correctly() {
         Contact contact = new Contact("Darius Tack", "", "", "", "", "", "");
-        CPoint cPoint = new CPoint("Beratung", "Telefon", "01.01.1970", contact, "");
+        ContactPoint contactPoint = new ContactPoint("Beratung", "Telefon", "01.01.1970", contact, "");
 
         contactRepository.save(contact);
-        cPointRepository.save(cPoint);
+        contactPointRepository.save(contactPoint);
 
-        assertThat(cPointRepository.findAll().size()).isEqualTo(1);
+        assertThat(contactPointRepository.findAll().size()).isEqualTo(1);
     }
 }

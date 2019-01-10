@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class CPoint {
+public class ContactPoint {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cpoint_generator")
-    @SequenceGenerator(name = "cpoint_generator", sequenceName = "cpoint_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contactPoint_generator")
+    @SequenceGenerator(name = "contactPoint_generator", sequenceName = "contactPoint_seq")
     private Long id;
 
     @NotNull
@@ -44,16 +44,16 @@ public class CPoint {
     @Column(length = 510)
     private String comment;
 
-    @OneToMany(mappedBy = "cPoint", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contactPoint", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @Column(length = 9999999)
     private List<Attachment> files;
 
-    public CPoint() {
+    public ContactPoint() {
     }
 
-    public CPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
-                  @NotNull @NotBlank String date, @NotNull Contact contact, String comment) {
+    public ContactPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
+                        @NotNull @NotBlank String date, @NotNull Contact contact, String comment) {
         this.title = title;
         this.type = type;
         this.contact = contact;

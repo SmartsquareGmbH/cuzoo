@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "drs", password = "secure")
-public class CPointControllerTest {
+public class ContactPointControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private CPointRepository cPointRepository;
+    private ContactPointRepository contactPointRepository;
     @Autowired
     private ContactRepository contactRepository;
     private Contact contact;
@@ -42,7 +42,7 @@ public class CPointControllerTest {
 
     @After
     public void tearDown() throws Exception {
-        cPointRepository.deleteAll();
+        contactPointRepository.deleteAll();
         contactRepository.deleteAll();
     }
 
@@ -60,7 +60,7 @@ public class CPointControllerTest {
                         .isCreated())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(cPointRepository.findAll()
+        assertThat(contactPointRepository.findAll()
                 .stream()
                 .anyMatch(point -> point.getTitle()
                         .equals("Beratungsgespraech")))
@@ -108,7 +108,7 @@ public class CPointControllerTest {
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(cPointRepository.findAll()
+        assertThat(contactPointRepository.findAll()
                 .stream()
                 .anyMatch(point -> point.getTitle()
                         .equals("Auftrag")))
@@ -144,11 +144,11 @@ public class CPointControllerTest {
 
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
-        CPoint cPoint = new CPoint("Beratung", "Telefon", "01.01.1970", contact, "");
-        cPointRepository.save(cPoint);
+        ContactPoint contactPoint = new ContactPoint("Beratung", "Telefon", "01.01.1970", contact, "");
+        contactPointRepository.save(contactPoint);
 
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.delete("/api/point/delete/" + cPoint.getId())
+                MockMvcRequestBuilders.delete("/api/point/delete/" + contactPoint.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
@@ -158,7 +158,7 @@ public class CPointControllerTest {
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(cPointRepository.existsById(cPoint.getId())).isFalse();
+        assertThat(contactPointRepository.existsById(contactPoint.getId())).isFalse();
     }
 
     @Test

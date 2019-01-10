@@ -10,7 +10,7 @@
                         <v-layout wrap>
                             <v-flex xs8>
                                 <v-text-field
-                                v-model="editedCPoint.title"
+                                v-model="editedContactPoint.title"
                                 :rules="titleRules"
                                 prepend-icon="title"
                                 label="Titel"
@@ -18,7 +18,7 @@
                             </v-flex>
                             <v-flex xs4>
                                 <v-combobox
-                                v-model="editedCPoint.type"
+                                v-model="editedContactPoint.type"
                                 :items="this.pointTypes"
                                 :rules="pointRules"
                                 prepend-icon="share"
@@ -33,7 +33,7 @@
                             </v-flex>
                             <v-flex xs8>
                                 <v-combobox
-                                v-model="editedCPoint.contactName"
+                                v-model="editedContactPoint.contactName"
                                 :items="this.contactNames"
                                 :rules="contactRules"
                                 prepend-icon="person"
@@ -71,7 +71,7 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
-                                v-model="editedCPoint.comment"
+                                v-model="editedContactPoint.comment"
                                 prepend-icon="comment"
                                 label="Kommentar"
                                 rows="10"/>
@@ -84,7 +84,7 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
-                <v-btn color="primary" flat v-on:click="submitCPoint()" :disabled="!valid">Speichern</v-btn>
+                <v-btn color="primary" flat v-on:click="submitContactPoint()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -116,7 +116,7 @@ export default {
             ],
             titleRules: [ v => !!v || "Bitte geben Sie einen Titel an" ],
             dateRules: [ v => !!v || "Bitte geben Sie ein Datum an" ],
-            defaultCPoint: {
+            defaultContactPoint: {
                 value: false,
                 id: 0,
                 title: "",
@@ -128,10 +128,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(['editedCPoint']),
-        editedCPoint: {
+        ...mapState(['editedContactPoint']),
+        editedContactPoint: {
             get() {
-                return pointStore.state.editedCPoint
+                return pointStore.state.editedContactPoint
             }
         },
         formTitle() {
@@ -158,19 +158,19 @@ export default {
             this.$emit('input')
             setTimeout(() => {
                 pointStore.commit({
-                    type: 'storeEditedCPointDetails',
+                    type: 'storeEditedContactPointDetails',
                     editedIndex: -1,
-                    editedCPoint: Object.assign({}, this.defaultCPoint)
+                    editedContactPoint: Object.assign({}, this.defaultContactPoint)
                 })
             }, 300)
         },
-        submitCPoint() {
-            api.put(`point/submit?contactName=${this.editedCPoint.contactName}`, {
-                title: this.editedCPoint.title,
-                id: this.editedCPoint.id,
-                type: this.editedCPoint.type,
+        submitContactPoint() {
+            api.put(`point/submit?contactName=${this.editedContactPoint.contactName}`, {
+                title: this.editedContactPoint.title,
+                id: this.editedContactPoint.id,
+                type: this.editedContactPoint.type,
                 date: this.dateFormatted,
-                comment: this.editedCPoint.comment
+                comment: this.editedContactPoint.comment
             }).then(() => {
                 this.$parent.refreshData();
 

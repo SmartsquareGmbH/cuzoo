@@ -20,54 +20,54 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/point")
-public class CPointController {
-    private final CPointRepository cPointRepository;
+public class ContactPointController {
+    private final ContactPointRepository contactPointRepository;
     private final AttachmentRepository attachmentRepository;
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
 
     @Autowired
-    public CPointController(final CPointRepository cPointRepository, final AttachmentRepository attachmentRepository,
-                            final ContactRepository contactRepository, final CompanyRepository companyRepository) {
-        this.cPointRepository = cPointRepository;
+    public ContactPointController(final ContactPointRepository contactPointRepository, final AttachmentRepository attachmentRepository,
+                                  final ContactRepository contactRepository, final CompanyRepository companyRepository) {
+        this.contactPointRepository = contactPointRepository;
         this.attachmentRepository = attachmentRepository;
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitContactPoint(@RequestBody @Valid CPoint cPoint,
+    public final ResponseEntity<?> submitContactPoint(@RequestBody @Valid ContactPoint contactPoint,
                                                       @RequestParam("contactName") String contactName,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Contact cPointsContact = contactRepository.findByName(contactName);
-        cPoint.setContact(cPointsContact);
+        Contact contactPointsContact = contactRepository.findByName(contactName);
+        contactPoint.setContact(contactPointsContact);
 
-        Long cPointIdBeforeSaving = cPoint.getId();
+        Long contactPointIdBeforeSaving = contactPoint.getId();
 
         try {
-            cPointRepository.save(cPoint);
+            contactPointRepository.save(contactPoint);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (cPointIdBeforeSaving == null) {
+        if (contactPointIdBeforeSaving == null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
-    @DeleteMapping("/delete/{cPointId}")
-    public final ResponseEntity<?> deleteContactPoint(@PathVariable Long cPointId) {
-        if (!cPointRepository.existsById(cPointId)) {
+    @DeleteMapping("/delete/{contactPointId}")
+    public final ResponseEntity<?> deleteContactPoint(@PathVariable Long contactPointId) {
+        if (!contactPointRepository.existsById(contactPointId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         try {
-            cPointRepository.deleteById(cPointId);
+            contactPointRepository.deleteById(contactPointId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -81,7 +81,7 @@ public class CPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
+        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
 
         contactPointsOfCompany
@@ -100,7 +100,7 @@ public class CPointController {
         }
     }
 
-    private void checkFiles(CPoint fileDestinationPoint) {
+    private void checkFiles(ContactPoint fileDestinationPoint) {
         if (fileDestinationPoint.getFiles() == null) {
             fileDestinationPoint.setFiles(new ArrayList<>());
         }
@@ -113,7 +113,7 @@ public class CPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
+        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
 
         return contactPointsOfCompany
                 .map(it -> ResponseEntity.ok(Objects.requireNonNull(getFile(it.get(contactPointId.intValue()).getFiles(), filename)).getContent()))
@@ -131,17 +131,17 @@ public class CPointController {
     }
 
     @GetMapping("/get")
-    public final ResponseEntity<List<CPoint>> getAllCPoints() {
-        return ResponseEntity.ok(cPointRepository.findAll());
+    public final ResponseEntity<List<ContactPoint>> getAllContactPoints() {
+        return ResponseEntity.ok(contactPointRepository.findAll());
     }
 
     @GetMapping("/get/{companyName}")
-    public final ResponseEntity<List<CPoint>> getCPointsOfCompany(@PathVariable String companyName) {
+    public final ResponseEntity<List<ContactPoint>> getContactPointsOfCompany(@PathVariable String companyName) {
         if (!companyRepository.existsByName(companyName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
+        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
 
         if (contactPointsOfCompany.isPresent()) {
             return ResponseEntity.ok(contactPointsOfCompany.get());

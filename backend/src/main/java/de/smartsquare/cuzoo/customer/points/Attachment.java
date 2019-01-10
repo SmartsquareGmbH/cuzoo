@@ -30,8 +30,8 @@ public class Attachment {
     private LocalDate uploadDate;
 
     @ManyToOne
-    @JoinColumn(name = "cPoint_id")
-    private CPoint cPoint;
+    @JoinColumn(name = "contactPoint_id")
+    private ContactPoint contactPoint;
 
     public Attachment() {
 
@@ -75,11 +75,11 @@ public class Attachment {
         this.uploadDate = uploadDate;
     }
 
-    public CPoint getContactPoint() {
-        return cPoint;
+    public ContactPoint getContactPoint() {
+        return contactPoint;
     }
 
-    public void setContactPoint(CPoint cPoint) {
-        this.cPoint = cPoint;
+    public void setContactPoint(ContactPoint contactPoint) {
+        this.contactPoint = contactPoint;
     }
 }

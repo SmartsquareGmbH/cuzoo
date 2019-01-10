@@ -4,8 +4,8 @@ import Search from "./views/Search.vue"
 import CompanyTable from "./views/company/CompanyTable.vue"
 import Company from "./views/company/Company.vue"
 import ContactTable from "./views/contact/ContactTable.vue"
-import CPointList from "./views/point/CPointList.vue"
-import CPoint from "./views/point/CPoint"
+import ContactPointList from "./views/point/ContactPointList.vue"
+import ContactPoint from "./views/point/ContactPoint"
 
 Vue.use(Router);
 
@@ -34,12 +34,12 @@ export default new Router({
         {
             path: "/:id",
             name: "contactpoints",
-            component: CPointList
+            component: ContactPointList
         },
         {
             path: "/:id/:id",
             name: "contactpointview",
-            component: CPoint
+            component: ContactPoint
         }
     ]
 });

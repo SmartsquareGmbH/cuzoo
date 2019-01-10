@@ -2,7 +2,7 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
-import de.smartsquare.cuzoo.customer.points.CPoint;
+import de.smartsquare.cuzoo.customer.points.ContactPoint;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class Contact {
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private List<CPoint> cPoints;
+    private List<ContactPoint> contactPoints;
 
     private String role;
     private String mail;
@@ -142,11 +142,11 @@ public class Contact {
         this.comment = comment;
     }
 
-    public List<CPoint> getcPoints() {
-        return cPoints;
+    public List<ContactPoint> getContactPoints() {
+        return contactPoints;
     }
 
-    public void setcPoints(List<CPoint> cPoints) {
-        this.cPoints = cPoints;
+    public void setContactPoints(List<ContactPoint> contactPoints) {
+        this.contactPoints = contactPoints;
     }
 }

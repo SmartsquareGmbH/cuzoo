@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-interface CPointRepository extends JpaRepository<CPoint, Long> {
+interface ContactPointRepository extends JpaRepository<ContactPoint, Long> {
 
-    @Query("SELECT c FROM CPoint c WHERE c.contact.company.name = :companyName ORDER BY c.date")
-    Optional<List<CPoint>> findCPointsByCompanyName(@Param("companyName") String companyName);
+    @Query("SELECT c FROM ContactPoint c WHERE c.contact.company.name = :companyName ORDER BY c.date")
+    Optional<List<ContactPoint>> findContactPointsByCompanyName(@Param("companyName") String companyName);
 
 }

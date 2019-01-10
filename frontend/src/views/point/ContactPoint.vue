@@ -23,7 +23,7 @@
                     <v-flex xs2>
                         <v-card height="100%" dark color="info">
                             <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px"> title </v-icon>
+                                <v-icon size="30px">title</v-icon>
                             </v-card-text>
                         </v-card>
                     </v-flex>
