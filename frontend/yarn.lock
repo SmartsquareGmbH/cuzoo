@@ -9018,6 +9018,13 @@ vue-cli-plugin-vuetify@^0.4.6:
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-0.4.6.tgz#91c4534d17bc04bbd6f41eacdb6ff49be0f59f2b"
   integrity sha512-vkai2B3XqanmscUYSioIjJkU7bzBZGl9mCuIISEZtaDy3qWEkF143UGdJ72u/rGuOytLxpV+9B+FNoV93qlnag==
 
+vue-cli-plugin-webpack-bundle-analyzer@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-webpack-bundle-analyzer/-/vue-cli-plugin-webpack-bundle-analyzer-1.2.0.tgz#8dd050008965bc029a3ae7c7b4c1ec762b601919"
+  integrity sha512-x8mhU5eFXpQ9PJuV+Ja8y9moi2veSPwyceepJaVjqVNKBEydRTgg458CWbEx2xay784Xy62LTK4XSYcVtPPglA==
+  dependencies:
+    webpack-bundle-analyzer "^2.13.1"
+
 vue-clip@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-clip/-/vue-clip-1.0.0.tgz#c28399ea4ca4957a391086584d50548a74340980"
