@@ -24,18 +24,6 @@ public class CPointController {
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
 
-    private final Comparator<CPoint> compareDates = (firstPoint, secondPoint) -> {
-        if (firstPoint.getDate().equals(secondPoint.getDate())) {
-            if (firstPoint.getId() > secondPoint.getId()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        } else {
-            return firstPoint.getDate().compareTo(secondPoint.getDate());
-        }
-    };
-
     @Autowired
     public CPointController(final CPointRepository cPointRepository, final AttachmentRepository attachmentRepository,
                             final ContactRepository contactRepository, final CompanyRepository companyRepository) {
