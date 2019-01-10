@@ -13,8 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/point")
@@ -79,28 +81,30 @@ public class CPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        CPoint fileDestinationPoint = cPointRepository.findAll()
-                .stream()
-                .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
-                .sorted(compareDates)
-                .collect(Collectors.toList())
-                .get(contactPointId.intValue());
+        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
 
-        if (fileDestinationPoint.getFiles() == null) {
-            fileDestinationPoint.setFiles(new ArrayList<>());
-        }
+        contactPointsOfCompany
+                .map(it -> it.get(contactPointId.intValue()))
+                .ifPresent(this::checkFiles);
 
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
-        attachment.setContactPoint(fileDestinationPoint);
+
+        contactPointsOfCompany
+                .map(it -> it.get(contactPointId.intValue()))
+                .ifPresent(attachment::setContactPoint);
 
         try {
             attachmentRepository.save(attachment);
 
-            cPointRepository.findAll().forEach(point -> point.getFiles().forEach(att -> System.out.println(att.getFilename())));
-
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void checkFiles(CPoint fileDestinationPoint) {
+        if (fileDestinationPoint.getFiles() == null) {
+            fileDestinationPoint.setFiles(new ArrayList<>());
         }
     }
 
