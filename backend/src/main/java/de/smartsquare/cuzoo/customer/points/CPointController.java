@@ -8,22 +8,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -133,22 +123,21 @@ public class CPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        cPointRepository.findAll().forEach(point -> point.getFiles().forEach(att -> System.out.println(att.getFilename())));
+        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
 
-        CPoint fileOriginPoint = cPointRepository.findAll()
-                .stream()
-                .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
-                .sorted(compareDates)
-                .collect(Collectors.toList())
-                .get(contactPointId.intValue());
+        return contactPointsOfCompany
+                .map(it -> ResponseEntity.ok(Objects.requireNonNull(getFile(it.get(contactPointId.intValue()).getFiles(), filename)).getContent()))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
-        for (Attachment file : fileOriginPoint.getFiles()) {
+    private Attachment getFile(List<Attachment> files, String filename) {
+        for (Attachment file : files) {
             if (file.getFilename().equals(filename)) {
-                return ResponseEntity.ok(file.getContent());
+                return file;
             }
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return null;
     }
 
     @GetMapping("/get")
