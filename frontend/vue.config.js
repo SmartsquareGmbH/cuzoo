@@ -1,10 +1,3 @@
 module.exports = {
-  runtimeCompiler: true,
-  configureWebpack: {
-    plugins: [
-    ]
-  },
-
-  pluginOptions: {
-  }
-}
+  runtimeCompiler: true
+};
