@@ -143,10 +143,12 @@ public class CPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(cPointRepository
-                .findAll()
-                .stream()
-                .filter(cPoint -> cPoint.getContact().getCompany().getName().equals(companyName))
-                .collect(Collectors.toList()));
+        Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
+
+        if (contactPointsOfCompany.isPresent()) {
+            return ResponseEntity.ok(contactPointsOfCompany.get());
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
