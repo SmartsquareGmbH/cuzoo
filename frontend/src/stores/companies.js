@@ -37,12 +37,7 @@ export default new Vuex.Store({
     },
     actions: {
         getCompanies() {
-            return api.get('company/get', {
-                auth: {
-                    username: store.getters.getUsername,
-                    password: store.getters.getPassword
-                }
-            }).then(response => {
+            return api.get('company/get').then(response => {
                 console.log(response.data);
                 this.commit({
                     type: 'storeCompanies',

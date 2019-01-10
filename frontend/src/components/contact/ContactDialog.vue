@@ -142,12 +142,7 @@
                     lastContact: this.editedContact.lastContact,
                     lastAnswer: this.editedContact.lastAnswer,
                     comment: this.editedContact.comment
-                }, {
-                    auth: {
-                        username: store.getters.getUsername,
-                        password: store.getters.getPassword
-                    }
-                }).then(response => {
+                }).then(() => {
                     this.$parent.refreshTable();
                     this.closeDialog();
                 }).catch(error => {

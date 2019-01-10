@@ -153,12 +153,7 @@
                     status: this.editedCompany.status,
                     purpose: this.editedCompany.purpose,
                     other: this.editedCompany.other
-                }, {
-                    auth: {
-                        username: store.getters.getUsername,
-                        password: store.getters.getPassword
-                    }
-                }).then(response => {
+                }).then(() => {
                     this.$parent.refreshTable();
                     this.closeDialog();
                 }).catch(error => {

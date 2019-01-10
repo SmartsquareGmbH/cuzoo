@@ -154,10 +154,6 @@
                 let formData = new FormData();
                 formData.append('file', this.file);
                 api.post('contact/import', formData, {
-                    auth: {
-                        username: store.getters.getUsername,
-                        password: store.getters.getPassword
-                    },
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -184,12 +180,7 @@
                 this.editedContact = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?")) {
-                    api.delete(`contact/delete/${this.editedContact.id}`, {
-                        auth: {
-                            username: store.getters.getUsername,
-                            password: store.getters.getPassword
-                        }
-                    }).then(response => {
+                    api.delete(`contact/delete/${this.editedContact.id}`).then(response => {
                         console.log(response.data);
                         this.refreshTable();
                     }).catch(error => {

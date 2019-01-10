@@ -188,10 +188,6 @@
                 formData.append('file', this.file);
 
                 api.post('company/import', formData, {
-                    auth: {
-                        username: store.getters.getUsername,
-                        password: store.getters.getPassword
-                    },
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -218,12 +214,7 @@
                 this.editedCompany = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {
-                    api.delete(`company/delete/${this.editedCompany.id}`, {
-                        auth: {
-                            username: store.getters.getUsername,
-                            password: store.getters.getPassword
-                        }
-                    }).then(response => {
+                    api.delete(`company/delete/${this.editedCompany.id}`).then(() => {
                         this.refreshTable();
                     }).catch(error => {
                         console.log(error);

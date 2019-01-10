@@ -160,12 +160,8 @@ export default {
     },
     methods: {
         refreshData() {
-            api.get(`point/get/${this.company.name}`, {
-                auth: {
-                    username: store.getters.getUsername,
-                    password: store.getters.getPassword
-                }
-            }).then(response => {
+            api.get(`point/get/${this.company.name}`).then(response => {
+                console.log(response);
                 let sortedCPoints = response.data.sort(compareCPoints)
                 pointStore.commit({
                     type: 'storeContactPoints',

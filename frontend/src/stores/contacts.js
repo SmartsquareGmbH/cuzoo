@@ -37,12 +37,7 @@ export default new Vuex.Store({
     },
     actions: {
         getContacts() {
-            return api.get('contact/get', {
-                auth: {
-                    username: store.getters.getUsername,
-                    password: store.getters.getPassword
-                }
-            }).then(response => {
+            return api.get('contact/get').then(response => {
                 console.log(response.data);
                 this.commit({
                     type: 'storeContacts',

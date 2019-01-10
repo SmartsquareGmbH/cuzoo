@@ -171,12 +171,7 @@ export default {
                 type: this.editedCPoint.type,
                 date: this.dateFormatted,
                 comment: this.editedCPoint.comment
-            }, {
-                auth: {
-                    username: store.getters.getUsername,
-                    password: store.getters.getPassword
-                }
-            }).then(response => {
+            }).then(() => {
                 this.$parent.refreshData();
 
                 this.closeDialog();

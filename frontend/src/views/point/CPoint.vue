@@ -140,68 +140,75 @@ import api from '@/utils/http-common'
 import store from '@/store.js'
 import pointStore from '@/stores/points.js'
 
-export default {
-    data() {
-        return {
-            contactPointId: this.$route.params.id,
-        }
-    },
-    computed: {
-        options() {
+    export default {
+        components: {
+            FileUploadDialog
+        },
+        data() {
             return {
-                url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.getContactPointId()}`,
-                headers: {
-                    "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
-                },
-                paramName: "file"
+                contactPointId: this.$route.params.id,
+                fileUploadDialogState: false
             }
         },
-        contactPoint() {
-            return this.contactPoints[this.contactPointId]
-        },
-        ...mapState(['contactPoints']),
-        contactPoints: {
-            get() {
-                return pointStore.state.contactPoints
+        computed: {
+            options() {
+                return {
+                    url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.getContactPointId()}`,
+                    headers: {
+                        "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
+                    },
+                    paramName: "file"
+                }
             },
-            set(contactPoints) {
-                pointStore.commit('storeContactPoints', contactPoints)
-            }
-        },
-        companyName() {
-            return this.contactPoint.contact.company.name
-        }
-    },
-    methods: {
-        getPointTypeIconOf: function (type) {
-            switch (type) {
-                case 'Telefon': return 'phone'
-                case 'E-Mail': return 'mail'
-                case 'Social Media': return 'share'
-                case 'Persönlich': return 'people'
-            }
-        },
-        goPageBack() {
-            this.$router.go(-1)
-        },
-        getContactPointId() {
-            return this.$route.params.id
-        },
-        downloadFile: function (filename) {
-            return api.get(`point/download/${this.companyName}/${this.getContactPointId()}/${filename}`, {
-                auth: {
-                    username: store.getters.getUsername,
-                    password: store.getters.getPassword
+            contactPoint() {
+                return this.contactPoints[this.contactPointId]
+            },
+            ...mapState(['contactPoints']),
+            contactPoints: {
+                get() {
+                    return pointStore.state.contactPoints
                 },
-                responseType: 'arraybuffer'
-            }).then(response => {
-                download(filename, response.data)
-            }).catch(error => {
-                console.log(error)
-            });
+                set(contactPoints) {
+                    pointStore.commit('storeContactPoints', contactPoints)
+                }
+            },
+            companyName() {
+                return this.contactPoint.contact.company.name
+            }
+        },
+        methods: {
+            getPointTypeIconOf: function (type) {
+                switch (type) {
+                    case 'Telefon':
+                        return 'phone'
+                    case 'E-Mail':
+                        return 'mail'
+                    case 'Social Media':
+                        return 'share'
+                    case 'Persönlich':
+                        return 'people'
+                }
+            },
+            goPageBack() {
+                this.$router.go(-1)
+            },
+            getContactPointId() {
+                return this.$route.params.id
+            },
+            downloadFile(filename) {
+                return api.get(`point/download/${this.companyName}/${this.getContactPointId()}/${filename}`, {
+                    responseType: 'arraybuffer'
+                }).then(response => {
+                    download(filename, response.data)
+                }).catch(error => {
+                    console.log(error)
+                });
+            },
+            uploadFiles() {
+                this.fileUploadDialogState = true
+            }
         }
     }
-}
 
 function download(filename, content) {
     const url = window.URL.createObjectURL(new Blob([content]));
