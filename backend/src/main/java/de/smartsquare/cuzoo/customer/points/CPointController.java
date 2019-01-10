@@ -82,16 +82,14 @@ public class CPointController {
         }
 
         Optional<List<CPoint>> contactPointsOfCompany = cPointRepository.findCPointsByCompanyName(companyName);
-
-        contactPointsOfCompany
-                .map(it -> it.get(contactPointId.intValue()))
-                .ifPresent(this::checkFiles);
-
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
 
         contactPointsOfCompany
                 .map(it -> it.get(contactPointId.intValue()))
-                .ifPresent(attachment::setContactPoint);
+                .ifPresent(fileDestinationPoint -> {
+                    checkFiles(fileDestinationPoint);
+                    attachment.setContactPoint(fileDestinationPoint);
+                });
 
         try {
             attachmentRepository.save(attachment);
