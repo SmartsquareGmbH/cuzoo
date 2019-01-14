@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/point")
@@ -204,12 +205,9 @@ public class ContactPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
-
-        if (contactPointsOfCompany.isPresent()) {
-            return ResponseEntity.ok(contactPointsOfCompany.get());
-        } else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        return ResponseEntity.ok(contactPointRepository.findAll()
+                .stream()
+                .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
+                .collect(Collectors.toList()));
     }
 }
