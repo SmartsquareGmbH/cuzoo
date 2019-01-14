@@ -12,10 +12,10 @@
                     fixed
                     app>
                 <v-toolbar-title class="mr-2">
-                    <v-chip 
-                    @click.native="goHome"
-                    outline
-                    color="black">
+                    <v-chip
+                            @click.native="goHome"
+                            outline
+                            color="black">
                         <span class="headline font-weight-light">
                             CUZOO
                         </span>
@@ -42,9 +42,10 @@
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                     <v-switch
-                    class="dm-switch pt-1 mt-3"
-                    label="Darkmode"
-                    v-model="dark"/>
+                            disabled
+                            class="dm-switch pt-1 mt-3"
+                            label="Darkmode"
+                            v-model="dark"/>
                     <v-btn flat icon disabled>
                         <v-icon style="transform: rotate(90deg)" dark>publish</v-icon>
                     </v-btn>
