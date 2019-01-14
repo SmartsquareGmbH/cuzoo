@@ -210,6 +210,14 @@
                     console.log(error)
                 });
             },
+            deleteFile(fileName) {
+                if (confirm("Bist du dir sicher, dass du diese Datei löschen willst? Danach kann sie nicht wieder hergestellt werden!")) {
+                    api.delete(`point/file/delete/${this.companyName}/${this.getContactPointId(this.contactPoint)}/${fileName}`).then(response => {
+                        console.log(response);
+                        this.getFileNames();
+                    })
+                }
+            },
             uploadFiles() {
                 this.fileUploadDialogState = true
             },
