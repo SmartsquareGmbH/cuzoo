@@ -2,35 +2,35 @@
     <v-container fluid>
         <v-card-title>
             <h1 class="mr-3">UNTERNEHMEN</h1>
-            <input 
-            class="input-file"
-            type="file"
-            id="file"
-            ref="file"
-            @change="handleUpload()"/>
+            <input
+                    class="input-file"
+                    type="file"
+                    id="file"
+                    ref="file"
+                    @change="handleUpload()"/>
             <label for="file">
                 <v-tooltip top>
                     <v-icon
-                    slot="activator"
-                    color="primary"
-                    x-large>
+                            slot="activator"
+                            color="primary"
+                            x-large>
                         publish
                     </v-icon>
                     <span>CSV Import</span>
                 </v-tooltip>
             </label>
             <v-btn
-            @click="openDialog()"
-            color="transparent"
-            fab
-            small
-            depressed
-            flat>
+                    @click="openDialog()"
+                    color="transparent"
+                    fab
+                    small
+                    depressed
+                    flat>
                 <v-tooltip top>
                     <v-icon
-                    color="light-green accent-2"
-                    slot="activator"
-                    x-large>
+                            color="light-green accent-2"
+                            slot="activator"
+                            x-large>
                         add
                     </v-icon>
                     <span>Unternehmen hinzufügen</span>
@@ -39,36 +39,36 @@
             <company-dialog v-model="dialogState"/>
             <v-layout row wrap class="pl-2 pt-1">
                 <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox 
-                    v-model="selectedStatus" 
-                    label="Leads" 
-                    value="Lead" 
-                    color="teal accent-2"/>
+                    <v-checkbox
+                            v-model="selectedStatus"
+                            label="Leads"
+                            value="Lead"
+                            color="teal accent-2"/>
                 </v-flex>
                 <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox 
-                    v-model="selectedStatus" 
-                    label="Bestandskunden" 
-                    value="Bestandskunde"
-                    color="teal accent-2"/>
+                    <v-checkbox
+                            v-model="selectedStatus"
+                            label="Bestandskunden"
+                            value="Bestandskunde"
+                            color="teal accent-2"/>
                 </v-flex>
             </v-layout>
             <v-spacer></v-spacer>
             <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Suche ..."
-            single-line
-            hide-details/>
+                    v-model="search"
+                    append-icon="search"
+                    label="Suche ..."
+                    single-line
+                    hide-details/>
         </v-card-title>
         <v-data-table
-        :headers="headers"
-        :items="filteredCompanies"
-        :loading=loading
-        :search="search"
-        rows-per-page-text="Unternehmen pro Seite"
-        :rows-per-page-items=[10,25,50,100]
-        dark>
+                :headers="headers"
+                :items="filteredCompanies"
+                :loading=loading
+                :search="search"
+                rows-per-page-text="Unternehmen pro Seite"
+                :rows-per-page-items=[10,25,50,100]
+                dark>
             <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
@@ -81,28 +81,28 @@
                 <td class="justify-center layout px-0">
                     <v-tooltip top>
                         <v-btn
-                        @click="viewCompany(props.item)"
-                        color="transparent"
-                        slot="activator"
-                        class="pt-1 mt-2"
-                        flat icon small>
+                                @click="viewCompany(props.item)"
+                                color="transparent"
+                                slot="activator"
+                                class="pt-1 mt-2"
+                                flat icon small>
                             <v-icon size="22px" color="white">
                                 info
                             </v-icon>
                         </v-btn>
                         <span>Informationen</span>
                     </v-tooltip>
-                    <v-icon 
-                    @click="editCompany(props.item)"
-                    size="22px" 
-                    class="mr-2">
+                    <v-icon
+                            @click="editCompany(props.item)"
+                            size="22px"
+                            class="mr-2">
                         edit
                     </v-icon>
                     <v-icon
-                    @click="deleteCompany(props.item)"
-                    size="22px" 
-                    color="red lighten-1" 
-                    class="mr-2">
+                            @click="deleteCompany(props.item)"
+                            size="22px"
+                            color="red lighten-1"
+                            class="mr-2">
                         delete
                     </v-icon>
                 </td>
@@ -121,8 +121,6 @@
 <script>
     import {mapState} from 'vuex';
     import api from '@/utils/http-common'
-    import store from '@/store.js'
-    import contactStore from '@/stores/contacts.js'
     import companyStore from '@/stores/companies.js'
 
     import CompanyDialog from "@/components/company/CompanyDialog.vue";
@@ -225,7 +223,7 @@
             openDialog() {
                 this.dialogState = true
             },
-            viewCompany: function (item) {
+            viewCompany(item) {
                 const index = this.companies.findIndex(company => company.id === item.id);
                 this.$router.push('/companies/' + (index));
             }
