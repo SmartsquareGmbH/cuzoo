@@ -7,19 +7,19 @@
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer/>
                         <v-img
-                        :src=kazookid
-                        max-height="64px"
-                        max-width="64px"
+                                :src=kazookid
+                                max-height="64px"
+                                max-width="64px"
                         />
                     </v-toolbar>
                     <v-card-text>
                         <v-form>
-                            <v-text-field 
-                            @keyup.enter="doLogin" v-model="username" prepend-icon="person"
-                            name="username" label="User" type="text" :rules="usernameRules"/>
-                            <v-text-field 
-                            @keyup.enter="doLogin" v-model="password" prepend-icon="lock"
-                            name="password" label="Passwort" type="password" :rules="passwordRules"/>
+                            <v-text-field
+                                    @keyup.enter="doLogin" v-model="username" prepend-icon="person"
+                                    name="username" label="User" type="text" :rules="usernameRules"/>
+                            <v-text-field
+                                    @keyup.enter="doLogin" v-model="password" prepend-icon="lock"
+                                    name="password" label="Passwort" type="password" :rules="passwordRules"/>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
@@ -47,27 +47,27 @@
         data: () => ({
             username: null,
             password: null,
-            usernameRules: [ v => !!v || "Ein Username wird benötigt" ],
-            passwordRules: [ v => !!v || "Ein Passwort wird benötigt" ],
+            usernameRules: [v => !!v || "Ein Username wird benötigt"],
+            passwordRules: [v => !!v || "Ein Passwort wird benötigt"],
             loginFailed: false,
             loginFailedMessage: "Die Anmeldedaten sind ungültig!",
             kazookid: require('@/assets/rsz_kazoo-kid.png')
         }),
         methods: {
-            doLogin: function (event) {
+            doLogin() {
                 api.post('security/login', {}, {
                     auth: {
                         username: this.username,
                         password: this.password
                     }
-                }).then(response => {
+                }).then(() => {
                     store.commit({
                         type: 'storeLogData',
                         authorized: true,
                         username: this.username,
                         password: this.password
                     })
-                }).then(response => {
+                }).then(() => {
                     this.$router.replace('/search')
                 }).catch(error => {
                     if (error.message === "Request failed with status code 401") {
