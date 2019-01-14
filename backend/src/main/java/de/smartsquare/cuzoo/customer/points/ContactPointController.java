@@ -128,6 +128,36 @@ public class ContactPointController {
                 .orElse(null);
     }
 
+    @GetMapping("/get/fileNames/{companyName}/{contactPointId}")
+    public final ResponseEntity<List<String>> getAllFileNamesOfContactPoint(@PathVariable String companyName,
+                                                                            @PathVariable Long contactPointId) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
+
+        if (contactPointsOfCompany.map(it -> it.get(contactPointId.intValue()).getFiles()).get().size() > 0) {
+            return contactPointsOfCompany
+                    .map(it -> ResponseEntity.ok(Objects.requireNonNull(getFileNames(it.get(contactPointId.intValue()).getFiles()))))
+                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } else {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+    }
+
+    private List<String> getFileNames(List<Attachment> files) {
+        if (files.size() > 0) {
+            List<String> fileNames = new ArrayList<>();
+
+            files.forEach(file -> fileNames.add(file.getFilename()));
+
+            return fileNames;
+        } else {
+            return null;
+        }
+    }
+
     @DeleteMapping("/file/delete/{companyName}/{contactPointId}/{fileName}")
     public final ResponseEntity<?> deleteFileOfContactPoint(@PathVariable String companyName,
                                                             @PathVariable Long contactPointId,
