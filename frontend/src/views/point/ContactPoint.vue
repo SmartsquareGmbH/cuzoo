@@ -196,11 +196,13 @@
             goPageBack() {
                 this.$router.go(-1)
             },
-            getContactPointId() {
-                return this.$route.params.id
+            getContactPointId(item) {
+                const index = this.contactPoints.findIndex(contactPoint => contactPoint.id === item.id);
+                console.log(this.contactPoints[index]);
+                return this.contactPoints[index].id - 1;
             },
             downloadFile(filename) {
-                return api.get(`point/download/${this.companyName}/${this.getContactPointId()}/${filename}`, {
+                return api.get(`point/download/${this.companyName}/${this.getContactPointId(this.contactPoint)}/${filename}`, {
                     responseType: 'arraybuffer'
                 }).then(response => {
                     download(filename, response.data)
@@ -222,15 +224,14 @@
         }
     }
 
-function download(filename, content) {
-    const url = window.URL.createObjectURL(new Blob([content]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-}
-
+    function download(filename, content) {
+        const url = window.URL.createObjectURL(new Blob([content]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+    }
 </script>
 
 <style>
