@@ -24,13 +24,14 @@
                 <h1 class="display-1 text-xs-center">Ansprechpartner</h1>
             </v-flex>
             <v-flex xs1>
-                <v-btn v-if="contactsOfCompany.length > 0" block color="secondary" @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
+                <v-btn v-if="contactsOfCompany.length > 0" block color="secondary"
+                       @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
                     <v-icon large dark>edit</v-icon>
                 </v-btn>
             </v-flex>
-            <contact-dialog 
-            v-model="contactDialogState"
-            :companyNames="this.companyNames"/>
+            <contact-dialog
+                    v-model="contactDialogState"
+                    :companyNames="this.companyNames"/>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -300,8 +301,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import store from '@/store.js'
+    import {mapGetters} from 'vuex'
     import companyStore from '@/stores/companies.js'
     import contactStore from '@/stores/contacts.js'
 
@@ -329,15 +329,7 @@
             homepage() {
                 return `http://${this.companies[this.companyId].homepage}`;
             },
-            ...mapState(['contacts']),
-            contacts: {
-                get() {
-                    return contactStore.state.contacts
-                },
-                set(contacts) {
-                    contactStore.commit('storeContacts', contacts)
-                }
-            },
+            ...mapGetters(['contacts']),
             contactsOfCompany() {
                 return this.contacts.filter((contact) => {
                     if (contact.company != null && this.companies[this.companyId].id === contact.company.id) {
@@ -350,7 +342,7 @@
             goPageBack() {
                 this.$router.go(-1);
             },
-            editCompany: function (item) {
+            editCompany(item) {
                 companyStore.commit({
                     type: 'storeEditedCompanyDetails',
                     editedIndex: this.companies.indexOf(item),
@@ -359,7 +351,7 @@
 
                 this.openCompanyDialog()
             },
-            editContact: function (item) {
+            editContact(item) {
                 contactStore.commit({
                     type: 'storeEditedContactDetails',
                     editedIndex: this.contacts.indexOf(item),
