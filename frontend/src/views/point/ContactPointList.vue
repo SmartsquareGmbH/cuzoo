@@ -11,7 +11,6 @@
                     {{ company.name }}
                 </h1>
             </v-flex>
-
             <v-flex xs12>
                 <v-divider/>
             </v-flex>
@@ -19,33 +18,33 @@
                 <h1 class="ml-1 text-xs-left headline font-weight-light">
                     Kontaktpunkte
                     <v-btn small flat fab
-                    @click="addContactPoint()"
-                    color="transparent">
+                           @click="addContactPoint()"
+                           color="transparent">
                         <v-tooltip top>
                             <v-icon large
-                            color="light-green accent-2"
-                            slot="activator">
+                                    color="light-green accent-2"
+                                    slot="activator">
                                 add
                             </v-icon>
                             <span>Kontaktpunkt hinzufügen</span>
                         </v-tooltip>
                     </v-btn>
                 </h1>
-                <c-point-dialog 
-                v-model="dialogState"
-                :contactNames="this.contactNames"/>
+                <contact-point-dialog
+                        v-model="dialogState"
+                        :contactNames="this.contactNames"/>
             </v-flex>
             <v-flex xs4>
                 <h1 class="text-xs-left headline font-weight-light">
                     TODOs
                     <v-btn small fab flat
-                    v-on:click="addTODO()"
-                    color="transparent">
+                           v-on:click="addTODO()"
+                           color="transparent">
                         <v-tooltip top>
                             <v-icon
-                            color="light-green accent-2"
-                            slot="activator"
-                            large>
+                                    color="light-green accent-2"
+                                    slot="activator"
+                                    large>
                                 add
                             </v-icon>
                             <span>TODO hinzufügen</span>
@@ -55,16 +54,16 @@
             </v-flex>
             <v-flex xs8>
                 <v-progress-circular
-                v-if="loading"
-                slot="progress"
-                :size="50"
-                color="primary"
-                indeterminate/>
-                <c-point-card
-                v-if="!loading"
-                :contactPoint="contactPoint"
-                v-bind:key="contactPoint.id"
-                v-for="contactPoint in this.contactPoints"/>
+                        v-if="loading"
+                        slot="progress"
+                        :size="50"
+                        color="primary"
+                        indeterminate/>
+                <contact-point-card
+                        v-if="!loading"
+                        :contactPoint="contactPoint"
+                        v-bind:key="contactPoint.id"
+                        v-for="contactPoint in this.contactPoints"/>
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
@@ -105,108 +104,107 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import api from '@/utils/http-common'
+    import {mapState} from 'vuex'
+    import api from '@/utils/http-common'
+    import pointStore from '@/stores/points.js'
+    import companyStore from '@/stores/companies.js'
+    import contactStore from '@/stores/contacts.js'
 
-import store from '@/store.js'
-import pointStore from '@/stores/points.js'
-import companyStore from '@/stores/companies.js'
-import contactStore from '@/stores/contacts.js'
+    import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
+    import ContactPointCard from "@/components/point/ContactPointCard.vue"
 
-import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
-import ContactPointCard from "@/components/point/ContactPointCard.vue"
-
-export default {
-    components: {
-        ContactPointDialog,
-        ContactPointCard
-    },
-    data() {
-        return {
-            loading: true,
-            companyId: this.$route.params.id,
-            contactNames: [],
-            dialogState: false
-        }
-    },
-    computed: {
-        company() {
-            return this.companies[this.companyId]; 
+    export default {
+        components: {
+            ContactPointDialog,
+            ContactPointCard
         },
-        ...mapState(['companies']),
-        companies: {
-            get() {
-                return companyStore.state.companies
+        data() {
+            return {
+                loading: true,
+                companyId: this.$route.params.id,
+                contactNames: [],
+                fileNames: [],
+                dialogState: false
             }
         },
-        ...mapState(['contacts']),
-        contacts: {
-            get() {
-                return contactStore.state.contacts
-            }
-        },
-        ...mapState(['contactPoints']),
-        contactPoints: {
-            get() {
-                return pointStore.state.contactPoints
+        computed: {
+            company() {
+                return this.companies[this.companyId];
             },
-            set(contactPoints) {
-                pointStore.commit('storeContactPoints', contactPoints)
-            }
-        }
-    },
-    mounted() {
-        this.refreshData()
-    },
-    methods: {
-        refreshData() {
-            api.get(`point/get/${this.company.name}`).then(response => {
-                console.log(response);
-                let sortedContactPoints = response.data.sort(compareContactPoints)
-                pointStore.commit({
-                    type: 'storeContactPoints',
-                    contactPoints: sortedContactPoints
-                })
-            }).catch(error => {
-                console.log(error)
-            }).then(() => {
-                this.loading = false
-            })
-        },
-        getContactsOfCompany() {
-            return this.contacts.filter((contact) => {
-                if (contact.company != null) {
-                    return contact.company.name === this.company.name
-                } else {
-                    return null
+            ...mapState(['companies']),
+            companies: {
+                get() {
+                    return companyStore.state.companies
                 }
-            })
+            },
+            ...mapState(['contacts']),
+            contacts: {
+                get() {
+                    return contactStore.state.contacts
+                }
+            },
+            ...mapState(['contactPoints']),
+            contactPoints: {
+                get() {
+                    return pointStore.state.contactPoints
+                },
+                set(contactPoints) {
+                    pointStore.commit('storeContactPoints', contactPoints)
+                }
+            }
         },
-        addContactPoint() {
-            this.getContactsOfCompany().forEach(contact => {
-                this.contactNames.push(contact.name)
-            })
+        mounted() {
+            this.refreshData()
+        },
+        methods: {
+            refreshData() {
+                api.get(`point/get/${this.company.name}`).then(response => {
+                    let sortedContactPoints = response.data;
+                    console.log(sortedContactPoints);
+                    pointStore.commit({
+                        type: 'storeContactPoints',
+                        contactPoints: sortedContactPoints.sort(compareContactPoints)
+                    })
+                }).catch(error => {
+                    console.log(error)
+                }).then(() => {
+                    this.loading = false
+                })
+            },
+            getContactsOfCompany() {
+                return this.contacts.filter((contact) => {
+                    if (contact.company != null) {
+                        return contact.company.name === this.company.name
+                    } else {
+                        return null
+                    }
+                })
+            },
+            addContactPoint() {
+                this.getContactsOfCompany().forEach(contact => {
+                    this.contactNames.push(contact.name)
+                })
 
-            this.contactNames.sort()
-            this.dialogState = true
-        },
-        goPageBack() {
-            this.$router.go(-1)
+                this.contactNames.sort()
+                this.dialogState = true
+            },
+            goPageBack() {
+                this.$router.go(-1)
+            }
         }
     }
-}
 
-function compareContactPoints(a,b) {
-    if (a.date === b.date) {
-        if (a.id < b.id)
+    function compareContactPoints(a, b) {
+        if (a.date === b.date) {
+            if (a.id < b.id)
+                return 1;
+            if (a.id > b.id)
+                return -1;
+        } else if (a.date < b.date) {
             return 1;
-        if (a.id > b.id)
+        } else if (a.date > b.date) {
             return -1;
-    } else if (a.date < b.date) {
-        return 1;
-    } else if (a.date > b.date) {
-        return -1;
-    } else return 0;
-}
+        } else return 0;
+    }
 
 </script>
