@@ -11,13 +11,13 @@
                     {{ this.contactPoint.contact.company.name }}
                 </h1>
             </v-flex>
-                <v-flex xs1>
-                    <v-btn id="dwn-btn" @click="downloadFile('kontaktpunkte.bmpr')" block color="secondary">
-                        <v-icon style="transform: rotate(180deg)" large dark>
-                            publish
-                        </v-icon>
-                    </v-btn>
-                </v-flex>
+            <v-flex xs1>
+                <v-btn id="upload-btn" @click="uploadFiles()" block color="secondary">
+                    <v-icon large dark>
+                        publish
+                    </v-icon>
+                </v-btn>
+            </v-flex>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -109,24 +109,33 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs8>
+                        <file-upload-dialog
+                                v-model="fileUploadDialogState"
+                                :companyName="this.companyName"
+                                :contactPointId="this.getContactPointId(this.contactPoint)"/>
                     </v-flex>
                     <v-flex xs12>
-                        <vue-clip :options="options">
-                            <template slot="clip-uploader-action">
-                                <v-card style="border-radius: 20px" class="pa-2">
-                                    <div id="drop-area" class="dz-message clickable">
-                                        <h2 class="mt-4 mb-4"><v-icon class="mb-1" size="24px">attach_file</v-icon>Dateien hochladen</h2>
-                                    </div>
+                        <v-layout row wrap>
+                            <v-flex xs12 v-for="fileName in this.fileNames">
+                                <v-card dark>
+                                    <v-btn absolute top right fab small color="primary" class="mr-5"
+                                           @click="downloadFile(fileName)">
+                                        <v-icon style="transform: rotate(180deg)" size="24px" color="secondary">
+                                            publish
+                                        </v-icon>
+                                    </v-btn>
+                                    <v-btn absolute top right fab small color="error" class="ml-0"
+                                           @click="deleteFile(fileName)">
+                                        <v-icon size="24px" color="secondary">
+                                            delete
+                                        </v-icon>
+                                    </v-btn>
+                                    <v-card-text class="headline text-xs-left font-weight-light">
+                                        {{ fileName }}
+                                    </v-card-text>
                                 </v-card>
-                            </template>
-
-                            <template slot="clip-uploader-body" scope="props">
-                                <div v-bind:key="file.name" v-for="file in props.files" class="text-xs-left">
-                                    <img v-bind:src="file.dataUrl" />
-                                    {{ file.name }} {{ file.status }}
-                                </div>
-                            </template>
-                        </vue-clip>
+                            </v-flex>
+                        </v-layout>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -135,10 +144,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex' 
-import api from '@/utils/http-common'
-import store from '@/store.js'
-import pointStore from '@/stores/points.js'
+    import {mapState} from 'vuex'
+    import api from '@/utils/http-common'
+    import pointStore from '@/stores/points.js'
+    import FileUploadDialog from '@/components/point/FileUploadDialog.vue'
 
     export default {
         components: {
@@ -151,15 +160,6 @@ import pointStore from '@/stores/points.js'
             }
         },
         computed: {
-            options() {
-                return {
-                    url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.getContactPointId()}`,
-                    headers: {
-                        "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
-                    },
-                    paramName: "file"
-                }
-            },
             contactPoint() {
                 return this.contactPoints[this.contactPointId]
             },
@@ -222,20 +222,7 @@ function download(filename, content) {
 </script>
 
 <style>
-.clickable {
-    cursor: pointer;
-}
-#drop-area {
-  border: 2px dashed #ccc;
-  border-radius: 20px;
-  font-family: sans-serif;
-  padding: 30px;
-}
-#drop-area:hover {
-  border-color: #4FC3F7;
-}
-
-#drop-area:hover h2 {
-  color: #4FC3F7;
-}
+    #drop-area:hover h2 {
+        color: #4FC3F7;
+    }
 </style>
