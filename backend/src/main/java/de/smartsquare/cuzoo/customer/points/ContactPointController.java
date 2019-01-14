@@ -121,13 +121,11 @@ public class ContactPointController {
     }
 
     private Attachment getFile(List<Attachment> files, String filename) {
-        for (Attachment file : files) {
-            if (file.getFilename().equals(filename)) {
-                return file;
-            }
-        }
-
-        return null;
+        return files
+                .stream()
+                .filter(file -> file.getFilename().equals(filename))
+                .findFirst()
+                .orElse(null);
     }
 
     @GetMapping("/get")
