@@ -146,7 +146,7 @@ public class ContactPointController {
         if (contactPointsOfCompany.isPresent()) {
             return ResponseEntity.ok(contactPointsOfCompany.get());
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }
