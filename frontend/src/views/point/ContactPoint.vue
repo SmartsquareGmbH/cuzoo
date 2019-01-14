@@ -104,7 +104,7 @@
                     <v-flex xs2>
                         <v-card dark height="100%">
                             <v-card-text class="headline text-xs-center font-weight-light">
-                                0
+                                {{ this.fileNames.length }}
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -156,7 +156,8 @@
         data() {
             return {
                 contactPointId: this.$route.params.id,
-                fileUploadDialogState: false
+                fileUploadDialogState: false,
+                fileNames: []
             }
         },
         computed: {
@@ -175,6 +176,9 @@
             companyName() {
                 return this.contactPoint.contact.company.name
             }
+        },
+        mounted() {
+            this.getFileNames();
         },
         methods: {
             getPointTypeIconOf: function (type) {
@@ -206,6 +210,14 @@
             },
             uploadFiles() {
                 this.fileUploadDialogState = true
+            },
+            getFileNames() {
+                api.get(`point/get/fileNames/${this.companyName}/${this.getContactPointId(this.contactPoint)}`).then(response => {
+                    this.fileNames = response.data;
+                    console.log(this.fileNames);
+                }).catch(error => {
+                    console.log(error);
+                });
             }
         }
     }
