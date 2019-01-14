@@ -178,7 +178,8 @@ public class ContactPointController {
                 .get().getFiles()
                 .stream()
                 .filter(file -> file.getFilename()
-                        .equals(fileName)).count() < 0) {
+                        .equals(fileName))
+                .count() < 1) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
