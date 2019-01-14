@@ -128,6 +128,41 @@ public class ContactPointController {
                 .orElse(null);
     }
 
+    @DeleteMapping("/file/delete/{companyName}/{contactPointId}/{fileName}")
+    public final ResponseEntity<?> deleteFileOfContactPoint(@PathVariable String companyName,
+                                                            @PathVariable Long contactPointId,
+                                                            @PathVariable String fileName) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
+
+        if (!contactPointsOfCompany.map(it -> it.get(contactPointId.intValue())).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (contactPointsOfCompany
+                .map(it -> it.get(contactPointId.intValue()))
+                .get().getFiles()
+                .stream()
+                .filter(file -> file.getFilename()
+                        .equals(fileName)).count() < 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        contactPointsOfCompany
+                .map(it -> it.get(contactPointId.intValue()))
+                .get().getFiles()
+                .stream()
+                .filter(file -> file.getFilename()
+                        .equals(fileName))
+                .findFirst()
+                .ifPresent(attachmentRepository::delete);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/get")
     public final ResponseEntity<List<ContactPoint>> getAllContactPoints() {
         return ResponseEntity.ok(contactPointRepository.findAll());
