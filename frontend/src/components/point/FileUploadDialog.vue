@@ -1,16 +1,22 @@
 <template>
-    <v-dialog :value="value" @input="$emit('input')" persistent max-width="950">
-        <v-card color="transparent">
+    <v-dialog
+            :value="value"
+            :companyName="companyName"
+            :contactPointId="contactPointId"
+            @input="$emit('input')"
+            persistent
+            max-width="950">
+        <v-card>
             <v-card-title class="headline primary" primary-title>
+                <v-icon class="mt-0" size="28px" absolute>attach_file</v-icon>
                 {{ formTitle }}
             </v-card-title>
             <v-card-text>
                 <vue-clip :options="options">
                     <template slot="clip-uploader-action">
-                        <v-card class="bordered pa-1">
+                        <v-card class="bordered pa-1" color="transparent elevation-12 mb-4">
                             <div id="drop-area" class="dz-message clickable">
                                 <h2 class="mt-4 mb-1">
-                                    <v-icon class="mt-1" size="24px" absolute>attach_file</v-icon>
                                     Drag & Drop
                                 </h2>
                                 <p>Oder klicke zum Hochladen</p>
@@ -20,54 +26,50 @@
 
                     <template slot="clip-uploader-body" scope="props">
                         <div v-bind:key="file.name" v-for="file in props.files" class="text-xs-left">
-                            <img v-bind:src="file.dataUrl"/>
-                            <v-layout row wrap>
-                                <v-flex xs10>
-                                    <v-card>
-                                        <v-card-text class="headline text-xs-left font-weight-light">
-                                            {{ file.name }} {{ file.status }}
-                                        </v-card-text>
-                                    </v-card>
-                                </v-flex>
-                                <v-flex xs2>
-                                    <v-card v-if="file.status == success" color="success">
-                                        <v-card-text class="headline text-xs-center">
-                                            <v-icon size="30px">done_outline</v-icon>
-                                        </v-card-text>
-                                    </v-card>
-                                    <v-card v-else color="error">
-                                        <v-card-text class="headline text-xs-center">
-                                            <v-icon size="30px">error_outline</v-icon>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-flex>
-                            </v-layout>
+                            <p class="title text-xs-left font-weight-light">
+                                {{ file.name }}
+                                <v-icon size="30px" v-if="file.status === 'success'" color="success">
+                                    done_outline
+                                </v-icon>
+                                <v-icon v-else size="30px" color="error">error_outline</v-icon>
+                            </p>
                         </div>
                     </template>
                 </vue-clip>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
-                <v-btn color="primary" flat v-on:click="submitCPoint()" :disabled="!valid">Speichern</v-btn>
+                <v-btn color="primary" flat @click.native="closeDialog()">OKAY</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
+    import store from '@/store.js'
+
     export default {
-        props: ["value"],
+        props: ["value", "companyName", "contactPointId"],
         data() {
             return {
-                formTitle: 'Dateien hochladen'
+                formTitle: 'Dateien hochladen',
+                uploaded: false
             }
         },
         computed: {
-
+            options() {
+                return {
+                    url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.contactPointId}`,
+                    headers: {
+                        "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
+                    },
+                    paramName: "file"
+                }
+            }
         },
         methods: {
             closeDialog() {
+                this.$parent.getFileNames();
                 this.$emit('input')
             }
         }
@@ -92,6 +94,12 @@
     #drop-area:hover h2 {
         color: #4FC3F7;
     }
+
+    #drop-area:hover p {
+        font-size: 16px;
+        color: #4FC3F7;
+    }
+
     .bordered {
         border-color: #fff;
         border-radius: 20px;
