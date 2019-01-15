@@ -1,7 +1,8 @@
 <template>
     <v-layout row wrap class="clickable">
         <v-flex xs1>
-            <v-card color="info" height="100%" style="border-radius: 15px">
+            <v-card color="info" height="100%"
+                    style="border-radius: 15px; background: linear-gradient(45deg, #4FC3F7, #546E7A)">
                 <v-card-text class="pt-4">
                     <v-icon large class="pt-4">{{ getPointTypeIconOf(contactPoint.type) }}</v-icon>
                 </v-card-text>
@@ -69,7 +70,7 @@
                 this.$router.push(this.$route.fullPath + '/' + (contactPoint.id));
             },
             refreshData() {
-                api.get(`point/get/fileNames/${this.contactPoint.id}`)
+                api.get(`file/get/names/${this.contactPoint.id}`)
                     .then(response => {
                         if (response.data.length > 0) {
                             this.fileNames = response.data;

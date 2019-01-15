@@ -196,13 +196,8 @@
             goPageBack() {
                 this.$router.go(-1)
             },
-            getContactPointId(item) {
-                const index = this.contactPoints.findIndex(contactPoint => contactPoint.id === item.id);
-                console.log(this.contactPoints[index]);
-                return this.contactPoints[index].id - 1;
-            },
             downloadFile(filename) {
-                return api.get(`point/download/${this.companyName}/${this.getContactPointId(this.contactPoint)}/${filename}`, {
+                return api.get(`file/download/${this.contactPoint.id}/${filename}`, {
                     responseType: 'arraybuffer'
                 }).then(response => {
                     download(filename, response.data)
@@ -212,17 +207,17 @@
             },
             deleteFile(fileName) {
                 if (confirm("Bist du dir sicher, dass du diese Datei löschen willst? Danach kann sie nicht wieder hergestellt werden!")) {
-                    api.delete(`point/file/delete/${this.companyName}/${this.getContactPointId(this.contactPoint)}/${fileName}`).then(response => {
-                        console.log(response);
-                        this.getFileNames();
-                    })
+                    api.delete(`file/delete/${this.contactPoint.id}/${fileName}`)
+                        .then(() => {
+                            this.getFileNames();
+                        })
                 }
             },
             uploadFiles() {
                 this.fileUploadDialogState = true
             },
             getFileNames() {
-                api.get(`point/get/fileNames/${this.companyName}/${this.getContactPointId(this.contactPoint)}`).then(response => {
+                api.get(`file/get/names/${this.contactPoint.id}`).then(response => {
                     this.fileNames = response.data;
                     console.log(this.fileNames);
                 }).catch(error => {

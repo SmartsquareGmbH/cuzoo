@@ -59,7 +59,7 @@
         computed: {
             options() {
                 return {
-                    url: `http://localhost:5000/api/point/upload/${this.companyName}/${this.contactPointId}`,
+                    url: `http://localhost:5000/api/file/upload/${this.contactPointId}`,
                     headers: {
                         "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
                     },
