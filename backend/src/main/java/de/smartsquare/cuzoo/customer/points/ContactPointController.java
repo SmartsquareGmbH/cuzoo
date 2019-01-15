@@ -82,15 +82,18 @@ public class ContactPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
+        Optional<ContactPoint> fileDestinationPoint = contactPointRepository.findById(contactPointId);
+
+        if (!fileDestinationPoint.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
 
-        contactPointsOfCompany
-                .map(it -> it.get(contactPointId.intValue()))
-                .ifPresent(fileDestinationPoint -> {
-                    checkFiles(fileDestinationPoint);
-                    attachment.setContactPoint(fileDestinationPoint);
-                });
+        fileDestinationPoint.ifPresent(contactPoint -> {
+            checkFiles(contactPoint);
+            attachment.setContactPoint(contactPoint);
+        });
 
         try {
             attachmentRepository.save(attachment);
