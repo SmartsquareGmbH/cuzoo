@@ -159,32 +159,23 @@ public class ContactPointController {
         }
     }
 
-    @DeleteMapping("/file/delete/{companyName}/{contactPointId}/{fileName}")
-    public final ResponseEntity<?> deleteFileOfContactPoint(@PathVariable String companyName,
-                                                            @PathVariable Long contactPointId,
+    @DeleteMapping("/file/delete/{contactPointId}/{fileName}")
+    public final ResponseEntity<?> deleteFileOfContactPoint(@PathVariable Long contactPointId,
                                                             @PathVariable String fileName) {
-        if (!companyRepository.existsByName(companyName)) {
+        Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
+
+        if (!fileOriginPoint.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
-
-        if (!contactPointsOfCompany.map(it -> it.get(contactPointId.intValue())).isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (contactPointsOfCompany
-                .map(it -> it.get(contactPointId.intValue()))
+        if (fileOriginPoint
                 .get().getFiles()
                 .stream()
-                .filter(file -> file.getFilename()
-                        .equals(fileName))
-                .count() < 1) {
+                .noneMatch(file -> file.getFilename().equals(fileName))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        contactPointsOfCompany
-                .map(it -> it.get(contactPointId.intValue()))
+        fileOriginPoint
                 .get().getFiles()
                 .stream()
                 .filter(file -> file.getFilename()
