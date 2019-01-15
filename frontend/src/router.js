@@ -32,12 +32,12 @@ export default new Router({
             component: Company
         },
         {
-            path: "/:id",
+            path: "/:companyId",
             name: "contactpoints",
             component: ContactPointList
         },
         {
-            path: "/:id/:id",
+            path: "/:companyId/:contactPointId",
             name: "contactpointview",
             component: ContactPoint
         }
