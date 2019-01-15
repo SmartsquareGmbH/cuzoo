@@ -67,18 +67,31 @@
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
-                    <v-flex xs12>
-                        <v-card style="border-radius: 15px" height="100%" color="error">
-                            <v-card-text class="secondary--text headline text-xs-left">
-                                <v-icon size="30px" class="mr-2" color="secondary">
-                                    error
-                                </v-icon>
-                                Michael anrufen
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
+                    <v-scroll-x-transition>
+                        <v-flex xs12 v-if="this.taskDone === false">
+                            <v-card style="border-radius: 15px" height="100%" color="error">
+                                <v-btn absolute top right fab small color="secondary" @click="taskIsDone()"
+                                       class="elevation-12">
+                                    <v-icon size="24px" color="success" class="ml-3">
+                                        done_outline
+                                    </v-icon>
+                                </v-btn>
+                                <v-card-text class="secondary--text headline text-xs-left">
+                                    <v-icon size="30px" class="mr-2" color="secondary">
+                                        error
+                                    </v-icon>
+                                    Michael Bescheid geben
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                    </v-scroll-x-transition>
                     <v-flex xs12>
                         <v-card style="border-radius: 15px" height="100%" color="warning">
+                            <v-btn absolute top right fab small color="secondary" @click="" class="elevation-12">
+                                <v-icon size="24px" color="success" class="ml-3">
+                                    done_outline
+                                </v-icon>
+                            </v-btn>
                             <v-card-text class="secondary--text headline text-xs-left">
                                 <v-icon size="30px" class="mr-2" color="secondary">
                                     warning
@@ -89,6 +102,11 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-card style="border-radius: 15px" height="100%" color="secondary">
+                            <v-btn absolute top right fab small color="secondary" @click="" class="elevation-12">
+                                <v-icon size="24px" color="success" class="ml-3">
+                                    done_outline
+                                </v-icon>
+                            </v-btn>
                             <v-card-text class="headline text-xs-left">
                                 <v-icon size="30px" class="mr-2">
                                     warning
@@ -106,6 +124,7 @@
 <script>
     import {mapState} from 'vuex'
     import api from '@/utils/http-common'
+
     import pointStore from '@/stores/points.js'
     import companyStore from '@/stores/companies.js'
     import contactStore from '@/stores/contacts.js'
@@ -123,8 +142,8 @@
                 loading: true,
                 companyId: this.$route.params.id,
                 contactNames: [],
-                fileNames: [],
-                dialogState: false
+                dialogState: false,
+                taskDone: false
             }
         },
         computed: {
@@ -190,6 +209,13 @@
             },
             goPageBack() {
                 this.$router.go(-1)
+            },
+            taskIsDone() {
+                this.taskDone = true;
+
+                setTimeout(() => {
+                    this.taskDone = false;
+                }, 2000)
             }
         }
     }
