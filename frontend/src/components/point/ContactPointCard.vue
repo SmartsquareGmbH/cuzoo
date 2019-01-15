@@ -50,13 +50,7 @@
             }
         },
         mounted() {
-            api.get(`point/get/fileNames/${this.company.name}/${this.contactPoint.id - 1}`).then(response => {
-                if (response.data.length > 0) {
-                    this.fileNames = response.data;
-                }
-            }).catch(error => {
-                console.log(error);
-            });
+            this.refreshData();
         },
         methods: {
             getPointTypeIconOf: function (type) {
@@ -71,9 +65,19 @@
                         return 'people'
                 }
             },
-            viewContactPoint: function (item) {
-                const index = this.contactPoints.findIndex(contactPoint => contactPoint.id === item.id);
-                this.$router.push(this.$route.fullPath + '/' + (index));
+            viewContactPoint(contactPoint) {
+                this.$router.push(this.$route.fullPath + '/' + (contactPoint.id));
+            },
+            refreshData() {
+                api.get(`point/get/fileNames/${this.contactPoint.id}`)
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.fileNames = response.data;
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
             }
         }
     }
