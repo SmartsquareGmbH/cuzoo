@@ -6,8 +6,8 @@
                     <v-icon large dark>arrow_back</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs11>
-                <h1 class="text-xs-left display-2 font-weight-thin">
+            <v-flex xs10>
+                <h1 class="text-xs-center display-2 font-weight-thin">
                     {{ company.name }}
                 </h1>
             </v-flex>
@@ -63,7 +63,7 @@
                         v-if="!loading"
                         :contactPoint="contactPoint"
                         v-bind:key="contactPoint.id"
-                        v-for="contactPoint in this.contactPoints"/>
+                        v-for="contactPoint in sortedContactPoints"/>
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
@@ -111,7 +111,7 @@
                                 <v-icon size="30px" class="mr-2">
                                     warning
                                 </v-icon>
-                                Pflichtenheft schreiben
+                                Mama anrufen
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -140,7 +140,7 @@
         data() {
             return {
                 loading: true,
-                companyId: this.$route.params.id,
+                companyId: this.$route.params.companyId,
                 contactNames: [],
                 dialogState: false,
                 taskDone: false
@@ -166,9 +166,12 @@
             contactPoints: {
                 get() {
                     return pointStore.state.contactPoints
-                },
-                set(contactPoints) {
-                    pointStore.commit('storeContactPoints', contactPoints)
+                }
+            },
+            ...mapState(['sortedContactPoints']),
+            sortedContactPoints: {
+                get() {
+                    return pointStore.state.sortedContactPoints
                 }
             }
         },
@@ -178,11 +181,13 @@
         methods: {
             refreshData() {
                 api.get(`point/get/${this.company.name}`).then(response => {
-                    let sortedContactPoints = response.data;
-                    console.log(sortedContactPoints);
+                    let contactPoints = response.data;
+                    let sortedContactPoints = contactPoints.sort(compareContactPoints);
+
                     pointStore.commit({
                         type: 'storeContactPoints',
-                        contactPoints: sortedContactPoints.sort(compareContactPoints)
+                        contactPoints: contactPoints,
+                        sortedContactPoints: sortedContactPoints
                     })
                 }).catch(error => {
                     console.log(error)
@@ -202,10 +207,10 @@
             addContactPoint() {
                 this.getContactsOfCompany().forEach(contact => {
                     this.contactNames.push(contact.name)
-                })
+                });
 
-                this.contactNames.sort()
-                this.dialogState = true
+                this.contactNames.sort();
+                this.dialogState = true;
             },
             goPageBack() {
                 this.$router.go(-1)
