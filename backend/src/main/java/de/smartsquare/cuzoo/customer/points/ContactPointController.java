@@ -132,21 +132,18 @@ public class ContactPointController {
                 .orElse(null);
     }
 
-    @GetMapping("/get/fileNames/{companyName}/{contactPointId}")
-    public final ResponseEntity<List<String>> getAllFileNamesOfContactPoint(@PathVariable String companyName,
-                                                                            @PathVariable Long contactPointId) {
-        if (!companyRepository.existsByName(companyName)) {
+    @GetMapping("/get/fileNames/{contactPointId}")
+    public final ResponseEntity<List<String>> getAllFileNamesOfContactPoint(@PathVariable Long contactPointId) {
+        Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
+
+        if (!fileOriginPoint.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
-
-        if (contactPointsOfCompany.map(it -> it.get(contactPointId.intValue()).getFiles()).get().size() > 0) {
-            return contactPointsOfCompany
-                    .map(it -> ResponseEntity.ok(Objects.requireNonNull(getFileNames(it.get(contactPointId.intValue()).getFiles()))))
-                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } else {
+        if (fileOriginPoint.get().getFiles().size() < 1) {
             return ResponseEntity.ok(new ArrayList<>());
+        } else {
+            return ResponseEntity.ok(getFileNames(fileOriginPoint.get().getFiles()));
         }
     }
 
