@@ -55,20 +55,20 @@
                     v-if="props.item.role == 'Freiberufler'"
                     @click="viewContact(props.item)"
                     size="22px" 
-                    class="mr-2">
+                    class="mr-2 mt-2">
                         account_box
                     </v-icon>
                     <v-icon 
                     @click="editContact(props.item)"
                     size="22px" 
-                    class="mr-0">
+                    class="mr-0 mt-2">
                         edit
                     </v-icon>
                     <v-tooltip top>
                         <v-btn
                         @click="downloadInfo(props.item)"
                         color="transparent"
-                        class="pt-1 mt-2"
+                        class="mr-2"
                         slot="activator"
                         flat icon small>
                             <v-icon size="22px" color="white" style="transform: rotate(180deg)" dark>
@@ -80,7 +80,7 @@
                     <v-icon 
                     @click="deleteContact(props.item)"
                     size="22px" 
-                    class="mr-2" 
+                    class="mr-2 mt-2"
                     color="red lighten-1">
                         delete
                     </v-icon>

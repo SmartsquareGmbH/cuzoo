@@ -84,7 +84,7 @@
                                 @click="viewCompany(props.item)"
                                 color="transparent"
                                 slot="activator"
-                                class="pt-1 mt-2"
+                                class="mr-2"
                                 flat icon small>
                             <v-icon size="22px" color="white">
                                 info
@@ -95,14 +95,14 @@
                     <v-icon
                             @click="editCompany(props.item)"
                             size="22px"
-                            class="mr-2">
+                            class="mr-2 mt-2">
                         edit
                     </v-icon>
                     <v-icon
                             @click="deleteCompany(props.item)"
                             size="22px"
                             color="red lighten-1"
-                            class="mr-2">
+                            class="mr-2 mt-2">
                         delete
                     </v-icon>
                 </td>
