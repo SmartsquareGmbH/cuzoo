@@ -110,18 +110,23 @@ public class ContactPointController {
         }
     }
 
-    @GetMapping("/download/{companyName}/{contactPointId}/{filename}")
-    public final ResponseEntity<byte[]> downloadFile(@PathVariable String companyName, @PathVariable Long contactPointId,
-                                                     @PathVariable String filename) {
-        if (!companyRepository.existsByName(companyName)) {
+    @GetMapping("/download/{contactPointId}/{fileName}")
+    public final ResponseEntity<byte[]> downloadFile(@PathVariable Long contactPointId,
+                                                     @PathVariable String fileName) {
+        Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
+
+        if (!fileOriginPoint.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<List<ContactPoint>> contactPointsOfCompany = contactPointRepository.findContactPointsByCompanyName(companyName);
+        if (fileOriginPoint
+                .get().getFiles()
+                .stream()
+                .noneMatch(file -> file.getFilename().equals(fileName))) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        return contactPointsOfCompany
-                .map(it -> ResponseEntity.ok(Objects.requireNonNull(getFile(it.get(contactPointId.intValue()).getFiles(), filename)).getContent()))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return ResponseEntity.ok(getFile(fileOriginPoint.get().getFiles(), fileName).getContent());
     }
 
     private Attachment getFile(List<Attachment> files, String filename) {
