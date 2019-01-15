@@ -6,11 +6,16 @@
                     <v-icon large dark>arrow_back</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs5>
-                <h1 class="text-xs-left display-2 font-weight-thin">
-                    {{ this.contactPoint.contact.company.name }}
-                </h1>
+            <v-flex xs4>
             </v-flex>
+            <v-flex xs1>
+                <v-btn block color="secondary" @click="editContactPoint()">
+                    <v-icon large dark>edit</v-icon>
+                </v-btn>
+            </v-flex>
+            <contact-point-dialog
+                    v-model="contactPointDialogState"
+                    :contactNames="this.contactNames"/>
             <v-flex xs1>
                 <v-btn id="upload-btn" @click="uploadFiles()" block color="secondary">
                     <v-icon large dark>
@@ -20,6 +25,34 @@
             </v-flex>
             <v-flex xs6>
                 <v-layout row wrap>
+                    <v-flex xs2>
+                        <v-card dark color="green" height="100%" class="centered">
+                            <v-card-text class="headline text-xs-center">
+                                <v-icon size="30px">business_center</v-icon>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs10>
+                        <v-card dark>
+                            <v-card-text class="headline text-xs-left font-weight-light">
+                                {{ this.contactPoint.contact.company.name }}
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs2>
+                        <v-card dark color="green" height="100%" class="centered">
+                            <v-card-text class="headline text-xs-center">
+                                <v-icon size="30px">person</v-icon>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs10>
+                        <v-card dark>
+                            <v-card-text class="headline text-xs-left font-weight-light">
+                                {{ this.contactPoint.contact.name }}
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
                     <v-flex xs2>
                         <v-card height="100%" dark color="info">
                             <v-card-text class="headline text-xs-center">
@@ -63,20 +96,6 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs2>
-                        <v-card dark color="green" height="100%" class="centered">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">person</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10>
-                        <v-card dark>
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.contact.name }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
                         <v-card dark color="green">
                             <v-card-text class="headline text-xs-center">
                                 <v-icon size="30px">comment</v-icon>
@@ -112,7 +131,7 @@
                         <file-upload-dialog
                                 v-model="fileUploadDialogState"
                                 :companyName="this.companyName"
-                                :contactPointId="this.getContactPointId(this.contactPoint)"/>
+                                :contactPointId="this.contactPointId"/>
                     </v-flex>
                     <v-flex xs12>
                         <v-layout row wrap>
@@ -146,35 +165,61 @@
 <script>
     import {mapState} from 'vuex'
     import api from '@/utils/http-common'
+
     import pointStore from '@/stores/points.js'
+    import contactStore from '@/stores/contacts.js'
+    import companyStore from '@/stores/companies.js'
+
     import FileUploadDialog from '@/components/point/FileUploadDialog.vue'
+    import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
 
     export default {
         components: {
-            FileUploadDialog
+            FileUploadDialog,
+            ContactPointDialog
         },
         data() {
             return {
-                contactPointId: this.$route.params.id,
+                contactPointId: this.$route.params.contactPointId,
+                companyId: this.$route.params.companyId,
                 fileUploadDialogState: false,
-                fileNames: []
+                fileNames: [],
+                contactPointDialogState: false,
+                contactNames: [],
             }
         },
         computed: {
             contactPoint() {
-                return this.contactPoints[this.contactPointId]
+                return this.contactPoints.find(contactPoint => {
+                    return contactPoint.id == this.contactPointId;
+                })
+            },
+            ...mapState(['contacts']),
+            contacts: {
+                get() {
+                    return contactStore.state.contacts
+                }
+            },
+            ...mapState(['companies']),
+            companies: {
+                get() {
+                    return companyStore.state.companies
+                }
             },
             ...mapState(['contactPoints']),
             contactPoints: {
                 get() {
                     return pointStore.state.contactPoints
-                },
-                set(contactPoints) {
-                    pointStore.commit('storeContactPoints', contactPoints)
+                }
+            },
+            ...mapState(['sortedContactPoints']),
+            sortedContactPoints: {
+                get() {
+                    return pointStore.state.sortedContactPoints
                 }
             },
             companyName() {
-                return this.contactPoint.contact.company.name
+                return this.companies[this.companyId].name;
             }
         },
         mounted() {
@@ -219,11 +264,46 @@
             getFileNames() {
                 api.get(`file/get/names/${this.contactPoint.id}`).then(response => {
                     this.fileNames = response.data;
-                    console.log(this.fileNames);
                 }).catch(error => {
                     console.log(error);
                 });
-            }
+            },
+            getContactsOfCompany() {
+                return this.contacts.filter((contact) => {
+                    if (contact.company != null) {
+                        return contact.company.name === this.companyName
+                    } else {
+                        return null
+                    }
+                })
+            },
+            editContactPoint() {
+                this.getContactsOfCompany().forEach(contact => {
+                    this.contactNames.push(contact.name)
+                });
+
+                this.contactNames.sort();
+
+                pointStore.commit({
+                    type: 'storeEditedContactPointDetails',
+                    editedIndex: this.contactPoints.indexOf(this.contactPoint),
+                    editedContactPoint: Object.assign({}, this.contactPoint)
+                });
+
+                this.contactPointDialogState = true;
+            },
+            refreshData() {
+                api.get(`point/get/${this.companyName}`).then(response => {
+                    let contactPoints = response.data;
+
+                    pointStore.commit({
+                        type: 'storeContactPoints',
+                        contactPoints: contactPoints
+                    })
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
         }
     }
 
@@ -236,9 +316,3 @@
         link.click();
     }
 </script>
-
-<style>
-    #drop-area:hover h2 {
-        color: #4FC3F7;
-    }
-</style>
