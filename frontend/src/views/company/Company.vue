@@ -301,7 +301,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import companyStore from '@/stores/companies.js'
     import contactStore from '@/stores/contacts.js'
 
@@ -329,7 +329,15 @@
             homepage() {
                 return `http://${this.companies[this.companyId].homepage}`;
             },
-            ...mapGetters(['contacts']),
+            ...mapState(['contacts']),
+            contacts: {
+                get() {
+                    return contactStore.state.contacts
+                },
+                set(contacts) {
+                    contactStore.commit('storeContacts', contacts)
+                }
+            },
             contactsOfCompany() {
                 return this.contacts.filter((contact) => {
                     if (contact.company != null && this.companies[this.companyId].id === contact.company.id) {
