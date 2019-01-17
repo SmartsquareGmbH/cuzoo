@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-interface ContactPointRepository extends JpaRepository<ContactPoint, Long> {
+public interface ContactPointRepository extends JpaRepository<ContactPoint, Long> {
 
     @Query("SELECT c FROM ContactPoint c WHERE c.contact.company.name = :companyName ORDER BY c.date")
     Optional<List<ContactPoint>> findContactPointsByCompanyName(@Param("companyName") String companyName);

@@ -1,4 +1,6 @@
-package de.smartsquare.cuzoo.customer.points;
+package de.smartsquare.cuzoo.customer.points.attachment;
+
+import de.smartsquare.cuzoo.customer.points.ContactPoint;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

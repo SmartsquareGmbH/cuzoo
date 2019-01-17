@@ -1,5 +1,7 @@
-package de.smartsquare.cuzoo.customer.points;
+package de.smartsquare.cuzoo.customer.points.attachment;
 
+import de.smartsquare.cuzoo.customer.points.ContactPoint;
+import de.smartsquare.cuzoo.customer.points.ContactPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;

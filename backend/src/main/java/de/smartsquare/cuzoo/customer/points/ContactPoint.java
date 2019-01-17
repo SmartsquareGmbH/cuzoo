@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.points;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.points.attachment.Attachment;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
