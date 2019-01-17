@@ -4,8 +4,8 @@ import Search from "./views/Search.vue"
 import CompanyTable from "./views/company/CompanyTable.vue"
 import Company from "./views/company/Company.vue"
 import ContactTable from "./views/contact/ContactTable.vue"
-import ContactPointList from "./views/point/ContactPointList.vue"
-import ContactPoint from "./views/point/ContactPoint"
+import ContactPointList from "./views/contactpoint/ContactPointList.vue"
+import ContactPoint from "./views/contactpoint/ContactPoint"
 
 Vue.use(Router);
 

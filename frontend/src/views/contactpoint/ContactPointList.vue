@@ -134,8 +134,8 @@
     import companyStore from '@/stores/companies.js'
     import contactStore from '@/stores/contacts.js'
 
-    import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
-    import ContactPointCard from "@/components/point/ContactPointCard.vue"
+    import ContactPointDialog from "@/components/contactpoint/ContactPointDialog.vue"
+    import ContactPointCard from "@/components/contactpoint/ContactPointCard.vue"
 
     export default {
         components: {
@@ -181,7 +181,7 @@
             }
         },
         mounted() {
-            this.refreshData()
+            this.refreshData();
         },
         methods: {
             refreshData() {

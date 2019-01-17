@@ -170,8 +170,8 @@
     import contactStore from '@/stores/contacts.js'
     import companyStore from '@/stores/companies.js'
 
-    import FileUploadDialog from '@/components/point/FileUploadDialog.vue'
-    import ContactPointDialog from "@/components/point/ContactPointDialog.vue"
+    import FileUploadDialog from '@/components/contactpoint/FileUploadDialog.vue'
+    import ContactPointDialog from "@/components/contactpoint/ContactPointDialog.vue"
 
     export default {
         components: {
