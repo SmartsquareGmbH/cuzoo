@@ -36,14 +36,14 @@
                     </v-btn>
                 </h1>
                 <contact-point-dialog
-                        v-model="dialogState"
+                        v-model="contactPointDialogState"
                         :contactNames="this.contactNames"/>
             </v-flex>
             <v-flex xs4>
                 <h1 class="text-xs-left headline font-weight-light">
                     TODOs
                     <v-btn small fab flat
-                           v-on:click="addTODO()"
+                           @click="addTODO()"
                            color="transparent">
                         <v-tooltip top>
                             <v-icon
@@ -56,6 +56,9 @@
                         </v-tooltip>
                     </v-btn>
                 </h1>
+                <todo-dialog
+                        v-model="todoDialogState"
+                        :company="this.company"/>
             </v-flex>
             <v-flex xs8>
                 <v-progress-circular
@@ -134,11 +137,13 @@
     import companyStore from '@/stores/companies.js'
     import contactStore from '@/stores/contacts.js'
 
+    import TodoDialog from '@/components/todo/TodoDialog.vue'
     import ContactPointDialog from "@/components/contactpoint/ContactPointDialog.vue"
     import ContactPointCard from "@/components/contactpoint/ContactPointCard.vue"
 
     export default {
         components: {
+            TodoDialog,
             ContactPointDialog,
             ContactPointCard
         },
@@ -147,7 +152,8 @@
                 loading: true,
                 companyId: this.$route.params.companyId,
                 contactNames: [],
-                dialogState: false,
+                contactPointDialogState: false,
+                todoDialogState: false,
                 taskDone: false
             }
         },
@@ -215,7 +221,10 @@
                 });
 
                 this.contactNames.sort();
-                this.dialogState = true;
+                this.contactPointDialogState = true;
+            },
+            addTODO() {
+                this.todoDialogState = true;
             },
             taskIsDone() {
                 this.taskDone = true;
