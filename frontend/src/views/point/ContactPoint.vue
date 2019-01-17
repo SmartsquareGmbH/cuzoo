@@ -96,7 +96,7 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs2>
-                        <v-card dark color="green">
+                        <v-card dark color="info">
                             <v-card-text class="headline text-xs-center">
                                 <v-icon size="30px">comment</v-icon>
                             </v-card-text>
