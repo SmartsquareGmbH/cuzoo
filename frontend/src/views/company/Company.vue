@@ -128,15 +128,13 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs12>
-                        <v-card dark color="transparent" class="elevation-0">
-                            <v-card-text class="headline text-xs-left">
-                                <v-tooltip top>
-                                    <v-icon color="info" size="36px" slot="activator">info</v-icon>
-                                    Hauptfunktionen des Unternehmens
-                                </v-tooltip>
-                                Unternehmenszweck
-                            </v-card-text>
-                        </v-card>
+                        <v-card-text class="headline text-xs-left">
+                            <v-tooltip top>
+                                <v-icon color="info" size="36px" slot="activator">info</v-icon>
+                                Hauptfunktionen des Unternehmens
+                            </v-tooltip>
+                            Unternehmenszweck
+                        </v-card-text>
                     </v-flex>
                     <v-flex xs12>
                         <v-card dark>
@@ -154,15 +152,13 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs9>
-                        <v-card dark color="transparent" class="elevation-0">
-                            <v-card-text class="headline text-xs-left">
-                                <v-tooltip top>
-                                    <v-icon color="info" size="36px" slot="activator">info</v-icon>
-                                    Sonstige Angaben zum Unternehmen
-                                </v-tooltip>
-                                Sonstiges
-                            </v-card-text>
-                        </v-card>
+                        <v-card-text class="headline text-xs-left">
+                            <v-tooltip top>
+                                <v-icon color="info" size="36px" slot="activator">info</v-icon>
+                                Sonstige Angaben zum Unternehmen
+                            </v-tooltip>
+                            Sonstiges
+                        </v-card-text>
                     </v-flex>
                     <v-flex xs3>
                         <v-card dark v-if="this.companies[this.companyId].status === 'Bestandskunde'" color="info">
@@ -260,15 +256,13 @@
                                     </v-card>
                                 </v-flex>
                                 <v-flex xs12>
-                                    <v-card dark color="transparent" class="elevation-0">
-                                        <v-card-text class="headline text-xs-left">
-                                            <v-tooltip top>
-                                                <v-icon color="info" size="36px" slot="activator">info</v-icon>
-                                                Sonstige Angaben zum Ansprechpartner
-                                            </v-tooltip>
-                                            Sonstiges
-                                        </v-card-text>
-                                    </v-card>
+                                    <v-card-text class="headline text-xs-left">
+                                        <v-tooltip top>
+                                            <v-icon color="info" size="36px" slot="activator" class="pt-0">info</v-icon>
+                                            Sonstige Angaben zum Ansprechpartner
+                                        </v-tooltip>
+                                        Sonstiges
+                                    </v-card-text>
                                 </v-flex>
                                 <v-flex xs12>
                                     <v-card dark>
