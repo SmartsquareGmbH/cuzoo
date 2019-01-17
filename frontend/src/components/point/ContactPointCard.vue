@@ -2,7 +2,7 @@
     <v-layout row wrap class="clickable">
         <v-flex xs1>
             <v-card color="info" height="100%"
-                    style="border-radius: 15px; background: linear-gradient(45deg, #4FC3F7, #546E7A)">
+                    style="border-radius: 15px;">
                 <v-card-text class="pt-4">
                     <v-icon large class="pt-4">{{ getPointTypeIconOf(contactPoint.type) }}</v-icon>
                 </v-card-text>
@@ -15,9 +15,9 @@
                     height="100%">
                 <v-card-title class="secondary headline font-weight-light">
                     {{ contactPoint.title }} •
-                    <span class="ml-2 mt-1 primary--text mr-2">{{ contactPoint.date }}</span> •
+                    <span class="ml-2 primary--text mr-2">{{ contactPoint.date }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
-                    <span class="ml-1 mt-1 primary--text">{{ fileNames.length }}</span>
+                    <span class="ml-1 primary--text">{{ fileNames.length }}</span>
                     <v-spacer></v-spacer>
                     <v-chip
                             class="mb-2"
