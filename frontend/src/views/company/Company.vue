@@ -10,6 +10,14 @@
                 <h1 class="display-1 text-xs-center">Unternehmen</h1>
             </v-flex>
             <v-flex xs1>
+                <v-tooltip top>
+                    <v-btn slot="activator" block color="secondary" @click="viewContactPoints()">
+                        <v-icon large dark>import_contacts</v-icon>
+                    </v-btn>
+                    Anzeigen der Kontaktpunktliste
+                </v-tooltip>
+            </v-flex>
+            <v-flex xs1>
                 <v-btn block color="secondary" @click="editCompany(companies[companyId])">
                     <v-icon large dark>edit</v-icon>
                 </v-btn>
@@ -371,6 +379,9 @@
             refreshTable() {
                 companyStore.dispatch('getCompanies')
                 contactStore.dispatch('getContacts')
+            },
+            viewContactPoints() {
+                this.$router.push('/' + (this.companyId));
             }
         }
     }
