@@ -11,6 +11,11 @@
                     {{ company.name }}
                 </h1>
             </v-flex>
+            <v-flex xs1>
+                <v-btn block color="secondary" @click="viewCompany()">
+                    <v-icon large dark>search</v-icon>
+                </v-btn>
+            </v-flex>
             <v-flex xs12>
                 <v-divider/>
             </v-flex>
@@ -212,15 +217,18 @@
                 this.contactNames.sort();
                 this.dialogState = true;
             },
-            goPageBack() {
-                this.$router.go(-1)
-            },
             taskIsDone() {
                 this.taskDone = true;
 
                 setTimeout(() => {
                     this.taskDone = false;
                 }, 2000)
+            },
+            goPageBack() {
+                this.$router.go(-1)
+            },
+            viewCompany() {
+                this.$router.push('/companies/' + (this.companyId));
             }
         }
     }
