@@ -1,8 +1,8 @@
-package de.smartsquare.cuzoo.customer.points;
+package de.smartsquare.cuzoo.customer.contactpoint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
-import de.smartsquare.cuzoo.customer.points.attachment.Attachment;
+import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

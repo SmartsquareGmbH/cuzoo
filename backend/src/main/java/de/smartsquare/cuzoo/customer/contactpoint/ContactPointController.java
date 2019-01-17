@@ -1,4 +1,4 @@
-package de.smartsquare.cuzoo.customer.points;
+package de.smartsquare.cuzoo.customer.contactpoint;
 
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;

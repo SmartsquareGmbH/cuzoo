@@ -1,4 +1,4 @@
-package de.smartsquare.cuzoo.customer.points.attachment;
+package de.smartsquare.cuzoo.customer.contactpoint.attachment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

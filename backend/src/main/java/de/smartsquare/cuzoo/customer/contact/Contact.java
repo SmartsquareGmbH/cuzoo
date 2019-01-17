@@ -2,7 +2,7 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
-import de.smartsquare.cuzoo.customer.points.ContactPoint;
+import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
