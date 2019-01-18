@@ -112,35 +112,4 @@
         text-align: center;
         color: #ffffff;
     }
-
-    #sidebar {
-        position: fixed;
-        width: 12.5%;
-        height: 100%;
-        background: #151719;
-    }
-
-    .sidebar-header {
-        padding: 1em;
-        color: white;
-        border-bottom: 1px solid rgba(100, 100, 100, 0.3);
-    }
-
-    #sidebar a {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    #sidebar a.router-link-exact-active {
-        color: skyblue;
-    }
-
-    #sidebar ul li {
-        color: rgba(230, 230, 230, 0.9);
-        list-style: none;
-        padding: 15px 10px;
-        text-align: left;
-        border-bottom: 1px solid rgba(100, 100, 100, 0.3);
-    }
 </style>
