@@ -79,8 +79,10 @@
             }
         },
         computed: {
-            ...mapGetters({ dark: 'getDarkState' }),
-            ...mapGetters({ authorized: 'authorized' }),
+            ...mapGetters({
+                dark: 'darkState',
+                authorized: 'authorized'
+            })
         },
         methods: {
             goHome() {

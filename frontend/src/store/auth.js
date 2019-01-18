@@ -11,7 +11,7 @@ export default {
         password: ''
     },
     getters: {
-        getDarkState: state => state.darkState,
+        darkState: state => state.darkState,
         authorized: state => state.authorized,
         username: state => state.username,
         password: state => state.password,
