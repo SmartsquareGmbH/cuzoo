@@ -20,7 +20,8 @@
                             </v-flex>
                             <v-flex xs6>
                                 <v-combobox
-                                v-model="editedContact.company.name"
+                                v-model="this.getCompanyName()"
+                                :disabled="!this.companyFieldEnabled"
                                 :items="companyNames"
                                 label="Unternehmen"
                                 prepend-icon="business_center"
@@ -75,6 +76,7 @@
         data() {
             return {
                 valid: true,
+                companyFieldEnabled: true,
                 defaultContact: {
                     value: false,
                     id: 0,
@@ -125,7 +127,7 @@
                 }
 
                 let company = this.companyName.replace("&", "%26");
-                let companyOrFreelancer = company ? `?companyName=${company}` : ''
+                let companyOrFreelancer = company ? `?companyName=${company}` : '';
                 
                 api.put(`contact/submit${companyOrFreelancer}`, {
                     name: this.editedContact.name,
@@ -145,6 +147,15 @@
                     alert(error);
                 });
             },
+            getCompanyName() {
+                if (this.companyNames.length === 1) {
+                    this.companyFieldEnabled = false;
+                    return this.companyNames[0];
+                } else {
+                    this.companyFieldEnabled = true;
+                    return this.editedContact.company.name
+                }
+            }
         }
     }
 </script>
