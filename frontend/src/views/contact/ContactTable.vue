@@ -97,13 +97,10 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
-    import api from '@/utils/http-common'
-    import store from '@/store.js'
-    import contactStore from '@/stores/contacts.js'
-    import companyStore from '@/stores/companies.js'
+    import {mapGetters, mapActions, mapMutations} from 'vuex';
+    import api from '../../utils/http-common'
 
-    import ContactDialog from "@/components/contact/ContactDialog.vue";
+    import ContactDialog from "../../components/contact/ContactDialog.vue";
 
     export default {
         components: {
@@ -128,23 +125,16 @@
             }
         },
         computed: {
-            companies() {
-                return companyStore.getters.getCompanies
-            },
-            ...mapState(['contacts']),
-            contacts: {
-                get() {
-                    return contactStore.state.contacts
-                },
-                set(contacts) {
-                    contactStore.commit('storeContacts', contacts)
-                }
-            }
+            ...mapGetters(['companies', 'contacts'])
         },
         mounted() {
             this.refreshTable()
         },
         methods: {
+            ...mapActions(['getContacts']),
+            ...mapMutations({
+                storeEditedDetails: 'storeEditedContactDetails'
+            }),
             handleUpload() {
                 this.loading = true;
                 this.file = this.$refs.file.files[0];
@@ -165,15 +155,14 @@
                 });
             },
             refreshTable() {
-                contactStore.dispatch('getContacts')
-                    .then(() => this.loading = false)
+                this.getContacts().then(() => this.loading = false)
             },
-            editContact: function (item) {
-                contactStore.commit({
-                    type: 'storeEditedContactDetails',
+            editContact(item) {
+                this.storeEditedDetails({
                     editedIndex: this.contacts.indexOf(item),
                     editedContact: Object.assign({}, item)
                 });
+
                 this.openDialog();
             },
             deleteContact: function (item) {

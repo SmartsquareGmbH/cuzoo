@@ -119,11 +119,10 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
-    import api from '@/utils/http-common'
-    import companyStore from '@/stores/companies.js'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
-    import CompanyDialog from "@/components/company/CompanyDialog.vue";
+    import CompanyDialog from "../../components/company/CompanyDialog.vue"
 
     export default {
         components: {
@@ -149,15 +148,7 @@
             }
         },
         computed: {
-            ...mapState(['companies']),
-            companies: {
-                get() {
-                    return companyStore.state.companies
-                },
-                set(companies) {
-                    companyStore.commit('storeCompanies', companies)
-                }
-            },
+            ...mapGetters(['companies']),
             filteredCompanies() {
                 return this.companies.filter((company) => {
                     if (this.selectedStatus.indexOf("Lead") > -1 && this.selectedStatus.indexOf("Bestandskunde") > -1) {
@@ -176,6 +167,10 @@
             this.refreshTable()
         },
         methods: {
+            ...mapActions(['getCompanies']),
+            ...mapMutations({
+                storeCompanyDetails: 'storeEditedCompanyDetails'
+            }),
             handleUpload() {
                 this.loading = true;
                 this.file = this.$refs.file.files[0];
@@ -189,23 +184,21 @@
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then(response => {
-                    console.log(response.data);
+                }).then(() => {
                     this.refreshTable();
                 }).catch(error => {
                     console.log(error);
                 });
             },
             refreshTable() {
-                companyStore.dispatch('getCompanies')
-                    .then(() => this.loading = false)
+                this.getCompanies().then(() => this.loading = false);
             },
-            editCompany: function (item) {
-                companyStore.commit({
-                    type: 'storeEditedCompanyDetails',
+            editCompany(item) {
+                this.storeCompanyDetails({
                     editedIndex: this.companies.indexOf(item),
                     editedCompany: Object.assign({}, item)
                 });
+
                 this.openDialog();
             },
             deleteCompany: function (item) {

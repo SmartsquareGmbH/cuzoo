@@ -35,100 +35,81 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { clearInterval } from 'timers'
-import store from '@/store.js'
-import contactStore from '@/stores/contacts.js'
-import companyStore from '@/stores/companies.js'
+    import {mapGetters} from 'vuex'
+    import {mapActions} from 'vuex'
+    import {clearInterval} from 'timers'
 
 import CompanyCard from "@/components/company/CompanyCard.vue"
 
-export default {
-    components: {
-        CompanyCard
-    },
-    data() {
-        return {
-            dark: store.getters.getDarkState,
-            search: '',
-            loading: true,
-            contactsOfCompany: [],
-            searchTermsOfCompany: []
-        }
-    },
-    mounted() {
-        this.refreshData();
-    },
-    computed: {
-        ...mapState(['companies']),
-        companies: {
-            get() {
-                return companyStore.state.companies
+    export default {
+        components: {
+            CompanyCard
+        },
+        data() {
+            return {
+                search: '',
+                loading: true,
+                contactsOfCompany: [],
+                searchTermsOfCompany: []
+            }
+        },
+        mounted() {
+            this.refreshData();
+        },
+        computed: {
+            ...mapGetters(['companies', 'contacts']),
+            searchResults() {
+                return this.companies
+                    .filter(company => {
+                        this.defineSearchTerms(company);
+
+                        if (this.search !== '') {
+                            return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
+                        } else {
+                            return null;
+                        }
+                    })
+                    .splice(0, 10);
+            }
+        },
+        methods: {
+            ...mapActions(['getCompanies', 'getContacts']),
+            getContactsOfCompany: function (item) {
+                return this.contacts.filter((contact) => {
+                    if (contact.company != null) {
+                        return contact.company.name === item;
+                    } else {
+                        return null;
+                    }
+                })
             },
-            set(companies) {
-                companyStore.commit('storeCompanies', companies)
-            }
-        },
-        ...mapState(['contacts']),
-        contacts: {
-            get() {
-                return contactStore.state.contacts
+            defineSearchTerms: function (company) {
+                this.searchTermsOfCompany = [];
+                this.contactsOfCompany = this.getContactsOfCompany(company.name);
+
+                this.contactsOfCompany.forEach(contact => {
+                    this.searchTermsOfCompany.push(contact.name.toLowerCase());
+                });
+
+                for (var key in company) {
+                    if (company.hasOwnProperty(key) && company[key] != null) {
+                        this.searchTermsOfCompany.push(company[key].toString().toLowerCase());
+                    }
+                }
             },
-            set(contacts) {
-                contactStore.commit('storeContacts', contacts)
+            refreshData() {
+                this.getCompanies().then(() => {
+                    this.getContacts().then(() => {
+                        this.loading = false;
+                        this.doFocus();
+                    })
+                });
+            },
+            doFocus() {
+                this.$refs.searchBar.focus();
             }
-        },
-        searchResults() {
-            return this.companies
-            .filter(company => {
-                this.defineSearchTerms(company);
-
-                if (this.search != '') {
-                    return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
-                } else {
-                    return null;
-                }
-            })
-            .splice(0, 10);
-        }
-    },
-    methods: {
-        getContactsOfCompany: function (item) {
-            return this.contacts.filter((contact) => {
-                if (contact.company != null) {
-                    return contact.company.name === item;
-                } else {
-                    return null;
-                }
-            })
-        },
-        defineSearchTerms: function (company) {
-            this.searchTermsOfCompany = [];
-            this.contactsOfCompany = this.getContactsOfCompany(company.name);
-
-            this.contactsOfCompany.forEach(contact => {
-                this.searchTermsOfCompany.push(contact.name.toLowerCase());
-            })
-
-            for (var key in company) {
-                if (company.hasOwnProperty(key) && company[key] != null) {
-                    this.searchTermsOfCompany.push(company[key].toString().toLowerCase());
-                }
-            }
-        },
-        refreshData() {
-            companyStore.dispatch('getCompanies');
-            contactStore.dispatch('getContacts')
-            .then(() => {
-                this.loading = false;
-                this.doFocus();
-            });
-        },
-        doFocus() {
-            this.$refs.searchBar.focus();
         }
     }
-}
 </script>
 
 <style>

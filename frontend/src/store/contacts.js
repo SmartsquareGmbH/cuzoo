@@ -1,11 +1,6 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import api from '@/utils/http-common'
-import store from '@/store.js'
+import api from '../utils/http-common'
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default {
     state: {
         contacts: [],
         editedIndex: -1,
@@ -23,8 +18,9 @@ export default new Vuex.Store({
         }
     },
     getters: {
-        getContacts: state => state.contacts,
-        getEditedIndex: state => state.editedIndex
+        contacts: state => state.contacts,
+        editedContact: state => state.editedContact,
+        editedContactIndex: state => state.editedIndex
     },
     mutations: {
         storeContacts(state, payload) {
@@ -48,4 +44,4 @@ export default new Vuex.Store({
             });
         }
     }
-});
+};

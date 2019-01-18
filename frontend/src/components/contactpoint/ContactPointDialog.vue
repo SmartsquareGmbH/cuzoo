@@ -91,15 +91,13 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import pointStore from '@/stores/points.js'
-    import api from '@/utils/http-common'
+    import {mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
     export default {
         props: ["value", "contactNames"],
         data() {
             return {
-                editedIndex: pointStore.getters.getEditedIndex,
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: true,
@@ -127,12 +125,10 @@
             }
         },
         computed: {
-            ...mapState(['editedContactPoint']),
-            editedContactPoint: {
-                get() {
-                    return pointStore.state.editedContactPoint
-                }
-            },
+            ...mapGetters({
+                editedIndex: 'editedContactPointIndex',
+                editedContactPoint: 'editedContactPoint'
+            }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
             },
@@ -141,6 +137,9 @@
             }
         },
         methods: {
+            ...mapMutations({
+                storeDetails: 'storeEditedContactPointDetails'
+            }),
             formatDate(date) {
                 if (!date) return null;
 
@@ -157,8 +156,7 @@
                 this.$emit('input');
 
                 setTimeout(() => {
-                    pointStore.commit({
-                        type: 'storeEditedContactPointDetails',
+                    this.storeDetails({
                         editedIndex: -1,
                         editedContactPoint: Object.assign({}, this.defaultContactPoint)
                     });

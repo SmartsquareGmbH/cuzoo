@@ -86,10 +86,8 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import api from '../../utils/http-common'
-    import companyStore from '@/stores/companies.js'
-    import store from '@/store.js'
+    import {mapGetters, mapMutations} from 'vuex'
 
     export default {
         props: ["value"],
@@ -112,28 +110,22 @@
             }
         },
         computed: {
+            ...mapGetters({
+                editedCompany: 'editedCompany',
+                editedIndex: 'editedCompanyIndex'
+            }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
-            },
-            companyDialogState() {
-                return companyStore.getters.getCompanyDialogState;
-            },
-            editedIndex() {
-                return companyStore.getters.getEditedIndex;
-            },
-            ...mapState(['editedCompany']),
-            editedCompany: {
-                get() {
-                    return companyStore.state.editedCompany
-                }
             }
         },
         methods: {
+            ...mapMutations({
+                storeCompanyDetails: 'storeEditedCompanyDetails'
+            }),
             closeDialog() {
                 this.$emit('input')
                 setTimeout(() => {
-                    companyStore.commit({
-                        type: 'storeEditedCompanyDetails',
+                    this.storeCompanyDetails({
                         editedIndex: -1,
                         editedCompany: Object.assign({}, this.defaultCompany)
                     })

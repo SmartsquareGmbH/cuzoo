@@ -130,16 +130,12 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import api from '@/utils/http-common'
+    import {mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
-    import pointStore from '@/stores/points.js'
-    import companyStore from '@/stores/companies.js'
-    import contactStore from '@/stores/contacts.js'
-
-    import TodoDialog from '@/components/todo/TodoDialog.vue'
-    import ContactPointDialog from "@/components/contactpoint/ContactPointDialog.vue"
-    import ContactPointCard from "@/components/contactpoint/ContactPointCard.vue"
+    import TodoDialog from '../../components/todo/TodoDialog.vue'
+    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
+    import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue"
 
     export default {
         components: {
@@ -158,45 +154,27 @@
             }
         },
         computed: {
+            ...mapGetters([
+                'companies',
+                'contacts',
+                'contactPoints',
+                'sortedContactPoints'
+            ]),
             company() {
                 return this.companies[this.companyId];
-            },
-            ...mapState(['companies']),
-            companies: {
-                get() {
-                    return companyStore.state.companies
-                }
-            },
-            ...mapState(['contacts']),
-            contacts: {
-                get() {
-                    return contactStore.state.contacts
-                }
-            },
-            ...mapState(['contactPoints']),
-            contactPoints: {
-                get() {
-                    return pointStore.state.contactPoints
-                }
-            },
-            ...mapState(['sortedContactPoints']),
-            sortedContactPoints: {
-                get() {
-                    return pointStore.state.sortedContactPoints
-                }
             }
         },
         mounted() {
             this.refreshData();
         },
         methods: {
+            ...mapMutations(['storeContactPoints']),
             refreshData() {
                 api.get(`point/get/${this.company.name}`).then(response => {
                     let contactPoints = response.data;
                     let sortedContactPoints = contactPoints.sort(compareContactPoints);
 
-                    pointStore.commit({
-                        type: 'storeContactPoints',
+                    this.storeContactPoints({
                         contactPoints: contactPoints,
                         sortedContactPoints: sortedContactPoints
                     })

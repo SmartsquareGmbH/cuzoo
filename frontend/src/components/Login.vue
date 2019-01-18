@@ -39,8 +39,8 @@
 </template>
 
 <script>
+    import {mapMutations} from 'vuex'
     import api from '../utils/http-common'
-    import store from '@/store.js'
 
     export default {
         name: "login",
@@ -54,6 +54,7 @@
             kazookid: require('@/assets/rsz_kazoo-kid.png')
         }),
         methods: {
+            ...mapMutations(['storeLogData']),
             doLogin() {
                 api.post('security/login', {}, {
                     auth: {
@@ -61,8 +62,7 @@
                         password: this.password
                     }
                 }).then(() => {
-                    store.commit({
-                        type: 'storeLogData',
+                    this.storeLogData({
                         authorized: true,
                         username: this.username,
                         password: this.password

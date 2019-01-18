@@ -67,16 +67,13 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common'
-    import contactStore from '@/stores/contacts.js'
-    import store from '@/store.js'
 
     export default {
         props: ["value", "companyNames"],
         data() {
             return {
-                contactDialog: false,
                 valid: true,
                 defaultContact: {
                     value: false,
@@ -93,28 +90,26 @@
             }
         },
         computed: {
+            ...mapGetters({
+                editedIndex: 'editedContactIndex',
+                editedContact: 'editedContact'
+            }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
             },
-            editedIndex() {
-                return contactStore.getters.getEditedIndex;
-            },
-            ...mapState(['editedContact']),
-            editedContact: {
-                get() {
-                    return contactStore.state.editedContact;
-                }
-            },
             companyName() {
-                return this.editedContact.company.name;
+                return this.editedContact.company.name
             }
         },
         methods: {
+            ...mapMutations({
+                storeContactDetails: 'storeEditedContactDetails'
+            }),
             closeDialog() {
-                this.$emit('input')
+                this.$emit('input');
+
                 setTimeout(() => {
-                    contactStore.commit({
-                        type: 'storeEditedContactDetails',
+                    this.storeContactDetails({
                         editedIndex: -1,
                         editedContact: Object.assign({}, this.defaultContact)
                     })

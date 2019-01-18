@@ -46,7 +46,7 @@
 </template>
 
 <script>
-    import store from '@/store.js'
+    import {mapGetters} from 'vuex'
 
     export default {
         props: ["value", "companyName", "contactPointId"],
@@ -57,11 +57,12 @@
             }
         },
         computed: {
+            ...mapGetters(['username', 'password']),
             options() {
                 return {
                     url: `http://localhost:5000/api/file/upload/${this.contactPointId}`,
                     headers: {
-                        "Authorization": "Basic " + btoa(store.getters.getUsername + ":" + store.getters.getPassword)
+                        "Authorization": "Basic " + btoa(this.username + ":" + this.password)
                     },
                     paramName: "file"
                 }

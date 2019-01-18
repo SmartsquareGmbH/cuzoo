@@ -303,12 +303,10 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import companyStore from '@/stores/companies.js'
-    import contactStore from '@/stores/contacts.js'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
 
-    import CompanyDialog from '@/components/company/CompanyDialog.vue'
-    import ContactDialog from '@/components/contact/ContactDialog.vue'
+    import CompanyDialog from '../../components/company/CompanyDialog.vue'
+    import ContactDialog from '../../components/contact/ContactDialog.vue'
 
     export default {
         components: {
@@ -318,27 +316,14 @@
         data() {
             return {
                 contactDialogState: false,
-                companyDialogState: false
+                companyDialogState: false,
+                companyId: this.$route.params.companyId
             }
         },
         computed: {
-            companyId() {
-                return this.$route.params.id;
-            },
-            companies() {
-                return companyStore.getters.getCompanies;
-            },
-            homepage() {
-                return `http://${this.companies[this.companyId].homepage}`;
-            },
-            ...mapState(['contacts']),
-            contacts: {
-                get() {
-                    return contactStore.state.contacts
-                },
-                set(contacts) {
-                    contactStore.commit('storeContacts', contacts)
-                }
+            ...mapGetters(['companies', 'contacts']),
+            company() {
+                return this.companies[this.companyId]
             },
             contactsOfCompany() {
                 return this.contacts.filter((contact) => {
@@ -349,24 +334,27 @@
             }
         },
         methods: {
+            ...mapActions(['getCompanies', 'getContacts']),
+            ...mapMutations({
+                storeCompanyDetails: 'storeEditedCompanyDetails',
+                storeContactDetails: 'storeEditedContactDetails'
+            }),
             goPageBack() {
                 this.$router.go(-1);
             },
             editCompany(item) {
-                companyStore.commit({
-                    type: 'storeEditedCompanyDetails',
+                this.storeCompanyDetails({
                     editedIndex: this.companies.indexOf(item),
                     editedCompany: Object.assign({}, item)
-                })
+                });
 
                 this.openCompanyDialog()
             },
             editContact(item) {
-                contactStore.commit({
-                    type: 'storeEditedContactDetails',
-                    editedIndex: this.contacts.indexOf(item),
+                this.storeContactDetails({
+                    editedIndex: this.companies.indexOf(item),
                     editedContact: Object.assign({}, item)
-                })
+                });
 
                 this.openContactDialog()
             },
@@ -377,8 +365,8 @@
                 this.contactDialogState = true
             },
             refreshTable() {
-                companyStore.dispatch('getCompanies')
-                contactStore.dispatch('getContacts')
+                this.getCompanies();
+                this.getContacts();
             },
             viewContactPoints() {
                 this.$router.push('/' + (this.companyId));

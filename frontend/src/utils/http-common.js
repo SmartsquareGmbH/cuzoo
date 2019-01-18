@@ -1,5 +1,5 @@
 import axios from 'axios'
-import store from '@/store.js'
+import auth from '../store/auth.js'
 
 const commonAxios = axios.create({
     baseURL: `http://${process.env.VUE_APP_API_HOSTNAME}:${process.env.VUE_APP_API_PORT}/api/`
@@ -8,12 +8,12 @@ const commonAxios = axios.create({
 commonAxios.interceptors.request.use((config) => {
     if(!config.auth) {
         config.auth = {
-            username: store.getters.getUsername,
-            password: store.getters.getPassword
+            username: auth.state.username,
+            password: auth.state.password
         }
     }
 
     return config
-})
+});
 
 export default commonAxios

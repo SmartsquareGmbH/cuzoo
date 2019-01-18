@@ -163,15 +163,11 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import api from '@/utils/http-common'
+    import {mapGetters, mapActions, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
-    import pointStore from '@/stores/points.js'
-    import contactStore from '@/stores/contacts.js'
-    import companyStore from '@/stores/companies.js'
-
-    import FileUploadDialog from '@/components/contactpoint/FileUploadDialog.vue'
-    import ContactPointDialog from "@/components/contactpoint/ContactPointDialog.vue"
+    import FileUploadDialog from '../../components/contactpoint/FileUploadDialog.vue'
+    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
 
     export default {
         components: {
@@ -189,34 +185,16 @@
             }
         },
         computed: {
+            ...mapGetters([
+                'companies',
+                'contacts',
+                'contactPoints',
+                'sortedContactPoints'
+            ]),
             contactPoint() {
                 return this.contactPoints.find(contactPoint => {
                     return contactPoint.id == this.contactPointId;
                 })
-            },
-            ...mapState(['contacts']),
-            contacts: {
-                get() {
-                    return contactStore.state.contacts
-                }
-            },
-            ...mapState(['companies']),
-            companies: {
-                get() {
-                    return companyStore.state.companies
-                }
-            },
-            ...mapState(['contactPoints']),
-            contactPoints: {
-                get() {
-                    return pointStore.state.contactPoints
-                }
-            },
-            ...mapState(['sortedContactPoints']),
-            sortedContactPoints: {
-                get() {
-                    return pointStore.state.sortedContactPoints
-                }
             },
             companyName() {
                 return this.companies[this.companyId].name;
@@ -226,6 +204,10 @@
             this.getFileNames();
         },
         methods: {
+            ...mapMutations({
+                storeDetails: 'storeEditedContactPointDetails',
+                storeContactPoints: 'storeContactPoints'
+            }),
             getPointTypeIconOf: function (type) {
                 switch (type) {
                     case 'Telefon':
@@ -284,8 +266,7 @@
 
                 this.contactNames.sort();
 
-                pointStore.commit({
-                    type: 'storeEditedContactPointDetails',
+                this.storeDetails({
                     editedIndex: this.contactPoints.indexOf(this.contactPoint),
                     editedContactPoint: Object.assign({}, this.contactPoint)
                 });
@@ -296,8 +277,7 @@
                 api.get(`point/get/${this.companyName}`).then(response => {
                     let contactPoints = response.data;
 
-                    pointStore.commit({
-                        type: 'storeContactPoints',
+                    this.storeContactPoints({
                         contactPoints: contactPoints
                     })
                 }).catch(error => {

@@ -1,11 +1,6 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import api from '@/utils/http-common'
-import store from '@/store.js'
+import api from '../utils/http-common'
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default {
     state: {
         companies: [],
         editedIndex: -1,
@@ -23,8 +18,9 @@ export default new Vuex.Store({
         }
     },
     getters: {
-        getCompanies: state => state.companies,
-        getEditedIndex: state => state.editedIndex
+        companies: state => state.companies,
+        editedCompany: state => state.editedCompany,
+        editedCompanyIndex: state => state.editedIndex
     },
     mutations: {
         storeCompanies(state, payload) {
@@ -48,4 +44,4 @@ export default new Vuex.Store({
             });
         }
     }
-});
+};

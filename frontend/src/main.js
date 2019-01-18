@@ -4,7 +4,7 @@ import VueClip from 'vue-clip'
 import '@babel/polyfill'
 import App from "./App.vue"
 import router from "./router"
-import store from "./store"
+import store from './plugins/vuex'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify/src/stylus/app.styl'
@@ -20,7 +20,7 @@ Vue.use(Vuetify, {
 
 Vue.use(VueClip);
 
-const app = new Vue({
+new Vue({
     router,
     store,
     render: h => h(App)

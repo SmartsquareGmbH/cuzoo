@@ -3,7 +3,7 @@ import Vuex from "vuex"
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+export default {
     state: {
         contactPoints: [],
         sortedContactPoints: [],
@@ -20,22 +20,20 @@ export default new Vuex.Store({
         }
     },
     getters: {
-        getContactPoints: state => state.contactPoints,
-        getSortedContactPoints: state => state.sortedContactPoints,
-        getContactNames: state => state.contactNames,
-        getEditedIndex: state => state.editedIndex
+        contactPoints: state => state.contactPoints,
+        sortedContactPoints: state => state.sortedContactPoints,
+        contactNames: state => state.contactNames,
+        editedContactPoint: state => state.editedContactPoint,
+        editedContactPointIndex: state => state.editedIndex
     },
     mutations: {
         storeContactPoints(state, payload) {
             state.contactPoints = payload.contactPoints,
             state.sortedContactPoints = payload.sortedContactPoints
         },
-        storeContactNames(state, payload) {
-            state.contactNames = payload.contactNames
-        },
         storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedContactPoint = payload.editedContactPoint
         }
     }
-});
+};

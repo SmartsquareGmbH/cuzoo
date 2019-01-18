@@ -66,7 +66,7 @@
 </template>
 
 <script>
-    import store from '@/store.js'
+    import {mapGetters} from 'vuex'
     import Login from "@/components/Login.vue"
 
     export default {
@@ -75,14 +75,12 @@
         },
         data() {
             return {
-                dark: store.getters.getDarkState,
                 drawer: null,
             }
         },
         computed: {
-            authorized() {
-                return store.getters.getAuthorized
-            }
+            ...mapGetters({ dark: 'getDarkState' }),
+            ...mapGetters({ authorized: 'authorized' }),
         },
         methods: {
             goHome() {

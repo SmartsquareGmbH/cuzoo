@@ -3,7 +3,7 @@ import Vuex from "vuex"
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+export default {
     state: {
         darkState: true,
         authorized: false,
@@ -12,9 +12,9 @@ export default new Vuex.Store({
     },
     getters: {
         getDarkState: state => state.darkState,
-        getAuthorized: state => state.authorized,
-        getUsername: state => state.username,
-        getPassword: state => state.password,
+        authorized: state => state.authorized,
+        username: state => state.username,
+        password: state => state.password,
     },
     mutations: {
         storeDarkState(state, payload) {
@@ -26,4 +26,4 @@ export default new Vuex.Store({
             state.password = payload.password
         }
     }
-});
+};
