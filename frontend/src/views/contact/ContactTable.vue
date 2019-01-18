@@ -52,7 +52,7 @@
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon 
-                    v-if="props.item.role == 'Freiberufler'"
+                    v-if="props.item.role === 'Freiberufler'"
                     @click="viewContact(props.item)"
                     size="22px" 
                     class="mr-2 mt-2">
@@ -165,7 +165,7 @@
 
                 this.openDialog();
             },
-            deleteContact: function (item) {
+            deleteContact(item) {
                 this.editedContact = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?")) {

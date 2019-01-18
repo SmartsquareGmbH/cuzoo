@@ -69,7 +69,7 @@ export default {
 
             return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
         },
-        viewContactPoints: function (item) {
+        viewContactPoints (item) {
             const index = this.companies.findIndex(company => company.id === item.id);
             this.$router.push('/' + (index));
         }

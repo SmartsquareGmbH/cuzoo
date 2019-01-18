@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import api from '@/utils/http-common'
+    import api from '../../utils/http-common'
 
     export default {
         props: ['contactPoint'],

@@ -6,8 +6,8 @@
                     <v-icon large dark>arrow_back</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs4>
-                <h1 class="display-1 text-xs-center">Unternehmen</h1>
+            <v-flex xs3>
+                <h1 class="display-1 text-xs-right"></h1>
             </v-flex>
             <v-flex xs1>
                 <v-tooltip top>
@@ -39,7 +39,7 @@
             </v-flex>
             <contact-dialog
                     v-model="contactDialogState"
-                    :companyNames="this.companyNames"/>
+                    :companyNames="[this.company.name]"/>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
@@ -52,7 +52,7 @@
                     <v-flex xs10>
                         <v-card height="100%" dark>
                             <v-card-text class="headline text-xs-left">
-                                {{ this.companies[this.companyId].name }}
+                                {{ this.company.name }}
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -66,10 +66,9 @@
                     <v-flex xs10>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].homepage != null &&
-                        this.companies[this.companyId].homepage != ''"
+                                    v-if="this.company.homepage != null && this.company.homepage !== ''"
                                     class="headline text-xs-left">
-                                <a :href=this.homepage target="_blank">{{ this.companies[this.companyId].homepage }}</a>
+                                <a :href=this.homepage target="_blank">{{ this.company.homepage }}</a>
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -88,10 +87,9 @@
                     <v-flex xs2>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].zipCode != null &&
-                        this.companies[this.companyId].zipCode != ''"
+                                    v-if="this.company.zipCode != null && this.company.zipCode !== ''"
                                     class="headline text-xs-left">
-                                {{ this.companies[this.companyId].zipCode }}
+                                {{ this.company.zipCode }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -103,10 +101,9 @@
                     <v-flex xs8>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].place != null &&
-                        this.companies[this.companyId].place != ''"
+                                    v-if="this.company.place != null && this.company.place !== ''"
                                     class="headline text-xs-left">
-                                {{ this.companies[this.companyId].place }}
+                                {{ this.company.place }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -123,10 +120,9 @@
                     <v-flex xs10>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].street != null &&
-                        this.companies[this.companyId].street != ''"
+                                    v-if="this.company.street != null && this.company.street !== ''"
                                     class="headline text-xs-left">
-                                {{ this.companies[this.companyId].street }}
+                                {{ this.company.street }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -147,10 +143,9 @@
                     <v-flex xs12>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].purpose != null &&
-                        this.companies[this.companyId].purpose !== ''"
+                                    v-if="this.company.purpose != null && this.company.purpose !== ''"
                                     class="headline text-xs-left">
-                                {{ this.companies[this.companyId].purpose }}
+                                {{ this.company.purpose }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -169,7 +164,7 @@
                         </v-card-text>
                     </v-flex>
                     <v-flex xs3>
-                        <v-card dark v-if="this.companies[this.companyId].status === 'Bestandskunde'" color="info">
+                        <v-card dark v-if="this.company.status === 'Bestandskunde'" color="info">
                             <v-card-text class="headline text-xs-center font-italic">
                                 Bestandskunde
                             </v-card-text>
@@ -183,10 +178,9 @@
                     <v-flex xs12>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.companies[this.companyId].other != null &&
-                        this.companies[this.companyId].other !== ''"
+                                    v-if="this.company.other != null && this.company.other !== ''"
                                     class="headline text-xs-left">
-                                {{ this.companies[this.companyId].other }}
+                                {{ this.company.other }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -275,8 +269,7 @@
                                 <v-flex xs12>
                                     <v-card dark>
                                         <v-card-text
-                                                v-if="contact.comment != null &&
-                                contact.comment !== ''"
+                                                v-if="contact.comment != null && contact.comment !== ''"
                                                 class="headline text-xs-left">
                                             {{ contact.comment }}
                                         </v-card-text>
@@ -327,10 +320,13 @@
             },
             contactsOfCompany() {
                 return this.contacts.filter((contact) => {
-                    if (contact.company != null && this.companies[this.companyId].id === contact.company.id) {
+                    if (contact.company != null && this.company.id === contact.company.id) {
                         return contact;
                     }
                 })
+            },
+            homepage() {
+                return `http://${this.company.homepage}`;
             }
         },
         methods: {

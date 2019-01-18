@@ -201,7 +201,7 @@
 
                 this.openDialog();
             },
-            deleteCompany: function (item) {
+            deleteCompany(item) {
                 this.editedCompany = Object.assign({}, item);
 
                 if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {

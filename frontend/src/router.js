@@ -27,18 +27,18 @@ export default new Router({
             component: ContactTable
         },
         {
-            path: "/companies/:id",
-            name: "companyview",
+            path: "/companies/:companyId",
+            name: "companyView",
             component: Company
         },
         {
             path: "/:companyId",
-            name: "contactpoints",
+            name: "contactPoints",
             component: ContactPointList
         },
         {
             path: "/:companyId/:contactPointId",
-            name: "contactpointview",
+            name: "contactPointView",
             component: ContactPoint
         }
     ]

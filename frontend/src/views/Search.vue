@@ -7,39 +7,38 @@
             <v-flex xs2></v-flex>
             <v-flex xs8>
                 <v-text-field
-                color="primary"
-                ref="searchBar"
-                v-model="search"
-                append-icon="search"
-                label="Suche nach Unternehmen oder Ansprechpartnern"
-                hide-details
-                outline/>
+                        color="primary"
+                        ref="searchBar"
+                        v-model="search"
+                        append-icon="search"
+                        label="Suche nach Unternehmen oder Ansprechpartnern"
+                        hide-details
+                        outline/>
                 <v-progress-linear
-                v-if="loading"
-                slot="progress"
-                :size="50"
-                color="primary"
-                class="mt-3"
-                indeterminate/>
+                        v-if="loading"
+                        slot="progress"
+                        :size="50"
+                        color="primary"
+                        class="mt-3"
+                        indeterminate/>
             </v-flex>
             <v-flex xs2/>
             <v-flex xs2/>
             <v-flex xs8>
                 <company-card
-                :company="company"
-                v-bind:key="company.id"
-                v-for="company in searchResults"/>
+                        :company="company"
+                        v-bind:key="company.id"
+                        v-for="company in searchResults"/>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
-    import {mapActions} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     import {clearInterval} from 'timers'
 
-import CompanyCard from "@/components/company/CompanyCard.vue"
+    import CompanyCard from "../components/company/CompanyCard.vue"
 
     export default {
         components: {
@@ -111,9 +110,3 @@ import CompanyCard from "@/components/company/CompanyCard.vue"
         }
     }
 </script>
-
-<style>
-.clickable {
-    cursor: pointer;
-}
-</style>
