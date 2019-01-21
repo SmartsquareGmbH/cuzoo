@@ -30,6 +30,10 @@ public class Todo {
 
     private boolean done;
 
+    Todo() {
+
+    }
+
     public Todo(@NotNull @NotBlank String description, @NotNull Company company,
                 @NotNull Long expiration, @NotNull Long reminder) {
         this.description = description;
