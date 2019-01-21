@@ -71,7 +71,7 @@ public class TodoController {
     }
 
     @GetMapping("/get/{companyName}")
-    public final ResponseEntity<List<Todo>> getContactPointsOfCompany(@PathVariable String companyName) {
+    public final ResponseEntity<List<Todo>> getTodosOfCompany(@PathVariable String companyName) {
         if (!companyRepository.existsByName(companyName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
