@@ -75,54 +75,17 @@
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
-                    <v-scroll-x-transition>
-                        <v-flex xs12 v-if="this.taskDone === false">
-                            <v-card style="border-radius: 15px" height="100%" color="error">
-                                <v-btn absolute top right fab small color="secondary" @click="taskIsDone()"
-                                       class="elevation-12">
-                                    <v-icon size="24px" color="success" class="ml-3">
-                                        done_outline
-                                    </v-icon>
-                                </v-btn>
-                                <v-card-text class="secondary--text headline text-xs-left">
-                                    <v-icon size="30px" class="mr-2" color="secondary">
-                                        error
-                                    </v-icon>
-                                    Michael Bescheid geben
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                    </v-scroll-x-transition>
-                    <v-flex xs12>
-                        <v-card style="border-radius: 15px" height="100%" color="warning">
-                            <v-btn absolute top right fab small color="secondary" @click="" class="elevation-12">
-                                <v-icon size="24px" color="success" class="ml-3">
-                                    done_outline
-                                </v-icon>
-                            </v-btn>
-                            <v-card-text class="secondary--text headline text-xs-left">
-                                <v-icon size="30px" class="mr-2" color="secondary">
-                                    warning
-                                </v-icon>
-                                Pflichtenheft schreiben
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-card style="border-radius: 15px" height="100%" color="secondary">
-                            <v-btn absolute top right fab small color="secondary" @click="" class="elevation-12">
-                                <v-icon size="24px" color="success" class="ml-3">
-                                    done_outline
-                                </v-icon>
-                            </v-btn>
-                            <v-card-text class="headline text-xs-left">
-                                <v-icon size="30px" class="mr-2">
-                                    warning
-                                </v-icon>
-                                Mama anrufen
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
+                    <v-progress-circular
+                            v-if="loadingContactPoints"
+                            slot="progress"
+                            :size="50"
+                            color="primary"
+                            indeterminate/>
+                    <todo-card
+                            v-if="!loadingTodos"
+                            :todo="todo"
+                            v-bind:key="todo.id"
+                            v-for="todo in sortedTodos"/>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -134,12 +97,14 @@
     import api from '../../utils/http-common'
 
     import TodoDialog from '../../components/todo/TodoDialog.vue'
+    import TodoCard from '../../components/todo/TodoCard.vue'
     import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
     import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue"
 
     export default {
         components: {
             TodoDialog,
+            TodoCard,
             ContactPointDialog,
             ContactPointCard
         },
