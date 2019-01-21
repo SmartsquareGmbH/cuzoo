@@ -171,10 +171,10 @@
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
-                    date: this.date,
+                    date: this.dateFormatted,
                     comment: this.editedContactPoint.comment
                 }).then(() => {
-                    this.$parent.refreshData();
+                    this.$parent.refreshContactPoints();
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);

@@ -165,11 +165,11 @@
             }
         },
         mounted() {
-            this.refreshData();
+            this.refreshContactPoints();
         },
         methods: {
             ...mapMutations(['storeContactPoints']),
-            refreshData() {
+            refreshContactPoints() {
                 api.get(`point/get/${this.company.name}`).then(response => {
                     let contactPoints = response.data;
                     let sortedContactPoints = contactPoints.sort(compareContactPoints);
