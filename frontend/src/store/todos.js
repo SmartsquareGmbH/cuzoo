@@ -10,8 +10,10 @@ export default {
         editedTodo: {
             id: 0,
             description: '',
+            company: {},
             expiration: '',
-            reminder: ''
+            reminder: '',
+            done: false
         }
     },
     getters: {
