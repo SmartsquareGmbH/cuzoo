@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -47,5 +49,17 @@ public class TodoController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/get/{companyName}")
+    public final ResponseEntity<List<Todo>> getContactPointsOfCompany(@PathVariable String companyName) {
+        if (!companyRepository.existsByName(companyName)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(todoRepository.findAll()
+                .stream()
+                .filter(todo -> todo.getCompany().getName().equals(companyName))
+                .collect(Collectors.toList()));
     }
 }
