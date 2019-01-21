@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +49,24 @@ public class TodoController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/done/{todoId}")
+    public final ResponseEntity<?> doneTodo(@PathVariable Long todoId) {
+        Optional<Todo> todo = todoRepository.findById(todoId);
+
+        if (!todo.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        todo.get().setDone(true);
+
+        try {
+            todoRepository.save(todo.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
