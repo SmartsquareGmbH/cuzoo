@@ -10,12 +10,13 @@
                 {{ formTitle }}
             </v-card-title>
             <v-card-text>
-                <v-form ref="form">
+                <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12>
                                 <v-textarea
                                         v-model="editedTodo.description"
+                                        :rules="this.descriptionRules"
                                         counter="255"
                                         maxlength="255"
                                         name="input-7-4"
@@ -57,6 +58,7 @@
                                 <v-combobox
                                         v-model="editedTodo.reminder"
                                         :items="this.reminders"
+                                        :rules="this.reminderRules"
                                         prepend-icon="timer"
                                         label="Erinnerung">
                                     <template slot="item" slot-scope="data">
@@ -72,7 +74,7 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
-                <v-btn color="primary" flat v-on:click="submitTodo()">Speichern</v-btn>
+                <v-btn color="primary" flat v-on:click="submitTodo()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -100,7 +102,10 @@
                     '3 Tage vorher',
                     '1 Woche vorher'
                 ],
+                reminderRules: [v => !!v || "Bitte geben Sie an, wann Sie erinnert werden möchten"],
+                descriptionRules: [v => !!v || "Bitte geben Sie eine Beschreibung an"],
                 menu: false,
+                valid: true,
                 defaultTodo: {
                     id: 0,
                     description: '',

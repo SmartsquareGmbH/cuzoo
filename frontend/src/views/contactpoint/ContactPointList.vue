@@ -62,13 +62,13 @@
             </v-flex>
             <v-flex xs8>
                 <v-progress-circular
-                        v-if="loading"
+                        v-if="loadingContactPoints"
                         slot="progress"
                         :size="50"
                         color="primary"
                         indeterminate/>
                 <contact-point-card
-                        v-if="!loading"
+                        v-if="!loadingContactPoints"
                         :contactPoint="contactPoint"
                         v-bind:key="contactPoint.id"
                         v-for="contactPoint in sortedContactPoints"/>
@@ -101,6 +101,8 @@
     import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
     import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue"
 
+    const datefns = require('date-fns');
+
     export default {
         components: {
             TodoDialog,
@@ -110,7 +112,8 @@
         },
         data() {
             return {
-                loading: true,
+                loadingContactPoints: true,
+                loadingTodos: true,
                 companyId: this.$route.params.companyId,
                 contactNames: [],
                 contactPointDialogState: false,
@@ -123,7 +126,9 @@
                 'companies',
                 'contacts',
                 'contactPoints',
-                'sortedContactPoints'
+                'sortedContactPoints',
+                'todos',
+                'sortedTodos'
             ]),
             company() {
                 return this.companies[this.companyId];
@@ -131,9 +136,10 @@
         },
         mounted() {
             this.refreshContactPoints();
+            this.refreshTodos();
         },
         methods: {
-            ...mapMutations(['storeContactPoints']),
+            ...mapMutations(['storeContactPoints', 'storeTodos']),
             refreshContactPoints() {
                 api.get(`point/get/${this.company.name}`).then(response => {
                     let contactPoints = response.data;
@@ -146,7 +152,23 @@
                 }).catch(error => {
                     console.log(error)
                 }).then(() => {
-                    this.loading = false
+                    this.loadingContactPoints = false
+                })
+            },
+            refreshTodos() {
+                api.get(`todo/get/${this.company.name}`).then(response => {
+                    console.log(response.data);
+                    let todos = response.data;
+                    let sortedTodos = todos.sort(compareTodos);
+
+                    this.storeTodos({
+                        todos: todos,
+                        sortedTodos: sortedTodos
+                    })
+                }).catch(error => {
+                    console.log(error)
+                }).then(() => {
+                    this.loadingTodos = false
                 })
             },
             getContactsOfCompany() {
@@ -169,13 +191,6 @@
             addTODO() {
                 this.todoDialogState = true;
             },
-            taskIsDone() {
-                this.taskDone = true;
-
-                setTimeout(() => {
-                    this.taskDone = false;
-                }, 2000)
-            },
             goPageBack() {
                 this.$router.go(-1)
             },
@@ -196,6 +211,17 @@
         } else if (a.date > b.date) {
             return -1;
         } else return 0;
+    }
+
+    function compareTodos(a, b) {
+        if (datefns.compareAsc(a.expiration, b.expiration) === 0) {
+            if (a.id < b.id)
+                return 1;
+            if (a.id > b.id)
+                return -1;
+        } else {
+            return datefns.compareAsc(a.expiration, b.expiration);
+        }
     }
 
 </script>
