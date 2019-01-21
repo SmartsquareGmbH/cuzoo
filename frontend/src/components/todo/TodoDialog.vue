@@ -10,27 +10,162 @@
                 {{ formTitle }}
             </v-card-title>
             <v-card-text>
+                <v-form ref="form">
+                    <v-container grid-list-md>
+                        <v-layout wrap>
+                            <v-flex xs12>
+                                <v-textarea
+                                        v-model="editedTodo.description"
+                                        counter="255"
+                                        maxlength="255"
+                                        name="input-7-4"
+                                        prepend-icon="title"
+                                        label="TODO"
+                                        rows="3"/>
+                            </v-flex>
+                            <v-flex xs3>
+                                <v-menu
+                                        ref="menu"
+                                        v-model="menu"
+                                        :close-on-content-click="false"
+                                        :nudge-right="35"
+                                        :return-value.sync="date"
+                                        transition="scale-transition"
+                                        offset-y
+                                        full-width
+                                        min-width="290px">
+                                    <v-text-field
+                                            slot="activator"
+                                            v-model="dateFormatted"
+                                            :rules="dateRules"
+                                            prepend-icon="event"
+                                            label="Fällig am"
+                                            suffix="*"
+                                            readonly/>
+                                    <v-date-picker
+                                            v-model="date"
+                                            :min="new Date().toISOString()"
+                                            scrollable
+                                            locale="de">
+                                        <v-spacer/>
+                                        <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
+                                        <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-flex>
+                            <v-flex xs9>
+                                <v-combobox
+                                        v-model="editedTodo.reminder"
+                                        :items="this.reminders"
+                                        prepend-icon="timer"
+                                        label="Erinnerung">
+                                    <template slot="item" slot-scope="data">
+                                        {{ data.item }}
+                                    </template>
+                                </v-combobox>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-form>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="closeDialog()">OKAY</v-btn>
+                <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
+                <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
+                <v-btn color="primary" flat v-on:click="submitTodo()">Speichern</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
+    import api from '../../utils/http-common'
+    import {mapGetters, mapMutations} from 'vuex'
+
+    const datefns = require('date-fns');
+    const de = require('date-fns/locale/de');
+
+    let expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    let reminderDate = new Date();
+
     export default {
         props: ["value", "company"],
         data() {
             return {
-                formTitle: 'TODO erstellen'
+                formTitle: 'TODO hinzufügen',
+                date: expirationDate.toISOString().substr(0, 10),
+                dateRules: [v => !!v || "Bitte geben Sie ein Fälligkeitsdatum an"],
+                reminders: [
+                    '1 Tag vorher',
+                    '3 Tage vorher',
+                    '1 Woche vorher'
+                ],
+                menu: false,
+                defaultTodo: {
+                    id: 0,
+                    description: '',
+                    company: {},
+                    expiration: '',
+                    reminder: '',
+                    done: false
+                }
             }
         },
-        computed: {},
+        computed: {
+            ...mapGetters({
+                editedIndex: 'editedTodoIndex',
+                editedTodo: 'editedTodo'
+            }),
+            dateFormatted() {
+                return datefns.format(this.date, 'DD.MM.YY', { locale: de })
+            }
+        },
         methods: {
+            ...mapMutations({
+                storeDetails: 'storeEditedTodoDetails'
+            }),
+            submitTodo() {
+                console.log(this.editedTodo.description);
+                console.log(datefns.parse(this.date).getTime());
+                console.log(this.getReminderDate());
+
+                api.put(`todo/submit?companyName=${this.company.name}`, {
+                    description: this.editedTodo.description,
+                    expiration: datefns.parse(this.date).getTime(),
+                    reminder: this.getReminderDate()
+                }).then(() => {
+                    this.$parent.refreshTodos();
+                    this.closeDialog();
+                }).catch(error => {
+                    console.log(error);
+                    alert(error);
+                });
+            },
+            getReminderDate() {
+                switch (this.editedTodo.reminder) {
+                    case this.reminders[0]:
+                        reminderDate.setDate((datefns.parse(this.date).getDate()) - 1);
+                        return reminderDate.getTime();
+                    case this.reminders[1]:
+                        reminderDate.setDate((datefns.parse(this.date).getDate()) - 3);
+                        return reminderDate.getTime();
+                    case this.reminders[2]:
+                        reminderDate.setDate((datefns.parse(this.date).getDate()) - 7);
+                        return reminderDate.getTime();
+                }
+            },
+            clearDialog() {
+                this.$refs.form.reset();
+            },
             closeDialog() {
-                this.$emit('input')
+                this.$emit('input');
+
+                setTimeout(() => {
+                    this.storeDetails({
+                        editedIndex: -1,
+                        editedTodo: Object.assign({}, this.defaultTodo)
+                    });
+                }, 300)
             }
         }
     }
