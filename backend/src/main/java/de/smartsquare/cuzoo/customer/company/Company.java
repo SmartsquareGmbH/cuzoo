@@ -2,14 +2,9 @@ package de.smartsquare.cuzoo.customer.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.todo.Todo;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -18,7 +13,7 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_generator")
-    @SequenceGenerator(name ="company_generator", sequenceName = "company_seq")
+    @SequenceGenerator(name = "company_generator", sequenceName = "company_seq")
     private Long id;
     @NotNull
     @NotBlank
@@ -27,6 +22,10 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Contact> contacts;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Todo> todos;
 
     private String street;
     private String zipCode;
@@ -40,8 +39,8 @@ public class Company {
     }
 
     public Company(@NotNull @NotBlank final String name,
-            String street, String zipCode, String place,
-            String homepage, String purpose, String other) {
+                   String street, String zipCode, String place,
+                   String homepage, String purpose, String other) {
         this.name = name;
         this.street = street;
         this.zipCode = zipCode;
@@ -121,5 +120,21 @@ public class Company {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 }
