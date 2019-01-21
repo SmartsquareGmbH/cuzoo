@@ -60,7 +60,7 @@
                                             readonly/>
                                     <v-date-picker
                                             v-model="date"
-                                            :max="new Date().toISOString().substr(0, 10)"
+                                            :max="new Date().toISOString()"
                                             scrollable
                                             locale="de">
                                         <v-spacer/>
@@ -93,6 +93,8 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     import api from '../../utils/http-common'
+
+    const datefns = require('date-fns');
 
     export default {
         props: ["value", "contactNames"],
@@ -133,19 +135,21 @@
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
             },
             dateFormatted() {
-                return this.formatDate(this.date)
+                let de = require('date-fns/locale/de');
+
+                console.log(this.date);
+
+                return datefns.format(
+                    this.date,
+                    'DD.MM.YY',
+                    { locale: de }
+                )
             }
         },
         methods: {
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails'
             }),
-            formatDate(date) {
-                if (!date) return null;
-
-                const [year, month, day] = date.split('-');
-                return `${day}.${month}.${year.substr(2, 2)}`
-            },
             getPointTypeIconOf: function (type) {
                 return this.pointTypeIcons[this.pointTypes.indexOf(type)];
             },
@@ -167,7 +171,7 @@
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
-                    date: this.dateFormatted,
+                    date: this.date,
                     comment: this.editedContactPoint.comment
                 }).then(() => {
                     this.$parent.refreshData();
