@@ -1,4 +1,5 @@
 <template>
+    <v-scroll-x-transition>
     <v-layout row wrap class="clickable">
         <v-flex xs1>
             <v-card color="info" height="100%"
@@ -36,6 +37,7 @@
             </v-card>
         </v-flex>
     </v-layout>
+    </v-scroll-x-transition>
 </template>
 
 <script>
