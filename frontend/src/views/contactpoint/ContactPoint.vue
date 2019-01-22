@@ -77,7 +77,7 @@
                     <v-flex xs4>
                         <v-card height="100%">
                             <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.date }}
+                                {{ this.dateFormatted }}
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -169,6 +169,9 @@
     import FileUploadDialog from '../../components/contactpoint/FileUploadDialog.vue'
     import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
 
+    const datefns = require('date-fns');
+    const de = require('date-fns/locale/de');
+
     export default {
         components: {
             FileUploadDialog,
@@ -198,6 +201,9 @@
             },
             companyName() {
                 return this.companies[this.companyId].name;
+            },
+            dateFormatted() {
+                return datefns.format(this.contactPoint.date, 'DD.MM.YY', { locale: de });
             }
         },
         mounted() {

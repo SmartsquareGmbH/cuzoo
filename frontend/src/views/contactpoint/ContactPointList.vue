@@ -201,16 +201,14 @@
     }
 
     function compareContactPoints(a, b) {
-        if (a.date === b.date) {
+        if (datefns.compareAsc(a.date, b.date) === 0) {
             if (a.id < b.id)
                 return 1;
             if (a.id > b.id)
                 return -1;
-        } else if (a.date < b.date) {
-            return 1;
-        } else if (a.date > b.date) {
-            return -1;
-        } else return 0;
+        } else {
+            return datefns.compareAsc(b.date, a.date);
+        }
     }
 
     function compareTodos(a, b) {
@@ -223,5 +221,4 @@
             return datefns.compareAsc(a.expiration, b.expiration);
         }
     }
-
 </script>

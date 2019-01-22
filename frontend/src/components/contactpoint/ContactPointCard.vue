@@ -15,7 +15,7 @@
                     height="100%">
                 <v-card-title class="secondary headline font-weight-light">
                     {{ contactPoint.title }} •
-                    <span class="ml-2 primary--text mr-2">{{ contactPoint.date }}</span> •
+                    <span class="ml-2 primary--text mr-2">{{ this.dateFormatted }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
                     <span class="ml-1 primary--text">{{ fileNames.length }}</span>
                     <v-spacer></v-spacer>
@@ -41,6 +41,9 @@
 <script>
     import api from '../../utils/http-common'
 
+    const datefns = require('date-fns');
+    const de = require('date-fns/locale/de');
+
     export default {
         props: ['contactPoint'],
         data() {
@@ -48,6 +51,11 @@
                 contactPoints: this.$parent.contactPoints,
                 company: this.$parent.company,
                 fileNames: []
+            }
+        },
+        computed: {
+            dateFormatted() {
+                return datefns.format(this.contactPoint.date, 'DD.MM.YY', { locale: de });
             }
         },
         mounted() {

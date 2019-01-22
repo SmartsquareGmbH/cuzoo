@@ -95,6 +95,7 @@
     import api from '../../utils/http-common'
 
     const datefns = require('date-fns');
+    const de = require('date-fns/locale/de');
 
     export default {
         props: ["value", "contactNames"],
@@ -135,13 +136,7 @@
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
             },
             dateFormatted() {
-                let de = require('date-fns/locale/de');
-
-                return datefns.format(
-                    this.date,
-                    'DD.MM.YY',
-                    { locale: de }
-                )
+                return datefns.format(this.date, 'DD.MM.YY', { locale: de });
             }
         },
         methods: {
@@ -169,7 +164,7 @@
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
-                    date: this.dateFormatted,
+                    date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment
                 }).then(() => {
                     this.$parent.refreshContactPoints();
