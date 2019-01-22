@@ -2,26 +2,43 @@
     <v-scroll-x-transition>
     <v-layout row wrap class="clickable">
         <v-flex xs1>
-            <v-card color="info" height="100%"
-                    style="border-radius: 15px;">
+            <v-card color="info" height="100%">
                 <v-card-text class="pt-4">
                     <v-icon large class="pt-4">{{ getPointTypeIconOf(contactPoint.type) }}</v-icon>
                 </v-card-text>
             </v-card>
         </v-flex>
         <v-flex xs11>
+            <v-hover>
             <v-card
-                    @click.native="viewContactPoint(contactPoint)"
-                    style="border-radius: 15px"
+                    slot-scope="{ hover }"
+                    :class="`elevation-${hover ? 6 : 2}`"
+                    v-on:click="viewContactPoint(contactPoint)"
                     height="100%">
+                <v-scroll-x-transition>
+                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click=""
+                           class="elevation-12 mr-5">
+                        <v-icon size="24px" color="white">
+                            edit
+                        </v-icon>
+                    </v-btn>
+                </v-scroll-x-transition>
+                <v-scroll-x-transition>
+                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click.native="deleteContactPoint(todo)"
+                           class="elevation-12">
+                        <v-icon size="24px" color="error">
+                            delete
+                        </v-icon>
+                    </v-btn>
+                </v-scroll-x-transition>
                 <v-card-title class="secondary headline font-weight-light">
                     {{ contactPoint.title }} •
-                    <span class="ml-2 primary--text mr-2">{{ this.dateFormatted }}</span> •
+                    <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
                     <span class="ml-1 primary--text">{{ fileNames.length }}</span>
                     <v-spacer></v-spacer>
                     <v-chip
-                            class="mb-2"
+                            :class="`mt-${hover ? 4 : 0} mb-${hover ? 0 : 2}`"
                             color="white">
                         <v-avatar class="info white--text" size="35px">
                             <v-icon>person</v-icon>
@@ -35,6 +52,7 @@
                     {{ contactPoint.comment }}
                 </v-card-text>
             </v-card>
+            </v-hover>
         </v-flex>
     </v-layout>
     </v-scroll-x-transition>
