@@ -137,8 +137,6 @@
             dateFormatted() {
                 let de = require('date-fns/locale/de');
 
-                console.log(this.date);
-
                 return datefns.format(
                     this.date,
                     'DD.MM.YY',
