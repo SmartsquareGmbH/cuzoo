@@ -1,7 +1,4 @@
-import Vue from "vue"
-import Vuex from "vuex"
-
-Vue.use(Vuex);
+import api from '../utils/http-common'
 
 export default {
     state: {
