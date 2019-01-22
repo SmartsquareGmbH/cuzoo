@@ -107,6 +107,10 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+            deleteContactPoint() {
+                api.delete(`point/delete/${this.contactPoint.id}`)
+                    .then(() => this.$parent.refreshContactPoints);
             }
         }
     }
