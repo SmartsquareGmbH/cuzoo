@@ -83,7 +83,7 @@ public class ContactPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
+        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\"}";
     }
 
     @Test
@@ -116,11 +116,11 @@ public class ContactPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\"}";
     }
 
     private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"type\":\"Telefon\", \"date\":\"01.01.1970\"}";
+        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"type\":\"Telefon\", \"date\":\"0\"}";
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ContactPointControllerTest {
 
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
-        ContactPoint contactPoint = new ContactPoint("Beratung", "Telefon", "01.01.1970", contact, "");
+        ContactPoint contactPoint = new ContactPoint("Beratung", "Telefon", 0L, contact, "");
         contactPointRepository.save(contactPoint);
 
         MockHttpServletRequestBuilder builder =

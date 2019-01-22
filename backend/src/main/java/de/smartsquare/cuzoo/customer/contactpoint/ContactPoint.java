@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,8 +35,7 @@ public class ContactPoint {
     private String type;
 
     @NotNull
-    @NotBlank
-    private String date;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "contact_id")
@@ -53,11 +53,11 @@ public class ContactPoint {
     }
 
     public ContactPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
-                        @NotNull @NotBlank String date, @NotNull Contact contact, String comment) {
+                        @NotNull Long date, @NotNull Contact contact, String comment) {
         this.title = title;
         this.type = type;
         this.contact = contact;
-        this.date = date;
+        this.date = new Date(date);
         this.comment = comment;
     }
 
@@ -93,11 +93,11 @@ public class ContactPoint {
         this.contact = contact;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
