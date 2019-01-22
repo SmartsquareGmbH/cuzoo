@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default {
     state: {
+        labels: [],
         contactPoints: [],
         sortedContactPoints: [],
         contactNames: [],
@@ -16,7 +17,8 @@ export default {
             contact: {},
             date: "",
             comment: "",
-            type: ""
+            type: "",
+            labels: []
         }
     },
     getters: {
@@ -24,7 +26,8 @@ export default {
         sortedContactPoints: state => state.sortedContactPoints,
         contactNames: state => state.contactNames,
         editedContactPoint: state => state.editedContactPoint,
-        editedContactPointIndex: state => state.editedIndex
+        editedContactPointIndex: state => state.editedIndex,
+        contactPointLabels: state => state.labels
     },
     mutations: {
         storeContactPoints(state, payload) {
@@ -34,6 +37,11 @@ export default {
         storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedContactPoint = payload.editedContactPoint
+        }
+    },
+    actions: {
+        getContactPointLabels() {
+
         }
     }
 };

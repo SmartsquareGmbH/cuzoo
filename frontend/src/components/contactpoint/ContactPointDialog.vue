@@ -74,7 +74,31 @@
                                         v-model="editedContactPoint.comment"
                                         prepend-icon="comment"
                                         label="Kommentar"
-                                        rows="10"/>
+                                        rows="5"/>
+                            </v-flex>
+                            <v-flex xs12>
+                                <v-combobox
+                                        hide-details
+                                        outline
+                                        color="primary"
+                                        v-model="editedContactPoint.labels"
+                                        :items="labels"
+                                        label="Tags"
+                                        chips
+                                        clearable
+                                        prepend-icon="label"
+                                        solo
+                                        multiple>
+                                    <template slot="selection" slot-scope="data">
+                                        <v-chip
+                                                class="title"
+                                                :selected="data.selected"
+                                                close
+                                                @input="removeLabel(data.item)">
+                                            {{ data.item }}
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -130,13 +154,14 @@
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
-                editedContactPoint: 'editedContactPoint'
+                editedContactPoint: 'editedContactPoint',
+                labels: 'contactPointLabels'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
             },
             dateFormatted() {
-                return datefns.format(this.date, 'DD.MM.YY', { locale: de });
+                return datefns.format(this.date, 'DD.MM.YY', {locale: de});
             }
         },
         methods: {
