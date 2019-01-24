@@ -12,6 +12,7 @@ export default {
             id: 0,
             title: "",
             contact: {},
+            contactName: "",
             date: "",
             comment: "",
             type: "",
@@ -29,16 +30,25 @@ export default {
     mutations: {
         storeContactPoints(state, payload) {
             state.contactPoints = payload.contactPoints,
-            state.sortedContactPoints = payload.sortedContactPoints
+                state.sortedContactPoints = payload.sortedContactPoints
         },
         storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-            state.editedContactPoint = payload.editedContactPoint
+                state.editedContactPoint = payload.editedContactPoint
+        },
+        storeContactPointLabels(state, payload) {
+            state.labels = payload.labels
         }
     },
     actions: {
         getContactPointLabels() {
-
+            api.get('point/get/labels').then(response => {
+                console.log(response.data);
+                this.commit({
+                    type: 'storeContactPointLabels',
+                    labels: response.data
+                });
+            }).catch(err => console.log(err));
         }
     }
-};
+}
