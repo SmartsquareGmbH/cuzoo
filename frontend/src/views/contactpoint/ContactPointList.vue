@@ -140,6 +140,10 @@
         },
         methods: {
             ...mapMutations(['storeContactPoints', 'storeTodos']),
+            refreshData() {
+                this.refreshContactPoints();
+                this.refreshTodos();
+            },
             refreshContactPoints() {
                 api.get(`point/get/${this.company.name}`).then(response => {
                     let contactPoints = response.data;
