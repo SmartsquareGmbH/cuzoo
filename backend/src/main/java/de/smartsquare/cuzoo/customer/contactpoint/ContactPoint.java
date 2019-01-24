@@ -3,6 +3,7 @@ package de.smartsquare.cuzoo.customer.contactpoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
+import de.smartsquare.cuzoo.customer.label.Label;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +51,14 @@ public class ContactPoint {
     @Column(length = 9999999)
     private List<Attachment> files;
 
+    @OneToMany(mappedBy = "contactPoint", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    @Column(name = "labels")
+    private List<Label> labels;
+
     public ContactPoint() {
+        this.files = new ArrayList<>();
+        this.labels = new ArrayList<>();
     }
 
     public ContactPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
@@ -59,6 +68,9 @@ public class ContactPoint {
         this.contact = contact;
         this.date = new Date(date);
         this.comment = comment;
+
+        this.files = new ArrayList<>();
+        this.labels = new ArrayList<>();
     }
 
     public Long getId() {
@@ -115,5 +127,17 @@ public class ContactPoint {
 
     public void setFiles(List<Attachment> files) {
         this.files = files;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
+    }
+
+    public void addLabel(Label label) {
+        this.labels.add(label);
     }
 }
