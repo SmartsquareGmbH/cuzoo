@@ -33,7 +33,7 @@
                             </v-flex>
                             <v-flex xs8>
                                 <v-combobox
-                                        v-model="editedContactPoint.contactName"
+                                        v-model="editedContactPoint.contact.name"
                                         :items="this.contactNames"
                                         :rules="contactRules"
                                         prepend-icon="person"
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
     import api from '../../utils/http-common'
 
     const datefns = require('date-fns');
@@ -144,10 +144,12 @@
                     value: false,
                     id: 0,
                     title: "",
+                    contact: {},
                     contactName: "",
                     date: "",
                     comment: "",
-                    type: ""
+                    type: "",
+                    labels: []
                 }
             }
         },
@@ -168,6 +170,7 @@
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails'
             }),
+            ...mapActions(['getContactPointLabels']),
             getPointTypeIconOf: function (type) {
                 return this.pointTypeIcons[this.pointTypes.indexOf(type)];
             },
@@ -185,20 +188,27 @@
                 }, 300)
             },
             submitContactPoint() {
-                api.put(`point/submit?contactName=${this.editedContactPoint.contactName}`, {
+                console.log(this.editedContactPoint.labels);
+
+                api.put(`point/submit/${this.editedContactPoint.contact.name}?labels=${this.editedContactPoint.labels}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment
                 }).then(() => {
-                    this.$parent.refreshContactPoints();
+                    this.$parent.refreshData();
+                    this.getContactPointLabels();
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);
                     alert(error);
                 });
             },
+            removeLabel(item) {
+                this.labels.splice(this.labels.indexOf(item), 1)
+                this.labels = [...this.labels]
+            }
         }
     }
 </script>
