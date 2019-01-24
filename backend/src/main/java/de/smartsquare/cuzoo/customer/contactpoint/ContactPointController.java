@@ -3,6 +3,8 @@ package de.smartsquare.cuzoo.customer.contactpoint;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
+import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,18 +23,23 @@ public class ContactPointController {
     private final ContactPointRepository contactPointRepository;
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
+    private final LabelRepository labelRepository;
 
     @Autowired
     public ContactPointController(final ContactPointRepository contactPointRepository,
-                                  final ContactRepository contactRepository, final CompanyRepository companyRepository) {
+                                  final ContactRepository contactRepository,
+                                  final CompanyRepository companyRepository,
+                                  final LabelRepository labelRepository) {
         this.contactPointRepository = contactPointRepository;
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
+        this.labelRepository = labelRepository;
     }
 
-    @PutMapping("/submit")
-    public final ResponseEntity<?> submitContactPoint(@RequestBody @Valid ContactPoint contactPoint,
-                                                      @RequestParam("contactName") String contactName,
+    @PutMapping("/submit/{contactName}")
+    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactName") String contactName,
+                                                      @RequestParam(name = "labels", required = false) List<String> labels,
+                                                      @RequestBody @Valid ContactPoint contactPoint,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -43,7 +51,11 @@ public class ContactPointController {
         Long contactPointIdBeforeSaving = contactPoint.getId();
 
         try {
-            contactPointRepository.save(contactPoint);
+            contactPoint = contactPointRepository.save(contactPoint);
+
+            if (labels != null) {
+                submitLabels(labels, contactPoint);
+            }
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -53,6 +65,22 @@ public class ContactPointController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    private void submitLabels(List<String> titles, ContactPoint contactPoint) {
+        titles.forEach(title -> {
+            Optional<Label> label = labelRepository.findForContactPointByTitle(title);
+
+            if (label.isPresent()) {
+                label.get().setContactPoint(contactPoint);
+                labelRepository.save(label.get());
+            } else {
+                Label labelToSave = new Label(title);
+                labelToSave.setContactPoint(contactPoint);
+
+                labelRepository.save(labelToSave);
+            }
+        });
     }
 
     @DeleteMapping("/delete/{contactPointId}")
