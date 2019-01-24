@@ -112,4 +112,13 @@ public class ContactPointController {
                 .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/get/labels")
+    public final ResponseEntity<List<String>> getContactPointLabels() {
+        return ResponseEntity.ok(contactPointRepository
+                .findAllLabels()
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
 }
