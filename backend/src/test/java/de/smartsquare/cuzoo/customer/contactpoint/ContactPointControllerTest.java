@@ -49,7 +49,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_contact_point_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -70,7 +70,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_submitting_contact_point_without_existing_contact_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit?contactName=")
+                MockMvcRequestBuilders.put("/api/point/submit/xxx")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -89,14 +89,14 @@ public class ContactPointControllerTest {
     @Test
     public void that_contact_point_is_getting_updated() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(getOutdatedContactPointInJson());
 
         MockHttpServletRequestBuilder updatedBuilder =
-                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -126,7 +126,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_submitting_invalid_contact_point_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit?contactName=" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
