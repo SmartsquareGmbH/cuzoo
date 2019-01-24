@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-transition>
+    <v-scroll-x-reverse-transition>
     <v-layout row wrap class="clickable">
         <v-flex xs1>
             <v-card color="info" height="100%">
@@ -13,10 +13,10 @@
             <v-card
                     slot-scope="{ hover }"
                     :class="`elevation-${hover ? 6 : 2}`"
-                    v-on:click="viewContactPoint(contactPoint)"
+                    @click="viewContactPoint(contactPoint)"
                     height="100%">
                 <v-scroll-x-transition>
-                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click=""
+                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click.stop="editContactPoint()"
                            class="elevation-12 mr-5">
                         <v-icon size="24px" color="white">
                             edit
@@ -24,7 +24,7 @@
                     </v-btn>
                 </v-scroll-x-transition>
                 <v-scroll-x-transition>
-                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click.native="deleteContactPoint(todo)"
+                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click.stop="deleteContactPoint()"
                            class="elevation-12">
                         <v-icon size="24px" color="error">
                             delete
@@ -55,11 +55,12 @@
             </v-hover>
         </v-flex>
     </v-layout>
-    </v-scroll-x-transition>
+    </v-scroll-x-reverse-transition>
 </template>
 
 <script>
     import api from '../../utils/http-common'
+    import {mapMutations} from 'vuex'
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -69,6 +70,7 @@
         data() {
             return {
                 contactPoints: this.$parent.contactPoints,
+                contactNames: [],
                 company: this.$parent.company,
                 fileNames: []
             }
@@ -82,6 +84,9 @@
             this.refreshData();
         },
         methods: {
+            ...mapMutations({
+                storeDetails: 'storeEditedContactPointDetails',
+            }),
             getPointTypeIconOf: function (type) {
                 switch (type) {
                     case 'Telefon':
@@ -105,12 +110,31 @@
                         }
                     })
                     .catch(error => {
-                        console.log(error);
+                        alert(error);
                     });
             },
+            editContactPoint() {
+                this.$parent.getContactsOfCompany().forEach(contact => {
+                    this.contactNames.push(contact.name)
+                });
+
+                this.contactNames.sort();
+
+                this.storeDetails({
+                    editedIndex: this.contactPoints.indexOf(this.contactPoint),
+                    editedContactPoint: Object.assign({}, this.contactPoint)
+                });
+
+                this.$parent.contactPointDialogState = true;
+            },
             deleteContactPoint() {
-                api.delete(`point/delete/${this.contactPoint.id}`)
-                    .then(() => this.$parent.refreshContactPoints);
+                if (confirm("Bist du dir sicher, dass du diesen Kontaktpunkt löschen willst?")) {
+                    api.delete(`point/delete/${this.contactPoint.id}`)
+                        .then(() =>  this.$parent.refreshContactPoints())
+                        .catch(error => {
+                            alert(error);
+                        });
+                }
             }
         }
     }
