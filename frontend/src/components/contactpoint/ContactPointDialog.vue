@@ -115,7 +115,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapActions} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
     import api from '../../utils/http-common'
 
     const datefns = require('date-fns');
@@ -166,11 +166,14 @@
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de});
             }
         },
+        mounted() {
+            this.getContactPointLabels();
+        },
         methods: {
+            ...mapActions(['getContactPointLabels']),
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails'
             }),
-            ...mapActions(['getContactPointLabels']),
             getPointTypeIconOf: function (type) {
                 return this.pointTypeIcons[this.pointTypes.indexOf(type)];
             },
@@ -188,8 +191,6 @@
                 }, 300)
             },
             submitContactPoint() {
-                console.log(this.editedContactPoint.labels);
-
                 api.put(`point/submit/${this.editedContactPoint.contact.name}?labels=${this.editedContactPoint.labels}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
@@ -198,7 +199,6 @@
                     comment: this.editedContactPoint.comment
                 }).then(() => {
                     this.$parent.refreshData();
-                    this.getContactPointLabels();
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);
@@ -206,8 +206,8 @@
                 });
             },
             removeLabel(item) {
-                this.labels.splice(this.labels.indexOf(item), 1)
-                this.labels = [...this.labels]
+                this.editedContactPoint.labels.splice(this.editedContactPoint.labels.indexOf(item), 1);
+                this.editedContactPoint.labels = [...this.editedContactPoint.labels]
             }
         }
     }
