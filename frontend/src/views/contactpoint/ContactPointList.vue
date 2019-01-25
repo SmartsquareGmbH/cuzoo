@@ -147,6 +147,13 @@
             refreshContactPoints() {
                 api.get(`point/get/${this.company.name}`).then(response => {
                     let contactPoints = response.data;
+
+                    contactPoints.forEach(contactPoint => {
+                        contactPoint.labels = contactPoint.labels.map(label => {
+                            return label.title;
+                        });
+                    });
+
                     let sortedContactPoints = contactPoints.sort(compareContactPoints);
 
                     this.storeContactPoints({
