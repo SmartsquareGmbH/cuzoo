@@ -1,10 +1,13 @@
 package de.smartsquare.cuzoo.customer.label;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Label {
@@ -17,15 +20,22 @@ public class Label {
     @NotBlank
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "contactPoint_id")
-    private ContactPoint contactPoint;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "labels")
+    private List<ContactPoint> contactPoints;
 
     Label() {
+        this.contactPoints = new ArrayList<>();
     }
 
-    public Label (@NotNull @NotBlank String title) {
+    public Label(@NotNull @NotBlank String title) {
         this.title = title;
+        this.contactPoints = new ArrayList<>();
     }
 
     public Long getId() {
@@ -44,11 +54,15 @@ public class Label {
         this.title = title;
     }
 
-    public ContactPoint getContactPoint() {
-        return contactPoint;
+    public List<ContactPoint> getContactPoints() {
+        return contactPoints;
     }
 
-    public void setContactPoint(ContactPoint contactPoint) {
-        this.contactPoint = contactPoint;
+    public void setContactPoints(List<ContactPoint> contactPoints) {
+        this.contactPoints = contactPoints;
+    }
+
+    public void addContactPoint(ContactPoint contactPoint) {
+        this.contactPoints.add(contactPoint);
     }
 }

@@ -51,11 +51,11 @@ public class ContactPointController {
         Long contactPointIdBeforeSaving = contactPoint.getId();
 
         try {
-            contactPoint = contactPointRepository.save(contactPoint);
-
             if (labels != null) {
                 submitLabels(labels, contactPoint);
             }
+
+            contactPointRepository.save(contactPoint);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -72,13 +72,14 @@ public class ContactPointController {
             Optional<Label> label = labelRepository.findForContactPointByTitle(title);
 
             if (label.isPresent()) {
-                label.get().setContactPoint(contactPoint);
-                labelRepository.save(label.get());
+                contactPoint.addLabel(label.get());
+                label.get().addContactPoint(contactPoint);
+
             } else {
                 Label labelToSave = new Label(title);
-                labelToSave.setContactPoint(contactPoint);
 
-                labelRepository.save(labelToSave);
+                contactPoint.addLabel(labelToSave);
+                labelToSave.addContactPoint(contactPoint);
             }
         });
     }

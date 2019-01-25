@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface LabelRepository extends JpaRepository<Label, Long> {
 
-    @Query("SELECT l FROM Label l WHERE l.title = :title AND l.contactPoint <> null")
+    @Query("SELECT l FROM Label l WHERE l.title = :title AND l.contactPoints IS NOT EMPTY")
     Optional<Label> findForContactPointByTitle(@Param("title") String title);
 
 }

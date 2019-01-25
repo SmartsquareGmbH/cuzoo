@@ -5,16 +5,7 @@ import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
 import de.smartsquare.cuzoo.customer.label.Label;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -51,9 +42,14 @@ public class ContactPoint {
     @Column(length = 9999999)
     private List<Attachment> files;
 
-    @OneToMany(mappedBy = "contactPoint", cascade = CascadeType.REMOVE)
-    @JsonIgnore
-    @Column(name = "labels")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "contactPoint_labels",
+            joinColumns = {@JoinColumn(name = "contactPoint_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")})
     private List<Label> labels;
 
     public ContactPoint() {
