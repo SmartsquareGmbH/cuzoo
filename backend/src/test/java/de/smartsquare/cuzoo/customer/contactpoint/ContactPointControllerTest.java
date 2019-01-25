@@ -1,5 +1,7 @@
 package de.smartsquare.cuzoo.customer.contactpoint;
 
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.junit.After;
@@ -32,11 +34,19 @@ public class ContactPointControllerTest {
     private ContactPointRepository contactPointRepository;
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+
     private Contact contact;
+    private Company company;
 
     @Before
     public void initialize() {
+        company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
+        companyRepository.save(company);
+
         contact = new Contact("Darius Tack", "", "", "", "", "", "");
+        contact.setCompany(company);
         contactRepository.save(contact);
     }
 
@@ -44,6 +54,7 @@ public class ContactPointControllerTest {
     public void tearDown() throws Exception {
         contactPointRepository.deleteAll();
         contactRepository.deleteAll();
+        companyRepository.deleteAll();
     }
 
     @Test
@@ -179,6 +190,48 @@ public class ContactPointControllerTest {
     public void that_getting_contact_points_is_successfully() throws Exception {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.get("/api/point/get")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_contact_points_of_company_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/point/get/" + company.getName())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_contact_points_of_invalid_company_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/point/get/xxx")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_labels_of_contact_points_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/point/get/labels")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
