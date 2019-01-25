@@ -109,6 +109,25 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
+                    <v-flex xs2>
+                        <v-card dark color="info">
+                            <v-card-text class="headline text-xs-center">
+                                <v-icon size="30px" class="pt-1">label</v-icon>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs10>
+                        <v-card dark height="100%">
+                            <v-card-text class="headline text-xs-left font-weight-light">
+                                <v-chip
+                                        class="title"
+                                        v-bind:key="contactPoint.id"
+                                        v-for="label in contactPoint.labels">
+                                    {{ label }}
+                                </v-chip>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
                 </v-layout>
             </v-flex>
             <v-flex xs6>
@@ -282,6 +301,12 @@
             refreshData() {
                 api.get(`point/get/${this.companyName}`).then(response => {
                     let contactPoints = response.data;
+
+                    contactPoints.forEach(contactPoint => {
+                        contactPoint.labels = contactPoint.labels.map(label => {
+                            return label.title;
+                        });
+                    });
 
                     this.storeContactPoints({
                         contactPoints: contactPoints
