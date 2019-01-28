@@ -78,4 +78,16 @@ public class AttachmentControllerTest {
         assertThat(attachmentRepository.findAll().size()).isEqualTo(1);
     }
 
+    @Test
+    public void that_file_uploading_without_valid_contact_point_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.multipart("/api/file/upload/999")
+                        .file(file);
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 }
