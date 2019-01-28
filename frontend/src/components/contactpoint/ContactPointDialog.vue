@@ -191,7 +191,9 @@
                 }, 300)
             },
             submitContactPoint() {
-                api.put(`point/submit/${this.editedContactPoint.contact.name}?labels=${this.editedContactPoint.labels}`, {
+                let encodedLabels = encodeURIComponent(this.editedContactPoint.labels);
+
+                api.put(`point/submit/${this.editedContactPoint.contact.name}?labels=${encodedLabels}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
