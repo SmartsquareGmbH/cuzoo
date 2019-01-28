@@ -116,17 +116,13 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs10>
-                        <v-card dark height="100%">
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                <v-chip
-                                        class="title"
-                                        v-bind:key="contactPoint.id"
-                                        v-for="label in contactPoint.labels">
-                                    {{ label }}
-                                </v-chip>
-                            </v-card-text>
-                        </v-card>
+                    <v-flex xs10 class="text-xs-left">
+                        <v-chip
+                                class="title mt-3"
+                                v-bind:key="contactPoint.label"
+                                v-for="label in contactPoint.labels">
+                            {{ label }}
+                        </v-chip>
                     </v-flex>
                 </v-layout>
             </v-flex>
