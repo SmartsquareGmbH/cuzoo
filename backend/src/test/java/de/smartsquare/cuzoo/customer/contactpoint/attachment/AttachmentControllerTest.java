@@ -187,5 +187,39 @@ public class AttachmentControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    public void that_getting_filenames_of_contact_point_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder uploadBuilder =
+                MockMvcRequestBuilders.multipart("/api/file/upload/" + contactPoint.getId())
+                        .file(file);
+
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/file/get/names/" + contactPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(uploadBuilder);
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("[\"TestCompanies.csv\"]"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_filenames_of_invalid_contact_point_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/file/get/names/999")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
 
 }
