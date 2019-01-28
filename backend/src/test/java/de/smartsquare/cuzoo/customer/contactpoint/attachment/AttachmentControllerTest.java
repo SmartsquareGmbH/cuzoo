@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -79,7 +80,7 @@ public class AttachmentControllerTest {
     }
 
     @Test
-    public void that_file_uploading_without_valid_contact_point_is_bad_request() throws Exception {
+    public void that_uploading_file_without_valid_contact_point_id_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/api/file/upload/999")
                         .file(file);
@@ -87,6 +88,53 @@ public class AttachmentControllerTest {
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_downloading_file_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder uploadBuilder =
+                MockMvcRequestBuilders.multipart("/api/file/upload/" + contactPoint.getId())
+                        .file(file);
+
+        MockHttpServletRequestBuilder downloadBuilder =
+                MockMvcRequestBuilders.get("/api/file/download/" + contactPoint.getId() + "/" + file.getOriginalFilename())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(uploadBuilder);
+        this.mockMvc.perform(downloadBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_downloading_file_without_valid_contact_point_id_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder downloadBuilder =
+                MockMvcRequestBuilders.get("/api/file/download/999/" + file.getOriginalFilename())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(downloadBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_non_existing_filename_will_not_be_found() throws Exception {
+        MockHttpServletRequestBuilder downloadBuilder =
+                MockMvcRequestBuilders.get("/api/file/download/" + contactPoint.getId() + "/elch.png")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(downloadBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
     }
 
