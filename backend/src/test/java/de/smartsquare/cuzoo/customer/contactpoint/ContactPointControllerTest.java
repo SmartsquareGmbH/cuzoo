@@ -4,6 +4,8 @@ import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
+import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,9 +40,13 @@ public class ContactPointControllerTest {
     private ContactRepository contactRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private LabelRepository labelRepository;
 
     private Contact contact;
     private Company company;
+    private ContactPoint contactPoint;
+    private Label label;
 
     @Before
     public void initialize() {
@@ -48,6 +56,15 @@ public class ContactPointControllerTest {
         contact = new Contact("Darius Tack", "", "", "", "", "", "");
         contact.setCompany(company);
         contactRepository.save(contact);
+
+        label = new Label("Cloud Flyer");
+        contactPoint = new ContactPoint("Beratung", "Social Media", 0L, contact, "");
+
+        contactPoint.addLabel(label);
+        label.addContactPoint(contactPoint);
+
+        contactPointRepository.save(contactPoint);
+        labelRepository.save(label);
     }
 
     @After
@@ -55,6 +72,7 @@ public class ContactPointControllerTest {
         contactPointRepository.deleteAll();
         contactRepository.deleteAll();
         companyRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Test
@@ -93,8 +111,58 @@ public class ContactPointControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    public void that_non_existing_labels_are_getting_registered_by_submitting_contact_point() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName() + getLabels())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(labelRepository.findAll()
+                .stream()
+                .anyMatch(label -> label.getTitle()
+                        .equals("B")))
+                .isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void that_existing_labels_are_getting_assigned() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName() + getExistingLabels())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactPointRepository.findAll()
+                .stream()
+                .anyMatch(contactPoint -> contactPoint.getLabels().contains(label)))
+                .isTrue();
+    }
+
     private String getContactPointInJson() {
         return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\"}";
+    }
+
+    private String getLabels() {
+        return "?labels=A,B,C";
+    }
+
+    private String getExistingLabels() {
+        return "?labels=" + label.getTitle();
     }
 
     @Test
