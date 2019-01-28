@@ -35,9 +35,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from 'vuex'
-    import {clearInterval} from 'timers'
-
+    import {mapActions, mapGetters} from 'vuex'
     import CompanyCard from "../components/company/CompanyCard.vue"
 
     export default {
@@ -48,7 +46,6 @@
             return {
                 search: '',
                 loading: true,
-                contactsOfCompany: [],
                 searchTermsOfCompany: []
             }
         },
@@ -56,12 +53,11 @@
             this.refreshData();
         },
         computed: {
-            ...mapGetters(['companies', 'contacts']),
+            ...mapGetters(['companies', 'contacts', 'contactPoints']),
             searchResults() {
                 return this.companies
                     .filter(company => {
                         this.defineSearchTerms(company);
-
                         if (this.search !== '') {
                             return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
                         } else {
@@ -73,21 +69,34 @@
         },
         methods: {
             ...mapActions(['getCompanies', 'getContacts']),
-            getContactsOfCompany: function (item) {
-                return this.contacts.filter((contact) => {
+            getContactsOfCompany(company) {
+                return this.contacts.filter(contact => {
                     if (contact.company != null) {
-                        return contact.company.name === item;
+                        return contact.company.name === company;
                     } else {
                         return null;
                     }
                 })
             },
-            defineSearchTerms: function (company) {
+            getContactPointsOfCompany(company) {
+                return this.contactPoints.filter(contactPoint => {
+                    return contactPoint.contact.company.name === company;
+                })
+            },
+            defineSearchTerms(company) {
                 this.searchTermsOfCompany = [];
-                this.contactsOfCompany = this.getContactsOfCompany(company.name);
 
-                this.contactsOfCompany.forEach(contact => {
+                let contactsOfCompany = this.getContactsOfCompany(company.name);
+                let contactPointsOfCompany = this.getContactPointsOfCompany(company.name);
+
+                contactsOfCompany.forEach(contact => {
                     this.searchTermsOfCompany.push(contact.name.toLowerCase());
+                });
+
+                contactPointsOfCompany.forEach(contactPoint => {
+                    contactPoint.labels.forEach(label => {
+                        this.searchTermsOfCompany.push(label.toLowerCase())
+                    });
                 });
 
                 for (var key in company) {
