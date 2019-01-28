@@ -38,8 +38,9 @@ public class ContactPointController {
 
     @PutMapping("/submit/{contactName}")
     public final ResponseEntity<?> submitContactPoint(@PathVariable("contactName") String contactName,
-                                                      @RequestParam(name = "labels", required = false) List<String> labels,
                                                       @RequestBody @Valid ContactPoint contactPoint,
+                                                      @RequestParam(name = "labels",
+                                                                    required = false) List<String> labels,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,7 +75,6 @@ public class ContactPointController {
             if (label.isPresent()) {
                 contactPoint.addLabel(label.get());
                 label.get().addContactPoint(contactPoint);
-
             } else {
                 Label labelToSave = new Label(title);
 
