@@ -125,7 +125,7 @@ public class AttachmentControllerTest {
     }
 
     @Test
-    public void that_non_existing_filename_will_not_be_found() throws Exception {
+    public void that_getting_non_existing_file_will_not_be_found() throws Exception {
         MockHttpServletRequestBuilder downloadBuilder =
                 MockMvcRequestBuilders.get("/api/file/download/" + contactPoint.getId() + "/elch.png")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -137,5 +137,55 @@ public class AttachmentControllerTest {
                         .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    public void that_file_is_getting_deleted() throws Exception {
+        MockHttpServletRequestBuilder uploadBuilder =
+                MockMvcRequestBuilders.multipart("/api/file/upload/" + contactPoint.getId())
+                        .file(file);
+
+        MockHttpServletRequestBuilder deleteBuilder =
+                MockMvcRequestBuilders.delete("/api/file/delete/" + contactPoint.getId() + "/" + file.getOriginalFilename())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(uploadBuilder);
+        this.mockMvc.perform(deleteBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(attachmentRepository.findAll().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void that_deleting_file_with_invalid_contact_point_id_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder deleteBuilder =
+                MockMvcRequestBuilders.delete("/api/file/delete/999/" + file.getOriginalFilename())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(deleteBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_deleting_non_existing_file_will_not_be_found() throws Exception {
+        MockHttpServletRequestBuilder deleteBuilder =
+                MockMvcRequestBuilders.delete("/api/file/delete/" + contactPoint.getId() + "/elch.png")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(deleteBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 
 }
