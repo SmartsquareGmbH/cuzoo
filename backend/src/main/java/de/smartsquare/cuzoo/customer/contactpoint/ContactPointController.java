@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,22 +39,37 @@ public class ContactPointController {
 
     @PutMapping("/submit/{contactName}")
     public final ResponseEntity<?> submitContactPoint(@PathVariable("contactName") String contactName,
-                                                      @RequestBody @Valid ContactPoint contactPoint,
-                                                      @RequestParam(name = "labels",
-                                                                    required = false) List<String> labels,
+                                                      @RequestBody @Valid ContactPointForm contactPointForm,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Contact contactPointsContact = contactRepository.findByName(contactName);
-        contactPoint.setContact(contactPointsContact);
+        ContactPoint contactPoint;
 
-        Long contactPointIdBeforeSaving = contactPoint.getId();
+        if (contactPointRepository.findById(contactPointForm.getId()).isPresent()) {
+            contactPoint = contactPointRepository.findById(contactPointForm.getId()).get();
+
+            contactPoint.setTitle(contactPointForm.getTitle());
+            contactPoint.setType(contactPointForm.getType());
+            contactPoint.setDate(contactPointForm.getDate());
+            contactPoint.setContact(contactPointsContact);
+            contactPoint.setComment(contactPointForm.getComment());
+        } else {
+            contactPoint = new ContactPoint(
+                    contactPointForm.getTitle(),
+                    contactPointForm.getType(),
+                    contactPointForm.getDate(),
+                    contactPointsContact,
+                    contactPointForm.getComment());
+        }
+
+        Long contactPointIdBeforeSaving = contactPointForm.getId();
 
         try {
-            if (labels != null) {
-                submitLabels(labels, contactPoint);
+            if (contactPointForm.getLabels() != null) {
+                submitLabels(contactPointForm.getLabels(), contactPoint);
             }
 
             contactPointRepository.save(contactPoint);
@@ -61,7 +77,7 @@ public class ContactPointController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (contactPointIdBeforeSaving == null) {
+        if (contactPointIdBeforeSaving < 1) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -69,19 +85,23 @@ public class ContactPointController {
     }
 
     private void submitLabels(List<String> titles, ContactPoint contactPoint) {
+        List<Label> contactPointLabels = new ArrayList<>();
+
         titles.forEach(title -> {
             Optional<Label> label = labelRepository.findForContactPointByTitle(title);
 
             if (label.isPresent()) {
-                contactPoint.addLabel(label.get());
                 label.get().addContactPoint(contactPoint);
+                contactPointLabels.add(label.get());
             } else {
                 Label labelToSave = new Label(title);
 
-                contactPoint.addLabel(labelToSave);
                 labelToSave.addContactPoint(contactPoint);
+                contactPointLabels.add(labelToSave);
             }
         });
+
+        contactPoint.setLabels(contactPointLabels);
     }
 
     @DeleteMapping("/delete/{contactPointId}")
