@@ -14,7 +14,10 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
     @Query("SELECT l FROM Label l WHERE l.title = :title AND l.contactPoints IS NOT EMPTY")
     Optional<Label> findForContactPointByTitle(@Param("title") String title);
 
-    @Query("SELECT l FROM Label l WHERE l.title LIKE CONCAT('%', :input, '%') AND l.contactPoints IS NOT EMPTY")
+    @Query("SELECT l FROM Label l " +
+            "WHERE LOWER(l.title) " +
+            "LIKE CONCAT('%', LOWER(:input), '%') " +
+            "AND l.contactPoints IS NOT EMPTY")
     List<Label> findAllForContactPointByPartOfTitle(@Param("input") String input);
 
 }
