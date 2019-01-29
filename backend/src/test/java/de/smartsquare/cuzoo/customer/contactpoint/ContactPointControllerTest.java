@@ -111,14 +111,18 @@ public class ContactPointControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    private String getContactPointInJson() {
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\", \"comment\":\"\"}}";
+    }
+
     @Test
     public void that_non_existing_labels_are_getting_registered_by_submitting_contact_point() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName() + getLabels())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getContactPointInJson());
+                        .content(getContactPointInJsonWithNonExistingLabels());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -128,19 +132,23 @@ public class ContactPointControllerTest {
         assertThat(labelRepository.findAll()
                 .stream()
                 .anyMatch(label -> label.getTitle()
-                        .equals("B")))
+                        .equals("Weihnachtskarte")))
                 .isTrue();
+    }
+
+    private String getContactPointInJsonWithNonExistingLabels() {
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\", \"comment\":\"\", \"labels\": [\"Weihnachtskarte\"]}";
     }
 
     @Test
     @Transactional
     public void that_existing_labels_are_getting_assigned() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName() + getExistingLabels())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getContactPointInJson());
+                        .content(getContactPointInJsonWithExistingLabels());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -153,16 +161,8 @@ public class ContactPointControllerTest {
                 .isTrue();
     }
 
-    private String getContactPointInJson() {
-        return "{\"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\"}";
-    }
-
-    private String getLabels() {
-        return "?labels=A,B,C";
-    }
-
-    private String getExistingLabels() {
-        return "?labels=" + label.getTitle();
+    private String getContactPointInJsonWithExistingLabels() {
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"type\":\"Telefon\", \"date\":\"0\", \"comment\":\"\", \"labels\": [\"" + label.getTitle() + "\"]}";
     }
 
     @Test
