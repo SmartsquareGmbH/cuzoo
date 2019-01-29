@@ -78,17 +78,17 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-combobox
-                                        hide-details
-                                        outline
-                                        color="primary"
                                         v-model="editedContactPoint.labels"
                                         :items="labels"
+                                        prepend-icon="label"
+                                        color="primary"
                                         label="Tags"
+                                        outline
                                         chips
                                         clearable
-                                        prepend-icon="label"
+                                        multiple
                                         solo
-                                        multiple>
+                                        hide-details>
                                     <template slot="selection" slot-scope="data">
                                         <v-chip
                                                 class="title"
@@ -191,14 +191,13 @@
                 }, 300)
             },
             submitContactPoint() {
-                let encodedLabels = encodeURIComponent(this.editedContactPoint.labels);
-
-                api.put(`point/submit/${this.editedContactPoint.contact.name}?labels=${encodedLabels}`, {
+                api.put(`point/submit/${this.editedContactPoint.contact.name}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     type: this.editedContactPoint.type,
                     date: datefns.parse(this.date).getTime(),
-                    comment: this.editedContactPoint.comment
+                    comment: this.editedContactPoint.comment,
+                    labels: this.editedContactPoint.labels
                 }).then(() => {
                     this.$parent.refreshData();
                     this.closeDialog();
