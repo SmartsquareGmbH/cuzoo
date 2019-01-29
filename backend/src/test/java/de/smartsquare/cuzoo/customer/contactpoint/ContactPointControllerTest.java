@@ -297,9 +297,10 @@ public class ContactPointControllerTest {
     }
 
     @Test
-    public void that_getting_labels_of_contact_points_is_successfully() throws Exception {
+    public void that_getting_labels_of_contact_points_with_part_of_title_is_successfully() throws Exception {
+        labelRepository.findAll().forEach(label1 -> System.out.println(label1.getTitle()));
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.get("/api/point/get/labels")
+                MockMvcRequestBuilders.get("/api/point/get/labels/oud")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
@@ -307,6 +308,8 @@ public class ContactPointControllerTest {
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("[\"Cloud Flyer\"]"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
