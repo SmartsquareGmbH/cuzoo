@@ -128,16 +128,17 @@ public class ContactPointController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(contactPointRepository.findAll()
+        return ResponseEntity.ok(contactPointRepository
+                .findAll()
                 .stream()
                 .filter(contactPoint -> contactPoint.getContact().getCompany().getName().equals(companyName))
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/get/labels")
-    public final ResponseEntity<List<String>> getContactPointLabels() {
-        return ResponseEntity.ok(contactPointRepository
-                .findAllLabels()
+    @GetMapping("/get/labels/{input}")
+    public final ResponseEntity<List<String>> getContactPointLabelsWithInput(@PathVariable String input) {
+        return ResponseEntity.ok(labelRepository
+                .findAllForContactPointByPartOfTitle(input)
                 .stream()
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
