@@ -80,6 +80,7 @@
                                 <v-combobox
                                         v-model="editedContactPoint.labels"
                                         :items="labels"
+                                        :search-input.sync="labelBoxInput"
                                         prepend-icon="label"
                                         color="primary"
                                         label="Tags"
@@ -97,6 +98,17 @@
                                                 @input="removeLabel(data.item)">
                                             {{ data.item }}
                                         </v-chip>
+                                    </template>
+                                    <template slot="no-data" v-if="labelBoxInput != null && labelBoxInput !== ''">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    Keine Label für
+                                                    "<strong class="primary--text">{{ labelBoxInput }}</strong>"
+                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
                                     </template>
                                 </v-combobox>
                             </v-flex>
