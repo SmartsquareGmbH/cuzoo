@@ -174,6 +174,12 @@
                             this.storeLabels({labels: response.data})
                         })
                     }, 300);
+
+                    this.labels.forEach(label => {
+                        if (label.toLowerCase() === input.toLowerCase()) {
+                            this.labelBoxInput = label;
+                        }
+                    })
                 }
             }
         },
