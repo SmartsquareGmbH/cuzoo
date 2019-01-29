@@ -105,8 +105,8 @@ public class ContactPoint {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(Long date) {
+        this.date = new Date(date);
     }
 
     public String getComment() {
