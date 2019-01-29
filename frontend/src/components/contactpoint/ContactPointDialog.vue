@@ -168,11 +168,13 @@
         },
         watch: {
             labelBoxInput(input) {
-                setTimeout(() => {
-                    api.get(`point/get/labels/${input}`).then(response => {
-                        this.storeLabels({labels: response.data})
-                    })
-                }, 200);
+                if (input) {
+                    setTimeout(() => {
+                        api.get(`point/get/labels/${input}`).then(response => {
+                            this.storeLabels({labels: response.data})
+                        })
+                    }, 300);
+                }
             }
         },
         computed: {
