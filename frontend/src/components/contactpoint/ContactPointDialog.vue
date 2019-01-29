@@ -140,6 +140,7 @@
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: true,
+                labelBoxInput: null,
                 pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
                 pointTypeIcons: ["phone", "mail", "share", "people"],
                 pointRules: [
@@ -165,6 +166,15 @@
                 }
             }
         },
+        watch: {
+            labelBoxInput(input) {
+                setTimeout(() => {
+                    api.get(`point/get/labels/${input}`).then(response => {
+                        this.storeLabels({labels: response.data})
+                    })
+                }, 200);
+            }
+        },
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
@@ -178,13 +188,11 @@
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de});
             }
         },
-        mounted() {
-            this.getContactPointLabels();
-        },
         methods: {
             ...mapActions(['getContactPointLabels']),
             ...mapMutations({
-                storeDetails: 'storeEditedContactPointDetails'
+                storeDetails: 'storeEditedContactPointDetails',
+                storeLabels: 'storeContactPointLabels'
             }),
             getPointTypeIconOf: function (type) {
                 return this.pointTypeIcons[this.pointTypes.indexOf(type)];

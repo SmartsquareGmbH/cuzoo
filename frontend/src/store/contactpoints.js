@@ -1,5 +1,3 @@
-import api from '../utils/http-common'
-
 export default {
     state: {
         labels: [],
@@ -38,17 +36,6 @@ export default {
         },
         storeContactPointLabels(state, payload) {
             state.labels = payload.labels
-        }
-    },
-    actions: {
-        getContactPointLabels() {
-            api.get('point/get/labels').then(response => {
-                console.log(response.data);
-                this.commit({
-                    type: 'storeContactPointLabels',
-                    labels: response.data
-                });
-            }).catch(err => console.log(err));
         }
     }
 }
