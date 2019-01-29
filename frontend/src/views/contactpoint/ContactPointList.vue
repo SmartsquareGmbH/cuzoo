@@ -168,7 +168,6 @@
             },
             refreshTodos() {
                 api.get(`todo/get/${this.company.name}`).then(response => {
-                    console.log(response.data);
                     let todos = response.data;
                     let sortedTodos = todos.sort(compareTodos);
 
