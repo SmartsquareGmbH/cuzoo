@@ -6,21 +6,17 @@ import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -30,12 +26,14 @@ public class ContactController {
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
     private final CSVConverter csvConverter;
+    private final ContactExporter contactExporter;
 
     @Autowired
     public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository, CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.csvConverter = csvConverter;
+        this.contactExporter = new ContactExporter();
     }
 
     @PostMapping("/import")
@@ -43,6 +41,7 @@ public class ContactController {
         if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
         insertedContacts.forEach(contactRepository::save);
 
@@ -73,7 +72,7 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(contactIdBeforeSaving == null) {
+        if (contactIdBeforeSaving == null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -89,11 +88,31 @@ public class ContactController {
         if (!contactRepository.existsById(contactId)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         try {
             contactRepository.deleteById(contactId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/download/{contactId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public final ResponseEntity<byte[]> getContactInformation(@PathVariable Long contactId) throws IOException {
+        if (!contactRepository.findById(contactId).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Contact contact = contactRepository.findById(contactId).get();
+        InputStream inputStream = Files.newInputStream(contactExporter.exportContactToTxt(contact));
+
+        try {
+            return ResponseEntity.ok(inputStream.readAllBytes());
+        } finally {
+            Files.delete(Paths.get("src/main/resources/" +
+                    contact.getName()
+                            .replace(' ', '_')
+                            .toLowerCase() + ".txt"));
         }
     }
 

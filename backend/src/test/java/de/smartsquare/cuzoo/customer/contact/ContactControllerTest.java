@@ -245,6 +245,40 @@ public class ContactControllerTest {
     }
 
     @Test
+    public void that_downloading_contacts_information_is_successfully() throws Exception {
+        Contact contact = new Contact("Tom", "Azubi", "", "123", "", "", "");
+        Company company = new Company("Tom AG", "", "", "", "", "", "");
+        companyRepository.save(company);
+        contact.setCompany(company);
+        contactRepository.save(contact);
+
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/contact/download/" + contact.getId())
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                        .accept(MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_downloading_non_existing_contacts_information_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/contact/download/" + -1)
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                        .accept(MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
     public void that_getting_contacts_is_successfully() throws Exception {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.get("/api/contact/get")

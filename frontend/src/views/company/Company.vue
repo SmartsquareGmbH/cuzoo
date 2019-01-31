@@ -38,6 +38,15 @@
             </v-flex>
             <v-flex xs1>
                 <v-tooltip top>
+                    <v-btn slot="activator" block color="secondary"
+                           @click="downloadInfo(contactsOfCompany[contactsOfCompany.contact])">
+                        <v-icon large dark style="transform: rotate(180deg)">publish</v-icon>
+                    </v-btn>
+                    Datenauskunft über Ansprechpartner herunterladen
+                </v-tooltip>
+            </v-flex>
+            <v-flex xs1>
+                <v-tooltip top>
                     <v-btn slot="activator" v-if="contactsOfCompany.length > 0" block color="secondary"
                            @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
                         <v-icon large dark>edit</v-icon>
@@ -305,6 +314,7 @@
 
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
     import CompanyDialog from '../../components/company/CompanyDialog.vue'
     import ContactDialog from '../../components/contact/ContactDialog.vue'
@@ -362,6 +372,10 @@
 
                 this.openContactDialog()
             },
+            downloadInfo(item) {
+                api.get("/contact/download/" + item.id)
+                    .then(response => download(response.data, item.name));
+            },
             openCompanyDialog() {
                 this.companyDialogState = true
             },
@@ -376,6 +390,15 @@
                 this.$router.push('/' + (this.companyId));
             }
         }
+    }
+
+    function download(content, name) {
+        const url = window.URL.createObjectURL(new Blob([content], {type : "text/plain"}));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name.replace(' ', '_').toLowerCase() + '.txt');
+        document.body.appendChild(link);
+        link.click();
     }
 </script>
 
