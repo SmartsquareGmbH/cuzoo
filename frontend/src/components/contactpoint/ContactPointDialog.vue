@@ -83,7 +83,7 @@
                                         :search-input.sync="labelBoxInput"
                                         prepend-icon="label"
                                         color="primary"
-                                        label="Tags"
+                                        label="Labels"
                                         outline
                                         chips
                                         clearable
@@ -103,7 +103,7 @@
                                         <v-list-tile>
                                             <v-list-tile-content>
                                                 <v-list-tile-title>
-                                                    Keine Label für
+                                                    Keine Labels für
                                                     "<strong class="primary--text">{{ labelBoxInput }}</strong>"
                                                     gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
                                                 </v-list-tile-title>
@@ -179,7 +179,7 @@
                         if (label.toLowerCase() === input.toLowerCase()) {
                             this.labelBoxInput = label;
                         }
-                    })
+                    });
                 }
             }
         },
