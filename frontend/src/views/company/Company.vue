@@ -18,24 +18,32 @@
                 </v-tooltip>
             </v-flex>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="editCompany(companies[companyId])">
-                    <v-icon large dark>edit</v-icon>
-                </v-btn>
+                <v-tooltip top>
+                    <v-btn slot="activator" block color="secondary" @click="editCompany(companies[companyId])">
+                        <v-icon large dark>edit</v-icon>
+                    </v-btn>
+                    Unternehmen editieren
+                </v-tooltip>
             </v-flex>
             <company-dialog v-model="companyDialogState"/>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="openContactDialog()">
-                    <v-icon large dark>add</v-icon>
-                </v-btn>
+                <v-tooltip top>
+                    <v-btn slot="activator" block color="secondary" @click="openContactDialog()">
+                        <v-icon large dark>add</v-icon>
+                    </v-btn>
+                    Ansprechpartner hinzufügen
+                </v-tooltip>
             </v-flex>
-            <v-flex xs4>
-                <h1 class="display-1 text-xs-center">Ansprechpartner</h1>
+            <v-flex xs3>
             </v-flex>
             <v-flex xs1>
-                <v-btn v-if="contactsOfCompany.length > 0" block color="secondary"
-                       @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
-                    <v-icon large dark>edit</v-icon>
-                </v-btn>
+                <v-tooltip top>
+                    <v-btn slot="activator" v-if="contactsOfCompany.length > 0" block color="secondary"
+                           @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
+                        <v-icon large dark>edit</v-icon>
+                    </v-btn>
+                    Ansprechpartner editieren
+                </v-tooltip>
             </v-flex>
             <contact-dialog
                     v-model="contactDialogState"
