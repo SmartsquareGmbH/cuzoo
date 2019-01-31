@@ -31,7 +31,7 @@ class ContactExporter {
 
     private String getContactContent(Contact contact) {
         return "Name:\t\t " + contact.getName() + System.lineSeparator() +
-                "Unternehmen: " + contact.getCompany().getName() + System.lineSeparator() +
+                "Unternehmen:\t " + contact.getCompany().getName() + System.lineSeparator() +
                 "Rolle:\t\t " + contact.getRole() + System.lineSeparator() +
                 "E-Mail:\t\t " + contact.getMail() + System.lineSeparator() +
                 "Telefon:\t " + contact.getTelephone() + System.lineSeparator() +
