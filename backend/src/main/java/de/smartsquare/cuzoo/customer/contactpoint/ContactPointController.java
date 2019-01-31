@@ -73,6 +73,7 @@ public class ContactPointController {
             }
 
             contactPointRepository.save(contactPoint);
+            labelRepository.deleteAllReferenceless();
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
