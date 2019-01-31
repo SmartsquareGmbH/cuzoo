@@ -231,7 +231,7 @@ public class ContactControllerTest {
     }
 
     @Test
-    public void that_deleting_contact_with_non_existing_id_is_not_found() throws Exception {
+    public void that_deleting_contact_with_non_existing_id_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.delete("/api/contact/delete/" + -1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -240,7 +240,7 @@ public class ContactControllerTest {
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
-                        .isNotFound())
+                        .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
 

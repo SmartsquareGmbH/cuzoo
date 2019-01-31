@@ -44,7 +44,6 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
-
         insertedContacts.forEach(contactRepository::save);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -88,7 +87,7 @@ public class ContactController {
     @DeleteMapping("/delete/{contactId}")
     public final ResponseEntity<?> deleteContact(@PathVariable Long contactId) {
         if (!contactRepository.existsById(contactId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             contactRepository.deleteById(contactId);
