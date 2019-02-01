@@ -1,12 +1,30 @@
 <template>
     <v-container grid-list-md text-xs-center fill-height fluid>
         <v-layout row wrap>
-            <v-flex xs12>
+            <v-flex xs4></v-flex>
+            <v-flex xs4>
                 <span class="display-3 font-weight-thin">CUZOO</span>
             </v-flex>
+            <v-flex xs2>
+                <v-btn flat
+                       class="mt-4 ml-5"
+                       @click="expandOptionMenu = !expandOptionMenu">
+                    Optionen
+                    <v-icon v-if="!expandOptionMenu">keyboard_arrow_down</v-icon>
+                    <v-icon v-if="expandOptionMenu">keyboard_arrow_up</v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs2></v-flex>
             <v-flex xs2></v-flex>
             <v-flex xs8>
+                <v-expand-transition>
+                    <div v-if="expandOptionMenu">
+                        <v-checkbox label="Kontaktpunkte"
+                                    hide-details/>
+                    </div>
+                </v-expand-transition>
                 <v-text-field
+                        :class="`mt-${expandOptionMenu ? 3 : 0}`"
                         color="primary"
                         ref="searchBar"
                         v-model="search"
@@ -26,9 +44,15 @@
             <v-flex xs2/>
             <v-flex xs8>
                 <company-card
+                        v-if="!searchForContactPoints"
                         :company="company"
                         v-bind:key="company.id"
                         v-for="company in searchResults"/>
+                <contact-point-card
+                        v-if="searchForContactPoints"
+                        :contact-point="contactPoint"
+                        v-bind:key="contactPoint.id"
+                        v-for="contactPoint in contactPoints"/>
             </v-flex>
         </v-layout>
     </v-container>
@@ -37,18 +61,20 @@
 <script>
     import {mapActions, mapGetters} from 'vuex'
     import CompanyCard from "../components/company/CompanyCard.vue"
+    import ContactPointCard from "../components/contactpoint/ContactPointCard";
 
     export default {
         components: {
+            ContactPointCard,
             CompanyCard
         },
-        data() {
-            return {
-                search: '',
-                loading: true,
-                searchTermsOfCompany: []
-            }
-        },
+        data: () => ({
+            search: '',
+            searchForContactPoints: false,
+            searchTermsOfCompany: [],
+            loading: true,
+            expandOptionMenu: false
+        }),
         mounted() {
             this.refreshData();
         },
