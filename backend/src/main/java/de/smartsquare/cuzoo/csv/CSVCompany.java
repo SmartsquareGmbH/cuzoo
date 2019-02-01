@@ -21,7 +21,7 @@ public class CSVCompany {
     private String homepage;
 
     @CsvField(pos = 6)
-    private String purpose;
+    private String description;
 
     @CsvField(pos = 7)
     private String other;
@@ -66,12 +66,12 @@ public class CSVCompany {
         this.homepage = homepage;
     }
 
-    public String getPurpose() {
-        return purpose;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOther() {

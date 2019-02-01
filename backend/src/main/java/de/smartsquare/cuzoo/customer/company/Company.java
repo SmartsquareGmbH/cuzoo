@@ -32,7 +32,7 @@ public class Company {
     private String place;
     private String homepage;
     private String status;
-    private String purpose;
+    private String description;
     private String other;
 
     public Company() {
@@ -40,13 +40,13 @@ public class Company {
 
     public Company(@NotNull @NotBlank final String name,
                    String street, String zipCode, String place,
-                   String homepage, String purpose, String other) {
+                   String homepage, String description, String other) {
         this.name = name;
         this.street = street;
         this.zipCode = zipCode;
         this.place = place;
         this.homepage = homepage;
-        this.purpose = purpose;
+        this.description = description;
         this.other = other;
     }
 
@@ -106,12 +106,12 @@ public class Company {
         this.status = status;
     }
 
-    public String getPurpose() {
-        return purpose;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOther() {

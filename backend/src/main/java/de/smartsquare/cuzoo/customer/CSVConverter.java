@@ -49,7 +49,7 @@ public class CSVConverter {
                     csvCompany.getZipCode(),
                     csvCompany.getPlace(),
                     csvCompany.getHomepage(),
-                    csvCompany.getPurpose(),
+                    csvCompany.getDescription(),
                     csvCompany.getOther());
 
             company.setStatus("Lead");
