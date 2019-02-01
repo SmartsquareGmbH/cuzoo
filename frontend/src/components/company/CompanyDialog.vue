@@ -53,11 +53,11 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
-                                        v-model="editedCompany.purpose"
+                                        v-model="editedCompany.description"
                                         counter="255"
                                         maxlength='255'
                                         name="input-7-4"
-                                        label="Unternehmenszweck"
+                                        label="Beschreibung"
                                         rows="3"
                                 ></v-textarea>
                             </v-flex>
@@ -104,7 +104,7 @@
                     place: "",
                     homepage: "",
                     status: "Lead",
-                    purpose: "",
+                    description: "",
                     other: ""
                 }
             }
@@ -143,7 +143,7 @@
                     place: this.editedCompany.place,
                     homepage: this.editedCompany.homepage,
                     status: this.editedCompany.status,
-                    purpose: this.editedCompany.purpose,
+                    description: this.editedCompany.description,
                     other: this.editedCompany.other
                 }).then(() => {
                     this.$parent.refreshTable();

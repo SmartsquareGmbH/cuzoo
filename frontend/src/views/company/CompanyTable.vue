@@ -76,7 +76,7 @@
                 <td class="text-xs-left">{{ props.item.zipCode }}</td>
                 <td class="text-xs-left">{{ props.item.place }}</td>
                 <td class="text-xs-left">{{ props.item.homepage }}</td>
-                <td class="text-xs-left">{{ props.item.purpose }}</td>
+                <td class="text-xs-left">{{ props.item.description }}</td>
                 <td class="text-xs-left">{{ props.item.other }}</td>
                 <td class="justify-center layout px-0">
                     <v-tooltip top>
@@ -141,7 +141,7 @@
                     {text: 'PLZ', value: 'zipCode'},
                     {text: 'Ort', value: 'place'},
                     {text: 'Homepage', value: 'homepage'},
-                    {text: 'Unternehmenszweck', value: 'purpose'},
+                    {text: 'Beschreibung', value: 'description'},
                     {text: 'Sonstiges', value: 'other'},
                     {text: 'Aktionen', value: 'name', sortable: false}
                 ]

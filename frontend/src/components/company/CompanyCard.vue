@@ -23,10 +23,10 @@
         </v-card-text>
         <v-card 
         color="#377D93"
-        v-if="company.purpose || company.other">
+        v-if="company.description || company.other">
             <v-card-text 
             class="headline text-xs-left font-weight-light">
-                {{ company.purpose }}
+                {{ company.description }}
                 <v-spacer/>
                 {{ company.other }}
             </v-card-text>

@@ -13,7 +13,7 @@ export default {
             place: "",
             homepage: "",
             status: "",
-            purpose: "",
+            description: "",
             other: ""
         }
     },

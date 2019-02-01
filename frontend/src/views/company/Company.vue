@@ -152,17 +152,17 @@
                         <v-card-text class="headline text-xs-left">
                             <v-tooltip top>
                                 <v-icon color="info" size="36px" slot="activator">info</v-icon>
-                                Hauptfunktionen des Unternehmens
+                                Beschreibung des Unternehmens
                             </v-tooltip>
-                            Unternehmenszweck
+                            Beschreibung
                         </v-card-text>
                     </v-flex>
                     <v-flex xs12>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.purpose != null && this.company.purpose !== ''"
+                                    v-if="this.company.description != null && this.company.description !== ''"
                                     class="headline text-xs-left">
-                                {{ this.company.purpose }}
+                                {{ this.company.description }}
                             </v-card-text>
                             <v-card-text
                                     v-else
