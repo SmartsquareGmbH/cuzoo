@@ -19,8 +19,18 @@
             <v-flex xs8>
                 <v-expand-transition>
                     <div v-if="expandOptionMenu">
-                        <v-checkbox label="Kontaktpunkte"
-                                    hide-details/>
+                        <v-btn flat
+                               :disabled="searchForCompanies"
+                               @click="searchResultsToCompany()">
+                            <v-icon class="mr-2">business_center</v-icon>
+                            Unternehmen
+                        </v-btn>
+                        <v-btn flat
+                               :disabled="searchForContactPoints"
+                               @click="searchResultsToContactPoint()">
+                            <v-icon class="mr-2">chat_bubble</v-icon>
+                            Kontaktpunkte
+                        </v-btn>
                     </div>
                 </v-expand-transition>
                 <v-text-field
@@ -44,7 +54,7 @@
             <v-flex xs2/>
             <v-flex xs8>
                 <company-card
-                        v-if="!searchForContactPoints"
+                        v-if="searchForCompanies"
                         :company="company"
                         v-bind:key="company.id"
                         v-for="company in searchResults"/>
@@ -71,6 +81,7 @@
         data: () => ({
             search: '',
             searchForContactPoints: false,
+            searchForCompanies: true,
             searchTermsOfCompany: [],
             loading: true,
             expandOptionMenu: false
@@ -138,6 +149,16 @@
                         this.doFocus();
                     })
                 });
+            },
+            searchResultsToContactPoint() {
+                setTimeout(() => this.searchForContactPoints = true, 300);
+
+                this.searchForCompanies = false
+            },
+            searchResultsToCompany() {
+                setTimeout(() => this.searchForCompanies = true, 300);
+
+                this.searchForContactPoints = false
             },
             doFocus() {
                 this.$refs.searchBar.focus();
