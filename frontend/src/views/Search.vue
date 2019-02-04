@@ -53,11 +53,11 @@
             <v-flex xs2/>
             <v-flex xs2/>
             <v-flex xs8>
-                <company-card
-                        v-if="searchForCompanies"
-                        :company="company"
-                        v-bind:key="company.id"
-                        v-for="company in searchResults"/>
+                <v-fade-transition>
+                    <search-companies
+                            v-if="searchForCompanies"
+                            :search="this.search"/>
+                </v-fade-transition>
                 <contact-point-card
                         v-if="searchForContactPoints"
                         :contact-point="contactPoint"
@@ -70,19 +70,18 @@
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
-    import CompanyCard from "../components/company/CompanyCard.vue"
+    import SearchCompanies from "../components/search/SearchCompanies.vue"
     import ContactPointCard from "../components/contactpoint/ContactPointCard";
 
     export default {
         components: {
+            SearchCompanies,
             ContactPointCard,
-            CompanyCard
         },
         data: () => ({
             search: '',
             searchForContactPoints: false,
             searchForCompanies: true,
-            searchTermsOfCompany: [],
             loading: true,
             expandOptionMenu: false
         }),
@@ -90,58 +89,14 @@
             this.refreshData();
         },
         computed: {
-            ...mapGetters(['companies', 'contacts', 'contactPoints']),
-            searchResults() {
-                return this.companies
-                    .filter(company => {
-                        this.defineSearchTerms(company);
-                        if (this.search !== '') {
-                            return this.searchTermsOfCompany.some(term => term.includes(this.search.toLowerCase()));
-                        } else {
-                            return null;
-                        }
-                    })
-                    .splice(0, 10);
-            }
+            ...mapGetters([
+                'companies',
+                'contacts',
+                'contactPoints'
+            ]),
         },
         methods: {
             ...mapActions(['getCompanies', 'getContacts']),
-            getContactsOfCompany(company) {
-                return this.contacts.filter(contact => {
-                    if (contact.company != null) {
-                        return contact.company.name === company;
-                    } else {
-                        return null;
-                    }
-                })
-            },
-            getContactPointsOfCompany(company) {
-                return this.contactPoints.filter(contactPoint => {
-                    return contactPoint.contact.company.name === company;
-                })
-            },
-            defineSearchTerms(company) {
-                this.searchTermsOfCompany = [];
-
-                let contactsOfCompany = this.getContactsOfCompany(company.name);
-                let contactPointsOfCompany = this.getContactPointsOfCompany(company.name);
-
-                contactsOfCompany.forEach(contact => {
-                    this.searchTermsOfCompany.push(contact.name.toLowerCase());
-                });
-
-                contactPointsOfCompany.forEach(contactPoint => {
-                    contactPoint.labels.forEach(label => {
-                        this.searchTermsOfCompany.push(label.toLowerCase())
-                    });
-                });
-
-                for (var key in company) {
-                    if (company.hasOwnProperty(key) && company[key] != null) {
-                        this.searchTermsOfCompany.push(company[key].toString().toLowerCase());
-                    }
-                }
-            },
             refreshData() {
                 this.getCompanies().then(() => {
                     this.getContacts().then(() => {
