@@ -295,7 +295,7 @@
                 this.contactPointDialogState = true;
             },
             refreshData() {
-                api.get(`point/get/${this.companyName}`).then(response => {
+                api.get('point/get').then(response => {
                     let contactPoints = response.data;
 
                     contactPoints.forEach(contactPoint => {

@@ -71,7 +71,7 @@
                         v-if="!loadingContactPoints"
                         :contactPoint="contactPoint"
                         v-bind:key="contactPoint.id"
-                        v-for="contactPoint in sortedContactPoints"/>
+                        v-for="contactPoint in companiesContactPoints"/>
             </v-flex>
             <v-flex xs4>
                 <v-layout row wrap>
@@ -132,11 +132,15 @@
             ]),
             company() {
                 return this.companies[this.companyId];
+            },
+            companiesContactPoints() {
+                return this.sortedContactPoints.filter(contactPoint => {
+                    return (contactPoint.contact.company.id - 1) == this.companyId;
+                })
             }
         },
         mounted() {
-            this.refreshContactPoints();
-            this.refreshTodos();
+            this.refreshData();
         },
         methods: {
             ...mapMutations(['storeContactPoints', 'storeTodos']),
@@ -145,7 +149,7 @@
                 this.refreshTodos();
             },
             refreshContactPoints() {
-                api.get(`point/get/${this.company.name}`).then(response => {
+                api.get('point/get').then(response => {
                     let contactPoints = response.data;
 
                     contactPoints.forEach(contactPoint => {

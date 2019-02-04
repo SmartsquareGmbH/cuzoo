@@ -73,7 +73,7 @@
 
 <script>
     import api from '../../utils/http-common'
-    import {mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -89,6 +89,7 @@
             }
         },
         computed: {
+            ...mapGetters(['companies']),
             dateFormatted() {
                 return datefns.format(this.contactPoint.date, 'DD.MM.YY', { locale: de });
             }
@@ -113,7 +114,8 @@
                 }
             },
             viewContactPoint(contactPoint) {
-                this.$router.push(this.$route.fullPath + '/' + (contactPoint.id));
+                const index = this.companies.findIndex(company => company.id === contactPoint.contact.company.id);
+                this.$router.push(`/${index}/${contactPoint.id}`);
             },
             refreshData() {
                 api.get(`file/get/names/${this.contactPoint.id}`)
