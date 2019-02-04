@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-transition>
+    <v-fade-transition>
         <v-card
                 style="border-radius: 10px"
                 class="secondary mt-3 mb-4 clickable"
@@ -53,7 +53,7 @@
                 </v-chip>
             </v-card-text>
         </v-card>
-    </v-scroll-x-transition>
+    </v-fade-transition>
 </template>
 
 <script>

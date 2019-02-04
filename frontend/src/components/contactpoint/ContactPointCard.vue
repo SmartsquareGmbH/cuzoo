@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-reverse-transition>
+    <v-fade-transition>
         <v-hover>
             <v-layout row wrap
                       class="clickable"
@@ -68,7 +68,7 @@
                 </v-flex>
             </v-layout>
         </v-hover>
-    </v-scroll-x-reverse-transition>
+    </v-fade-transition>
 </template>
 
 <script>
