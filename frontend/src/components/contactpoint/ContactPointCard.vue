@@ -54,6 +54,16 @@
                         <v-card-text class="subheading text-xs-left text-truncate" width="20%">
                             {{ contactPoint.comment }}
                         </v-card-text>
+                        <v-divider/>
+                        <v-card-text class="subheading text-xs-left">
+                            <v-chip
+                                    color="info"
+                                    class="title mt-1 mb-1"
+                                    v-bind:key="contactPoint.label"
+                                    v-for="label in contactPoint.labels">
+                                {{ label }}
+                            </v-chip>
+                        </v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
