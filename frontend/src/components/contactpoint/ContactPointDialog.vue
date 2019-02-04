@@ -127,8 +127,8 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
-    import api from '../../utils/http-common'
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import api from '../../utils/http-common';
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');

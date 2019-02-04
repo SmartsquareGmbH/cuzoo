@@ -17,7 +17,7 @@
             CompanyCard
         },
         data: () => ({
-            searchTermsOfCompany: [],
+            searchTerms: [],
         }),
         computed: {
             ...mapGetters(['companies', 'contacts', 'contactPoints']),
@@ -25,7 +25,7 @@
                 return this.companies.filter(company => {
                     this.defineSearchTerms(company);
                     if (this.search) {
-                        return this.searchTermsOfCompany.some(term => {
+                        return this.searchTerms.some(term => {
                             term.includes(this.search.toLowerCase())
                         });
                     }
@@ -34,14 +34,14 @@
         },
         methods: {
             defineSearchTerms(company) {
-                this.searchTermsOfCompany = [];
+                this.searchTerms = [];
 
                 this.getContactsOfCompany(company.name);
                 this.getContactPointsOfCompany(company.name);
 
                 for (let key in company) {
                     if (company.hasOwnProperty(key) && company[key] != null) {
-                        this.searchTermsOfCompany.push(company[key].toString().toLowerCase());
+                        this.searchTerms.push(company[key].toString().toLowerCase());
                     }
                 }
             },
@@ -51,7 +51,7 @@
                         return contact.company.name === company;
                     }
                 }).forEach(contact => {
-                    this.searchTermsOfCompany.push(contact.name.toLowerCase());
+                    this.searchTerms.push(contact.name.toLowerCase());
                 });
             },
             getContactPointsOfCompany(company) {
@@ -59,7 +59,7 @@
                     return contactPoint.contact.company.name === company;
                 }).forEach(contactPoint => {
                     contactPoint.labels.forEach(label => {
-                        this.searchTermsOfCompany.push(label.toLowerCase());
+                        this.searchTerms.push(label.toLowerCase());
                     });
                 });
             }
