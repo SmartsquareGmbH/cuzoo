@@ -28,7 +28,7 @@ public class Company {
     private List<Todo> todos;
 
     private String street;
-    private String zipCode;
+    private String zipcode;
     private String place;
     private String homepage;
     private String status;
@@ -39,11 +39,11 @@ public class Company {
     }
 
     public Company(@NotNull @NotBlank final String name,
-                   String street, String zipCode, String place,
+                   String street, String zipcode, String place,
                    String homepage, String description, String other) {
         this.name = name;
         this.street = street;
-        this.zipCode = zipCode;
+        this.zipcode = zipcode;
         this.place = place;
         this.homepage = homepage;
         this.description = description;
@@ -74,12 +74,12 @@ public class Company {
         this.street = street;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getZipcode() {
+        return zipcode;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     public String getPlace() {

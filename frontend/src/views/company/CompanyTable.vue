@@ -73,7 +73,7 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-left">{{ props.item.street }}</td>
-                <td class="text-xs-left">{{ props.item.zipCode }}</td>
+                <td class="text-xs-left">{{ props.item.zipcode }}</td>
                 <td class="text-xs-left">{{ props.item.place }}</td>
                 <td class="text-xs-left">{{ props.item.homepage }}</td>
                 <td class="text-xs-left">{{ props.item.description }}</td>
@@ -138,7 +138,7 @@
                 headers: [
                     {text: 'Unternehmen', value: 'name', align: 'left'},
                     {text: 'Straße', value: 'street'},
-                    {text: 'PLZ', value: 'zipCode'},
+                    {text: 'PLZ', value: 'zipcode'},
                     {text: 'Ort', value: 'place'},
                     {text: 'Homepage', value: 'homepage'},
                     {text: 'Beschreibung', value: 'description'},
