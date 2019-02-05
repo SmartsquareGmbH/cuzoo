@@ -5,7 +5,7 @@
                     :class="`mt-2 mb-3 elevation-${hover ? 6 : 2}`"
                     @click="viewContactPoint(contactPoint)">
                 <v-scroll-x-transition>
-                    <v-btn v-if="hover" absolute right top fab small color="secondary" @click.stop="editContactPoint()"
+                    <v-btn v-if="hover && search === false" absolute right top fab small color="secondary" @click.stop="editContactPoint()"
                            class="elevation-12 mr-5">
                         <v-icon size="24px" color="white">
                             edit
@@ -13,7 +13,7 @@
                     </v-btn>
                 </v-scroll-x-transition>
                 <v-scroll-x-transition>
-                    <v-btn v-if="hover" absolute right top fab small color="secondary"
+                    <v-btn v-if="hover && search === false" absolute right top fab small color="secondary"
                            @click.stop="deleteContactPoint()"
                            class="elevation-12">
                         <v-icon size="24px" color="error">
