@@ -13,7 +13,9 @@ INSERT INTO contact_point (id, title, type, date, contact_id, comment) VALUES
  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'),
 (2, 'Besprechung', 'Social Media', '2019-02-05 00:00:00', 1,
  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'),
-(3, 'Pöbeln', 'Persönlich', '2019-01-02 00:00:00', 3,
+(3, 'Pöbeln', 'E-Mail', '2019-01-02 00:00:00', 3,
+ 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'),
+(4, 'Frohe Weihnachten', 'Persönlich', '2019-01-02 00:00:00', 2,
  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.');
 
 INSERT INTO label (id, title) VALUES
@@ -28,7 +30,8 @@ INSERT INTO contact_point_labels (contact_point_id, label_id) VALUES
 (3, 1),
 (2, 4),
 (2, 3),
-(3, 4);
+(3, 4),
+(4, 1);
 
 INSERT INTO todo (id, description, company_id, expiration, reminder, done) VALUES
 (1, 'Alfred Bescheid geben', 1, '2019-02-05 00:00:0', '2019-02-04 00:00:0', false),
