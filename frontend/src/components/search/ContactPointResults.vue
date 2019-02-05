@@ -2,6 +2,7 @@
     <div>
         <contact-point-card
                 :contact-point="contactPoint"
+                :search="true"
                 v-bind:key="contactPoint.id"
                 v-for="contactPoint in searchResults"/>
     </div>

@@ -25,7 +25,11 @@
                     {{ contactPoint.title }} •
                     <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
-                    <span class="ml-1 primary--text">{{ fileNames.length }}</span>
+                    <span class="ml-1 mr-2 primary--text">{{ fileNames.length }}</span>
+                    <span v-if="search === true"
+                          class="ml-1 font-weight-light font-italic headline">
+                        {{ contactPoint.contact.company.name }}
+                    </span>
                     <v-spacer></v-spacer>
                     <v-chip
                             :class="`mt-${hover ? 4 : 0} mb-${hover ? 0 : 2}`"
@@ -64,7 +68,7 @@
     const de = require('date-fns/locale/de');
 
     export default {
-        props: ['contactPoint'],
+        props: ['contactPoint', 'search'],
         data() {
             return {
                 contactPoints: this.$parent.contactPoints,

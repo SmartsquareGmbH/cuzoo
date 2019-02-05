@@ -70,6 +70,7 @@
                 <contact-point-card
                         v-if="!loadingContactPoints"
                         :contactPoint="contactPoint"
+                        :search="false"
                         v-bind:key="contactPoint.id"
                         v-for="contactPoint in companiesContactPoints"/>
             </v-flex>
