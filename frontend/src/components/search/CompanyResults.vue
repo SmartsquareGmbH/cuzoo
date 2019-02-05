@@ -20,14 +20,19 @@
             searchTerms: [],
         }),
         computed: {
-            ...mapGetters(['companies', 'contacts', 'contactPoints']),
+            ...mapGetters([
+                'companies',
+                'contacts',
+                'contactPoints'
+            ]),
             searchResults() {
                 return this.companies.filter(company => {
                     this.defineSearchTerms(company);
+
                     if (this.search) {
-                        return this.searchTerms.some(term => {
+                        return this.searchTerms.some(term =>
                             term.includes(this.search.toLowerCase())
-                        });
+                        );
                     }
                 }).splice(0, 10);
             }
@@ -36,32 +41,36 @@
             defineSearchTerms(company) {
                 this.searchTerms = [];
 
-                this.getContactsOfCompany(company.name);
-                this.getContactPointsOfCompany(company.name);
+                let contactsOfCompany = this.getContactsOfCompany(company.name);
+                let contactPointsOfCompany = this.getContactPointsOfCompany(company.name);
+
+                contactsOfCompany.forEach(contact => {
+                    this.searchTerms.push(contact.name.toLowerCase());
+                });
+
+                contactPointsOfCompany.forEach(contactPoint => {
+                    contactPoint.labels.forEach(label => {
+                        this.searchTerms.push(label.toLowerCase())
+                    });
+                });
 
                 for (let key in company) {
-                    if (company.hasOwnProperty(key) && company[key] != null) {
+                    if (company.hasOwnProperty(key) && company[key]) {
                         this.searchTerms.push(company[key].toString().toLowerCase());
                     }
                 }
             },
             getContactsOfCompany(company) {
-                this.contacts.filter(contact => {
+                return this.contacts.filter(contact => {
                     if (contact.company) {
                         return contact.company.name === company;
                     }
-                }).forEach(contact => {
-                    this.searchTerms.push(contact.name.toLowerCase());
-                });
+                })
             },
             getContactPointsOfCompany(company) {
-                this.contactPoints.filter(contactPoint => {
+                return this.contactPoints.filter(contactPoint => {
                     return contactPoint.contact.company.name === company;
-                }).forEach(contactPoint => {
-                    contactPoint.labels.forEach(label => {
-                        this.searchTerms.push(label.toLowerCase());
-                    });
-                });
+                })
             }
         }
     }

@@ -54,7 +54,7 @@
             <v-flex xs2/>
             <v-flex xs8>
                 <v-fade-transition>
-                    <search-companies
+                    <company-results
                             v-if="searchForCompanies"
                             :search="this.search"/>
                 </v-fade-transition>
