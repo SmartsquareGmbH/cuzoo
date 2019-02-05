@@ -58,25 +58,25 @@
                             v-if="searchForCompanies"
                             :search="this.search"/>
                 </v-fade-transition>
-                <contact-point-card
-                        v-if="searchForContactPoints"
-                        :contact-point="contactPoint"
-                        v-bind:key="contactPoint.id"
-                        v-for="contactPoint in contactPoints"/>
+                <v-fade-transition>
+                    <contact-point-results
+                            v-if="searchForContactPoints"
+                            :search="this.search"/>
+                </v-fade-transition>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
-    import SearchCompanies from "../components/search/SearchCompanies.vue"
-    import ContactPointCard from "../components/contactpoint/ContactPointCard";
+    import {mapActions, mapGetters} from 'vuex';
+    import CompanyResults from "../components/search/CompanyResults.vue";
+    import ContactPointResults from "../components/search/ContactPointResults.vue";
 
     export default {
         components: {
-            SearchCompanies,
-            ContactPointCard,
+            CompanyResults,
+            ContactPointResults
         },
         data: () => ({
             search: '',
