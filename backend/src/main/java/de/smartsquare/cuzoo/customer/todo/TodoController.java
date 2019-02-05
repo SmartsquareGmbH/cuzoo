@@ -81,4 +81,9 @@ public class TodoController {
                 .filter(todo -> todo.getCompany().getName().equals(companyName))
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/get")
+    public final ResponseEntity<List<Todo>> getTodos() {
+        return ResponseEntity.ok(todoRepository.findAll());
+    }
 }

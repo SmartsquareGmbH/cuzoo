@@ -1,7 +1,10 @@
+import api from '../utils/http-common'
+
+const datefns = require('date-fns');
+
 export default {
     state: {
         todos: [],
-        sortedTodos: [],
         editedIndex: -1,
         editedTodo: {
             id: 0,
@@ -14,18 +17,41 @@ export default {
     },
     getters: {
         todos: state => state.todos,
-        sortedTodos: state => state.sortedTodos,
         editedTodo: state => state.editedTodo,
         editedTodoIndex: state => state.editedIndex
     },
     mutations: {
         storeTodos(state, payload) {
-            state.todos = payload.todos,
-            state.sortedTodos = payload.sortedTodos
+            state.todos = payload.todos
         },
         storeEditedTodoDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-            state.editedTodo = payload.editedTodo
+                state.editedTodo = payload.editedTodo
+        }
+    },
+    actions: {
+        getTodos() {
+            return api.get('todo/get/').then(response => {
+                let todos = response.data;
+
+                this.commit({
+                    type: 'storeTodos',
+                    todos: todos.sort(compareTodos)
+                })
+            }).catch(error => {
+                console.log(error)
+            });
         }
     }
-};
+}
+
+function compareTodos(a, b) {
+    if (datefns.compareAsc(a.expiration, b.expiration) === 0) {
+        if (a.id < b.id)
+            return 1;
+        if (a.id > b.id)
+            return -1;
+    } else {
+        return datefns.compareAsc(a.expiration, b.expiration);
+    }
+}

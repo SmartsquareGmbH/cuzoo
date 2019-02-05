@@ -85,7 +85,7 @@
                             v-if="!loadingTodos"
                             :todo="todo"
                             v-bind:key="todo.id"
-                            v-for="todo in sortedTodos"/>
+                            v-for="todo in companiesTodos"/>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -93,15 +93,12 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
-    import api from '../../utils/http-common'
+    import {mapActions, mapGetters} from 'vuex';
 
-    import TodoDialog from '../../components/todo/TodoDialog.vue'
-    import TodoCard from '../../components/todo/TodoCard.vue'
-    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
-    import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue"
-
-    const datefns = require('date-fns');
+    import TodoDialog from '../../components/todo/TodoDialog.vue';
+    import TodoCard from '../../components/todo/TodoCard.vue';
+    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue";
+    import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue";
 
     export default {
         components: {
@@ -117,8 +114,7 @@
                 companyId: this.$route.params.companyId,
                 contactNames: [],
                 contactPointDialogState: false,
-                todoDialogState: false,
-                taskDone: false
+                todoDialogState: false
             }
         },
         computed: {
@@ -126,9 +122,7 @@
                 'companies',
                 'contacts',
                 'contactPoints',
-                'sortedContactPoints',
                 'todos',
-                'sortedTodos'
             ]),
             company() {
                 return this.companies[this.companyId];
@@ -137,16 +131,21 @@
                 return this.sortedContactPoints.filter(contactPoint => {
                     return (contactPoint.contact.company.id - 1) == this.companyId;
                 })
+            },
+            companiesTodos() {
+                return this.todos.filter(todo => {
+                    return (todo.company.id - 1) == this.companyId;
+                })
             }
         },
         mounted() {
             this.refreshData();
         },
         methods: {
-            ...mapMutations(['storeContactPoints', 'storeTodos']),
+            ...mapActions(['getContactPoints', 'getTodos']),
             refreshData() {
-                this.refreshContactPoints();
-                this.refreshTodos();
+                this.getContactPoints().then(() => this.loadingContactPoints = false);
+                this.getTodos().then(() => this.loadingTodos = false);
             },
             refreshContactPoints() {
                 api.get('point/get').then(response => {
@@ -211,28 +210,6 @@
             viewCompany() {
                 this.$router.push('/companies/' + (this.companyId));
             }
-        }
-    }
-
-    function compareContactPoints(a, b) {
-        if (datefns.compareAsc(a.date, b.date) === 0) {
-            if (a.id < b.id)
-                return 1;
-            if (a.id > b.id)
-                return -1;
-        } else {
-            return datefns.compareAsc(b.date, a.date);
-        }
-    }
-
-    function compareTodos(a, b) {
-        if (datefns.compareAsc(a.expiration, b.expiration) === 0) {
-            if (a.id < b.id)
-                return 1;
-            if (a.id > b.id)
-                return -1;
-        } else {
-            return datefns.compareAsc(a.expiration, b.expiration);
         }
     }
 </script>

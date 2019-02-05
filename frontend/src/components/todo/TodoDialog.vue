@@ -122,7 +122,7 @@
                 editedTodo: 'editedTodo'
             }),
             dateFormatted() {
-                return datefns.format(this.date, 'DD.MM.YY', { locale: de })
+                return datefns.format(this.date, 'DD.MM.YY', {locale: de})
             }
         },
         methods: {
@@ -130,16 +130,12 @@
                 storeDetails: 'storeEditedTodoDetails'
             }),
             submitTodo() {
-                console.log(this.editedTodo.description);
-                console.log(datefns.parse(this.date).getTime());
-                console.log(this.getReminderDate());
-
                 api.put(`todo/submit?companyName=${this.company.name}`, {
                     description: this.editedTodo.description,
                     expiration: datefns.parse(this.date).getTime(),
                     reminder: this.getReminderDate()
                 }).then(() => {
-                    this.$parent.refreshTodos();
+                    this.$parent.refreshData();
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);
