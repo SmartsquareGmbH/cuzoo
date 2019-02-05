@@ -128,7 +128,7 @@
                 return this.companies[this.companyId];
             },
             companiesContactPoints() {
-                return this.sortedContactPoints.filter(contactPoint => {
+                return this.contactPoints.filter(contactPoint => {
                     return (contactPoint.contact.company.id - 1) == this.companyId;
                 })
             },
@@ -147,49 +147,10 @@
                 this.getContactPoints().then(() => this.loadingContactPoints = false);
                 this.getTodos().then(() => this.loadingTodos = false);
             },
-            refreshContactPoints() {
-                api.get('point/get').then(response => {
-                    let contactPoints = response.data;
-
-                    contactPoints.forEach(contactPoint => {
-                        contactPoint.labels = contactPoint.labels.map(label => {
-                            return label.title;
-                        });
-                    });
-
-                    let sortedContactPoints = contactPoints.sort(compareContactPoints);
-
-                    this.storeContactPoints({
-                        contactPoints: contactPoints,
-                        sortedContactPoints: sortedContactPoints
-                    })
-                }).catch(error => {
-                    console.log(error)
-                }).then(() => {
-                    this.loadingContactPoints = false
-                })
-            },
-            refreshTodos() {
-                api.get(`todo/get/${this.company.name}`).then(response => {
-                    let todos = response.data;
-                    let sortedTodos = todos.sort(compareTodos);
-
-                    this.storeTodos({
-                        todos: todos,
-                        sortedTodos: sortedTodos
-                    })
-                }).catch(error => {
-                    console.log(error)
-                }).then(() => {
-                    this.loadingTodos = false
-                })
-            },
             getContactsOfCompany() {
                 return this.contacts.filter((contact) => {
-                    if (contact.company != null) {
+                    if (contact.company) {
                         return contact.company.name === this.company.name
-                    } else {
-                        return null
                     }
                 })
             },

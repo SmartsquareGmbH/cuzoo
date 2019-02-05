@@ -145,7 +145,7 @@
             deleteContactPoint() {
                 if (confirm("Bist du dir sicher, dass du diesen Kontaktpunkt löschen willst?")) {
                     api.delete(`point/delete/${this.contactPoint.id}`)
-                        .then(() =>  this.$parent.refreshContactPoints())
+                        .then(() => this.$parent.refreshData())
                         .catch(error => {
                             alert(error);
                         });
