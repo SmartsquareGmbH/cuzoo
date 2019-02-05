@@ -96,13 +96,19 @@
             ]),
         },
         methods: {
-            ...mapActions(['getCompanies', 'getContacts']),
+            ...mapActions([
+                'getCompanies',
+                'getContacts',
+                'getContactPoints'
+            ]),
             refreshData() {
                 this.getCompanies().then(() => {
                     this.getContacts().then(() => {
-                        this.loading = false;
-                        this.doFocus();
-                    })
+                        this.getContactPoints().then(() => {
+                            this.loading = false;
+                            this.doFocus();
+                        });;
+                    });
                 });
             },
             searchResultsToContactPoint() {

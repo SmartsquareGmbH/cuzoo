@@ -1,3 +1,5 @@
+import api from '../utils/http-common'
+
 export default {
     state: {
         labels: [],
@@ -36,6 +38,26 @@ export default {
         },
         storeContactPointLabels(state, payload) {
             state.labels = payload.labels
+        }
+    },
+    actions: {
+        getContactPoints() {
+            return api.get('point/get').then(response => {
+                let contactPoints = response.data;
+
+                contactPoints.forEach(contactPoint => {
+                    contactPoint.labels = contactPoint.labels.map(label => {
+                        return label.title;
+                    });
+                });
+
+                this.commit({
+                    type: 'storeContactPoints',
+                    contactPoints: contactPoints
+                })
+            }).catch(error => {
+                console.log(error);
+            });
         }
     }
 }
