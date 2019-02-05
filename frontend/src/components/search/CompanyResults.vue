@@ -2,6 +2,7 @@
     <div>
         <company-card
                 :company="company"
+                :contacts="getContactsOfCompany(company.name)"
                 v-bind:key="company.id"
                 v-for="company in searchResults"/>
     </div>
