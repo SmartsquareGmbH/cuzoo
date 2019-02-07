@@ -83,7 +83,7 @@
                     <v-flex xs10>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.homepage != null && this.company.homepage !== ''"
+                                    v-if="this.company.homepage"
                                     class="headline text-xs-left">
                                 <a :href=this.homepage target="_blank">{{ this.company.homepage }}</a>
                             </v-card-text>
@@ -104,9 +104,9 @@
                     <v-flex xs2>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.zipCode != null && this.company.zipCode !== ''"
+                                    v-if="this.company.zipcode"
                                     class="headline text-xs-left">
-                                {{ this.company.zipCode }}
+                                {{ this.company.zipcode }}
                             </v-card-text>
                             <v-card-text
                                     v-else
@@ -118,7 +118,7 @@
                     <v-flex xs8>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.place != null && this.company.place !== ''"
+                                    v-if="this.company.place"
                                     class="headline text-xs-left">
                                 {{ this.company.place }}
                             </v-card-text>
@@ -137,7 +137,7 @@
                     <v-flex xs10>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.street != null && this.company.street !== ''"
+                                    v-if="this.company.street"
                                     class="headline text-xs-left">
                                 {{ this.company.street }}
                             </v-card-text>
@@ -160,7 +160,7 @@
                     <v-flex xs12>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.description != null && this.company.description !== ''"
+                                    v-if="this.company.description"
                                     class="headline text-xs-left">
                                 {{ this.company.description }}
                             </v-card-text>
@@ -195,7 +195,7 @@
                     <v-flex xs12>
                         <v-card dark>
                             <v-card-text
-                                    v-if="this.company.other != null && this.company.other !== ''"
+                                    v-if="this.company.other"
                                     class="headline text-xs-left">
                                 {{ this.company.other }}
                             </v-card-text>
@@ -242,7 +242,7 @@
                                 <v-flex xs10>
                                     <v-card dark>
                                         <v-card-text
-                                                v-if="contact.mail != null && contact.mail !== ''"
+                                                v-if="contact.mail"
                                                 class="headline text-xs-left">
                                             {{ contact.mail }}
                                         </v-card-text>
@@ -263,7 +263,7 @@
                                 <v-flex xs10>
                                     <v-card dark>
                                         <v-card-text
-                                                v-if="contact.telephone != null && contact.telephone !== ''"
+                                                v-if="contact.telephone"
                                                 class="headline text-xs-left">
                                             {{ contact.telephone }}
                                         </v-card-text>
@@ -286,7 +286,7 @@
                                 <v-flex xs12>
                                     <v-card dark>
                                         <v-card-text
-                                                v-if="contact.comment != null && contact.comment !== ''"
+                                                v-if="contact.comment"
                                                 class="headline text-xs-left">
                                             {{ contact.comment }}
                                         </v-card-text>

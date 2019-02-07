@@ -99,7 +99,7 @@
                                             {{ data.item }}
                                         </v-chip>
                                     </template>
-                                    <template slot="no-data" v-if="labelBoxInput != null && labelBoxInput !== ''">
+                                    <template slot="no-data" v-if="labelBoxInput">
                                         <v-list-tile>
                                             <v-list-tile-content>
                                                 <v-list-tile-title>
