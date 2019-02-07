@@ -130,12 +130,12 @@
             },
             companiesContactPoints() {
                 return this.contactPoints.filter(contactPoint => {
-                    return (contactPoint.contact.company.id - 1) == this.companyId;
+                    return contactPoint.contact.company.id === this.company.id;
                 })
             },
             companiesTodos() {
                 return this.todos.filter(todo => {
-                    return (todo.company.id - 1) == this.companyId;
+                    return todo.company.id === this.company.id;
                 })
             }
         },
