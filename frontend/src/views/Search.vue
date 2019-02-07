@@ -39,7 +39,7 @@
                         ref="searchBar"
                         v-model="search"
                         append-icon="search"
-                        label="Suche nach Unternehmen oder Ansprechpartnern"
+                        :label="`Suche nach ${searchForCompanies ? 'Unternehmen' : 'Kontaktpunkten' } oder Ansprechpartnern`"
                         hide-details
                         outline/>
                 <v-progress-linear
