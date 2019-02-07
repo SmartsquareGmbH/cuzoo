@@ -107,10 +107,10 @@
             },
             editContactPoint() {
                 this.$parent.getContactsOfCompany().forEach(contact => {
-                    this.contactNames.push(contact.name)
+                    this.$parent.contactNames.push(contact.name)
                 });
 
-                this.contactNames.sort();
+                this.$parent.contactNames.sort();
 
                 this.storeDetails({
                     editedIndex: this.contactPoints.indexOf(this.contactPoint),
