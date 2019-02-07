@@ -170,13 +170,14 @@
             labelBoxInput(input) {
                 if (input) {
                     setTimeout(() => {
-                        api.get(`point/get/labels/${input}`).then(response => {
-                            this.storeLabels({labels: response.data})
+                        api.get(`point/get/labels/${input.replace(' ', '')}`).then(response => {
+                            this.storeLabels({labels: response.data});
+                            console.log('labels: ' + this.labels);
                         })
                     }, 300);
 
                     this.labels.forEach(label => {
-                        if (label.toLowerCase() === input.toLowerCase()) {
+                        if (label.replace('-', '').toLowerCase() === input.replace(' ', '').toLowerCase()) {
                             this.labelBoxInput = label;
                         }
                     });
