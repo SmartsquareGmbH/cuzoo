@@ -3,7 +3,6 @@
         <v-flex xs12 v-if="todo.done === false">
             <v-hover>
                 <v-card slot-scope="{ hover }"
-                        style="border-radius: 15px"
                         :color="getUrgency(todo.expiration)"
                         height="100%">
                     <v-scroll-x-transition>
