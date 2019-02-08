@@ -178,21 +178,14 @@
                     setTimeout(() => {
                         api.get(`point/get/labels/${input.replace(' ', '')}`).then(response => {
                             this.storeLabels({labels: response.data});
-                            console.log('labels: ' + this.labels);
                         })
                     }, 300);
 
                     this.labels.forEach(label => {
-                        if (label.replace('-', '').toLowerCase() === input.replace(' ', '').toLowerCase()) {
+                        if (removeNonLetters(label) === input.replace(' ', '').toLowerCase()) {
                             this.labelBoxInput = label;
                         }
                     });
-                }
-            },
-            value(isVisible) {
-                debugger
-                if (isVisible) {
-                    this.nextTick(() => this.$refs.form.resetValidation());
                 }
             }
         },
@@ -208,9 +201,6 @@
             dateFormatted() {
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de});
             }
-        },
-        mounted() {
-            this.nextTick(() => this.$refs.form.reset());
         },
         methods: {
             ...mapActions(['getContactPointLabels']),
@@ -255,5 +245,9 @@
                 this.editedContactPoint.labels = [...this.editedContactPoint.labels]
             }
         }
+    }
+
+    function removeNonLetters(string) {
+        return string.replace('-', '').replace(' ', '').toLowerCase();
     }
 </script>
