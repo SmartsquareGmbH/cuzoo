@@ -43,6 +43,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("drs").password(passwordEncoder().encode("secure"))
+                .authorities("ROLE_USER")
+                .and()
+                .withUser("alex").password(passwordEncoder().encode("cuzoo"))
                 .authorities("ROLE_USER");
     }
 
