@@ -2,22 +2,22 @@ version: "3.7"
 
 services:
   cuzoo-frontend:
-    build: frontend
+    image: cuzoo/frontend:latest
     container_name: cuzoo-frontend
     links:
       - cuzoo-backend
     ports:
-      - "80:8080"
+      - "127.0.01:8082:80"
 
   cuzoo-backend:
-    build: backend
+    image: cuzoo/backend:latest
     container_name: cuzoo-backend
     depends_on:
       - "postgre-db"
     ports:
-      - "5000:5000"
+      - "127.0.0.1:8083:5000"
     command:
-      ["java", "-jar", "app.jar",
+      ["java", "-jar", "/app/app.jar",
        "--spring.datasource.url=jdbc:postgresql://postgre-db:5432/postgre-db",
        "--spring.datasource.username=postgres",
        "--spring.datasource.password=secure",
