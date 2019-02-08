@@ -7,7 +7,7 @@ services:
     links:
       - cuzoo-backend
     ports:
-      - "80:8080"
+      - "127.0.01:8082:8080"
 
   cuzoo-backend:
     build: backend
@@ -15,7 +15,7 @@ services:
     depends_on:
       - "postgre-db"
     ports:
-      - "5000:5000"
+      - "127.0.0.1:8083:5000"
     command:
       ["java", "-jar", "/app/app.jar",
        "--spring.datasource.url=jdbc:postgresql://postgre-db:5432/postgre-db",
