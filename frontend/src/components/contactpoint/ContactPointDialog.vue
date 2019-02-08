@@ -176,13 +176,13 @@
             labelBoxInput(input) {
                 if (input) {
                     setTimeout(() => {
-                        api.get(`point/get/labels/${input.replace(' ', '')}`).then(response => {
+                        api.get(`point/get/labels/${removeNonLetters(input)}`).then(response => {
                             this.storeLabels({labels: response.data});
                         })
                     }, 300);
 
                     this.labels.forEach(label => {
-                        if (removeNonLetters(label) === input.replace(' ', '').toLowerCase()) {
+                        if (removeNonLetters(label) === removeNonLetters(input)) {
                             this.labelBoxInput = label;
                         }
                     });
