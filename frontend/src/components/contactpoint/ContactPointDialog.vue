@@ -248,6 +248,6 @@
     }
 
     function removeNonLetters(string) {
-        return string.replace('-', '').replace(' ', '').toLowerCase();
+        return string.replace(/-/g, '').replace(/ /g, '').toLowerCase();
     }
 </script>
