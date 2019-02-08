@@ -2,7 +2,6 @@
 # Builder Container
 #
 FROM node:11-alpine as builder
-
 WORKDIR /app
 
 # copy both 'package.json' and 'package-lock.json' (if available)
