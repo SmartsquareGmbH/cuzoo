@@ -46,6 +46,34 @@
                                     </v-date-picker>
                                 </v-menu>
                             </v-flex>
+                            <v-flex xs6>
+                                <v-combobox
+                                        v-model="editedContactPoint.contact.name"
+                                        :items="this.contactNames"
+                                        :rules="contactRules"
+                                        prepend-icon="person"
+                                        label="Ansprechpartner"/>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-combobox
+                                        v-model="editedContactPoint.type"
+                                        :items="this.pointTypes"
+                                        :rules="pointRules"
+                                        :search-input.sync="mediumLabelBoxInput"
+                                        prepend-icon="share"
+                                        label="Art"
+                                        color="primary"
+                                        clearable
+                                        multiple
+                                        hide-details>
+                                    <template slot="item" slot-scope="data">
+                                        <v-icon class="mr-1">
+                                            {{ getPointTypeIconOf(data.item) }}
+                                        </v-icon>
+                                        {{ data.item }}
+                                    </template>
+                                </v-combobox>
+                            </v-flex>
                             <v-flex xs12>
                                 <v-textarea
                                         v-model="editedContactPoint.comment"
@@ -118,6 +146,7 @@
                 menu: false,
                 valid: true,
                 labelBoxInput: null,
+                mediumLabelBoxInput: null,
                 pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
                 pointTypeIcons: ["phone", "mail", "share", "people"],
                 pointRules: [
@@ -159,6 +188,12 @@
                         }
                     });
                 }
+            },
+            value(isVisible) {
+                debugger
+                if (isVisible) {
+                    this.nextTick(() => this.$refs.form.resetValidation());
+                }
             }
         },
         computed: {
@@ -173,6 +208,9 @@
             dateFormatted() {
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de});
             }
+        },
+        mounted() {
+            this.nextTick(() => this.$refs.form.reset());
         },
         methods: {
             ...mapActions(['getContactPointLabels']),
