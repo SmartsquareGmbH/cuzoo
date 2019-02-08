@@ -5,7 +5,7 @@
                 {{ formTitle }}
             </v-card-title>
             <v-card-text>
-                <v-form ref="form" v-model="valid">
+                <v-form ref="form" v-model="valid" lazy-validation>
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs8>
@@ -15,29 +15,6 @@
                                         prepend-icon="title"
                                         label="Titel"
                                         suffix="*"/>
-                            </v-flex>
-                            <v-flex xs4>
-                                <v-combobox
-                                        v-model="editedContactPoint.type"
-                                        :items="this.pointTypes"
-                                        :rules="pointRules"
-                                        prepend-icon="share"
-                                        label="Art">
-                                    <template slot="item" slot-scope="data">
-                                        <v-icon class="mr-1">
-                                            {{ getPointTypeIconOf(data.item) }}
-                                        </v-icon>
-                                        {{ data.item }}
-                                    </template>
-                                </v-combobox>
-                            </v-flex>
-                            <v-flex xs8>
-                                <v-combobox
-                                        v-model="editedContactPoint.contact.name"
-                                        :items="this.contactNames"
-                                        :rules="contactRules"
-                                        prepend-icon="person"
-                                        label="Ansprechpartner"/>
                             </v-flex>
                             <v-flex xs4>
                                 <v-menu
