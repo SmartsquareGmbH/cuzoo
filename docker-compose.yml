@@ -7,7 +7,7 @@ services:
     links:
       - cuzoo-backend
     ports:
-      - "127.0.01:8082:8080"
+      - "127.0.01:8082:80"
 
   cuzoo-backend:
     build: backend
