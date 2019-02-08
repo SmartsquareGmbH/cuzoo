@@ -17,7 +17,7 @@ services:
     ports:
       - "5000:5000"
     command:
-      ["java", "-jar", "app.jar",
+      ["java", "-jar", "/app/app.jar",
        "--spring.datasource.url=jdbc:postgresql://postgre-db:5432/postgre-db",
        "--spring.datasource.username=postgres",
        "--spring.datasource.password=secure",
