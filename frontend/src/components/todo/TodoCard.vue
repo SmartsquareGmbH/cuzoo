@@ -25,7 +25,7 @@
                         {{ todo.description }}
                     </v-card-text>
                     <v-card-text v-else class="white--text headline text-xs-left">
-                        <v-icon size="30px" class="mr-2" color="white">
+                        <v-icon :size="`${hover ? 48 : 32}px`" class="mr-2" color="white">
                             info
                         </v-icon>
                         {{ todo.description }}
