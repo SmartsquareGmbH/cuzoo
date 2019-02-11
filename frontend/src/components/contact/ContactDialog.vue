@@ -20,7 +20,7 @@
                             </v-flex>
                             <v-flex xs6>
                                 <v-combobox
-                                v-model="this.getCompanyName()"
+                                v-model="companyName"
                                 :disabled="!this.companyFieldEnabled"
                                 :items="companyNames"
                                 label="Unternehmen"
@@ -77,6 +77,7 @@
             return {
                 valid: true,
                 companyFieldEnabled: true,
+                companyName: '',
                 defaultContact: {
                     value: false,
                     id: 0,
@@ -98,10 +99,10 @@
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
-            },
-            companyName() {
-                return this.editedContact.company.name
             }
+        },
+        mounted() {
+            this.companyName = this.getCompanyName();
         },
         methods: {
             ...mapMutations({
@@ -121,13 +122,14 @@
                 this.$refs.form.reset();
             },
             submitContact() {
-                if (this.companyName == null || this.companyName === "") {
+                if (this.getCompanyName() == null || this.getCompanyName() === "") {
                     this.editedContact.companyName = "";
                     this.editedContact.role = "Freiberufler";
                 }
 
-                let company = this.companyName.replace("&", "%26");
-                let companyOrFreelancer = company ? `?companyName=${company}` : '';
+                this.companyName.replace("&", "%26");
+
+                let companyOrFreelancer = this.companyName ? `?companyName=${this.companyName}` : '';
                 
                 api.put(`contact/submit${companyOrFreelancer}`, {
                     name: this.editedContact.name,
@@ -153,7 +155,7 @@
                     return this.companyNames[0];
                 } else {
                     this.companyFieldEnabled = true;
-                    return this.editedContact.company.name
+                    return this.companyName;
                 }
             }
         }
