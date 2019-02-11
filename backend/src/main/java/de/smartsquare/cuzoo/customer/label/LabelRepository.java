@@ -23,7 +23,13 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
             "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
             "LIKE CONCAT('%', LOWER(:input), '%') " +
             "AND l.contactPointsWithLabels IS NOT EMPTY")
-    List<Label> findAllForContactPointByPartOfTitle(@Param("input") String input);
+    List<Label> findAllOfContactPointLabelsByPartOfTitle(@Param("input") String input);
+
+    @Query("SELECT l FROM Label l " +
+            "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
+            "LIKE CONCAT('%', LOWER(:input), '%') " +
+            "AND l.contactPointsWithTypes IS NOT EMPTY")
+    List<Label> findAllOfContactPointTypesByPartOfTitle(@Param("input") String input);
 
     @Transactional
     @Modifying

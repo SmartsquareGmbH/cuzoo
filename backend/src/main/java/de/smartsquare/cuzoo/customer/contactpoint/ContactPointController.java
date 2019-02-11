@@ -155,7 +155,16 @@ public class ContactPointController {
     @GetMapping("/get/labels/{input}")
     public final ResponseEntity<List<String>> getContactPointLabelsWithInput(@PathVariable String input) {
         return ResponseEntity.ok(labelRepository
-                .findAllForContactPointByPartOfTitle(input)
+                .findAllOfContactPointLabelsByPartOfTitle(input)
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/get/types/{input}")
+    public final ResponseEntity<List<String>> getContactPointTypesWithInput(@PathVariable String input) {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfContactPointTypesByPartOfTitle(input)
                 .stream()
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
