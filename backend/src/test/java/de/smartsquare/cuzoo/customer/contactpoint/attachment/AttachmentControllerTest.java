@@ -54,7 +54,7 @@ public class AttachmentControllerTest {
         Path path = new File(uri).toPath();
 
         file = new MockMultipartFile("file", "TestCompanies.csv", "text/plain", Files.readAllBytes(path));
-        contactPoint = new ContactPoint("Besprechung", "Social Media", 0L, contact, "");
+        contactPoint = new ContactPoint("Besprechung", 0L, contact, "");
 
         contactPointRepository.save(contactPoint);
     }

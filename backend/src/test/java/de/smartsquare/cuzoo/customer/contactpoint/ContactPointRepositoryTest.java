@@ -30,7 +30,7 @@ public class ContactPointRepositoryTest {
     @Test
     public final void that_saves_contact_point_correctly() {
         Contact contact = new Contact("Darius Tack", "", "", "", "", "", "");
-        ContactPoint contactPoint = new ContactPoint("Beratung", "Telefon", 0L, contact, "");
+        ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "");
 
         contactRepository.save(contact);
         contactPointRepository.save(contactPoint);
