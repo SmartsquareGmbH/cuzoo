@@ -52,14 +52,12 @@ public class ContactPointController {
             contactPoint = contactPointRepository.findById(contactPointForm.getId()).get();
 
             contactPoint.setTitle(contactPointForm.getTitle());
-            contactPoint.setType(contactPointForm.getType());
             contactPoint.setDate(contactPointForm.getDate());
             contactPoint.setContact(contactPointsContact);
             contactPoint.setComment(contactPointForm.getComment());
         } else {
             contactPoint = new ContactPoint(
                     contactPointForm.getTitle(),
-                    contactPointForm.getType(),
                     contactPointForm.getDate(),
                     contactPointsContact,
                     contactPointForm.getComment());
@@ -68,8 +66,12 @@ public class ContactPointController {
         Long contactPointIdBeforeSaving = contactPointForm.getId();
 
         try {
+            if (contactPointForm.getTypes() != null) {
+                submitLabels(contactPointForm.getTypes(), contactPoint, true);
+            }
+
             if (contactPointForm.getLabels() != null) {
-                submitLabels(contactPointForm.getLabels(), contactPoint);
+                submitLabels(contactPointForm.getLabels(), contactPoint, false);
             }
 
             contactPointRepository.save(contactPoint);
@@ -85,24 +87,38 @@ public class ContactPointController {
         }
     }
 
-    private void submitLabels(List<String> titles, ContactPoint contactPoint) {
+    private void submitLabels(List<String> titles, ContactPoint contactPoint, boolean mediaTypes) {
         List<Label> contactPointLabels = new ArrayList<>();
 
         titles.forEach(title -> {
             Optional<Label> label = labelRepository.findForContactPointByTitle(title);
 
             if (label.isPresent()) {
-                label.get().addContactPoint(contactPoint);
+                if (mediaTypes) {
+                    label.get().addContactPointTypes(contactPoint);
+                } else {
+                    label.get().addContactPointWithLabel(contactPoint);
+                }
+
                 contactPointLabels.add(label.get());
             } else {
                 Label labelToSave = new Label(title);
 
-                labelToSave.addContactPoint(contactPoint);
+                if (mediaTypes) {
+                    labelToSave.addContactPointTypes(contactPoint);
+                } else {
+                    labelToSave.addContactPointWithLabel(contactPoint);
+                }
+
                 contactPointLabels.add(labelToSave);
             }
         });
 
-        contactPoint.setLabels(contactPointLabels);
+        if (mediaTypes) {
+            contactPoint.setTypes(contactPointLabels);
+        } else {
+            contactPoint.setLabels(contactPointLabels);
+        }
     }
 
     @DeleteMapping("/delete/{contactPointId}")
