@@ -138,9 +138,13 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
+    import debounce from 'lodash.debounce'
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
+
+    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, { leading: true });
+    const debouncedTypeApiCall = debounce(getTypesByInput, 150, { leading: true });
 
     export default {
         props: ["value", "contactNames"],
@@ -177,11 +181,11 @@
         watch: {
             labelBoxInput(input) {
                 if (input) {
-                    setTimeout(() => {
-                        api.get(`point/get/labels/${removeNonLetters(input)}`).then(response => {
-                            this.storeLabels({labels: response.data});
-                        })
-                    }, 300);
+                    let call = debouncedLabelApiCall(input);
+
+                    if (call) {
+                        call.then(res => this.storeLabels(res));
+                    }
 
                     this.labels.forEach(label => {
                         if (removeNonLetters(label) === removeNonLetters(input)) {
@@ -192,7 +196,17 @@
             },
             mediumLabelBoxInput(input) {
                 if (input) {
-                    
+                    let call = debouncedTypeApiCall(input);
+
+                    if (call) {
+                        call.then(res => this.storeTypes(res));
+                    }
+
+                    this.types.forEach(type => {
+                        if (removeNonLetters(type) === removeNonLetters(input)) {
+                            this.mediumLabelBoxInput = type;
+                        }
+                    });
                 }
             }
         },
@@ -214,7 +228,8 @@
             ...mapActions(['getContactPointLabels']),
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails',
-                storeLabels: 'storeContactPointLabels'
+                storeLabels: 'storeContactPointLabels',
+                storeTypes: 'storeContactPointTypes'
             }),
             clearDialog() {
                 this.$refs.form.reset();
@@ -251,6 +266,18 @@
                 this.editedContactPoint.labels = [...this.editedContactPoint.labels]
             }
         }
+    }
+
+    function getLabelsByInput(input) {
+        return api.get(`point/get/labels/${removeNonLetters(input)}`).then(response => {
+            return {labels: response.data};
+        })
+    }
+
+    function getTypesByInput(input) {
+        return api.get(`point/get/types/${removeNonLetters(input)}`).then(response => {
+            return {types: response.data};
+        })
     }
 
     function removeNonLetters(string) {
