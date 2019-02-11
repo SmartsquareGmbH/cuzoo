@@ -18,8 +18,8 @@
                             </v-flex>
                             <v-flex xs5>
                                 <v-combobox
-                                        v-model="editedContactPoint.type"
-                                        :items="this.pointTypes"
+                                        v-model="editedContactPoint.types"
+                                        :items="types"
                                         :search-input.sync="mediumLabelBoxInput"
                                         :rules="pointRules"
                                         prepend-icon="share"
@@ -169,7 +169,7 @@
                     contactName: "",
                     date: "",
                     comment: "",
-                    type: "",
+                    types: [],
                     labels: []
                 }
             }
@@ -189,13 +189,19 @@
                         }
                     });
                 }
+            },
+            mediumLabelBoxInput(input) {
+                if (input) {
+                    
+                }
             }
         },
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
                 editedContactPoint: 'editedContactPoint',
-                labels: 'contactPointLabels'
+                labels: 'contactPointLabels',
+                types: 'contactPointTypes'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
@@ -224,12 +230,13 @@
                 }, 300)
             },
             submitContactPoint() {
+                console.log(this.editedContactPoint.types);
                 api.put(`point/submit/${this.editedContactPoint.contact.name}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
-                    type: this.editedContactPoint.type,
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment,
+                    types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels
                 }).then(() => {
                     this.$parent.refreshData();

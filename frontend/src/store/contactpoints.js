@@ -5,6 +5,7 @@ const datefns = require('date-fns');
 export default {
     state: {
         labels: [],
+        types: [],
         contactPoints: [],
         contactNames: [],
         editedIndex: -1,
@@ -16,7 +17,7 @@ export default {
             contactName: "",
             date: "",
             comment: "",
-            type: "",
+            types: [],
             labels: []
         }
     },
@@ -25,7 +26,8 @@ export default {
         contactNames: state => state.contactNames,
         editedContactPoint: state => state.editedContactPoint,
         editedContactPointIndex: state => state.editedIndex,
-        contactPointLabels: state => state.labels
+        contactPointLabels: state => state.labels,
+        contactPointTypes: state => state.types
     },
     mutations: {
         storeContactPoints(state, payload) {
@@ -37,6 +39,9 @@ export default {
         },
         storeContactPointLabels(state, payload) {
             state.labels = payload.labels
+        },
+        storeContactPointTypes(state, payload) {
+            state.types = payload.types
         }
     },
     actions: {
@@ -48,7 +53,12 @@ export default {
                     contactPoint.labels = contactPoint.labels.map(label => {
                         return label.title;
                     });
+
+                    contactPoint.types = contactPoint.types.map(label => {
+                        return label.title;
+                    });
                 });
+
 
                 this.commit({
                     type: 'storeContactPoints',
