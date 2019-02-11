@@ -24,10 +24,6 @@ public class ContactPoint {
     private String title;
 
     @NotNull
-    @NotBlank
-    private String type;
-
-    @NotNull
     private Date date;
 
     @ManyToOne
@@ -52,21 +48,32 @@ public class ContactPoint {
             inverseJoinColumns = {@JoinColumn(name = "label_id")})
     private List<Label> labels;
 
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "contactPoint_types",
+            joinColumns = {@JoinColumn(name = "contactPoint_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")})
+    private List<Label> types;
+
     public ContactPoint() {
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();
+        this.types = new ArrayList<>();
     }
 
-    public ContactPoint(@NotNull @NotBlank String title, @NotNull @NotBlank String type,
-                        @NotNull Long date, @NotNull Contact contact, String comment) {
+    public ContactPoint(@NotNull @NotBlank String title, @NotNull Long date,
+                        @NotNull Contact contact, String comment) {
         this.title = title;
-        this.type = type;
         this.contact = contact;
         this.date = new Date(date);
         this.comment = comment;
 
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();
+        this.types = new ArrayList<>();
     }
 
     public Long getId() {
@@ -84,15 +91,6 @@ public class ContactPoint {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Contact getContact() {
         return contact;
     }
@@ -133,7 +131,15 @@ public class ContactPoint {
         this.labels = labels;
     }
 
-    public void addLabel(Label label) {
-        this.labels.add(label);
+    public void addLabels(List<Label> labels) {
+        this.labels.addAll(labels);
+    }
+
+    public List<Label> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<Label> types) {
+        this.types = types;
     }
 }

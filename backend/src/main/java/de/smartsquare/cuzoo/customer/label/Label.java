@@ -27,15 +27,26 @@ public class Label {
                     CascadeType.MERGE
             },
             mappedBy = "labels")
-    private List<ContactPoint> contactPoints;
+    private List<ContactPoint> contactPointsWithLabels;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "types")
+    private List<ContactPoint> contactPointsWithTypes;
 
     Label() {
-        this.contactPoints = new ArrayList<>();
+        this.contactPointsWithLabels = new ArrayList<>();
+        this.contactPointsWithTypes = new ArrayList<>();
     }
 
     public Label(@NotNull @NotBlank String title) {
         this.title = title;
-        this.contactPoints = new ArrayList<>();
+        this.contactPointsWithLabels = new ArrayList<>();
+        this.contactPointsWithTypes = new ArrayList<>();
     }
 
     public Long getId() {
@@ -54,15 +65,25 @@ public class Label {
         this.title = title;
     }
 
-    public List<ContactPoint> getContactPoints() {
-        return contactPoints;
+    public List<ContactPoint> getContactPointsWithLabels() {
+        return contactPointsWithLabels;
     }
 
-    public void setContactPoints(List<ContactPoint> contactPoints) {
-        this.contactPoints = contactPoints;
+    public void setContactPointsWithLabels(List<ContactPoint> contactPointsWithLabels) {
+        this.contactPointsWithLabels = contactPointsWithLabels;
     }
 
-    public void addContactPoint(ContactPoint contactPoint) {
-        this.contactPoints.add(contactPoint);
+    public void addContactPointWithLabel(ContactPoint contactPoint) {
+        this.contactPointsWithLabels.add(contactPoint);
     }
+
+    public List<ContactPoint> getContactPointsWithTypes() {
+        return contactPointsWithTypes;
+    }
+
+    public void setContactPointsWithTypes(List<ContactPoint> contactPointsWithTypes) {
+        this.contactPointsWithTypes = contactPointsWithTypes;
+    }
+
+    public void addContactPointTypes(ContactPoint contactPoint) { this.contactPointsWithTypes.add(contactPoint); }
 }

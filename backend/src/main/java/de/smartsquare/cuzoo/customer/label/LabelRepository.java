@@ -13,18 +13,23 @@ import java.util.Optional;
 @Repository
 public interface LabelRepository extends JpaRepository<Label, Long> {
 
-    @Query("SELECT l FROM Label l WHERE l.title = :title AND l.contactPoints IS NOT EMPTY")
+    @Query("SELECT l FROM Label l " +
+            "WHERE l.title = :title " +
+            "AND (l.contactPointsWithLabels IS NOT EMPTY " +
+            "OR l.contactPointsWithTypes IS NOT EMPTY)")
     Optional<Label> findForContactPointByTitle(@Param("title") String title);
 
     @Query("SELECT l FROM Label l " +
             "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
             "LIKE CONCAT('%', LOWER(:input), '%') " +
-            "AND l.contactPoints IS NOT EMPTY")
+            "AND l.contactPointsWithLabels IS NOT EMPTY")
     List<Label> findAllForContactPointByPartOfTitle(@Param("input") String input);
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Label l WHERE l.contactPoints IS EMPTY")
+    @Query("DELETE FROM Label l " +
+            "WHERE l.contactPointsWithLabels IS EMPTY " +
+            "AND l.contactPointsWithTypes IS EMPTY")
     void deleteAllReferenceless();
 
 }

@@ -11,12 +11,12 @@ public class ContactPointForm {
     @NotBlank
     private String title;
     @NotNull
-    @NotBlank
-    private String type;
-    @NotNull
     private Long date;
-    private String comment;
+    @NotNull
+    private List<String> types;
     private List<String> labels;
+
+    private String comment;
 
     public Long getId() {
         return id;
@@ -26,8 +26,8 @@ public class ContactPointForm {
         return title;
     }
 
-    public String getType() {
-        return type;
+    public List<String> getTypes() {
+        return types;
     }
 
     public Long getDate() {
