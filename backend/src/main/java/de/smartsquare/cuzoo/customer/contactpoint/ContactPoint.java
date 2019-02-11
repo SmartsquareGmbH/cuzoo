@@ -131,8 +131,8 @@ public class ContactPoint {
         this.labels = labels;
     }
 
-    public void addLabels(List<Label> labels) {
-        this.labels.addAll(labels);
+    public void addLabel(Label label) {
+        this.labels.add(label);
     }
 
     public List<Label> getTypes() {
