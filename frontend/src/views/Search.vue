@@ -112,14 +112,12 @@
                 });
             },
             searchResultsToContactPoint() {
-                this.expandOptionMenu = false;
                 setTimeout(() => this.searchForContactPoints = true, 300);
 
                 this.searchForCompanies = false;
                 this.doFocus();
             },
             searchResultsToCompany() {
-                this.expandOptionMenu = false;
                 setTimeout(() => this.searchForCompanies = true, 300);
 
                 this.searchForContactPoints = false;
