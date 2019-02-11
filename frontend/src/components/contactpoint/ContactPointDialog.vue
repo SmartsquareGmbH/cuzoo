@@ -8,7 +8,7 @@
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-container grid-list-md>
                         <v-layout wrap>
-                            <v-flex xs8>
+                            <v-flex xs7>
                                 <v-text-field
                                         v-model="editedContactPoint.title"
                                         :rules="titleRules"
@@ -16,7 +16,40 @@
                                         label="Titel"
                                         suffix="*"/>
                             </v-flex>
-                            <v-flex xs4>
+                            <v-flex xs5>
+                                <v-combobox
+                                        v-model="editedContactPoint.type"
+                                        :items="this.pointTypes"
+                                        :search-input.sync="mediumLabelBoxInput"
+                                        :rules="pointRules"
+                                        prepend-icon="share"
+                                        color="primary"
+                                        label="Art"
+                                        chips
+                                        outline
+                                        multiple
+                                        solo
+                                        hide-details>
+                                    <template slot="selection" slot-scope="data">
+                                        <v-chip
+                                                class="subheading"
+                                                :selected="data.selected"
+                                                close
+                                                @input="removeLabel(data.item)">
+                                            {{ data.item }}
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-flex>
+                            <v-flex xs7>
+                                <v-combobox
+                                        v-model="editedContactPoint.contact.name"
+                                        :items="this.contactNames"
+                                        :rules="contactRules"
+                                        prepend-icon="person"
+                                        label="Ansprechpartner"/>
+                            </v-flex>
+                            <v-flex xs5>
                                 <v-menu
                                         ref="menu"
                                         v-model="menu"
@@ -46,34 +79,6 @@
                                     </v-date-picker>
                                 </v-menu>
                             </v-flex>
-                            <v-flex xs6>
-                                <v-combobox
-                                        v-model="editedContactPoint.contact.name"
-                                        :items="this.contactNames"
-                                        :rules="contactRules"
-                                        prepend-icon="person"
-                                        label="Ansprechpartner"/>
-                            </v-flex>
-                            <v-flex xs6>
-                                <v-combobox
-                                        v-model="editedContactPoint.type"
-                                        :items="this.pointTypes"
-                                        :rules="pointRules"
-                                        :search-input.sync="mediumLabelBoxInput"
-                                        prepend-icon="share"
-                                        label="Art"
-                                        color="primary"
-                                        clearable
-                                        multiple
-                                        hide-details>
-                                    <template slot="item" slot-scope="data">
-                                        <v-icon class="mr-1">
-                                            {{ getPointTypeIconOf(data.item) }}
-                                        </v-icon>
-                                        {{ data.item }}
-                                    </template>
-                                </v-combobox>
-                            </v-flex>
                             <v-flex xs12>
                                 <v-textarea
                                         v-model="editedContactPoint.comment"
@@ -90,7 +95,6 @@
                                         color="primary"
                                         label="Labels"
                                         outline
-                                        chips
                                         clearable
                                         multiple
                                         solo
@@ -148,10 +152,8 @@
                 labelBoxInput: null,
                 mediumLabelBoxInput: null,
                 pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
-                pointTypeIcons: ["phone", "mail", "share", "people"],
                 pointRules: [
-                    v => !!v || "Bitte geben Sie eine Kontaktpunktart an",
-                    v => this.pointTypes.includes(v) || "Diese Kontaktpunktart existiert nicht"
+                    v => !!v || "Bitte geben Sie eine Kontaktpunktart an"
                 ],
                 contactRules: [
                     v => !!v || "Bitte geben Sie einen Ansprechpartner an",
@@ -208,9 +210,6 @@
                 storeDetails: 'storeEditedContactPointDetails',
                 storeLabels: 'storeContactPointLabels'
             }),
-            getPointTypeIconOf: function (type) {
-                return this.pointTypeIcons[this.pointTypes.indexOf(type)];
-            },
             clearDialog() {
                 this.$refs.form.reset();
             },
