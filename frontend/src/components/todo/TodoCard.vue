@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-transition>
+    <v-fade-transition>
         <v-flex xs12 v-if="todo.done === false">
             <v-hover>
                 <v-card slot-scope="{ hover }"
@@ -19,13 +19,13 @@
                     <v-card-text
                             v-if="getUrgency(todo.expiration) !== 'secondary'"
                             class="secondary--text headline text-xs-left">
-                        <v-icon size="30px" class="mr-2" color="secondary">
+                        <v-icon size="32px" color="secondary">
                             {{ getUrgency(todo.expiration) }}
                         </v-icon>
                         {{ todo.description }}
                     </v-card-text>
                     <v-card-text v-else class="white--text headline text-xs-left">
-                        <v-icon :size="`${hover ? 48 : 32}px`" class="mr-2" color="white">
+                        <v-icon size="32px" class="mr-2" color="white">
                             info
                         </v-icon>
                         {{ todo.description }}
@@ -33,7 +33,7 @@
                 </v-card>
             </v-hover>
         </v-flex>
-    </v-scroll-x-transition>
+    </v-fade-transition>
 </template>
 
 <script>
