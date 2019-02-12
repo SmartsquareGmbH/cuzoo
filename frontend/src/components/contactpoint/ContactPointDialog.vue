@@ -39,6 +39,17 @@
                                             {{ type.item }}
                                         </v-chip>
                                     </template>
+                                    <template slot="no-data" v-if="mediumLabelBoxInput">
+                                        <v-list-tile v-if="mediumLabelBoxInput.replace(/ /g, '') !== ''">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    Keine Labels für
+                                                    "<strong class="primary--text">{{ mediumLabelBoxInput }}</strong>"
+                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
                                 </v-combobox>
                             </v-flex>
                             <v-flex xs7>
@@ -87,7 +98,7 @@
                                         rows="5"/>
                             </v-flex>
                             <v-flex xs12>
-                                <v-combobox tabindex="0"
+                                <v-combobox
                                         v-model="editedContactPoint.labels"
                                         :items="labels"
                                         :search-input.sync="labelBoxInput"
@@ -109,7 +120,7 @@
                                         </v-chip>
                                     </template>
                                     <template slot="no-data" v-if="labelBoxInput" tabindex="-1">
-                                        <v-list-tile>
+                                        <v-list-tile v-if="labelBoxInput.replace(/ /g, '') !== ''">
                                             <v-list-tile-content>
                                                 <v-list-tile-title>
                                                     Keine Labels für
@@ -180,7 +191,7 @@
         },
         watch: {
             labelBoxInput(input) {
-                if (input) {
+                if (input && removeNonLetters(input) !== '') {
                     let call = debouncedLabelApiCall(input);
 
                     if (call) {
@@ -195,7 +206,7 @@
                 }
             },
             mediumLabelBoxInput(input) {
-                if (input) {
+                if (input && removeNonLetters(input) !== '') {
                     let call = debouncedTypeApiCall(input);
 
                     if (call) {
@@ -208,6 +219,20 @@
                         }
                     });
                 }
+            },
+            temporaryLabels() {
+                this.editedContactPoint.labels.forEach(label => {
+                    if (removeNonLetters(label) === '') {
+                        this.removeLabel(label);
+                    }
+                })
+            },
+            temporaryTypes() {
+                this.editedContactPoint.types.forEach(type => {
+                    if (removeNonLetters(type) === '') {
+                        this.removeType(type);
+                    }
+                })
             }
         },
         computed: {
@@ -222,6 +247,12 @@
             },
             dateFormatted() {
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de});
+            },
+            temporaryLabels() {
+                return this.editedContactPoint.labels;
+            },
+            temporaryTypes() {
+                return this.editedContactPoint.types;
             }
         },
         methods: {
