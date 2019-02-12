@@ -30,13 +30,13 @@
                                         multiple
                                         solo
                                         hide-details>
-                                    <template slot="selection" slot-scope="data">
+                                    <template slot="selection" slot-scope="type">
                                         <v-chip
                                                 class="subheading"
-                                                :selected="data.selected"
+                                                :selected="type.selected"
                                                 close
-                                                @input="removeLabel(data.item)">
-                                            {{ data.item }}
+                                                @input="removeType(type.item)">
+                                            {{ type.item }}
                                         </v-chip>
                                     </template>
                                 </v-combobox>
@@ -87,7 +87,7 @@
                                         rows="5"/>
                             </v-flex>
                             <v-flex xs12>
-                                <v-combobox
+                                <v-combobox tabindex="0"
                                         v-model="editedContactPoint.labels"
                                         :items="labels"
                                         :search-input.sync="labelBoxInput"
@@ -99,16 +99,16 @@
                                         multiple
                                         solo
                                         hide-details>
-                                    <template slot="selection" slot-scope="data">
-                                        <v-chip
+                                    <template slot="selection" slot-scope="label" tabindex="-1">
+                                        <v-chip tabindex="-1"
                                                 class="title"
-                                                :selected="data.selected"
+                                                :selected="label.selected"
                                                 close
-                                                @input="removeLabel(data.item)">
-                                            {{ data.item }}
+                                                @input="removeLabel(label.item)">
+                                            {{ label.item }}
                                         </v-chip>
                                     </template>
-                                    <template slot="no-data" v-if="labelBoxInput">
+                                    <template slot="no-data" v-if="labelBoxInput" tabindex="-1">
                                         <v-list-tile>
                                             <v-list-tile-content>
                                                 <v-list-tile-title>
@@ -264,6 +264,10 @@
             removeLabel(item) {
                 this.editedContactPoint.labels.splice(this.editedContactPoint.labels.indexOf(item), 1);
                 this.editedContactPoint.labels = [...this.editedContactPoint.labels]
+            },
+            removeType(item) {
+                this.editedContactPoint.types.splice(this.editedContactPoint.types.indexOf(item), 1);
+                this.editedContactPoint.types = [...this.editedContactPoint.types]
             }
         }
     }
