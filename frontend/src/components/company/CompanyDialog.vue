@@ -93,7 +93,6 @@
         props: ["value"],
         data() {
             return {
-                companyDialog: false,
                 valid: false,
                 companyFieldRules: [
                     v => !!v || "Bitte geben Sie ein Unternehmen an"
@@ -126,7 +125,8 @@
                 storeCompanyDetails: 'storeEditedCompanyDetails'
             }),
             closeDialog() {
-                this.$emit('input')
+                this.$emit('input');
+
                 setTimeout(() => {
                     this.storeCompanyDetails({
                         editedIndex: -1,
