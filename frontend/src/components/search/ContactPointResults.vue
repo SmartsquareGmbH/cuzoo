@@ -10,7 +10,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue";
+    import ContactPointCard from "../cards/ContactPointCard.vue";
 
     export default {
         props: ['search'],

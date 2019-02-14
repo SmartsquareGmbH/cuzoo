@@ -10,7 +10,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import CompanyCard from "../../components/company/CompanyCard.vue";
+    import CompanyCard from "../cards/CompanyCard.vue";
 
     export default {
         props: ['search'],
