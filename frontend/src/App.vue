@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
 
     import Login from "@/components/main/Login.vue";
     import Settings from "@/components/main/Settings.vue";
@@ -88,6 +88,7 @@
         data() {
             return {
                 drawer: null,
+                settingState: false
             }
         },
         computed: {
@@ -101,6 +102,9 @@
             ...mapMutations(['storeLogData']),
             goHome() {
                 this.$router.push('/search');
+            },
+            openSettings() {
+                this.settingState = true;
             },
             logout() {
                 this.storeLogData({authorized: false});
