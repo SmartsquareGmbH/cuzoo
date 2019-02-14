@@ -21,6 +21,7 @@
                                         v-model="editedContactPoint.types"
                                         :items="types"
                                         :search-input.sync="mediumLabelBoxInput"
+                                        @change="resetTypes()"
                                         :rules="pointRules"
                                         prepend-icon="share"
                                         color="primary"
@@ -103,6 +104,7 @@
                                         v-model="editedContactPoint.labels"
                                         :items="labels"
                                         :search-input.sync="labelBoxInput"
+                                        @change="resetLabels()"
                                         prepend-icon="label"
                                         color="primary"
                                         label="Labels"
@@ -151,13 +153,13 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
-    import debounce from 'lodash.debounce'
+    import debounce from 'lodash.debounce';
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
 
-    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, { leading: true });
-    const debouncedTypeApiCall = debounce(getTypesByInput, 150, { leading: true });
+    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
+    const debouncedTypeApiCall = debounce(getTypesByInput, 150, {leading: true});
 
     export default {
         props: ["value", "contactNames"],
@@ -304,6 +306,14 @@
                     console.log(error);
                     alert(error);
                 });
+            },
+            resetLabels() {
+                this.labelBoxInput = '';
+                this.storeLabels({labels: []});
+            },
+            resetTypes() {
+                this.mediumLabelBoxInput = '';
+                this.storeTypes({types: []});
             },
             removeLabel(item) {
                 this.editedContactPoint.labels.splice(this.editedContactPoint.labels.indexOf(item), 1);
