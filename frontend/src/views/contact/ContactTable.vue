@@ -16,14 +16,14 @@
                     <span>CSV Import</span>
                 </v-tooltip>
             </label>
-            <v-btn @click="openDialog()" fab light small color="transparent" depressed flat>
+            <v-btn @click="openContactDialog()" fab light small color="transparent" depressed flat>
                 <v-tooltip top>
                     <v-icon x-large color="light-green accent-2" slot="activator">add</v-icon>
                     <span>Ansprechpartner hinzufügen</span>
                 </v-tooltip>
             </v-btn>
             <contact-dialog 
-            v-model="dialogState"
+            v-model="contactDialogState"
             :companyNames="this.companyNames"/>
             <v-spacer></v-spacer>
             <v-text-field
@@ -71,12 +71,16 @@
                         <span>Export Informationen</span>
                     </v-tooltip>
                     <v-icon 
-                    @click="deleteContact(props.item)"
+                    @click="openConfirmDialog"
                     size="22px" 
                     class="mr-2 mt-2"
                     color="red lighten-1">
                         delete
                     </v-icon>
+                    <confirm-dialog
+                            v-model="confirmDialogState"
+                            :questionToBeConfirmed="deleteContactMessage"
+                            @confirmed="deleteContact(props.item)"/>
                 </td>
             </template>
             <span slot="no-data">
@@ -94,10 +98,12 @@
     import api from '../../utils/http-common'
 
     import ContactDialog from "../../components/contact/ContactDialog.vue";
+    import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     export default {
         components: {
-            ContactDialog
+            ContactDialog,
+            ConfirmDialog
         },
         data() {
             return {
@@ -105,7 +111,7 @@
                 search: '',
                 companyNames: [],
                 loading: true,
-                dialogState: false,
+                contactDialogState: false,
                 headers: [
                     {text: 'Name', align: 'left', value: 'name'},
                     {text: 'Unternehmen', value: "company.name"},
@@ -114,7 +120,9 @@
                     {text: 'Telefon', value: 'telephone'},
                     {text: 'Bemerkung', value: 'comment'},
                     {text: 'Aktionen', value: 'name', sortable: false}
-                ]
+                ],
+                confirmDialogState: false,
+                deleteContactMessage: 'Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?'
             }
         },
         computed: {
@@ -156,28 +164,29 @@
                     editedContact: Object.assign({}, item)
                 });
 
-                this.openDialog();
+                this.openContactDialog();
             },
             deleteContact(item) {
                 this.editedContact = Object.assign({}, item);
 
-                if (confirm("Bist du dir sicher, dass du diesen Ansprechpartner löschen willst?")) {
-                    api.delete(`contact/delete/${this.editedContact.id}`).then(response => {
-                        console.log(response.data);
-                        this.refreshTable();
-                    }).catch(error => {
-                        console.log(error);
-                        alert(error);
-                    });
-                }
+                api.delete(`contact/delete/${this.editedContact.id}`).then(response => {
+                    console.log(response.data);
+                    this.refreshTable();
+                }).catch(error => {
+                    console.log(error);
+                    alert(error);
+                });
             },
-            openDialog() {
+            openConfirmDialog() {
+                this.confirmDialogState = true;
+            },
+            openContactDialog() {
                 this.companies.forEach(company => {
                     this.companyNames.push(company.name)
                 });
 
                 this.companyNames.sort();                
-                this.dialogState = true;
+                this.contactDialogState = true;
             },
             downloadInfo(item) {
                 api.get("/contact/download/" + item.id)
