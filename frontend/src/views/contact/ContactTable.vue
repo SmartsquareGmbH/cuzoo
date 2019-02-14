@@ -52,13 +52,6 @@
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon 
-                    v-if="props.item.role === 'Freiberufler'"
-                    @click="viewContact(props.item)"
-                    size="22px" 
-                    class="mr-2 mt-2">
-                        account_box
-                    </v-icon>
-                    <v-icon 
                     @click="editContact(props.item)"
                     size="22px" 
                     class="mr-0 mt-2">
@@ -186,11 +179,20 @@
                 this.companyNames.sort();                
                 this.dialogState = true;
             },
-            viewContact: function (item) {
-                const index = this.contacts.findIndex(contact => contact.id == item.id);
-                this.$router.replace('/contacts/' + (index));
+            downloadInfo(item) {
+                api.get("/contact/download/" + item.id)
+                    .then(response => download(response.data, item.name));
             }
         }
+    }
+
+    function download(content, name) {
+        const url = window.URL.createObjectURL(new Blob([content], {type : "text/plain"}));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name.replace(' ', '_').toLowerCase() + '.txt');
+        document.body.appendChild(link);
+        link.click();
     }
 </script>
 
