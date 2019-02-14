@@ -47,7 +47,7 @@
                             <span class="ml-2 black--text">{{ username }}</span>
                         </v-btn>
                         <v-list light>
-                            <v-list-tile @click="">
+                            <v-list-tile @click="openSettings()">
                                 <v-list-tile-title class="mr-2">Einstellungen</v-list-tile-title>
                                 <v-icon color="black" light>settings</v-icon>
                             </v-list-tile>
@@ -59,6 +59,7 @@
                     </v-menu>
                 </v-toolbar-items>
             </v-toolbar>
+            <settings v-model="settingState"/>
             <v-content>
                 <router-view></router-view>
             </v-content>
@@ -76,11 +77,13 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
 
-    import Login from "@/components/Login.vue"
+    import Login from "@/components/main/Login.vue";
+    import Settings from "@/components/main/Settings.vue";
 
     export default {
         components: {
-            Login
+            Login,
+            Settings
         },
         data() {
             return {
