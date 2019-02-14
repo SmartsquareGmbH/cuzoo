@@ -41,14 +41,22 @@
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                    <v-switch
-                            disabled
-                            class="dm-switch pt-1 mt-3"
-                            label="Darkmode"
-                            v-model="dark"/>
-                    <v-btn flat icon disabled>
-                        <v-icon style="transform: rotate(90deg)" dark>publish</v-icon>
-                    </v-btn>
+                    <v-menu offset-y>
+                        <v-btn slot="activator" color="primary">
+                            <v-icon color="black">person</v-icon>
+                            <span class="ml-2 black--text">{{ username }}</span>
+                        </v-btn>
+                        <v-list light>
+                            <v-list-tile @click="">
+                                <v-list-tile-title class="mr-2">Einstellungen</v-list-tile-title>
+                                <v-icon color="black" light>settings</v-icon>
+                            </v-list-tile>
+                            <v-list-tile @click="logout()">
+                                <v-list-tile-title class="mr-2">Logout</v-list-tile-title>
+                                <v-icon style="transform: rotate(90deg)" color="black" light>publish</v-icon>
+                            </v-list-tile>
+                        </v-list>
+                    </v-menu>
                 </v-toolbar-items>
             </v-toolbar>
             <v-content>
@@ -81,7 +89,8 @@
         computed: {
             ...mapGetters({
                 dark: 'darkState',
-                authorized: 'authorized'
+                authorized: 'authorized',
+                username: 'username'
             })
         },
         methods: {
