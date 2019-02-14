@@ -14,13 +14,17 @@
                 </v-scroll-x-transition>
                 <v-scroll-x-transition>
                     <v-btn v-if="hover && search === false" absolute right top fab small color="secondary"
-                           @click.stop="deleteContactPoint()"
+                           @click.stop="openConfirmDialog()"
                            class="elevation-12">
                         <v-icon size="24px" color="error">
                             delete
                         </v-icon>
                     </v-btn>
                 </v-scroll-x-transition>
+                <confirm-dialog
+                        v-model="confirmDialogState"
+                        :questionToBeConfirmed="deleteContactPointMessage"
+                        @confirmed="deleteContactPoint()"/>
                 <v-card-title class="secondary headline font-weight-light">
                     {{ contactPoint.title }} •
                     <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
@@ -61,20 +65,27 @@
 </template>
 
 <script>
-    import api from '../../utils/http-common'
-    import {mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common';
+    import {mapGetters, mapMutations} from 'vuex';
+
+    import ConfirmDialog from "../dialogs/ConfirmDialog.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
 
     export default {
         props: ['contactPoint', 'search'],
+        components: {
+            ConfirmDialog
+        },
         data() {
             return {
                 contactPoints: this.$parent.contactPoints,
                 contactNames: [],
                 company: this.$parent.company,
-                fileNames: []
+                fileNames: [],
+                confirmDialogState: false,
+                deleteContactPointMessage: 'Bist du dir sicher, dass du diesen Kontaktpunkt löschen willst?'
             }
         },
         computed: {
@@ -120,20 +131,15 @@
                 this.$parent.contactPointDialogState = true;
             },
             deleteContactPoint() {
-                if (confirm("Bist du dir sicher, dass du diesen Kontaktpunkt löschen willst?")) {
-                    api.delete(`point/delete/${this.contactPoint.id}`)
-                        .then(() => this.$parent.refreshData())
-                        .catch(error => {
-                            alert(error);
-                        });
-                }
+                api.delete(`point/delete/${this.contactPoint.id}`)
+                    .then(() => this.$parent.refreshData())
+                    .catch(error => {
+                        alert(error);
+                    });
+            },
+            openConfirmDialog() {
+                this.confirmDialogState = true;
             }
         }
     }
 </script>
-
-<style>
-    .clickable {
-        cursor: pointer;
-    }
-</style>
