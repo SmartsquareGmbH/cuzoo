@@ -20,7 +20,7 @@
                 </v-tooltip>
             </label>
             <v-btn
-                    @click="openDialog()"
+                    @click="openCompanyDialog()"
                     color="transparent"
                     fab
                     small
@@ -207,7 +207,7 @@
                     editedCompany: Object.assign({}, item)
                 });
 
-                this.openDialog();
+                this.openCompanyDialog();
             },
             deleteCompany(item) {
                 this.editedCompany = Object.assign({}, item);
