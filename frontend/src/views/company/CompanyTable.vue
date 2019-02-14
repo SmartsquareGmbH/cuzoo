@@ -36,7 +36,7 @@
                     <span>Unternehmen hinzufügen</span>
                 </v-tooltip>
             </v-btn>
-            <company-dialog v-model="dialogState"/>
+            <company-dialog v-model="companyDialogState"/>
             <v-layout row wrap class="pl-2 pt-1">
                 <v-flex xl2 lg3 md4 xs5>
                     <v-checkbox
@@ -99,12 +99,16 @@
                         edit
                     </v-icon>
                     <v-icon
-                            @click="deleteCompany(props.item)"
+                            @click="openConfirmDialog()"
                             size="22px"
                             color="red lighten-1"
                             class="mr-2 mt-2">
                         delete
                     </v-icon>
+                    <confirm-dialog
+                            v-model="confirmDialogState"
+                            :questionToBeConfirmed="deleteCompanyMessage"
+                            @confirmed="deleteCompany(props.item)"/>
                 </td>
             </template>
             <span slot="no-data">
@@ -119,19 +123,23 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
-    import api from '../../utils/http-common'
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import api from '../../utils/http-common';
 
-    import CompanyDialog from "../../components/company/CompanyDialog.vue"
+    import CompanyDialog from "../../components/company/CompanyDialog.vue";
+    import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     export default {
         components: {
-            CompanyDialog
+            CompanyDialog,
+            ConfirmDialog
         },
         data() {
             return {
                 selectedStatus: ["Lead", "Bestandskunde"],
-                dialogState: false,
+                companyDialogState: false,
+                confirmDialogState: false,
+                deleteCompanyMessage: 'Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?',
                 file: '',
                 search: '',
                 loading: true,
@@ -204,17 +212,18 @@
             deleteCompany(item) {
                 this.editedCompany = Object.assign({}, item);
 
-                if (confirm("Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?")) {
-                    api.delete(`company/delete/${this.editedCompany.id}`).then(() => {
-                        this.refreshTable();
-                    }).catch(error => {
-                        console.log(error);
-                        alert(error);
-                    });
-                }
+                api.delete(`company/delete/${this.editedCompany.id}`).then(() => {
+                    this.refreshTable();
+                }).catch(error => {
+                    console.log(error);
+                    alert(error);
+                });
             },
-            openDialog() {
-                this.dialogState = true
+            openCompanyDialog() {
+                this.companyDialogState = true;
+            },
+            openConfirmDialog() {
+                this.confirmDialogState = true;
             },
             viewCompany(item) {
                 const index = this.companies.findIndex(company => company.id === item.id);
