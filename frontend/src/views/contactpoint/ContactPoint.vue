@@ -84,25 +84,26 @@
                     <v-flex xs2>
                         <v-card dark color="info" height="100%">
                             <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">{{ getPointTypeIconOf(this.contactPoint.type) }}</v-icon>
+                                <v-icon size="30px">share</v-icon>
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs4>
-                        <v-card height="100%">
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.type }}
-                            </v-card-text>
-                        </v-card>
+                    <v-flex xs4 class="text-xs-left">
+                        <v-chip
+                                class="title mt-3"
+                                v-for="type in contactPoint.types"
+                                v-bind:key="contactPoint.type">
+                            {{ type }}
+                        </v-chip>
                     </v-flex>
-                    <v-flex xs2>
+                    <v-flex xs2 v-if="this.contactPoint.comment">
                         <v-card dark color="info">
                             <v-card-text class="headline text-xs-center">
                                 <v-icon size="30px">comment</v-icon>
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs10>
+                    <v-flex xs10 v-if="this.contactPoint.comment">
                         <v-card dark>
                             <v-card-text class="headline text-xs-left font-weight-light">
                                 {{ this.contactPoint.comment }}
@@ -119,8 +120,8 @@
                     <v-flex xs10 class="text-xs-left">
                         <v-chip
                                 class="title mt-3"
-                                v-bind:key="contactPoint.label"
-                                v-for="label in contactPoint.labels">
+                                v-for="label in contactPoint.labels"
+                                v-bind:key="contactPoint.label">
                             {{ label }}
                         </v-chip>
                     </v-flex>
@@ -229,18 +230,6 @@
                 storeDetails: 'storeEditedContactPointDetails',
                 storeContactPoints: 'storeContactPoints'
             }),
-            getPointTypeIconOf: function (type) {
-                switch (type) {
-                    case 'Telefon':
-                        return 'phone'
-                    case 'E-Mail':
-                        return 'mail'
-                    case 'Social Media':
-                        return 'share'
-                    case 'Persönlich':
-                        return 'people'
-                }
-            },
             goPageBack() {
                 this.$router.go(-1)
             },
