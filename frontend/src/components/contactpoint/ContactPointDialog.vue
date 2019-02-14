@@ -278,10 +278,6 @@
                 this.dateFormatted = new Date().toISOString().substr(0, 10);
             },
             closeDialog() {
-                this.$refs.form.reset();
-                this.$refs.form.resetValidation();
-
-                this.dateFormatted = new Date().toISOString().substr(0, 10);
                 this.$emit('input');
 
                 setTimeout(() => {
