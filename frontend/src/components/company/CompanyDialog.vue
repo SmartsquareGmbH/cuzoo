@@ -4,7 +4,7 @@
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="text-xs-right primary--text">
                 <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
@@ -15,8 +15,7 @@
                                         prepend-icon="business_center"
                                         hide-details
                                         suffix="*"
-                                        required
-                                        :rules="[v => !!v]"></v-text-field>
+                                        :rules="companyFieldRules"></v-text-field>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
@@ -74,6 +73,7 @@
                         </v-layout>
                     </v-container>
                 </v-form>
+                <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -94,7 +94,10 @@
         data() {
             return {
                 companyDialog: false,
-                valid: true,
+                valid: false,
+                companyFieldRules: [
+                    v => !!v || "Bitte geben Sie ein Unternehmen an"
+                ],
                 defaultCompany: {
                     value: false,
                     id: 0,

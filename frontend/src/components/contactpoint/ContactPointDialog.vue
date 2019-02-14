@@ -4,8 +4,8 @@
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
             </v-card-title>
-            <v-card-text>
-                <v-form ref="form" v-model="valid" lazy-validation>
+            <v-card-text class="text-xs-right primary--text">
+                <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs7>
@@ -58,6 +58,7 @@
                                         :items="this.contactNames"
                                         :rules="contactRules"
                                         prepend-icon="person"
+                                        suffix="*"
                                         label="Ansprechpartner"/>
                             </v-flex>
                             <v-flex xs5>
@@ -135,6 +136,7 @@
                         </v-layout>
                     </v-container>
                 </v-form>
+                <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -163,7 +165,7 @@
             return {
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
-                valid: true,
+                valid: false,
                 labelBoxInput: null,
                 mediumLabelBoxInput: null,
                 pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
@@ -245,8 +247,13 @@
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
             },
-            dateFormatted() {
-                return datefns.format(this.date, 'DD.MM.YY', {locale: de});
+            dateFormatted: {
+                get() {
+                    return datefns.format(this.date, 'DD.MM.YY', {locale: de});
+                },
+                set(newDate) {
+                    this.date = newDate;
+                }
             },
             temporaryLabels() {
                 return this.editedContactPoint.labels;
@@ -264,8 +271,15 @@
             }),
             clearDialog() {
                 this.$refs.form.reset();
+                this.$refs.form.resetValidation();
+
+                this.dateFormatted = new Date().toISOString().substr(0, 10);
             },
             closeDialog() {
+                this.$refs.form.reset();
+                this.$refs.form.resetValidation();
+
+                this.dateFormatted = new Date().toISOString().substr(0, 10);
                 this.$emit('input');
 
                 setTimeout(() => {
@@ -276,7 +290,6 @@
                 }, 300)
             },
             submitContactPoint() {
-                console.log(this.editedContactPoint.types);
                 api.put(`point/submit/${this.editedContactPoint.contact.name}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,

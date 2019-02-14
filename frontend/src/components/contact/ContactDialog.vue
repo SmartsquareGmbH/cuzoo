@@ -4,7 +4,7 @@
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="text-xs-right primary--text">
                 <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
@@ -16,7 +16,7 @@
                                 hide-details
                                 suffix="*"
                                 required
-                                :rules="[v => !!v]"/>
+                                :rules="contactFieldRules"/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-combobox
@@ -56,6 +56,7 @@
                         </v-layout>
                     </v-container>
                 </v-form>
+                <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -75,9 +76,12 @@
         props: ["value", "companyNames"],
         data() {
             return {
-                valid: true,
+                valid: false,
                 companyFieldEnabled: true,
                 companyName: '',
+                contactFieldRules: [
+                    v => !!v || "Bitte geben Sie einen Namen an"
+                ],
                 defaultContact: {
                     value: false,
                     id: 0,

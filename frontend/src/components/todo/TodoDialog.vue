@@ -9,7 +9,7 @@
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="text-xs-right primary--text">
                 <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
@@ -22,7 +22,8 @@
                                         name="input-7-4"
                                         prepend-icon="title"
                                         label="TODO"
-                                        rows="3"/>
+                                        rows="3"
+                                        suffix="*"/>
                             </v-flex>
                             <v-flex xs3>
                                 <v-menu
@@ -60,7 +61,8 @@
                                         :items="this.reminders"
                                         :rules="this.reminderRules"
                                         prepend-icon="timer"
-                                        label="Erinnerung">
+                                        label="Erinnerung"
+                                        suffix="*">
                                     <template slot="item" slot-scope="data">
                                         {{ data.item }}
                                     </template>
@@ -69,6 +71,7 @@
                         </v-layout>
                     </v-container>
                 </v-form>
+                <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
