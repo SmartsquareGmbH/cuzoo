@@ -6,7 +6,7 @@
                 persistent
                 max-width="420">
             <v-card>
-                <v-card-text class="text-xs-left headline">
+                <v-card-text class="text-xs-left headline font-weight-light">
                     {{ questionToBeConfirmed }}
                 </v-card-text>
                 <v-card-actions>
@@ -17,7 +17,6 @@
                             @click="closeDialog()">
                         Abbrechen
                     </v-btn>
-
                     <v-btn
                             color="success"
                             flat="flat"
