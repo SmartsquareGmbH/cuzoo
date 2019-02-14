@@ -74,7 +74,8 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
+
     import Login from "@/components/Login.vue"
 
     export default {
@@ -94,8 +95,12 @@
             })
         },
         methods: {
+            ...mapMutations(['storeLogData']),
             goHome() {
                 this.$router.push('/search');
+            },
+            logout() {
+                this.storeLogData({authorized: false});
             }
         }
     }
