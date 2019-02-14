@@ -3,6 +3,7 @@ package de.smartsquare.cuzoo.customer.contact;
 import de.smartsquare.cuzoo.customer.CSVConverter;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,17 @@ public class ContactController {
 
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
+    private final ContactPointRepository contactPointRepository;
+
     private final CSVConverter csvConverter;
     private final ContactExporter contactExporter;
 
     @Autowired
-    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository, CSVConverter csvConverter) {
+    public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository,
+                             final ContactPointRepository contactPointRepository, CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
+        this.contactPointRepository = contactPointRepository;
         this.csvConverter = csvConverter;
 
         contactExporter = new ContactExporter();
@@ -100,7 +105,8 @@ public class ContactController {
 
         Contact contact = contactRepository.findById(contactId).get();
 
-        return ResponseEntity.ok(String.join("\n", contactExporter.getContactContent(contact)));
+        return ResponseEntity
+                .ok(String.join("\n", contactExporter.getContactContent(contact, this.contactPointRepository)));
     }
 
     @GetMapping("/get")
