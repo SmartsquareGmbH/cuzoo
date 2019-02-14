@@ -160,11 +160,15 @@
                                         </v-icon>
                                     </v-btn>
                                     <v-btn absolute top right fab small color="error" class="ml-0"
-                                           @click="deleteFile(fileName)">
+                                           @click="openConfirmDialog()">
                                         <v-icon size="24px" color="secondary">
                                             delete
                                         </v-icon>
                                     </v-btn>
+                                    <confirm-dialog
+                                            v-model="confirmDialogState"
+                                            :questionToBeConfirmed="deleteFileMessage"
+                                            @confirmed="deleteFile(fileName)"/>
                                     <v-card-text class="headline text-xs-left font-weight-light">
                                         {{ fileName }}
                                     </v-card-text>
@@ -179,11 +183,12 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions, mapMutations} from 'vuex'
-    import api from '../../utils/http-common'
+    import {mapGetters, mapMutations} from 'vuex';
+    import api from '../../utils/http-common';
 
-    import FileUploadDialog from '../../components/contactpoint/FileUploadDialog.vue'
-    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue"
+    import FileUploadDialog from '../../components/contactpoint/FileUploadDialog.vue';
+    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue";
+    import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -191,7 +196,8 @@
     export default {
         components: {
             FileUploadDialog,
-            ContactPointDialog
+            ContactPointDialog,
+            ConfirmDialog
         },
         data() {
             return {
@@ -201,6 +207,10 @@
                 fileNames: [],
                 contactPointDialogState: false,
                 contactNames: [],
+                confirmDialogState: false,
+                deleteFileMessage:
+                    'Bist du dir sicher, dass du diese Datei löschen willst? ' +
+                    'Danach kann sie nicht wieder hergestellt werden'
             }
         },
         computed: {
@@ -243,12 +253,13 @@
                 });
             },
             deleteFile(fileName) {
-                if (confirm("Bist du dir sicher, dass du diese Datei löschen willst? Danach kann sie nicht wieder hergestellt werden!")) {
-                    api.delete(`file/delete/${this.contactPoint.id}/${fileName}`)
-                        .then(() => {
-                            this.getFileNames();
-                        })
-                }
+                api.delete(`file/delete/${this.contactPoint.id}/${fileName}`)
+                    .then(() => {
+                        this.getFileNames();
+                    })
+            },
+            openConfirmDialog() {
+                this.confirmDialogState = true;
             },
             uploadFiles() {
                 this.fileUploadDialogState = true
