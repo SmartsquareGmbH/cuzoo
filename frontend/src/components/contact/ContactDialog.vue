@@ -61,7 +61,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat v-on:click="closeDialog()">Abbrechen</v-btn>
-                <v-btn color="primary" flat v-on:click="clearDialog()">Löschen</v-btn>
+                <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
                 <v-btn color="primary" flat v-on:click="submitContact()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
