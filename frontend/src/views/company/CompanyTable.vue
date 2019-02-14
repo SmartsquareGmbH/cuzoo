@@ -126,7 +126,7 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
-    import CompanyDialog from "../../components/company/CompanyDialog.vue";
+    import CompanyDialog from "../../components/dialogs/CompanyDialog.vue";
     import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     export default {

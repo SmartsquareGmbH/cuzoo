@@ -97,7 +97,7 @@
     import {mapGetters, mapActions, mapMutations} from 'vuex';
     import api from '../../utils/http-common'
 
-    import ContactDialog from "../../components/contact/ContactDialog.vue";
+    import ContactDialog from "../../components/dialogs/ContactDialog.vue";
     import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     export default {

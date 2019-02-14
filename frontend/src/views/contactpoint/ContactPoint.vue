@@ -186,8 +186,8 @@
     import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
-    import FileUploadDialog from '../../components/contactpoint/FileUploadDialog.vue';
-    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue";
+    import FileUploadDialog from '../../components/dialogs/FileUploadDialog.vue';
+    import ContactPointDialog from "../../components/dialogs/ContactPointDialog.vue";
     import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     const datefns = require('date-fns');

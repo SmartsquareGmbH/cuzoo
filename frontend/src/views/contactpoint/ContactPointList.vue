@@ -96,9 +96,9 @@
 <script>
     import {mapActions, mapGetters} from 'vuex';
 
-    import TodoDialog from '../../components/todo/TodoDialog.vue';
+    import TodoDialog from '../../components/dialogs/TodoDialog.vue';
     import TodoCard from '../../components/todo/TodoCard.vue';
-    import ContactPointDialog from "../../components/contactpoint/ContactPointDialog.vue";
+    import ContactPointDialog from "../../components/dialogs/ContactPointDialog.vue";
     import ContactPointCard from "../../components/contactpoint/ContactPointCard.vue";
 
     export default {

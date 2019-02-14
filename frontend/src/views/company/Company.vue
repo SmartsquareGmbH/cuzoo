@@ -316,8 +316,8 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex'
     import api from '../../utils/http-common'
 
-    import CompanyDialog from '../../components/company/CompanyDialog.vue'
-    import ContactDialog from '../../components/contact/ContactDialog.vue'
+    import CompanyDialog from '../../components/dialogs/CompanyDialog.vue'
+    import ContactDialog from '../../components/dialogs/ContactDialog.vue'
 
     export default {
         components: {
