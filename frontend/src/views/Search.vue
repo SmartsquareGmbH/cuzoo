@@ -74,6 +74,8 @@
     import CompanyResults from "../components/search/CompanyResults.vue";
     import ContactPointResults from "../components/search/ContactPointResults.vue";
 
+    const containsKey = (obj, key) => Object.keys(obj).includes(key);
+
     export default {
         components: {
             CompanyResults,
@@ -104,7 +106,19 @@
                 'getContactPoints'
             ]),
             goToFirstResult() {
+                const isCompany = containsKey(this.searchResults[0], 'name');
+                let index;
 
+                if (isCompany) {
+                    index = this.companies.findIndex(company => company.id === this.searchResults[0].id);
+
+                    this.$router.push('/' + (index));
+                } else {
+                    index = this.companies.findIndex(company => company.id === this.searchResults[0].contact.company.id);
+
+                    this.$router.push(`/${index}/${this.searchResults[0].id}`);
+
+                }
             },
             refreshData() {
                 this.getCompanies().then(() => {
