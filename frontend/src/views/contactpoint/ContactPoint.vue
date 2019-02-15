@@ -304,6 +304,12 @@
                         });
                     });
 
+                    contactPoints.forEach(contactPoint => {
+                        contactPoint.types = contactPoint.types.map(type => {
+                            return type.title;
+                        });
+                    });
+
                     this.storeContactPoints({
                         contactPoints: contactPoints
                     })
