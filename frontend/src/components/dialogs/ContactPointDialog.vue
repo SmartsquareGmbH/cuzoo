@@ -195,7 +195,13 @@
         },
         watch: {
             value() {
-                this.$refs.form.resetValidation()
+                this.$refs.form.resetValidation();
+
+                if (this.editedContactPoint.date) {
+                    this.date = datefns.format(this.editedContactPoint.date, 'YYYY-MM-DD', {locale: de});
+                } else {
+                    this.date = new Date().toISOString().substr(0, 10);
+                }
             },
             labelBoxInput(input) {
                 if (input && removeNonLetters(input) !== '') {
