@@ -129,6 +129,10 @@
             },
             clearDialog() {
                 this.$refs.form.reset();
+
+                if (this.$route.name === 'companyView') {
+                    setTimeout(() => this.companyName = this.getCompanyName());
+                }
             },
             submitContact() {
                 if (this.getCompanyName() == null || this.getCompanyName() === "") {
