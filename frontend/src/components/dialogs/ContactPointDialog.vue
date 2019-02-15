@@ -282,9 +282,8 @@
             }),
             clearDialog() {
                 this.$refs.form.reset();
-                this.$refs.form.resetValidation();
 
-                this.dateFormatted = new Date().toISOString().substr(0, 10);
+                setTimeout(() => this.date = new Date().toISOString().substr(0, 10));
             },
             closeDialog() {
                 this.$emit('input');
