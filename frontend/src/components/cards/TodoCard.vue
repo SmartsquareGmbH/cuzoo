@@ -19,7 +19,7 @@
                     <v-card-text
                             v-if="getUrgency(todo.expiration) !== 'secondary'"
                             class="secondary--text headline text-xs-left">
-                        <v-icon size="32px" color="secondary">
+                        <v-icon size="32px" class="mr-2" color="secondary">
                             {{ getUrgency(todo.expiration) }}
                         </v-icon>
                         {{ todo.description }}
