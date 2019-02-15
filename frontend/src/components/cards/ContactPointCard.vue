@@ -2,25 +2,33 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    :class="`mt-${search ? 2 : 0} mb-3 clickable elevation-${hover ? 6 : 2}`"
+                    :class="`mt-${search ? 2 : 0} mb-${search ? 3 : 2} clickable elevation-${hover ? 6 : 2}`"
                     @click="viewContactPoint(contactPoint)">
-                <v-scroll-x-transition>
-                    <v-btn v-if="hover && search === false" absolute right top fab small color="secondary" @click.stop="editContactPoint()"
-                           class="elevation-12 mr-5">
-                        <v-icon size="24px" color="white">
-                            edit
-                        </v-icon>
-                    </v-btn>
-                </v-scroll-x-transition>
-                <v-scroll-x-transition>
-                    <v-btn v-if="hover && search === false" absolute right top fab small color="secondary"
-                           @click.stop="openConfirmDialog()"
-                           class="elevation-12">
-                        <v-icon size="24px" color="error">
-                            delete
-                        </v-icon>
-                    </v-btn>
-                </v-scroll-x-transition>
+                <div v-if="search === false">
+                    <v-scroll-x-transition>
+                        <v-btn
+                                v-if="hover"
+                                @click.stop="editContactPoint()"
+                                class="elevation-12 mr-5"
+                                color="secondary"
+                                absolute right top fab small>
+                            <v-icon size="24px" color="white">
+                                edit
+                            </v-icon>
+                        </v-btn>
+                    </v-scroll-x-transition>
+                    <v-scroll-x-transition>
+                        <v-btn v-if="hover"
+                               @click.stop="openConfirmDialog()"
+                               class="elevation-12"
+                               color="secondary"
+                               absolute right top fab small>
+                            <v-icon size="24px" color="error">
+                                delete
+                            </v-icon>
+                        </v-btn>
+                    </v-scroll-x-transition>
+                </div>
                 <confirm-dialog
                         v-model="confirmDialogState"
                         :questionToBeConfirmed="deleteContactPointMessage"
@@ -92,6 +100,11 @@
             ...mapGetters(['companies']),
             dateFormatted() {
                 return datefns.format(this.contactPoint.date, 'DD.MM.YY', {locale: de});
+            }
+        },
+        watch: {
+            hover() {
+                console.log(this.search);
             }
         },
         mounted() {
