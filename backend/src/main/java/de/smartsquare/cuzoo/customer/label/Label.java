@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.label;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 
 import javax.persistence.*;
@@ -37,6 +38,15 @@ public class Label {
             },
             mappedBy = "types")
     private List<ContactPoint> contactPointsWithTypes;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "labels")
+    private List<Company> companies;
 
     Label() {
         this.contactPointsWithLabels = new ArrayList<>();
@@ -86,4 +96,14 @@ public class Label {
     }
 
     public void addContactPointTypes(ContactPoint contactPoint) { this.contactPointsWithTypes.add(contactPoint); }
+
+    public List<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
+    }
+
+    public void addCompany(Company company) { this.companies.add(company); }
 }

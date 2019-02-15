@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.todo.Todo;
 
 import javax.persistence.*;
@@ -26,6 +27,16 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Todo> todos;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "company_labels",
+            joinColumns = {@JoinColumn(name = "company_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")})
+    private List<Label> labels;
 
     private String street;
     private String zipcode;
@@ -136,5 +147,13 @@ public class Company {
 
     public void setTodos(List<Todo> todos) {
         this.todos = todos;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 }
