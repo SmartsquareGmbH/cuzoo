@@ -71,45 +71,33 @@
                 dark>
             <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
-                <td class="text-xs-left">{{ props.item.name }}</td>
-                <td class="text-xs-left">{{ props.item.street }}</td>
-                <td class="text-xs-left">{{ props.item.zipcode }}</td>
-                <td class="text-xs-left">{{ props.item.place }}</td>
-                <td class="text-xs-left">{{ props.item.homepage }}</td>
-                <td class="text-xs-left">{{ props.item.description }}</td>
-                <td class="text-xs-left">{{ props.item.other }}</td>
-                <td class="justify-center layout px-0">
-                    <v-tooltip top>
-                        <v-btn
-                                @click="viewCompany(props.item)"
-                                color="transparent"
-                                slot="activator"
-                                class="mr-2"
-                                flat icon small>
-                            <v-icon size="22px" color="white">
-                                info
+                <tr v-if="!!props.item" style="cursor: pointer;" @click="viewCompany(props.item)">
+                    <td class="text-xs-left">{{ props.item.name }}</td>
+                    <td class="text-xs-left">{{ props.item.street }}</td>
+                    <td class="text-xs-left">{{ props.item.zipcode }}</td>
+                    <td class="text-xs-left">{{ props.item.place }}</td>
+                    <td class="text-xs-left">{{ props.item.homepage }}</td>
+                    <td class="text-xs-left">{{ props.item.description }}</td>
+                    <td class="text-xs-left">{{ props.item.other }}</td>
+                    <td>
+                        <v-tooltip top>
+                            <v-icon @click.stop="editCompany(props.item)" size="22px" slot="activator" class="mr-2">
+                                edit
                             </v-icon>
-                        </v-btn>
-                        <span>Informationen</span>
-                    </v-tooltip>
-                    <v-icon
-                            @click="editCompany(props.item)"
-                            size="22px"
-                            class="mr-2 mt-2">
-                        edit
-                    </v-icon>
-                    <v-icon
-                            @click="openConfirmDialog()"
-                            size="22px"
-                            color="red lighten-1"
-                            class="mr-2 mt-2">
-                        delete
-                    </v-icon>
-                    <confirm-dialog
-                            v-model="confirmDialogState"
-                            :questionToBeConfirmed="deleteCompanyMessage"
-                            @confirmed="deleteCompany(props.item)"/>
-                </td>
+                            Unternehmen bearbeiten
+                        </v-tooltip>
+                        <v-tooltip top>
+                            <v-icon @click.stop="openConfirmDialog()" size="22px" color="red lighten-1" slot="activator">
+                                delete
+                            </v-icon>
+                            Unternehmen löschen
+                        </v-tooltip>
+                        <confirm-dialog
+                                v-model="confirmDialogState"
+                                :questionToBeConfirmed="deleteCompanyMessage"
+                                @confirmed="deleteCompany(props.item)"/>
+                    </td>
+                </tr>
             </template>
             <span slot="no-data">
                 Keine Daten verfügbar :'(
