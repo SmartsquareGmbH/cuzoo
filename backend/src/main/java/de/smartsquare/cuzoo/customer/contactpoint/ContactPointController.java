@@ -91,7 +91,7 @@ public class ContactPointController {
         List<Label> contactPointLabels = new ArrayList<>();
 
         titles.forEach(title -> {
-            Optional<Label> label = labelRepository.findForContactPointByTitle(title);
+            Optional<Label> label = labelRepository.findByTitle(title);
 
             if (label.isPresent()) {
                 if (mediaTypes) {

@@ -100,7 +100,7 @@ public class CompanyController {
         List<Label> companyLabels = new ArrayList<>();
 
         titles.forEach(title -> {
-            Optional<Label> label = labelRepository.findForCompanyByTitle(title);
+            Optional<Label> label = labelRepository.findByTitle(title);
 
             if (label.isPresent()) {
                 label.get().addCompany(company);

@@ -16,8 +16,9 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
     @Query("SELECT l FROM Label l " +
             "WHERE l.title = :title " +
             "AND (l.contactPointsWithLabels IS NOT EMPTY " +
-            "OR l.contactPointsWithTypes IS NOT EMPTY)")
-    Optional<Label> findForContactPointByTitle(@Param("title") String title);
+            "OR l.contactPointsWithTypes IS NOT EMPTY " +
+            "OR l.companies IS NOT EMPTY)")
+    Optional<Label> findByTitle(@Param("title") String title);
 
     @Query("SELECT l FROM Label l " +
             "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
@@ -30,11 +31,6 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
             "LIKE CONCAT('%', LOWER(:input), '%') " +
             "AND l.contactPointsWithTypes IS NOT EMPTY")
     List<Label> findAllOfContactPointTypesByPartOfTitle(@Param("input") String input);
-
-    @Query("SELECT l FROM Label l " +
-            "WHERE l.title = :title " +
-            "AND l.companies IS NOT EMPTY")
-    Optional<Label> findForCompanyByTitle(@Param("title") String title);
 
     @Query("SELECT l FROM Label l " +
             "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
