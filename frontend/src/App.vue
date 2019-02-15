@@ -11,17 +11,10 @@
                     clipped-left
                     fixed
                     app>
-                <v-toolbar-title class="mr-2">
-                    <v-chip
-                            @click.native="goHome"
-                            outline
-                            color="black">
-                        <span class="headline font-weight-light">
-                            CUZOO
-                        </span>
-                    </v-chip>
-                </v-toolbar-title>
                 <v-toolbar-items class="hidden-sm-and-down">
+                    <v-btn color="primary" href="#/search">
+                        <span class="headline font-weight-light black--text">CUZOO</span>
+                    </v-btn>
                     <v-btn flat href="#/dashboard" disabled>
                         <v-icon>dashboard</v-icon>
                         <span class="ml-2">Dashboard</span>
