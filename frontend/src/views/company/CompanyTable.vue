@@ -139,7 +139,8 @@
                 selectedStatus: ["Lead", "Bestandskunde"],
                 companyDialogState: false,
                 confirmDialogState: false,
-                deleteCompanyMessage: 'Bist du dir sicher, dass du das Unternehmen mit all dessen Ansprechpartnern löschen willst?',
+                deleteCompanyMessage: 'Bist du dir sicher, dass du das Unternehmen ' +
+                    'mit all dessen Ansprechpartnern und Kontaktpunkten löschen willst?',
                 file: '',
                 search: '',
                 loading: true,
