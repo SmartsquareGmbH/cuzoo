@@ -31,11 +31,23 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
             "AND l.contactPointsWithTypes IS NOT EMPTY")
     List<Label> findAllOfContactPointTypesByPartOfTitle(@Param("input") String input);
 
+    @Query("SELECT l FROM Label l " +
+            "WHERE l.title = :title " +
+            "AND l.companies IS NOT EMPTY")
+    Optional<Label> findForCompanyByTitle(@Param("title") String title);
+
+    @Query("SELECT l FROM Label l " +
+            "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
+            "LIKE CONCAT('%', LOWER(:input), '%') " +
+            "AND l.companies IS NOT EMPTY")
+    List<Label> findAllOfCompanyByPartOfTitle(@Param("input") String input);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Label l " +
             "WHERE l.contactPointsWithLabels IS EMPTY " +
-            "AND l.contactPointsWithTypes IS EMPTY")
+            "AND l.contactPointsWithTypes IS EMPTY " +
+            "AND l.companies IS EMPTY")
     void deleteAllReferenceless();
 
 }

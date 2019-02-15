@@ -99,7 +99,7 @@ public class CompanyControllerTest {
     }
 
     private String getCompanyInJson() {
-        return "{\"name\":\"Fidea Development\"}";
+        return "{\"id\":\"0\", \"name\":\"Fidea Development\"}";
     }
 
     @Test
