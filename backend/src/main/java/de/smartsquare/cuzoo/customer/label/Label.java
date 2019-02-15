@@ -51,12 +51,14 @@ public class Label {
     Label() {
         this.contactPointsWithLabels = new ArrayList<>();
         this.contactPointsWithTypes = new ArrayList<>();
+        this.companies = new ArrayList<>();
     }
 
     public Label(@NotNull @NotBlank String title) {
         this.title = title;
         this.contactPointsWithLabels = new ArrayList<>();
         this.contactPointsWithTypes = new ArrayList<>();
+        this.companies = new ArrayList<>();
     }
 
     public Long getId() {
