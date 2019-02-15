@@ -1,5 +1,5 @@
 <template>
-    <v-dialog :value="value" @input="$emit('input')" persistent max-width="950">
+    <v-dialog v-model="value" @input="$emit('input')" persistent max-width="950">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -194,6 +194,9 @@
             }
         },
         watch: {
+            value() {
+                this.$refs.form.resetValidation()
+            },
             labelBoxInput(input) {
                 if (input && removeNonLetters(input) !== '') {
                     let call = debouncedLabelApiCall(input);

@@ -105,6 +105,11 @@
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
             }
         },
+        watch: {
+            value() {
+                this.$refs.form.resetValidation()
+            }
+        },
         mounted() {
             this.companyName = this.getCompanyName();
         },

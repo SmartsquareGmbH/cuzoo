@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-            :value="value"
+            v-model="value"
             :company="company"
             @input="$emit('input')"
             persistent
@@ -126,6 +126,11 @@
             }),
             dateFormatted() {
                 return datefns.format(this.date, 'DD.MM.YY', {locale: de})
+            }
+        },
+        watch: {
+            value() {
+                this.$refs.form.resetValidation()
             }
         },
         methods: {

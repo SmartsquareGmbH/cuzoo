@@ -1,5 +1,5 @@
 <template>
-    <v-dialog :value="value" @input="$emit('input')" persistent max-width="750">
+    <v-dialog v-model="value" @input="$emit('input')" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
@@ -118,6 +118,11 @@
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
+            }
+        },
+        watch: {
+            value() {
+                this.$refs.form.resetValidation()
             }
         },
         methods: {
