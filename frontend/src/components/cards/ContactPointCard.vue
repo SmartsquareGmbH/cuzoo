@@ -102,11 +102,6 @@
                 return datefns.format(this.contactPoint.date, 'DD.MM.YY', {locale: de});
             }
         },
-        watch: {
-            hover() {
-                console.log(this.search);
-            }
-        },
         mounted() {
             this.refreshData();
         },
