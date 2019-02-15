@@ -46,7 +46,7 @@
                             <v-icon color="black">person</v-icon>
                             <span class="ml-2 black--text">{{ username }}</span>
                         </v-btn>
-                        <v-list light>
+                        <v-list light class="mr-2">
                             <v-list-tile @click="openSettings()">
                                 <v-list-tile-title class="mr-2">Einstellungen</v-list-tile-title>
                                 <v-icon color="black" light>settings</v-icon>
