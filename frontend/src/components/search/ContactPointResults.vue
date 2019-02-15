@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
     import ContactPointCard from "../cards/ContactPointCard.vue";
 
     export default {
@@ -34,7 +34,16 @@
                 }).splice(0, 10);
             }
         },
+        mounted() {
+            this.storeSearchResults({searchResults: this.searchResults});
+        },
+        watch: {
+            searchResults() {
+                this.storeSearchResults({searchResults: this.searchResults});
+            }
+        },
         methods: {
+            ...mapMutations(['storeSearchResults']),
             defineSearchTerms(contactPoint) {
                 this.searchTerms = [];
 

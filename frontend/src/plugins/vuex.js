@@ -5,6 +5,7 @@ import Companies from "../store/companies"
 import Contacts from "../store/contacts"
 import ContactPoints from "../store/contactpoints"
 import Todos from "../store/todos"
+import SearchResults from "../store/searchResults"
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
         Companies,
         Contacts,
         ContactPoints,
-        Todos
+        Todos,
+        SearchResults
     }
 })

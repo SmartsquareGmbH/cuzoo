@@ -35,6 +35,7 @@
                 </v-expand-transition>
                 <v-text-field
                         :class="`mt-${expandOptionMenu ? 3 : 0}`"
+                        @keyup.enter="goToFirstResult()"
                         color="primary"
                         ref="searchBar"
                         v-model="search"
@@ -92,7 +93,8 @@
             ...mapGetters([
                 'companies',
                 'contacts',
-                'contactPoints'
+                'contactPoints',
+                'searchResults'
             ]),
         },
         methods: {
@@ -101,13 +103,16 @@
                 'getContacts',
                 'getContactPoints'
             ]),
+            goToFirstResult() {
+
+            },
             refreshData() {
                 this.getCompanies().then(() => {
                     this.getContacts().then(() => {
                         this.getContactPoints().then(() => {
                             this.loading = false;
                             this.doFocus();
-                        });;
+                        });
                     });
                 });
             },

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
     import CompanyCard from "../cards/CompanyCard.vue";
 
     export default {
@@ -38,7 +38,16 @@
                 }).splice(0, 10);
             }
         },
+        mounted() {
+            this.storeSearchResults({searchResults: this.searchResults});
+        },
+        watch: {
+            searchResults() {
+                this.storeSearchResults({searchResults: this.searchResults});
+            }
+        },
         methods: {
+            ...mapMutations(['storeSearchResults']),
             defineSearchTerms(company) {
                 this.searchTerms = [];
 
