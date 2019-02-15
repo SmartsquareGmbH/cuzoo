@@ -2,6 +2,7 @@ import api from '../utils/http-common'
 
 export default {
     state: {
+        labels: [],
         companies: [],
         editedIndex: -1,
         editedCompany: {
@@ -12,15 +13,16 @@ export default {
             zipCode: "",
             place: "",
             homepage: "",
-            status: "",
             description: "",
-            other: ""
+            other: "",
+            labels: []
         }
     },
     getters: {
         companies: state => state.companies,
         editedCompany: state => state.editedCompany,
-        editedCompanyIndex: state => state.editedIndex
+        editedCompanyIndex: state => state.editedIndex,
+        companyLabels: state => state.labels
     },
     mutations: {
         storeCompanies(state, payload) {
@@ -29,15 +31,25 @@ export default {
         storeEditedCompanyDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedCompany = payload.editedCompany
+        },
+        storeCompanyLabels(state, payload) {
+            state.labels = payload.labels
         }
     },
     actions: {
         getCompanies() {
             return api.get('company/get').then(response => {
-                console.log(response.data);
+                let companies = response.data;
+
+                companies.forEach(company => {
+                    company.labels = company.labels.map(label => {
+                        return label.title;
+                    });
+                });
+
                 this.commit({
                     type: 'storeCompanies',
-                    companies: response.data
+                    companies: companies
                 })
             }).catch(error => {
                 console.log(error);

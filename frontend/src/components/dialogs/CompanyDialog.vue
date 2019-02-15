@@ -45,12 +45,6 @@
                                         prepend-icon="home"></v-text-field>
                             </v-flex>
                             <v-flex xs12>
-                                <v-radio-group v-model="editedCompany.status" required row>
-                                    <v-radio label="Lead" value="Lead" color="primary"/>
-                                    <v-radio label="Bestandskunde" value="Bestandskunde" color="primary"/>
-                                </v-radio-group>
-                            </v-flex>
-                            <v-flex xs12>
                                 <v-textarea
                                         v-model="editedCompany.description"
                                         counter="255"
@@ -70,6 +64,43 @@
                                         rows="3"
                                 ></v-textarea>
                             </v-flex>
+
+                            <v-flex xs12>
+                                <v-combobox
+                                        v-model="editedCompany.labels"
+                                        :items="labels"
+                                        :search-input.sync="labelBoxInput"
+                                        @change="resetLabels()"
+                                        prepend-icon="label"
+                                        color="primary"
+                                        label="Labels"
+                                        outline
+                                        clearable
+                                        multiple
+                                        solo
+                                        hide-details>
+                                    <template slot="selection" slot-scope="label" tabindex="-1">
+                                        <v-chip tabindex="-1"
+                                                class="title"
+                                                :selected="label.selected"
+                                                close
+                                                @input="removeLabel(label.item)">
+                                            {{ label.item }}
+                                        </v-chip>
+                                    </template>
+                                    <template slot="no-data" v-if="labelBoxInput" tabindex="-1">
+                                        <v-list-tile v-if="labelBoxInput.replace(/ /g, '') !== ''">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    Keine Labels für
+                                                    "<strong class="primary--text">{{ labelBoxInput }}</strong>"
+                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                </v-combobox>
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-form>
@@ -86,14 +117,18 @@
 </template>
 
 <script>
-    import api from '../../utils/http-common'
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
+    import api from '../../utils/http-common';
+    import debounce from 'lodash.debounce';
+
+    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
 
     export default {
         props: ["value"],
         data() {
             return {
                 valid: false,
+                labelBoxInput: '',
                 companyFieldRules: [
                     v => !!v || "Bitte geben Sie ein Unternehmen an"
                 ],
@@ -105,29 +140,56 @@
                     zipCode: "",
                     place: "",
                     homepage: "",
-                    status: "Lead",
                     description: "",
-                    other: ""
+                    other: "",
+                    labels: []
                 }
             }
         },
         computed: {
             ...mapGetters({
                 editedCompany: 'editedCompany',
-                editedIndex: 'editedCompanyIndex'
+                editedIndex: 'editedCompanyIndex',
+                labels: 'companyLabels'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
-            }
+            },
+            temporaryLabels() {
+                return this.editedCompany.labels;
+            },
         },
         watch: {
             value() {
                 this.$refs.form.resetValidation()
+            },
+            labelBoxInput(input) {
+                if (input && removeNonLetters(input) !== '') {
+                    let call = debouncedLabelApiCall(input);
+
+                    if (call) {
+                        call.then(res => this.storeLabels(res));
+                    }
+
+                    this.labels.forEach(label => {
+                        if (removeNonLetters(label) === removeNonLetters(input)) {
+                            this.labelBoxInput = label;
+                        }
+                    });
+                }
+            },
+            temporaryLabels() {
+                this.editedCompany.labels.forEach(label => {
+                    if (removeNonLetters(label) === '') {
+                        this.removeLabel(label);
+                    }
+                })
             }
         },
         methods: {
             ...mapMutations({
-                storeCompanyDetails: 'storeEditedCompanyDetails'
+                storeCompanyDetails: 'storeEditedCompanyDetails',
+                storeLabels: 'storeCompanyLabels'
             }),
             closeDialog() {
                 this.$emit('input');
@@ -150,9 +212,9 @@
                     zipCode: this.editedCompany.zipCode,
                     place: this.editedCompany.place,
                     homepage: this.editedCompany.homepage,
-                    status: this.editedCompany.status,
                     description: this.editedCompany.description,
-                    other: this.editedCompany.other
+                    other: this.editedCompany.other,
+                    labels: this.editedCompany.labels
                 }).then(() => {
                     this.$parent.refreshTable();
                     this.closeDialog();
@@ -161,6 +223,24 @@
                     alert(error);
                 });
             },
+            resetLabels() {
+                this.labelBoxInput = '';
+                this.storeLabels({labels: []});
+            },
+            removeLabel(item) {
+                this.editedCompany.labels.splice(this.editedCompany.labels.indexOf(item), 1);
+                this.editedCompany.labels = [...this.editedCompany.labels]
+            },
         }
+    }
+
+    function getLabelsByInput(input) {
+        return api.get(`company/get/labels/${removeNonLetters(input)}`).then(response => {
+            return {labels: response.data};
+        })
+    }
+
+    function removeNonLetters(string) {
+        return string.replace(/-/g, '').replace(/ /g, '').toLowerCase();
     }
 </script>
