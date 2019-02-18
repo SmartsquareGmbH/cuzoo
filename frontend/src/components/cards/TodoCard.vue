@@ -19,13 +19,13 @@
                     <v-card-text
                             v-if="getUrgency(todo.expiration) !== 'secondary'"
                             class="secondary--text headline text-xs-left">
-                        <v-icon size="32px" class="mr-2" color="secondary">
+                        <v-icon size="32px" class="mr-2" color="secondary" :style="`transform: rotate(${hover ? 90 : 0}deg)`">
                             {{ getUrgency(todo.expiration) }}
                         </v-icon>
                         {{ todo.description }}
                     </v-card-text>
                     <v-card-text v-else class="white--text headline text-xs-left">
-                        <v-icon size="32px" class="mr-2" color="white">
+                        <v-icon size="32px" class="mr-2" color="white" :style="`transform: rotate(${hover ? 90 : 0}deg)`">
                             info
                         </v-icon>
                         {{ todo.description }}
