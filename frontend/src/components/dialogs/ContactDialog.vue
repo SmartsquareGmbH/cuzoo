@@ -140,7 +140,7 @@
                     this.editedContact.role = "Freiberufler";
                 }
 
-                this.companyName.replace("&", "%26");
+                this.companyName = this.companyName.replace("&", "%26");
 
                 let companyOrFreelancer = this.companyName ? `?companyName=${this.companyName}` : '';
                 
