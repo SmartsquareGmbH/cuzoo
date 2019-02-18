@@ -15,21 +15,21 @@
                     <v-btn color="primary" href="#/search">
                         <span class="headline font-weight-light black--text">CUZOO</span>
                     </v-btn>
-                    <v-btn flat href="#/dashboard" disabled>
+                    <v-btn flat href="#/dashboard">
                         <v-icon>dashboard</v-icon>
                         <span class="ml-2">Dashboard</span>
                     </v-btn>
+                    <v-btn flat href="#/search">
+                        <v-icon>search</v-icon>
+                        <span class="ml-2">Suche</span>
+                    </v-btn>
                     <v-btn flat href="#/companies">
-                        <v-icon>business_center</v-icon>
+                        <v-icon>business</v-icon>
                         <span class="ml-2">Unternehmen</span>
                     </v-btn>
                     <v-btn flat href="#/contacts">
                         <v-icon>people</v-icon>
                         <span class="ml-2">Ansprechpartner</span>
-                    </v-btn>
-                    <v-btn flat href="#/search">
-                        <v-icon>search</v-icon>
-                        <span class="ml-2">Suche</span>
                     </v-btn>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
