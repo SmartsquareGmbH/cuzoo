@@ -12,7 +12,7 @@
             <v-flex xs1>
                 <v-tooltip top>
                     <v-btn slot="activator" block color="secondary" @click="viewContactPoints()">
-                        <v-icon large dark>import_contacts</v-icon>
+                        <v-icon large dark>forum</v-icon>
                     </v-btn>
                     Anzeigen der Kontaktpunktliste
                 </v-tooltip>

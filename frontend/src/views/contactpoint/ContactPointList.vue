@@ -12,9 +12,12 @@
                 </h1>
             </v-flex>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="viewCompany()">
-                    <v-icon large dark>search</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <v-btn block color="secondary" slot="activator" @click="viewCompany()">
+                        <v-icon large dark>business_center</v-icon>
+                    </v-btn>
+                    QuickView des Unternehmens
+                </v-tooltip>
             </v-flex>
             <v-flex xs12>
                 <v-divider/>
