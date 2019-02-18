@@ -171,7 +171,7 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs9>
+                    <v-flex xs12>
                         <v-card-text class="headline text-xs-left">
                             <v-tooltip top>
                                 <v-icon color="info" size="36px" slot="activator">info</v-icon>
@@ -179,18 +179,6 @@
                             </v-tooltip>
                             Sonstiges
                         </v-card-text>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-card dark v-if="this.company.status === 'Bestandskunde'" color="info">
-                            <v-card-text class="headline text-xs-center font-italic">
-                                Bestandskunde
-                            </v-card-text>
-                        </v-card>
-                        <v-card dark v-else color="warning">
-                            <v-card-text class="headline text-xs-center font-italic">
-                                Lead
-                            </v-card-text>
-                        </v-card>
                     </v-flex>
                     <v-flex xs12>
                         <v-card dark>
