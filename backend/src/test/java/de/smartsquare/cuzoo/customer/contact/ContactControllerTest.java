@@ -213,7 +213,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_contact_is_getting_deleted() throws Exception {
-        Contact contact = new Contact("Zoey", "", "", "", "", "", "");
+        Contact contact = new Contact("Zoey", "", "", "", "");
         contactRepository.save(contact);
 
         MockHttpServletRequestBuilder builder =
@@ -246,7 +246,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_downloading_contacts_information_is_successfully() throws Exception {
-        Contact contact = new Contact("Tom", "Azubi", "", "123", "", "", "");
+        Contact contact = new Contact("Tom", "Azubi", "", "123", "");
         Company company = new Company("Tom AG", "", "", "", "", "", "");
         companyRepository.save(company);
         contact.setCompany(company);

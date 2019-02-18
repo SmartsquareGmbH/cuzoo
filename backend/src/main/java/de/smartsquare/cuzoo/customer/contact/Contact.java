@@ -38,35 +38,27 @@ public class Contact {
     private String role;
     private String mail;
     private String telephone;
-    private String lastContact;
-    private String lastAnswer;
     private String comment;
 
     public Contact() {
     }
 
     public Contact(@NotNull @NotBlank final String name, Company company,
-            String role, String mail, String telephone,
-            String lastContact, String lastAnswer, String comment) {
+            String role, String mail, String telephone, String comment) {
         this.name = name;
         this.company = company;
         this.role = role;
         this.mail = mail;
         this.telephone = telephone;
-        this.lastContact = lastContact;
-        this.lastAnswer = lastAnswer;
         this.comment = comment;
     }
 
     public Contact(@NotNull @NotBlank final String name,
-            String role, String mail, String telephone,
-            String lastContact, String lastAnswer, String comment) {
+            String role, String mail, String telephone, String comment) {
         this.name = name;
         this.role = role;
         this.mail = mail;
         this.telephone = telephone;
-        this.lastContact = lastContact;
-        this.lastAnswer = lastAnswer;
         this.comment = comment;
     }
 
@@ -116,22 +108,6 @@ public class Contact {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public String getLastContact() {
-        return lastContact;
-    }
-
-    public void setLastContact(String lastContact) {
-        this.lastContact = lastContact;
-    }
-
-    public String getLastAnswer() {
-        return lastAnswer;
-    }
-
-    public void setLastAnswer(String lastAnswer) {
-        this.lastAnswer = lastAnswer;
     }
 
     public String getComment() {
