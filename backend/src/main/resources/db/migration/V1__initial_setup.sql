@@ -50,8 +50,8 @@ CREATE TABLE todo
 CREATE TABLE attachment
 (
   id               BIGINT PRIMARY KEY,
-  filename         VARCHAR         NOT NULL,
-  content          BINARY(9999999) NOT NULL,
+  filename         VARCHAR            NOT NULL,
+  content          BYTEA(9999999) NOT NULL,
   upload_date      DATE,
   contact_point_id BIGINT,
   FOREIGN KEY (contact_point_id) REFERENCES contact_point (id) ON DELETE CASCADE
