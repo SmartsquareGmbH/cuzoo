@@ -26,7 +26,7 @@
                             </v-flex>
                             <v-flex xs3>
                                 <v-text-field
-                                        v-model="editedCompany.zipCode"
+                                        v-model="editedCompany.zipcode"
                                         label="PLZ"
                                         hide-details
                                         mask="#####"
@@ -137,7 +137,7 @@
                     id: 0,
                     name: "",
                     street: "",
-                    zipCode: "",
+                    zipcode: "",
                     place: "",
                     homepage: "",
                     description: "",
