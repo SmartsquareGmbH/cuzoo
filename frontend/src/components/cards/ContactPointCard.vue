@@ -37,7 +37,14 @@
                     {{ contactPoint.title }} •
                     <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
-                    <span class="ml-1 mr-2 primary--text">{{ fileNames.length }}</span>
+                    <span class="ml-1 mr-1 primary--text">{{ fileNames.length }}</span>
+                    <v-icon class="ml-1 mr-1">share</v-icon>
+                    <v-chip
+                            class="subheading mt-1 mb-1 primary--text"
+                            v-bind:key="contactPoint.types"
+                            v-for="label in contactPoint.types">
+                        {{ label }}
+                    </v-chip>
                     <span v-if="search === true"
                           class="ml-1 font-weight-light font-italic headline">
                         {{ contactPoint.contact.company.name }}
