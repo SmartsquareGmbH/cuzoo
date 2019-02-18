@@ -6,11 +6,17 @@ import Company from "./views/company/Company.vue"
 import ContactTable from "./views/contact/ContactTable.vue"
 import ContactPointList from "./views/contactpoint/ContactPointList.vue"
 import ContactPoint from "./views/contactpoint/ContactPoint"
+import Dashboard from "./views/Dashboard.vue"
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
+        {
+            path: "/dashboard",
+            name: "dashboard",
+            component: Dashboard
+        },
         {
             path: "/search",
             name: "search",
