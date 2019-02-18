@@ -1,22 +1,18 @@
 <template>
     <v-container grid-list-md fluid>
-        <v-layout row wrap>
-            <v-flex xs1>
-                <v-btn block color="secondary" @click="goPageBack()">
-                    <v-icon large dark>arrow_back</v-icon>
-                </v-btn>
-            </v-flex>
-            <v-flex xs10>
-                <h1 class="text-xs-center display-2 font-weight-thin">
-                    {{ company.name }}
-                </h1>
-            </v-flex>
-            <v-flex xs1>
+        <v-layout row wrap class="text-xs-left">
+            <v-flex xs12>
+                <v-icon aboslute size="48px" class="mr-3" color="primary">business</v-icon>
+                <span class="text-xs-left display-2 font-weight-thin">{{ company.name }}</span>
                 <v-tooltip bottom>
-                    <v-btn block color="secondary" slot="activator" @click="viewCompany()">
-                        <v-icon large dark>business_center</v-icon>
+                    <v-btn slot="activator"
+                           @click="viewCompany()"
+                           class="ml-5 mt-3"
+                           absolute right
+                           flat small>
+                        QuickView
                     </v-btn>
-                    QuickView des Unternehmens
+                    Detailansicht des Unternehmens
                 </v-tooltip>
             </v-flex>
             <v-flex xs12>
