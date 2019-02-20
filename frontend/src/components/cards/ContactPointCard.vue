@@ -43,7 +43,7 @@
                             class="subheading mt-1 mb-1 primary--text"
                             v-bind:key="type"
                             v-for="type in contactPoint.types">
-                        {{ label }}
+                        {{ type }}
                     </v-chip>
                     <span v-if="search === true"
                           class="ml-1 font-weight-light font-italic headline">
