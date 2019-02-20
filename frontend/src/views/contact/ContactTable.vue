@@ -71,17 +71,17 @@
                         <span>Export Informationen</span>
                     </v-tooltip>
                     <v-icon 
-                    @click="openConfirmDialog"
+                    @click="openConfirmDialog(props.item)"
                     size="22px" 
                     class="mr-2 mt-2"
                     color="red lighten-1">
                         delete
                     </v-icon>
-                    <confirm-dialog
-                            v-model="confirmDialogState"
-                            :questionToBeConfirmed="deleteContactMessage"
-                            @confirmed="deleteContact(props.item)"/>
                 </td>
+                <confirm-dialog
+                        v-model="confirmDialogState"
+                        :questionToBeConfirmed="deleteContactMessage"
+                        @confirmed="deleteContact"/>
             </template>
             <span slot="no-data">
                 Keine Daten verfügbar :'(
@@ -166,9 +166,7 @@
 
                 this.openContactDialog();
             },
-            deleteContact(item) {
-                this.editedContact = Object.assign({}, item);
-
+            deleteContact() {
                 api.delete(`contact/delete/${this.editedContact.id}`).then(response => {
                     console.log(response.data);
                     this.refreshTable();
@@ -177,7 +175,9 @@
                     alert(error);
                 });
             },
-            openConfirmDialog() {
+            openConfirmDialog(item) {
+                this.editedContact = Object.assign({}, item);
+
                 this.confirmDialogState = true;
             },
             openContactDialog() {
