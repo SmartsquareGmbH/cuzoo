@@ -41,8 +41,8 @@
                     <v-icon class="ml-1 mr-1">share</v-icon>
                     <v-chip
                             class="subheading mt-1 mb-1 primary--text"
-                            v-bind:key="contactPoint.types"
-                            v-for="label in contactPoint.types">
+                            v-bind:key="type"
+                            v-for="type in contactPoint.types">
                         {{ label }}
                     </v-chip>
                     <span v-if="search === true"
