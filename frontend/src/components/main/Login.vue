@@ -7,10 +7,8 @@
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer/>
                         <v-img
-                                :src=kazookid
-                                max-height="64px"
-                                max-width="64px"
-                        />
+                                :src=logo
+                                max-width="128px"/>
                     </v-toolbar>
                     <v-card-text>
                         <v-form>
@@ -51,7 +49,7 @@
             passwordRules: [v => !!v || "Ein Passwort wird benötigt"],
             loginFailed: false,
             loginFailedMessage: "Die Anmeldedaten sind ungültig!",
-            kazookid: require('@/assets/rsz_kazoo-kid.png')
+            logo: require('@/assets/sq_white.png')
         }),
         methods: {
             ...mapMutations(['storeLogData']),
