@@ -33,8 +33,9 @@
                         v-model="confirmDialogState"
                         :questionToBeConfirmed="deleteContactPointMessage"
                         @confirmed="deleteContactPoint()"/>
-                <v-card-title class="secondary headline font-weight-light">
-                    {{ contactPoint.title }} •
+                <v-card-title class="secondary title font-weight-light">
+                    <v-icon color="primary  " class="mr-1">forum</v-icon>
+                    <span class="headline font-weight-light mr-2">{{ contactPoint.title }}</span> •
                     <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
                     <v-icon class="ml-1">attach_file</v-icon>
                     <span class="ml-1 mr-1 primary--text">{{ fileNames.length }}</span>
@@ -45,30 +46,26 @@
                             v-for="type in contactPoint.types">
                         {{ type }}
                     </v-chip>
-                    <span v-if="search === true"
-                          class="ml-1 font-weight-light font-italic headline">
-                        {{ contactPoint.contact.company.name }}
-                    </span>
                     <v-spacer></v-spacer>
                     <v-chip
-                            :class="`mt-${hover ? 4 : 0} mb-${hover ? 0 : 2}`"
+                            :class="`mt-${hover ? 4 : 0}`"
                             color="white">
                         <v-avatar class="info white--text" size="35px">
                             <v-icon>person</v-icon>
                         </v-avatar>
-                        <span class="headline secondary--text">
+                        <span class="subheading secondary--text">
                             {{ contactPoint.contact.name }}
                         </span>
                     </v-chip>
                 </v-card-title>
-                <v-card-text class="subheading text-xs-left text-truncate" width="20%">
+                <v-card-text class="text-xs-left text-truncate" width="20%">
                     {{ contactPoint.comment }}
                 </v-card-text>
                 <v-divider/>
-                <v-card-text class="subheading text-xs-left">
+                <v-card-text class="subheading text-xs-left low-padding">
                     <v-chip
                             color="info"
-                            class="title mt-1 mb-1"
+                            class="subheading mt-1 mb-1"
                             v-bind:key="contactPoint.label"
                             v-for="label in contactPoint.labels">
                         {{ label }}
@@ -158,3 +155,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .low-padding {
+        padding: 8px !important;
+    }
+</style>
