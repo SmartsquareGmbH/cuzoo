@@ -19,7 +19,7 @@
             </v-flex>
             <v-flex xs1>
                 <v-tooltip top>
-                    <v-btn slot="activator" block color="secondary" @click="editCompany(companies[companyId])">
+                    <v-btn slot="activator" block color="secondary" @click="editCompany()">
                         <v-icon large dark>edit</v-icon>
                     </v-btn>
                     Unternehmen editieren
@@ -346,10 +346,10 @@
             goPageBack() {
                 this.$router.go(-1);
             },
-            editCompany(item) {
+            editCompany() {
                 this.storeCompanyDetails({
-                    editedIndex: this.companies.indexOf(item),
-                    editedCompany: Object.assign({}, item)
+                    editedIndex: this.companies.indexOf(this.company),
+                    editedCompany: Object.assign({}, this.company)
                 });
 
                 this.openCompanyDialog()

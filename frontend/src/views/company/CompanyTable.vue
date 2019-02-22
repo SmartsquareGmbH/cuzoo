@@ -63,7 +63,7 @@
         </v-card-title>
         <v-data-table
                 :headers="headers"
-                :items="filteredCompanies"
+                :items="companies"
                 :loading=loading
                 :search="search"
                 rows-per-page-text="Unternehmen pro Seite"
@@ -93,15 +93,11 @@
                             Unternehmen bearbeiten
                         </v-tooltip>
                         <v-tooltip top>
-                            <v-icon @click.stop="openConfirmDialog()" size="22px" color="red lighten-1" slot="activator">
+                            <v-icon @click.stop="openConfirmDialog(props.item)" size="22px" color="red lighten-1" slot="activator">
                                 delete
                             </v-icon>
                             Unternehmen löschen
                         </v-tooltip>
-                        <confirm-dialog
-                                v-model="confirmDialogState"
-                                :questionToBeConfirmed="deleteCompanyMessage"
-                                @confirmed="deleteCompany(props.item)"/>
                     </td>
                 </tr>
             </template>
@@ -112,7 +108,10 @@
                 Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
             </v-alert>
         </v-data-table>
-
+        <confirm-dialog
+                v-model="confirmDialogState"
+                :questionToBeConfirmed="deleteCompanyMessage"
+                @confirmed="deleteCompany()"/>
     </v-container>
 </template>
 
@@ -201,9 +200,7 @@
 
                 this.openCompanyDialog();
             },
-            deleteCompany(item) {
-                this.editedCompany = Object.assign({}, item);
-
+            deleteCompany() {
                 api.delete(`company/delete/${this.editedCompany.id}`).then(() => {
                     this.refreshTable();
                 }).catch(error => {
@@ -214,7 +211,9 @@
             openCompanyDialog() {
                 this.companyDialogState = true;
             },
-            openConfirmDialog() {
+            openConfirmDialog(item) {
+                this.editedCompany = Object.assign({}, item);
+
                 this.confirmDialogState = true;
             },
             viewCompany(item) {
