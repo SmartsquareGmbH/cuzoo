@@ -47,8 +47,8 @@
                             <v-flex xs12>
                                 <v-textarea
                                         v-model="editedCompany.description"
-                                        counter="255"
-                                        maxlength='255'
+                                        counter="1000"
+                                        maxlength='1000'
                                         name="input-7-4"
                                         label="Beschreibung"
                                         rows="3"
