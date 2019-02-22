@@ -71,14 +71,19 @@
                 dark>
             <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
-                <tr v-if="!!props.item" style="cursor: pointer;" @click="viewCompany(props.item)">
-                    <td class="text-xs-left">{{ props.item.name }}</td>
-                    <td class="text-xs-left">{{ props.item.street }}</td>
-                    <td class="text-xs-left">{{ props.item.zipcode }}</td>
-                    <td class="text-xs-left">{{ props.item.place }}</td>
-                    <td class="text-xs-left">{{ props.item.homepage }}</td>
-                    <td class="text-xs-left">{{ props.item.description }}</td>
-                    <td class="text-xs-left">{{ props.item.other }}</td>
+                <tr v-if="!!props.item"
+                    style="cursor: pointer;"
+                    @click="viewCompany(props.item)"
+                    class="text-xs-left vertical-center">
+                    <td>{{ props.item.name }}</td>
+                    <td>{{ props.item.place }}</td>
+                    <td>{{ props.item.homepage }}</td>
+                    <v-tooltip top>
+                        <td slot="activator" class="vertical-center">
+                            {{ props.item.description | truncate(100) }}
+                        </td>
+                        {{ props.item.description }}
+                    </v-tooltip>
                     <td>
                         <v-tooltip top>
                             <v-icon @click.stop="editCompany(props.item)" size="22px" slot="activator" class="mr-2">
@@ -134,12 +139,9 @@
                 loading: true,
                 headers: [
                     {text: 'Unternehmen', value: 'name', align: 'left'},
-                    {text: 'Straße', value: 'street'},
-                    {text: 'PLZ', value: 'zipcode'},
                     {text: 'Ort', value: 'place'},
                     {text: 'Homepage', value: 'homepage'},
                     {text: 'Beschreibung', value: 'description'},
-                    {text: 'Sonstiges', value: 'other'},
                     {text: 'Aktionen', value: 'name', sortable: false}
                 ]
             }
@@ -234,5 +236,9 @@
 
     .input-file + label {
         cursor: pointer;
+    }
+
+    .vertical-center {
+        vertical-align: middle !important;
     }
 </style>
