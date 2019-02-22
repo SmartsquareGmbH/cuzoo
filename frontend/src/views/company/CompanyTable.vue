@@ -78,12 +78,13 @@
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.place }}</td>
                     <td>{{ props.item.homepage }}</td>
-                    <v-tooltip top>
+                    <v-tooltip top v-if="props.item.description.length > 100">
                         <td slot="activator" class="vertical-center">
                             {{ props.item.description | truncate(100) }}
                         </td>
                         {{ props.item.description }}
                     </v-tooltip>
+                    <td v-else>{{ props.item.description }}</td>
                     <td>
                         <v-tooltip top>
                             <v-icon @click.stop="editCompany(props.item)" size="22px" slot="activator" class="mr-2">
