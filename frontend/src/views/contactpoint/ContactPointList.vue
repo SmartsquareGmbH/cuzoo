@@ -125,7 +125,9 @@
                 'todos',
             ]),
             company() {
-                return this.companies[this.companyId];
+                return this.companies.find(company => {
+                    return company.id == this.companyId;
+                })
             },
             companiesContactPoints() {
                 return this.contactPoints.filter(contactPoint => {

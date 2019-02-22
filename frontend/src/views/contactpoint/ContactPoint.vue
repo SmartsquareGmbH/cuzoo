@@ -146,7 +146,7 @@
                     <v-flex xs8>
                         <file-upload-dialog
                                 v-model="fileUploadDialogState"
-                                :companyName="this.companyName"
+                                :companyName="this.company.name"
                                 :contactPointId="this.contactPointId"/>
                     </v-flex>
                     <v-flex xs12>
@@ -221,12 +221,16 @@
                 'sortedContactPoints'
             ]),
             contactPoint() {
+                console.log(this.contactPoints);
+                console.log(this.contactPointId);
                 return this.contactPoints.find(contactPoint => {
                     return contactPoint.id == this.contactPointId;
                 })
             },
-            companyName() {
-                return this.companies[this.companyId].name;
+            company() {
+                return this.companies.find(company => {
+                    return company.id == this.companyId;
+                })
             },
             dateFormatted() {
                 return datefns.format(this.contactPoint.date, 'DD.MM.YY', { locale: de });
@@ -274,7 +278,7 @@
             getContactsOfCompany() {
                 return this.contacts.filter((contact) => {
                     if (contact.company != null) {
-                        return contact.company.name === this.companyName
+                        return contact.company.name === this.company.name
                     } else {
                         return null
                     }

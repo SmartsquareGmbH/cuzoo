@@ -322,7 +322,9 @@
         computed: {
             ...mapGetters(['companies', 'contacts']),
             company() {
-                return this.companies[this.companyId]
+                return this.companies.find(company => {
+                    return company.id == this.companyId;
+                })
             },
             contactsOfCompany() {
                 return this.contacts.filter((contact) => {

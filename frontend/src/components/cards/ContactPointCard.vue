@@ -114,8 +114,7 @@
                 storeDetails: 'storeEditedContactPointDetails',
             }),
             viewContactPoint(contactPoint) {
-                const index = this.companies.findIndex(company => company.id === contactPoint.contact.company.id);
-                this.$router.push(`/${index}/${contactPoint.id}`);
+                this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`);
             },
             refreshData() {
                 api.get(`file/get/names/${this.contactPoint.id}`)

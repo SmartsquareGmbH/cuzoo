@@ -76,8 +76,7 @@
                 return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
             },
             viewContactPoints(item) {
-                const index = this.companies.findIndex(company => company.id === item.id);
-                this.$router.push('/' + (index));
+                this.$router.push('/' + (item.id));
             }
         }
     }

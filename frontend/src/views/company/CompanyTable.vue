@@ -218,8 +218,7 @@
                 this.confirmDialogState = true;
             },
             viewCompany(item) {
-                const index = this.companies.findIndex(company => company.id === item.id);
-                this.$router.push('/companies/' + (index));
+                this.$router.push('/companies/' + (item.id));
             }
         }
     }
