@@ -19,6 +19,7 @@
     "vue-clip": "^1.0.0",
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.1",
+    "vue-truncate-filter": "^1.1.7",
     "vue2-google-maps": "^0.10.2",
     "vuetify": "^1.2.0",
     "vuex": "^3.0.1"

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuetify from 'vuetify/lib';
 import VueClip from 'vue-clip';
+import VueTruncateFilter from 'vue-truncate-filter';
 import App from "./App.vue";
 import router from "./router";
 import store from './plugins/vuex';
@@ -20,6 +21,7 @@ Vue.use(Vuetify, {
 });
 
 Vue.use(VueClip);
+Vue.use(VueTruncateFilter);
 
 new Vue({
     router,
