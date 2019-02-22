@@ -209,7 +209,7 @@
                     name: this.editedCompany.name,
                     id: this.editedCompany.id,
                     street: this.editedCompany.street,
-                    zipCode: this.editedCompany.zipCode,
+                    zipcode: this.editedCompany.zipcode,
                     place: this.editedCompany.place,
                     homepage: this.editedCompany.homepage,
                     description: this.editedCompany.description,
