@@ -1,58 +1,44 @@
 <template>
-    <v-container grid-list-md text-xs-center fluid>
+    <v-container grid-list-md text-xs-left fluid>
         <v-layout row wrap>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="goPageBack()">
-                    <v-icon large dark>arrow_back</v-icon>
+                <v-btn flat small @click="goPageBack()">
+                    <v-icon size="22px"  class="mr-1"  dark>arrow_back</v-icon> Zurück
                 </v-btn>
             </v-flex>
-            <v-flex xs3>
-                <h1 class="display-1 text-xs-right"></h1>
-            </v-flex>
-            <v-flex xs1>
+            <v-flex xs5 text-xs-right>
                 <v-tooltip top>
-                    <v-btn slot="activator" block color="secondary" @click="viewContactPoints()">
-                        <v-icon large dark>forum</v-icon>
+                    <v-btn flat small slot="activator" @click="viewContactPoints()">
+                        <v-icon size="22px" class="mr-1" dark>forum</v-icon>
+                        Kontaktpunktliste
                     </v-btn>
                     Anzeigen der Kontaktpunktliste
                 </v-tooltip>
-            </v-flex>
-            <v-flex xs1>
-                <v-tooltip top>
-                    <v-btn slot="activator" block color="secondary" @click="editCompany()">
-                        <v-icon large dark>edit</v-icon>
-                    </v-btn>
+                <v-btn slot="activator" flat small @click="editCompany()">
+                    <v-icon size="22px" class="mr-1" dark>edit</v-icon>
                     Unternehmen editieren
-                </v-tooltip>
+                </v-btn>
             </v-flex>
             <company-dialog v-model="companyDialogState"/>
             <v-flex xs1>
-                <v-tooltip top>
-                    <v-btn slot="activator" block color="secondary" @click="openContactDialog()">
-                        <v-icon large dark>add</v-icon>
-                    </v-btn>
+                <v-btn slot="activator" small flat @click="openContactDialog()">
+                    <v-icon size="22px" class="mr-1" dark>add</v-icon>
                     Ansprechpartner hinzufügen
-                </v-tooltip>
+                </v-btn>
             </v-flex>
-            <v-flex xs3>
-            </v-flex>
-            <v-flex xs1>
+            <v-flex xs5 text-xs-right>
                 <v-tooltip top>
-                    <v-btn slot="activator" block color="secondary"
+                    <v-btn slot="activator" small flat
                            @click="downloadInfo(contactsOfCompany[contactsOfCompany.contact])">
-                        <v-icon large dark style="transform: rotate(180deg)">publish</v-icon>
+                        <v-icon dark size="22px" style="transform: rotate(180deg)">publish</v-icon> Datenauskunft
                     </v-btn>
                     Datenauskunft über Ansprechpartner herunterladen
                 </v-tooltip>
-            </v-flex>
-            <v-flex xs1>
-                <v-tooltip top>
-                    <v-btn slot="activator" v-if="contactsOfCompany.length > 0" block color="secondary"
-                           @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
-                        <v-icon large dark>edit</v-icon>
-                    </v-btn>
+                <v-btn slot="activator" v-if="contactsOfCompany.length > 0" small flat
+                       @click="editContact(contactsOfCompany[contactsOfCompany.contact])">
+                    <v-icon size="22px" dark>edit</v-icon>
                     Ansprechpartner editieren
-                </v-tooltip>
+                </v-btn>
             </v-flex>
             <contact-dialog
                     v-model="contactDialogState"
