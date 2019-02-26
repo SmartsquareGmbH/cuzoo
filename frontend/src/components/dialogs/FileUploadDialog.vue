@@ -60,7 +60,7 @@
             ...mapGetters(['username', 'password']),
             options() {
                 return {
-                    url: `http://localhost:5000/api/file/upload/${this.contactPointId}`,
+                    url: `${process.env.VUE_APP_API_SCHEME}://${process.env.VUE_APP_API_HOSTNAME}:${process.env.VUE_APP_API_PORT}/api/file/upload/${this.contactPointId}`,
                     headers: {
                         "Authorization": "Basic " + btoa(this.username + ":" + this.password)
                     },
