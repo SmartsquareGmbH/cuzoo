@@ -78,7 +78,7 @@
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.place }}</td>
                     <td>{{ props.item.homepage }}</td>
-                    <v-tooltip top v-if="props.item.description.length > 100">
+                    <v-tooltip top v-if="props.item.description.length > 100" max-width="750">
                         <td slot="activator" class="vertical-center">
                             {{ props.item.description | truncate(100) }}
                         </td>
