@@ -4,7 +4,8 @@
 FROM node:11-alpine as builder
 WORKDIR /app
 
-COPY package.json ./
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
 
 COPY yarn.lock ./
 
