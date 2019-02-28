@@ -53,7 +53,7 @@ public class ContactPointControllerTest {
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(company);
 
-        contact = new Contact("Darius", "", "", "", "");
+        contact = new Contact("Darius", "", "", "", "", "");
         contact.setCompany(company);
         contactRepository.save(contact);
 

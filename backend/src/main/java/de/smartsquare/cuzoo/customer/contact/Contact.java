@@ -38,27 +38,30 @@ public class Contact {
     private String role;
     private String mail;
     private String telephone;
+    private String mobile;
     private String comment;
 
     public Contact() {
     }
 
     public Contact(@NotNull @NotBlank final String name, Company company,
-            String role, String mail, String telephone, String comment) {
+                   String role, String mail, String telephone, String mobile, String comment) {
         this.name = name;
         this.company = company;
         this.role = role;
         this.mail = mail;
         this.telephone = telephone;
+        this.mobile = mobile;
         this.comment = comment;
     }
 
     public Contact(@NotNull @NotBlank final String name,
-            String role, String mail, String telephone, String comment) {
+                   String role, String mail, String telephone, String mobile, String comment) {
         this.name = name;
         this.role = role;
         this.mail = mail;
         this.telephone = telephone;
+        this.mobile = mobile;
         this.comment = comment;
     }
 
@@ -104,6 +107,14 @@ public class Contact {
 
     public String getTelephone() {
         return telephone;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public void setTelephone(String telephone) {

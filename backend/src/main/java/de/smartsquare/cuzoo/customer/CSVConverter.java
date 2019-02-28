@@ -74,6 +74,7 @@ public class CSVConverter {
                         csvContact.getRole(),
                         csvContact.getMail(),
                         csvContact.getTelephone(),
+                        null,
                         csvContact.getComment());
             } else {
                 if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
@@ -89,6 +90,7 @@ public class CSVConverter {
                         csvContact.getRole(),
                         csvContact.getMail(),
                         csvContact.getTelephone(),
+                        null,
                         csvContact.getComment());
             }
 

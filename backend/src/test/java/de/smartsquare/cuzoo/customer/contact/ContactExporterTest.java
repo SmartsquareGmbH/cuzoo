@@ -39,7 +39,7 @@ public class ContactExporterTest {
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(smartsquare);
 
-        darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "");
+        darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "", "");
         contactRepository.save(darius);
 
         firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "");

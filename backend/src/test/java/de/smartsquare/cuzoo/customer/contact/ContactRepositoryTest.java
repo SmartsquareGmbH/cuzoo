@@ -2,8 +2,6 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
-import de.smartsquare.cuzoo.customer.contact.Contact;
-import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +30,7 @@ public class ContactRepositoryTest {
     @Test
     public final void that_saves_contact_correctly() {
         Company smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
-        Contact darius = new Contact("Darius Tack", smartsquare, "", "", "", "");
+        Contact darius = new Contact("Darius Tack", smartsquare, "", "", "", "", "");
 
         companyRepository.save(smartsquare);
         contactRepository.save(darius);
