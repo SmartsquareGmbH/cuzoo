@@ -49,6 +49,7 @@
                 <td class="text-xs-left">{{ props.item.role }}</td>
                 <td class="text-xs-left">{{ props.item.mail }}</td>
                 <td class="text-xs-left">{{ props.item.telephone }}</td>
+                <td class="text-xs-left">{{ props.item.mobile }}</td>
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon 
@@ -118,6 +119,7 @@
                     {text: 'Rolle', value: 'role'},
                     {text: 'E-Mail', value: 'mail'},
                     {text: 'Telefon', value: 'telephone'},
+                    {text: 'Mobil', value: 'mobile'},
                     {text: 'Bemerkung', value: 'comment'},
                     {text: 'Aktionen', value: 'name', sortable: false}
                 ],
