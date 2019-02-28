@@ -1,26 +1,22 @@
 <template>
-    <v-container grid-list-md fluid>
+    <v-container grid-list-md text-xs-left fluid>
         <v-layout row wrap>
             <v-flex xs1>
-                <v-btn block color="secondary" @click="goPageBack()">
-                    <v-icon large dark>arrow_back</v-icon>
+                <v-btn flat small @click="goPageBack()">
+                    <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon> Zurück
                 </v-btn>
             </v-flex>
-            <v-flex xs4>
-            </v-flex>
-            <v-flex xs1>
-                <v-btn block color="secondary" @click="editContactPoint()">
-                    <v-icon large dark>edit</v-icon>
+            <v-flex xs5 class="text-xs-right">
+                <v-btn flat small @click="editContactPoint()">
+                    <v-icon size="22px" class="mr-1" dark>edit</v-icon> Kontaktpunkt editieren
                 </v-btn>
             </v-flex>
             <contact-point-dialog
                     v-model="contactPointDialogState"
                     :contactNames="this.contactNames"/>
-            <v-flex xs1>
-                <v-btn id="upload-btn" @click="uploadFiles()" block color="secondary">
-                    <v-icon large dark>
-                        publish
-                    </v-icon>
+            <v-flex xs6>
+                <v-btn id="upload-btn" @click="uploadFiles()" flat small>
+                    <v-icon size="22px" class="mr-1" dark>publish</v-icon> Dateien hochladen
                 </v-btn>
             </v-flex>
             <v-flex xs6>
