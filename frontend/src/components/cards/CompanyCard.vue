@@ -29,7 +29,7 @@
                     <v-scroll-y-transition>
                         <v-card-text
                                 class="headline text-xs-left font-weight-light">
-                            {{ company.description }}
+                            {{ company.description | truncate(275) }}
                             <v-spacer/>
                             {{ company.other }}
                         </v-card-text>
