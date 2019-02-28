@@ -248,6 +248,27 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-flex>
+                                <v-flex xs2>
+                                    <v-card dark color="info">
+                                        <v-card-text class="headline text-xs-center">
+                                            <v-icon size="30px">smartphone</v-icon>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex xs10>
+                                    <v-card dark>
+                                        <v-card-text
+                                                v-if="contact.mobile"
+                                                class="headline text-xs-left">
+                                            {{ contact.mobile }}
+                                        </v-card-text>
+                                        <v-card-text
+                                                v-else
+                                                class="headline text-xs-left font-weight-light font-italic error--text">
+                                            N/A
+                                        </v-card-text>
+                                    </v-card>
+                                </v-flex>
                                 <v-flex xs12>
                                     <v-card-text class="headline text-xs-left">
                                         <v-tooltip top>
