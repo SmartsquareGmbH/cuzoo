@@ -25,7 +25,8 @@ class ContactExporter {
         lines.add("Unternehmen:\t " + contact.getCompany().getName());
         lines.add("Rolle:\t\t " + contact.getRole());
         lines.add("E-Mail:\t\t " + contact.getMail());
-        lines.add("Telefon:\t " + contact.getTelephone() + "\n");
+        lines.add("Telefon:\t " + contact.getTelephone());
+        lines.add("Mobil:\t\t " + contact.getMobile() + "\n");
         lines.add("Kontaktpunkte:");
 
         contactsContactPoints.forEach(contactPoint ->
