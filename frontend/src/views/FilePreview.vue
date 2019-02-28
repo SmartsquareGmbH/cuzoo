@@ -1,0 +1,53 @@
+<template>
+    <v-layout row wrap class="text-xs-center">
+        <v-flex xs3>
+            <v-btn flat small @click="goPageBack()">
+                <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
+                Zurück
+            </v-btn>
+        </v-flex>
+        <v-flex xs6>
+            <pdf v-if="isPDF()" :src="getPDFSource()"/>
+            <v-img v-else :src="this.url"/>
+        </v-flex>
+        <v-flex xs3></v-flex>
+    </v-layout>
+</template>
+
+<script>
+    import {mapGetters} from 'vuex';
+    import pdf from 'vue-pdf';
+
+    export default {
+        components: {
+            pdf
+        },
+        data() {
+            return {
+                contactPointId: this.$route.params.contactPointId,
+                fileName: this.$route.params.fileName
+            }
+        },
+        computed: {
+            ...mapGetters(['username', 'password']),
+            url() {
+                return `${process.env.VUE_APP_API_SCHEME}://${process.env.VUE_APP_API_HOSTNAME}:` +
+                    `${process.env.VUE_APP_API_PORT}/api/file/download/${this.contactPointId}/${this.fileName}`
+            }
+        },
+        methods: {
+            isPDF() {
+                if (this.fileName.includes('pdf')) return true
+            },
+            getPDFSource() {
+                return {
+                    'url': this.url,
+                    'httpHeaders': {'Authorization': 'Basic ' + btoa(this.username + ':' + this.password)}
+                }
+            },
+            goPageBack() {
+                this.$router.go(-1);
+            }
+        }
+    }
+</script>

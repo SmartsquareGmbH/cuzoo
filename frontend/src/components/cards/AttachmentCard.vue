@@ -1,5 +1,12 @@
 <template>
     <v-card dark>
+        <v-btn v-if="fileIsImageOrPDF(fileName)"
+                absolute top right fab small color="primary" class="more-distance-to-right"
+               @click="previewFile(fileName)">
+            <v-icon size="24px" color="secondary">
+                search
+            </v-icon>
+        </v-btn>
         <v-btn absolute top right fab small color="primary" class="mr-5"
                @click="downloadFile(fileName)">
             <v-icon style="transform: rotate(180deg)" size="24px" color="secondary">
@@ -41,11 +48,20 @@
             }
         },
         methods: {
-            downloadFile(filename) {
-                return api.get(`file/download/${this.contactPoint.id}/${filename}`, {
+            previewFile(fileName) {
+                this.$router.push({
+                    name: 'filePreview',
+                    params: {
+                        contactPointId: this.contactPoint.id,
+                        fileName: fileName
+                    }
+                });
+            },
+            downloadFile(fileName) {
+                return api.get(`file/download/${this.contactPoint.id}/${fileName}`, {
                     responseType: 'arraybuffer'
                 }).then(response => {
-                    download(filename, response.data)
+                    download(fileName, response.data)
                 }).catch(error => {
                     console.log(error)
                 });
@@ -58,6 +74,15 @@
             },
             openConfirmDialog() {
                 this.confirmDialogState = true;
+            },
+            fileIsImageOrPDF(fileName) {
+                if (fileName.includes('pdf') ||
+                    fileName.includes('ico') ||
+                    fileName.includes('png') ||
+                    fileName.includes('jpg') ||
+                    fileName.includes('jpeg')) {
+                    return true
+                }
             }
         }
     }
