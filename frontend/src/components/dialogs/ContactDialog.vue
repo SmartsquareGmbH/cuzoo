@@ -12,25 +12,19 @@
                                 <v-text-field
                                 v-model="editedContact.name"
                                 label="Vor- und Nachname"
-                                prepend-icon="people"
+                                prepend-icon="person"
                                 hide-details
                                 suffix="*"
                                 required
                                 :rules="contactFieldRules"/>
                             </v-flex>
-                            <v-flex xs6>
+                            <v-flex xs12>
                                 <v-combobox
                                 v-model="companyName"
                                 :disabled="!this.companyFieldEnabled"
                                 :items="companyNames"
                                 label="Unternehmen"
-                                prepend-icon="business_center"
-                                hide-details/>
-                            </v-flex>
-                            <v-flex xs6>
-                                <v-text-field
-                                v-model="editedContact.role"
-                                label="Rolle"
+                                prepend-icon="business"
                                 hide-details/>
                             </v-flex>
                             <v-flex xs6>
@@ -42,9 +36,24 @@
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
+                                        v-model="editedContact.role"
+                                        label="Rolle"
+                                        prepend-icon="work"
+                                        hide-details/>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-text-field
                                 v-model="editedContact.telephone"
+                                prepend-icon="call"
                                 label="Telefon"
                                 hide-details/>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-text-field
+                                        v-model="editedContact.mobile"
+                                        prepend-icon="smartphone"
+                                        label="Mobil"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
@@ -90,8 +99,7 @@
                     role: "",
                     mail: "",
                     telephone: "",
-                    lastContact: "",
-                    lastAnswer: "",
+                    mobile: "",
                     comment: ""
                 }
             }
@@ -149,8 +157,7 @@
                     address: this.editedContact.address,
                     mail: this.editedContact.mail,
                     telephone: this.editedContact.telephone,
-                    lastContact: this.editedContact.lastContact,
-                    lastAnswer: this.editedContact.lastAnswer,
+                    mobile: this.editedContact.mobile,
                     comment: this.editedContact.comment
                 }).then(() => {
                     this.$parent.refreshTable();

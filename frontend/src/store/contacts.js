@@ -12,8 +12,7 @@ export default {
             role: "",
             mail: "",
             telephone: "",
-            lastContact: "",
-            lastAnswer: "",
+            mobile: "",
             comment: ""
         }
     },
