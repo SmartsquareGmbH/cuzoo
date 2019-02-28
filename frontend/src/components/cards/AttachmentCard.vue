@@ -1,32 +1,44 @@
 <template>
-    <v-card dark>
-        <v-btn v-if="fileIsImageOrPDF(fileName)"
-                absolute top right fab small color="primary" class="more-distance-to-right"
-               @click="previewFile(fileName)">
-            <v-icon size="24px" color="secondary">
-                search
-            </v-icon>
-        </v-btn>
-        <v-btn absolute top right fab small color="primary" class="mr-5"
-               @click="downloadFile(fileName)">
-            <v-icon style="transform: rotate(180deg)" size="24px" color="secondary">
-                publish
-            </v-icon>
-        </v-btn>
-        <v-btn absolute top right fab small color="error" class="ml-0"
-               @click="openConfirmDialog()">
-            <v-icon size="24px" color="secondary">
-                delete
-            </v-icon>
-        </v-btn>
+    <v-flex xs12>
+        <v-hover>
+            <v-card dark
+                    slot-scope="{ hover }"
+                    class="mb-1">
+                <v-scroll-x-transition>
+                    <v-btn v-if="hover && fileIsImageOrPDF(fileName)"
+                           absolute top right fab small color="primary" class="more-distance-to-right"
+                           @click="previewFile(fileName)">
+                        <v-icon size="24px" color="secondary">
+                            search
+                        </v-icon>
+                    </v-btn>
+                </v-scroll-x-transition>
+                <v-scroll-x-transition>
+                    <v-btn v-if="hover" absolute top right fab small color="primary" class="mr-5"
+                           @click="downloadFile(fileName)">
+                        <v-icon style="transform: rotate(180deg)" size="24px" color="secondary">
+                            publish
+                        </v-icon>
+                    </v-btn>
+                </v-scroll-x-transition>
+                <v-scroll-x-transition>
+                    <v-btn v-if="hover" absolute top right fab small color="error" class="ml-0"
+                           @click="openConfirmDialog()">
+                        <v-icon size="24px" color="secondary">
+                            delete
+                        </v-icon>
+                    </v-btn>
+                </v-scroll-x-transition>
+                <v-card-text class="headline text-xs-left font-weight-light">
+                    {{ fileName }}
+                </v-card-text>
+            </v-card>
+        </v-hover>
         <confirm-dialog
                 v-model="confirmDialogState"
                 :questionToBeConfirmed="deleteFileMessage"
                 @confirmed="deleteFile(fileName)"/>
-        <v-card-text class="headline text-xs-left font-weight-light">
-            {{ fileName }}
-        </v-card-text>
-    </v-card>
+    </v-flex>
 </template>
 
 <script>
@@ -77,7 +89,6 @@
             },
             fileIsImageOrPDF(fileName) {
                 if (fileName.includes('pdf') ||
-                    fileName.includes('ico') ||
                     fileName.includes('png') ||
                     fileName.includes('jpg') ||
                     fileName.includes('jpeg')) {

@@ -151,11 +151,10 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-layout row wrap>
-                            <v-flex xs12 v-for="fileName in this.fileNames">
-                                <attachment-card
-                                        :fileName="fileName"
-                                        :contactPoint="contactPoint"/>
-                            </v-flex>
+                            <attachment-card
+                                    v-for="fileName in this.fileNames"
+                                    :fileName="fileName"
+                                    :contactPoint="contactPoint"/>
                         </v-layout>
                     </v-flex>
                 </v-layout>
