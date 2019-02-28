@@ -87,7 +87,6 @@
             return {
                 valid: false,
                 companyFieldEnabled: true,
-                companyName: '',
                 contactFieldRules: [
                     v => !!v || "Bitte geben Sie einen Namen an"
                 ],
@@ -111,6 +110,9 @@
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
+            },
+            companyName() {
+                return this.editedContact.company.name;
             }
         },
         watch: {
