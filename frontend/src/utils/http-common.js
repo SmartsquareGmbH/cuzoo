@@ -1,5 +1,5 @@
-import axios from 'axios'
-import auth from '../store/auth.js'
+import axios from 'axios';
+import vuex from '../plugins/vuex.js';
 
 const commonAxios = axios.create({
     baseURL: `${process.env.VUE_APP_API_SCHEME}://${process.env.VUE_APP_API_HOSTNAME}:${process.env.VUE_APP_API_PORT}/api/`
@@ -8,8 +8,8 @@ const commonAxios = axios.create({
 commonAxios.interceptors.request.use((config) => {
     if(!config.auth) {
         config.auth = {
-            username: auth.state.username,
-            password: auth.state.password
+            username: vuex.getters.username,
+            password: vuex.getters.password
         }
     }
 

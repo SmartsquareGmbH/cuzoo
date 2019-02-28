@@ -61,7 +61,7 @@
                     :light="!dark"
                     :dark="dark"
                     app>
-                &copy; 2018 Smartsquare GmbH
+                &copy; 2019 Smartsquare GmbH
             </v-footer>
         </v-container>
     </v-app>
@@ -88,29 +88,25 @@
             ...mapGetters({
                 dark: 'darkState',
                 authorized: 'authorized',
-                username: 'username'
+                username: 'username',
+                password: 'password'
             })
         },
         methods: {
             ...mapMutations(['storeLogData']),
-            goHome() {
-                this.$router.push('/search');
-            },
             openSettings() {
                 this.settingState = true;
             },
             logout() {
-                this.storeLogData({authorized: false});
+                this.storeLogData({
+                    authorized: false
+                });
             }
         }
     }
 </script>
 
 <style>
-    .dm-switch {
-        padding: 1em;
-    }
-
     .nav-header h1 {
         padding: 0.35em;
         text-align: center;
@@ -120,12 +116,5 @@
         margin: 0px;
         padding: 0px;
         font-family: "Avenir", Helvetica, Arial, sans-serif;
-    }
-
-    #app {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #ffffff;
     }
 </style>
