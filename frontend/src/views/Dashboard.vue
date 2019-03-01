@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md fluid>
-        <v-layout row wrap>
+        <v-layout row wrap v-if="!loading">
             <v-flex xs6>
                 <v-card style="border-style: solid; border-color: #4FC3F7; border-width: 0px">
                     <v-card-title class="secondary title font-weight-light">
@@ -87,11 +87,16 @@
                 </v-layout>
         </v-flex>
         </v-layout>
+        <v-layout v-if="loading">
+            <v-flex xs12 class="text-xs-center">
+                <v-progress-circular :size="128" color="primary" indeterminate/>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
 
     import TodoDialog from '../components/dialogs/TodoDialog.vue';
     import TodoCard from '../components/cards/TodoCard.vue';
@@ -111,9 +116,10 @@
             contactPointDialogState: false,
             todoDialogState: false,
             searchBar: false,
+            loading: true,
             settings: {
                 maxScrollbarLength: 120
-            }
+            },
         }),
         computed: {
             ...mapGetters([
@@ -123,10 +129,35 @@
                 'todos',
             ]),
         },
-        mounted() {
+        beforeMount() {
             this.refreshData();
         },
         methods: {
+            ...mapActions([
+                'getCompanies',
+                'getContacts',
+                'getContactPoints'
+            ]),
+            goToFirstResult() {
+                const isCompany = containsKey(this.searchResults[0], 'name');
+                let index;
+
+                if (isCompany) {
+                    index = this.companies.findIndex(company => company.id === this.searchResults[0].id);
+
+                    this.$router.push('/' + (index));
+                } else {
+                    index = this.companies.findIndex(company => company.id === this.searchResults[0].contact.company.id);
+
+                    this.$router.push(`/${index}/${this.searchResults[0].id}`);
+
+                }
+            },
+            refreshData() {
+                this.getCompanies();
+                this.getContacts();
+                this.getContactPoints().then(() => this.loading = false);
+            },
             expandSearchBar() {
                 this.searchBar = !this.searchBar;
                 setTimeout(() => {
@@ -135,9 +166,6 @@
             },
             scrollHanle(evt) {
                 console.log(evt)
-            },
-            refreshData() {
-
             },
             addContactPoint() {
                 this.contactPointDialogState = true;

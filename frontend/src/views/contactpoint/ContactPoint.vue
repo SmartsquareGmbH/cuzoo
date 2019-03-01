@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-md text-xs-left fluid>
         <v-fade-transition>
-            <v-layout row wrap v-if="doneLoading">
+            <v-layout row wrap v-if="!loading">
                 <v-flex xs1>
                     <v-btn flat small @click="goPageBack()">
                         <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
@@ -165,7 +165,7 @@
                 </v-flex>
             </v-layout>
         </v-fade-transition>
-        <v-layout v-if="!doneLoading">
+        <v-layout v-if="loading">
             <v-flex xs12 class="text-xs-center">
                 <v-progress-circular :size="128" color="primary" indeterminate/>
             </v-flex>
@@ -200,7 +200,7 @@
                 fileNames: [],
                 contactPointDialogState: false,
                 contactNames: [],
-                doneLoading: false,
+                loading: true,
             }
         },
         computed: {
@@ -280,7 +280,7 @@
 
                 api.get(`file/get/names/${this.contactPointId}`).then(response => {
                     this.fileNames = response.data;
-                    this.doneLoading = true;
+                    this.loading = false;
                 });
             }
         }
