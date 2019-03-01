@@ -179,6 +179,21 @@
                             N/A
                         </v-card-text>
                     </v-flex>
+                    <v-flex xs2 v-if="this.company.labels.length > 0">
+                        <v-card dark color="info">
+                            <v-card-text class="headline text-xs-center">
+                                <v-icon size="30px" class="pt-1">label</v-icon>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex xs10 class="text-xs-left" v-if="this.company.labels.length > 0">
+                        <v-chip
+                                class="title mt-3"
+                                v-for="label in this.company.labels"
+                                v-bind:key="label">
+                            {{ label }}
+                        </v-chip>
+                    </v-flex>
                 </v-layout>
             </v-flex>
             <v-flex xs6>

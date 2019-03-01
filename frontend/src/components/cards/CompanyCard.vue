@@ -10,10 +10,11 @@
                         class="headline text-xs-left">
                     {{ company.name }}
                     <v-divider
-                            class="mt-2 mb-3"/>
-                    <div
+                            class="my-2"/>
+                    <v-layout row wrap>
+                    <v-flex xs4
                             v-if="company.zipCode || company.place || company.street"
-                            class="headline font-weight-light text-xs-left">
+                            class="headline font-weight-light text-xs-left low-padding">
                         <v-icon
                                 color="primary"
                                 class="mr-1"
@@ -21,37 +22,51 @@
                             place
                         </v-icon>
                         {{ company.zipCode }} {{ company.place }}, {{ company.street }}
-                    </div>
+                    </v-flex>
+                        <v-flex xs8
+                                class="headline text-xs-right"
+                                v-if="contacts.length > 0">
+                            <v-icon
+                                    color="primary"
+                                    class="mr-2"
+                                    size="30px">
+                                people
+                            </v-icon>
+                            <v-chip
+                                    v-bind:key="contact.id"
+                                    v-for="contact in contacts">
+                        <span class="headline white--text">
+                            {{ contact.name }}
+                        </span>
+                            </v-chip>
+                        </v-flex>
+                    </v-layout>
                 </v-card-text>
                 <v-card
                         color="#377D93"
                         v-if="(company.description || company.other)">
                     <v-scroll-y-transition>
                         <v-card-text
-                                class="headline text-xs-left font-weight-light">
-                            {{ company.description | truncate(275) }}
-                            <v-spacer/>
-                            {{ company.other }}
+                                class="text-xs-left font-weight-light">
+                            {{ company.description | truncate(325) }}
                         </v-card-text>
                     </v-scroll-y-transition>
                 </v-card>
                 <v-card-text
-                        class="headline text-xs-left"
-                        v-if="contacts.length > 0">
+                        class="headline text-xs-left low-padding"
+                        v-if="company.labels.length > 0">
                     <v-icon
                             color="primary"
                             class="mr-2"
                             size="30px">
-                        people
+                        label
                     </v-icon>
                     <v-chip
                             class="mb-2"
-                            color="primary"
-                            v-bind:key="contact.id"
-                            v-for="contact in contacts">
-                        <span
-                                class="headline secondary--text">
-                            {{ contact.name }}
+                            v-bind:key="label"
+                            v-for="label in company.labels">
+                        <span class="headline white--text">
+                            {{ label }}
                         </span>
                     </v-chip>
                 </v-card-text>
@@ -81,3 +96,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .low-padding {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+</style>
