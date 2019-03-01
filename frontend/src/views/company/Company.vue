@@ -3,7 +3,8 @@
         <v-layout row wrap>
             <v-flex xs1>
                 <v-btn flat small @click="goPageBack()">
-                    <v-icon size="22px"  class="mr-1"  dark>arrow_back</v-icon> Zurück
+                    <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
+                    Zurück
                 </v-btn>
             </v-flex>
             <v-flex xs5 text-xs-right>
@@ -30,7 +31,8 @@
                 <v-tooltip top>
                     <v-btn slot="activator" small flat
                            @click="downloadInfo(contactsOfCompany[contactsOfCompany.contact])">
-                        <v-icon dark size="22px" style="transform: rotate(180deg)">publish</v-icon> Datenauskunft
+                        <v-icon dark size="22px" style="transform: rotate(180deg)">publish</v-icon>
+                        Datenauskunft
                     </v-btn>
                     Datenauskunft über Ansprechpartner herunterladen
                 </v-tooltip>
@@ -46,17 +48,20 @@
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
-                        <v-card height="100%" dark color="green">
+                        <v-card dark color="green">
                             <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">business_center</v-icon>
+                                <v-icon size="30px">business</v-icon>
                             </v-card-text>
                         </v-card>
                     </v-flex>
                     <v-flex xs10>
                         <v-card height="100%" dark>
-                            <v-card-text class="headline text-xs-left">
-                                {{ this.company.name }}
-                            </v-card-text>
+                            <v-tooltip bottom>
+                                <v-card-text slot="activator" class="headline text-xs-left">
+                                    {{ this.company.name | truncate(60) }}
+                                </v-card-text>
+                                <span class="headline">{{ this.company.name }}</span>
+                            </v-tooltip>
                         </v-card>
                     </v-flex>
                     <v-flex xs2>
@@ -135,50 +140,42 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs12>
-                        <v-card-text class="headline text-xs-left">
+                        <v-card-text class="headline text-xs-left no-padding-left">
                             <v-tooltip top>
-                                <v-icon color="info" size="36px" slot="activator">info</v-icon>
+                                <v-icon color="info" size="30px" slot="activator">info</v-icon>
                                 Beschreibung des Unternehmens
                             </v-tooltip>
                             Beschreibung
                         </v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-card dark>
-                            <v-card-text
-                                    v-if="this.company.description"
-                                    class="headline text-xs-left">
-                                {{ this.company.description }}
-                            </v-card-text>
-                            <v-card-text
-                                    v-else
-                                    class="headline text-xs-left font-weight-light font-italic error--text">
-                                N/A
-                            </v-card-text>
-                        </v-card>
+                        <span v-if="this.company.description"
+                              style="white-space: pre-wrap">{{ this.company.description }}
+                        </span>
+                        <v-card-text
+                                v-else
+                                class="headline text-xs-left font-weight-light font-italic error--text">
+                            N/A
+                        </v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-card-text class="headline text-xs-left">
+                        <v-card-text class="headline text-xs-left no-padding-left">
                             <v-tooltip top>
-                                <v-icon color="info" size="36px" slot="activator">info</v-icon>
+                                <v-icon color="info" size="30px" slot="activator">info</v-icon>
                                 Sonstige Angaben zum Unternehmen
                             </v-tooltip>
                             Sonstiges
                         </v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-card dark>
-                            <v-card-text
-                                    v-if="this.company.other"
-                                    class="headline text-xs-left">
-                                {{ this.company.other }}
-                            </v-card-text>
-                            <v-card-text
-                                    v-else
-                                    class="headline text-xs-left font-weight-light font-italic error--text">
-                                N/A
-                            </v-card-text>
-                        </v-card>
+                        <span v-if="this.company.other"
+                              style="white-space: pre-wrap">{{ this.company.other }}
+                        </span>
+                        <v-card-text
+                                v-else
+                                class="headline text-xs-left font-weight-light font-italic error--text">
+                            N/A
+                        </v-card-text>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -234,7 +231,7 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-flex>
-                                <v-flex xs10>
+                                <v-flex xs4>
                                     <v-card dark>
                                         <v-card-text
                                                 v-if="contact.telephone"
@@ -255,7 +252,7 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-flex>
-                                <v-flex xs10>
+                                <v-flex xs4>
                                     <v-card dark>
                                         <v-card-text
                                                 v-if="contact.mobile"
@@ -269,28 +266,18 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-flex>
-                                <v-flex xs12>
-                                    <v-card-text class="headline text-xs-left">
+                                <v-flex xs12 v-if="contact.comment">
+                                    <v-card-text class="headline text-xs-left no-padding-left">
                                         <v-tooltip top>
-                                            <v-icon color="info" size="36px" slot="activator" class="pt-0">info</v-icon>
-                                            Sonstige Angaben zum Ansprechpartner
+                                            <v-icon color="info" size="30px" slot="activator">info</v-icon>
+                                            Kommentar zum Ansprechpartner
                                         </v-tooltip>
-                                        Sonstiges
+                                        Kommentar
                                     </v-card-text>
                                 </v-flex>
-                                <v-flex xs12>
-                                    <v-card dark>
-                                        <v-card-text
-                                                v-if="contact.comment"
-                                                class="headline text-xs-left">
-                                            {{ contact.comment }}
-                                        </v-card-text>
-                                        <v-card-text
-                                                v-else
-                                                class="headline text-xs-left font-weight-light font-italic error--text">
-                                            N/A
-                                        </v-card-text>
-                                    </v-card>
+                                <v-flex xs12 v-if="contact.comment">
+                                    <span style="white-space: pre-wrap">{{ contact.comment }}
+                                    </span>
                                 </v-flex>
                             </v-layout>
                         </v-tab-item>
@@ -390,7 +377,7 @@
     }
 
     function download(content, name) {
-        const url = window.URL.createObjectURL(new Blob([content], {type : "text/plain"}));
+        const url = window.URL.createObjectURL(new Blob([content], {type: "text/plain"}));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', name.replace(' ', '_').toLowerCase() + '.txt');
@@ -405,5 +392,9 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
+    }
+
+    .no-padding-left {
+        padding-left: 0px;
     }
 </style>
