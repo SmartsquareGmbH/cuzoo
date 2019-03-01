@@ -70,9 +70,22 @@
                     </v-card-title>
                 </v-card>
                 <v-layout row wrap>
-
+                    <v-flex xs12>
+                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings"
+                                               @ps-scroll-y="scrollHanle">
+                            <div style="max-height: 350px">
+                                <v-layout row wrap>
+                                    <todo-card
+                                            :todo="todo"
+                                            :search="true"
+                                            v-bind:key="todo.id"
+                                            v-for="todo in todos"/>
+                                </v-layout>
+                            </div>
+                        </vue-perfect-scrollbar>
+                    </v-flex>
                 </v-layout>
-        </v-flex>
+            </v-flex>
         </v-layout>
         <v-layout v-if="loading">
             <v-flex xs12 class="text-xs-center">
@@ -124,7 +137,8 @@
             ...mapActions([
                 'getCompanies',
                 'getContacts',
-                'getContactPoints'
+                'getContactPoints',
+                'getTodos'
             ]),
             goToFirstResult() {
                 const isCompany = containsKey(this.searchResults[0], 'name');
@@ -144,7 +158,8 @@
             refreshData() {
                 this.getCompanies();
                 this.getContacts();
-                this.getContactPoints().then(() => this.loading = false);
+                this.getContactPoints();
+                this.getTodos().then(() => this.loading = false);
             },
             scrollHanle(evt) {
                 console.log(evt)
