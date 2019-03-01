@@ -331,6 +331,9 @@
                 return `http://${this.company.homepage}`;
             }
         },
+        mounted() {
+            this.refreshTable();
+        },
         methods: {
             ...mapActions(['getCompanies', 'getContacts']),
             ...mapMutations({
