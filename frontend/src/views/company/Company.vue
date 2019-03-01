@@ -57,10 +57,10 @@
                     <v-flex xs10>
                         <v-card height="100%" dark>
                             <v-tooltip bottom>
-                                <v-card-text slot="activator" class="headline text-xs-left">
+                                <v-card-text slot="activator" class="headline text-xs-left font-weight-light">
                                     {{ this.company.name | truncate(60) }}
                                 </v-card-text>
-                                <span class="headline">{{ this.company.name }}</span>
+                                <span class="headline font-weight-light">{{ this.company.name }}</span>
                             </v-tooltip>
                         </v-card>
                     </v-flex>
@@ -75,7 +75,7 @@
                         <v-card dark>
                             <v-card-text
                                     v-if="this.company.homepage"
-                                    class="headline text-xs-left">
+                                    class="headline text-xs-left font-weight-light">
                                 <a :href=this.homepage target="_blank">{{ this.company.homepage }}</a>
                             </v-card-text>
                             <v-card-text
@@ -87,7 +87,7 @@
                     </v-flex>
                     <v-flex xs2>
                         <v-card dark color="green" height="212%" class="centered">
-                            <v-card-text class="headline text-xs-center">
+                            <v-card-text class="headline text-xs-center font-weight-light">
                                 <v-icon size="30px">place</v-icon>
                             </v-card-text>
                         </v-card>
@@ -96,7 +96,7 @@
                         <v-card dark>
                             <v-card-text
                                     v-if="this.company.zipcode"
-                                    class="headline text-xs-left">
+                                    class="headline text-xs-left font-weight-light">
                                 {{ this.company.zipcode }}
                             </v-card-text>
                             <v-card-text
@@ -110,7 +110,7 @@
                         <v-card dark>
                             <v-card-text
                                     v-if="this.company.place"
-                                    class="headline text-xs-left">
+                                    class="headline text-xs-left font-weight-light">
                                 {{ this.company.place }}
                             </v-card-text>
                             <v-card-text
@@ -129,7 +129,7 @@
                         <v-card dark>
                             <v-card-text
                                     v-if="this.company.street"
-                                    class="headline text-xs-left">
+                                    class="headline text-xs-left font-weight-light">
                                 {{ this.company.street }}
                             </v-card-text>
                             <v-card-text
@@ -180,7 +180,8 @@
                 </v-layout>
             </v-flex>
             <v-flex xs6>
-                <v-tabs centered height="64%" grow slider-color="info" v-model="contactsOfCompany.contact"
+                <v-tabs centered height="64%" grow slider-color="info"
+                        v-model="contactsOfCompany.contact"
                         v-if="contactsOfCompany.length > 0">
                     <v-tab v-bind:key="contact.id" v-for="contact in contactsOfCompany">
                         {{ contact.name }}
@@ -198,7 +199,7 @@
                                 <v-flex xs10>
                                     <v-card dark height="100%">
                                         <v-card-text
-                                                class="headline text-xs-left">
+                                                class="headline text-xs-left font-weight-light">
                                             {{ contact.role }}
                                         </v-card-text>
                                     </v-card>
@@ -214,7 +215,7 @@
                                     <v-card dark>
                                         <v-card-text
                                                 v-if="contact.mail"
-                                                class="headline text-xs-left">
+                                                class="headline text-xs-left font-weight-light">
                                             {{ contact.mail }}
                                         </v-card-text>
                                         <v-card-text
@@ -235,7 +236,7 @@
                                     <v-card dark>
                                         <v-card-text
                                                 v-if="contact.telephone"
-                                                class="headline text-xs-left">
+                                                class="headline text-xs-left font-weight-light">
                                             {{ contact.telephone }}
                                         </v-card-text>
                                         <v-card-text
@@ -256,7 +257,7 @@
                                     <v-card dark>
                                         <v-card-text
                                                 v-if="contact.mobile"
-                                                class="headline text-xs-left">
+                                                class="headline text-xs-left font-weight-light">
                                             {{ contact.mobile }}
                                         </v-card-text>
                                         <v-card-text
