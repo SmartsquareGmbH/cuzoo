@@ -39,7 +39,7 @@ public class ContactExporterTest {
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(smartsquare);
 
-        darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "", "");
+        darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "3456356453", "");
         contactRepository.save(darius);
 
         firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "");
@@ -60,9 +60,10 @@ public class ContactExporterTest {
         assertThat(content.get(2).contains(darius.getRole())).isTrue();
         assertThat(content.get(3).contains(darius.getMail())).isTrue();
         assertThat(content.get(4).contains(darius.getTelephone())).isTrue();
-        assertThat(content.get(6).contains(firstContactPoint.getTitle())).isTrue();
-        assertThat(content.get(6).contains(dateFormat.format(firstContactPoint.getDate()))).isTrue();
-        assertThat(content.get(7).contains(secondContactPoint.getTitle())).isTrue();
-        assertThat(content.get(7).contains(dateFormat.format(secondContactPoint.getDate()))).isTrue();
+        assertThat(content.get(5).contains(darius.getMobile())).isTrue();
+        assertThat(content.get(7).contains(firstContactPoint.getTitle())).isTrue();
+        assertThat(content.get(7).contains(dateFormat.format(firstContactPoint.getDate()))).isTrue();
+        assertThat(content.get(8).contains(secondContactPoint.getTitle())).isTrue();
+        assertThat(content.get(8).contains(dateFormat.format(secondContactPoint.getDate()))).isTrue();
     }
 }
