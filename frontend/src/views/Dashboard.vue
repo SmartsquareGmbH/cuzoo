@@ -50,25 +50,39 @@
                 </v-layout>
             </v-flex>
             <v-flex xs6>
-                <v-card>
-                    <v-card-title class="title font-weight-light">
-                        TODOs
-                        <v-btn small fab flat
-                               absolute right
+                <v-layout row wrap class="text-xs-right">
+                    <v-flex xs3 class="text-xs-left more-padding-top">
+                        <v-icon color="primary" size="24px">done_all</v-icon>
+                        <span class="headline font-weight-light">
+                            TODOs
+                        </span>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn small flat fab
                                @click="addTODO()"
                                color="transparent">
                             <v-tooltip top>
-                                <v-icon
+                                <v-icon large
                                         color="light-green accent-2"
-                                        slot="activator"
-                                        large>
+                                        slot="activator">
                                     add
                                 </v-icon>
                                 <span>TODO hinzufügen</span>
                             </v-tooltip>
                         </v-btn>
-                    </v-card-title>
-                </v-card>
+                    </v-flex>
+                    <v-flex xs6>
+                        <v-text-field
+                                ref="searchBarDashboard"
+                                v-model="search"
+                                @keyup.enter="goToFirstResult()"
+                                append-icon="search"
+                                label="Suche nach TODOs"
+                                color="primary"
+                                hide-details
+                                solo/>
+                    </v-flex>
+                </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12>
                         <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings"
@@ -158,8 +172,9 @@
             refreshData() {
                 this.getCompanies();
                 this.getContacts();
-                this.getContactPoints();
-                this.getTodos().then(() => this.loading = false);
+                this.getContactPoints().then(() => {
+                    this.getTodos().then(() => this.loading = false);
+                });
             },
             scrollHanle(evt) {
                 console.log(evt)
