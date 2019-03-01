@@ -2,25 +2,15 @@
     <v-container grid-list-md fluid>
         <v-layout row wrap v-if="!loading">
             <v-flex xs6>
-                <v-card style="border-style: solid; border-color: #4FC3F7; border-width: 0px">
-                    <v-card-title class="secondary title font-weight-light">
-                        Kontaktpunkte
+                <v-layout row wrap class="text-xs-right">
+                    <v-flex xs3 class="text-xs-left more-padding-top">
+                        <v-icon color="primary" size="24px">forum</v-icon>
+                        <span class="headline font-weight-light">
+                            Kontaktpunkte
+                        </span>
+                    </v-flex>
+                    <v-flex xs3>
                         <v-btn small flat fab
-                               absolute right
-                               @click="expandSearchBar()"
-                               color="transparent">
-                            <v-tooltip top>
-                                <v-icon large
-                                        color="primary"
-                                        slot="activator">
-                                    search
-                                </v-icon>
-                                <span>Kontaktpunkte durchsuchen</span>
-                            </v-tooltip>
-                        </v-btn>
-                        <v-btn small flat fab
-                               absolute right
-                               class="mr-5"
                                @click="addContactPoint()"
                                color="transparent">
                             <v-tooltip top>
@@ -32,22 +22,19 @@
                                 <span>Kontaktpunkt hinzufügen</span>
                             </v-tooltip>
                         </v-btn>
-                    </v-card-title>
-                    <v-expand-transition>
-                        <div v-if="searchBar">
-                            <v-text-field
-                                    ref="searchBarDashboard"
-                                    v-model="search"
-                                    @keyup.enter="goToFirstResult()"
-                                    append-icon="search"
-                                    label="Suche nach Kontaktpunkten"
-                                    color="primary"
-                                    background-color="#303030"
-                                    hide-details
-                                    solo/>
-                        </div>
-                    </v-expand-transition>
-                </v-card>
+                    </v-flex>
+                    <v-flex xs6>
+                    <v-text-field
+                            ref="searchBarDashboard"
+                            v-model="search"
+                            @keyup.enter="goToFirstResult()"
+                            append-icon="search"
+                            label="Suche nach Kontaktpunkten"
+                            color="primary"
+                            hide-details
+                            solo/>
+                    </v-flex>
+                </v-layout>
                 <v-layout row wrap>
                     <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
                         <div style="max-height: 675px">
@@ -96,7 +83,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
 
     import TodoDialog from '../components/dialogs/TodoDialog.vue';
     import TodoCard from '../components/cards/TodoCard.vue';
@@ -115,10 +102,11 @@
         data: () => ({
             contactPointDialogState: false,
             todoDialogState: false,
-            searchBar: false,
             loading: true,
+            search: '',
             settings: {
-                maxScrollbarLength: 120
+                maxScrollbarLength: 120,
+                wheelSpeed: 0.5
             },
         }),
         computed: {
@@ -158,12 +146,6 @@
                 this.getContacts();
                 this.getContactPoints().then(() => this.loading = false);
             },
-            expandSearchBar() {
-                this.searchBar = !this.searchBar;
-                setTimeout(() => {
-                    this.$refs.searchBarDashboard.focus();
-                }, 30);
-            },
             scrollHanle(evt) {
                 console.log(evt)
             },
@@ -176,3 +158,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .more-padding-top {
+        padding-top: 12px !important;
+    }
+</style>
