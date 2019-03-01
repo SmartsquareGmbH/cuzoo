@@ -9,6 +9,13 @@
                     </v-btn>
                 </v-flex>
                 <v-flex xs5 class="text-xs-right">
+                    <v-tooltip top>
+                        <v-btn flat small slot="activator" @click="viewContactPoints()">
+                            <v-icon size="22px" class="mr-1" dark>forum</v-icon>
+                            Kontaktpunktliste
+                        </v-btn>
+                        Anzeigen der Kontaktpunktliste
+                    </v-tooltip>
                     <v-btn flat small @click="editContactPoint()">
                         <v-icon size="22px" class="mr-1" dark>edit</v-icon>
                         Kontaktpunkt editieren
@@ -282,6 +289,9 @@
                     this.fileNames = response.data;
                     this.loading = false;
                 });
+            },
+            viewContactPoints() {
+                this.$router.push('/' + (this.companyId));
             }
         }
     }
