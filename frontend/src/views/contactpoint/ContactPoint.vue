@@ -130,9 +130,10 @@
                                 </v-tooltip>
                                 Kommentar
                             </v-card-text>
+                            <v-divider class="mb-3"/>
                         </v-flex>
                         <v-flex xs12>
-                        <span v-if="this.contactPoint.comment"
+                            <span v-if="this.contactPoint.comment"
                               style="white-space: pre-wrap;">{{ this.contactPoint.comment }}
                         </span>
                         </v-flex>

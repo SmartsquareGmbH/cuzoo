@@ -147,6 +147,7 @@
                             </v-tooltip>
                             Beschreibung
                         </v-card-text>
+                        <v-divider class="mb-3"/>
                     </v-flex>
                     <v-flex xs12>
                         <span v-if="this.company.description"
@@ -165,7 +166,8 @@
                                 Sonstige Angaben zum Unternehmen
                             </v-tooltip>
                             Sonstiges
-                        </v-card-text>
+                            </v-card-text>
+                            <v-divider class="mb-3"/>
                     </v-flex>
                     <v-flex xs12>
                         <span v-if="this.company.other"
@@ -275,6 +277,7 @@
                                         </v-tooltip>
                                         Bemerkung
                                     </v-card-text>
+                                    <v-divider class="mb-3"/>
                                 </v-flex>
                                 <v-flex xs12 v-if="contact.comment">
                                     <span style="white-space: pre-wrap">{{ contact.comment }}
