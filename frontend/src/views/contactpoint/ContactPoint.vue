@@ -1,166 +1,176 @@
 <template>
     <v-container grid-list-md text-xs-left fluid>
-        <v-layout row wrap>
-            <v-flex xs1>
-                <v-btn flat small @click="goPageBack()">
-                    <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon> Zurück
-                </v-btn>
-            </v-flex>
-            <v-flex xs5 class="text-xs-right">
-                <v-btn flat small @click="editContactPoint()">
-                    <v-icon size="22px" class="mr-1" dark>edit</v-icon> Kontaktpunkt editieren
-                </v-btn>
-            </v-flex>
-            <contact-point-dialog
-                    v-model="contactPointDialogState"
-                    :contactNames="this.contactNames"/>
-            <v-flex xs6>
-                <v-btn id="upload-btn" @click="uploadFiles()" flat small>
-                    <v-icon size="22px" class="mr-1" dark>publish</v-icon> Dateien hochladen
-                </v-btn>
-            </v-flex>
-            <v-flex xs6>
-                <v-layout row wrap>
-                    <v-flex xs2>
-                        <v-card dark color="green" height="100%" class="centered">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">business_center</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10>
-                        <v-card dark>
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.contact.company.name }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card dark color="green" height="100%" class="centered">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">person</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10>
-                        <v-card dark>
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.contact.name }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card height="100%" dark color="info">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">title</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10>
-                        <v-card height="100%" dark>
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.title }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card dark color="info" height="100%">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">event</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-card height="100%">
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.dateFormatted }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card dark color="info" height="100%">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">share</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs4 class="text-xs-left">
-                        <v-chip
-                                class="title mt-3"
-                                v-for="type in contactPoint.types"
-                                v-bind:key="contactPoint.type">
-                            {{ type }}
-                        </v-chip>
-                    </v-flex>
-                    <v-flex xs2 v-if="this.contactPoint.comment">
-                        <v-card dark color="info">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">comment</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10 v-if="this.contactPoint.comment">
-                        <v-card dark>
-                            <v-card-text class="headline text-xs-left font-weight-light">
-                                {{ this.contactPoint.comment }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card dark color="info">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px" class="pt-1">label</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs10 class="text-xs-left">
-                        <v-chip
-                                class="title mt-3"
-                                v-for="label in contactPoint.labels"
-                                v-bind:key="contactPoint.label">
-                            {{ label }}
-                        </v-chip>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-            <v-flex xs6>
-                <v-layout row wrap>
-                    <v-flex xs2>
-                        <v-card dark color="info" height="100%" class="centered">
-                            <v-card-text class="headline text-xs-center">
-                                <v-icon size="30px">attach_file</v-icon>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs2>
-                        <v-card dark height="100%">
-                            <v-card-text class="headline text-xs-center font-weight-light">
-                                {{ this.fileNames.length }}
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs8>
-                        <file-upload-dialog
-                                v-model="fileUploadDialogState"
-                                :companyName="this.company.name"
-                                :contactPointId="this.contactPointId"/>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-layout row wrap>
-                            <attachment-card
-                                    v-for="fileName in this.fileNames"
-                                    :fileName="fileName"
-                                    :contactPoint="contactPoint"/>
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
+        <v-fade-transition>
+            <v-layout row wrap v-if="doneLoading">
+                <v-flex xs1>
+                    <v-btn flat small @click="goPageBack()">
+                        <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
+                        Zurück
+                    </v-btn>
+                </v-flex>
+                <v-flex xs5 class="text-xs-right">
+                    <v-btn flat small @click="editContactPoint()">
+                        <v-icon size="22px" class="mr-1" dark>edit</v-icon>
+                        Kontaktpunkt editieren
+                    </v-btn>
+                </v-flex>
+                <contact-point-dialog
+                        v-model="contactPointDialogState"
+                        :contactNames="this.contactNames"/>
+                <v-flex xs6>
+                    <v-btn id="upload-btn" @click="uploadFiles()" flat small>
+                        <v-icon size="22px" class="mr-1" dark>publish</v-icon>
+                        Dateien hochladen
+                    </v-btn>
+                </v-flex>
+                <v-flex xs6>
+                    <v-layout row wrap>
+                        <v-flex xs2>
+                            <v-card dark color="green" height="100%" class="centered">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">business_center</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs10>
+                            <v-card dark>
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ this.contactPoint.contact.company.name }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark color="green" height="100%" class="centered">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">person</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs10>
+                            <v-card dark>
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ this.contactPoint.contact.name }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card height="100%" dark color="info">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">title</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs10>
+                            <v-card height="100%" dark>
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ this.contactPoint.title }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark color="info" height="100%">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">event</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs4>
+                            <v-card height="100%">
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ this.dateFormatted }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark color="info" height="100%">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">share</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs4 class="text-xs-left">
+                            <v-chip
+                                    class="title mt-3"
+                                    v-for="type in contactPoint.types"
+                                    v-bind:key="contactPoint.type">
+                                {{ type }}
+                            </v-chip>
+                        </v-flex>
+                        <v-flex xs2 v-if="this.contactPoint.comment">
+                            <v-card dark color="info">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">comment</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs10 v-if="this.contactPoint.comment">
+                            <v-card dark>
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ this.contactPoint.comment }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark color="info">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px" class="pt-1">label</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs10 class="text-xs-left">
+                            <v-chip
+                                    class="title mt-3"
+                                    v-for="label in contactPoint.labels"
+                                    v-bind:key="label">
+                                {{ label }}
+                            </v-chip>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+                <v-flex xs6>
+                    <v-layout row wrap>
+                        <v-flex xs2>
+                            <v-card dark color="info" height="100%" class="centered">
+                                <v-card-text class="headline text-xs-center">
+                                    <v-icon size="30px">attach_file</v-icon>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark height="100%">
+                                <v-card-text class="headline text-xs-center font-weight-light">
+                                    {{ this.fileNames.length }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs8>
+                            <file-upload-dialog
+                                    v-model="fileUploadDialogState"
+                                    :companyName="this.company.name"
+                                    :contactPointId="this.contactPointId"/>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-layout row wrap>
+                                <attachment-card
+                                        v-for="fileName in this.fileNames"
+                                        :fileName="fileName"
+                                        :contactPoint="contactPoint"/>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+        </v-fade-transition>
+        <v-layout v-if="!doneLoading">
+            <v-flex xs12 class="text-xs-center">
+                <v-progress-circular :size="128" color="primary" indeterminate/>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
     import FileUploadDialog from '../../components/dialogs/FileUploadDialog.vue';
@@ -185,7 +195,8 @@
                 fileUploadDialogState: false,
                 fileNames: [],
                 contactPointDialogState: false,
-                contactNames: []
+                contactNames: [],
+                doneLoading: false,
             }
         },
         computed: {
@@ -206,17 +217,22 @@
                 })
             },
             dateFormatted() {
-                return datefns.format(this.contactPoint.date, 'DD.MM.YY', { locale: de });
+                return datefns.format(this.contactPoint.date, 'DD.MM.YY', {locale: de});
             }
         },
         mounted() {
-            this.getFileNames();
+            this.refreshData();
         },
         methods: {
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails',
                 storeContactPoints: 'storeContactPoints'
             }),
+            ...mapActions([
+                'getContactPoints',
+                'getContacts',
+                'getCompanies'
+            ]),
             goPageBack() {
                 this.$router.go(-1)
             },
@@ -254,27 +270,14 @@
                 this.contactPointDialogState = true;
             },
             refreshData() {
-                api.get('point/get').then(response => {
-                    let contactPoints = response.data;
+                this.getContactPoints();
+                this.getContacts();
+                this.getCompanies();
 
-                    contactPoints.forEach(contactPoint => {
-                        contactPoint.labels = contactPoint.labels.map(label => {
-                            return label.title;
-                        });
-                    });
-
-                    contactPoints.forEach(contactPoint => {
-                        contactPoint.types = contactPoint.types.map(type => {
-                            return type.title;
-                        });
-                    });
-
-                    this.storeContactPoints({
-                        contactPoints: contactPoints
-                    })
-                }).catch(error => {
-                    console.log(error)
-                })
+                api.get(`file/get/names/${this.contactPointId}`).then(response => {
+                    this.fileNames = response.data;
+                    this.doneLoading = true;
+                });
             }
         }
     }
