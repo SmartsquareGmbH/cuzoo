@@ -20,7 +20,7 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-combobox
-                                v-model="companyName"
+                                v-model="this.companyName"
                                 :disabled="!this.companyFieldEnabled"
                                 :items="companyNames"
                                 label="Unternehmen"
@@ -86,6 +86,7 @@
         data() {
             return {
                 valid: false,
+                companyName: "",
                 companyFieldEnabled: true,
                 contactFieldRules: [
                     v => !!v || "Bitte geben Sie einen Namen an"
@@ -110,9 +111,6 @@
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
-            },
-            companyName() {
-                return this.editedContact.company.name;
             }
         },
         watch: {
