@@ -26,17 +26,20 @@
                 <v-flex xs6>
                     <v-layout row wrap>
                         <v-flex xs2>
-                            <v-card dark color="green" height="100%" class="centered">
+                            <v-card dark color="green">
                                 <v-card-text class="headline text-xs-center">
-                                    <v-icon size="30px">business_center</v-icon>
+                                    <v-icon size="30px">business</v-icon>
                                 </v-card-text>
                             </v-card>
                         </v-flex>
                         <v-flex xs10>
                             <v-card dark>
-                                <v-card-text class="headline text-xs-left font-weight-light">
-                                    {{ this.contactPoint.contact.company.name }}
-                                </v-card-text>
+                                <v-tooltip bottom>
+                                    <v-card-text slot="activator" class="headline text-xs-left font-weight-light">
+                                        {{ this.contactPoint.contact.company.name | truncate(60) }}
+                                    </v-card-text>
+                                    <span class="headline font-weight-light">{{ this.company.name }}</span>
+                                </v-tooltip>
                             </v-card>
                         </v-flex>
                         <v-flex xs2>
@@ -96,20 +99,6 @@
                                 {{ type }}
                             </v-chip>
                         </v-flex>
-                        <v-flex xs2 v-if="this.contactPoint.comment">
-                            <v-card dark color="info">
-                                <v-card-text class="headline text-xs-center">
-                                    <v-icon size="30px">comment</v-icon>
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                        <v-flex xs10 v-if="this.contactPoint.comment">
-                            <v-card dark>
-                                <v-card-text class="headline text-xs-left font-weight-light">
-                                    {{ this.contactPoint.comment }}
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
                         <v-flex xs2>
                             <v-card dark color="info">
                                 <v-card-text class="headline text-xs-center">
@@ -124,6 +113,21 @@
                                     v-bind:key="label">
                                 {{ label }}
                             </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-card-text class="headline text-xs-left no-padding-left"
+                                         v-if="this.contactPoint.comment">
+                                <v-tooltip top>
+                                    <v-icon color="info" size="30px" slot="activator">comment</v-icon>
+                                    Kommentar zum Kontakpunkt
+                                </v-tooltip>
+                                Kommentar
+                            </v-card-text>
+                        </v-flex>
+                        <v-flex xs12>
+                        <span v-if="this.contactPoint.comment"
+                              style="white-space: pre-wrap;">{{ this.contactPoint.comment }}
+                        </span>
                         </v-flex>
                     </v-layout>
                 </v-flex>
