@@ -273,7 +273,7 @@
                                             <v-icon color="info" size="30px" slot="activator">info</v-icon>
                                             Kommentar zum Ansprechpartner
                                         </v-tooltip>
-                                        Kommentar
+                                        Bemerkung
                                     </v-card-text>
                                 </v-flex>
                                 <v-flex xs12 v-if="contact.comment">
