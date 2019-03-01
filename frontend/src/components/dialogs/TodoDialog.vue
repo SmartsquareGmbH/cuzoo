@@ -138,7 +138,7 @@
                 storeDetails: 'storeEditedTodoDetails'
             }),
             submitTodo() {
-                api.put(`todo/submit?companyName=${this.company.name}`, {
+                api.put(`todo/submit?companyName=${this.company.name.replace("&", "%26")}`, {
                     description: this.editedTodo.description,
                     expiration: datefns.parse(this.date).getTime(),
                     reminder: this.getReminderDate()
