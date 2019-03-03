@@ -8,10 +8,10 @@
                     <v-scroll-x-transition>
                         <v-btn v-if="hover"
                                absolute top right fab small
-                               color="secondary"
+                               color="success"
                                @click="taskIsDone(todo)"
                                class="elevation-12">
-                            <v-icon size="24px" color="success" class="ml-3">
+                            <v-icon size="24px" color="secondary" class="ml-3">
                                 done_outline
                             </v-icon>
                         </v-btn>
