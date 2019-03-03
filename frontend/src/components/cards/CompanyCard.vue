@@ -6,25 +6,12 @@
                     :class="`secondary mt-2 mb-3 clickable elevation-${hover ? 2 : 2}`"
                     @click.native="viewContactPoints(company)"
                     hover>
-                <v-card-text
-                        class="headline text-xs-left">
+                <v-card-text class="headline text-xs-left">
                     {{ company.name }}
-                    <v-divider
-                            class="my-2"/>
+                    <v-divider class="my-2"/>
                     <v-layout row wrap>
-                    <v-flex xs4
-                            v-if="company.zipCode || company.place || company.street"
-                            class="headline font-weight-light text-xs-left low-padding">
-                        <v-icon
-                                color="primary"
-                                class="mr-1"
-                                size="30px">
-                            place
-                        </v-icon>
-                        {{ company.zipCode }} {{ company.place }}, {{ company.street }}
-                    </v-flex>
                         <v-flex xs8
-                                class="headline text-xs-right"
+                                class="headline text-xs-left"
                                 v-if="contacts.length > 0">
                             <v-icon
                                     color="primary"
@@ -32,26 +19,41 @@
                                     size="30px">
                                 people
                             </v-icon>
-                            <v-chip
-                                    v-bind:key="contact.id"
+                            <v-chip v-bind:key="contact.id"
                                     v-for="contact in contacts">
-                        <span class="headline white--text">
-                            {{ contact.name }}
-                        </span>
+                                <span class="title font-weight-regular white--text">
+                                    {{ contact.name }}
+                                </span>
                             </v-chip>
+                        </v-flex>
+                        <v-flex xs4 v-if="company.zipCode || company.place || company.street"
+                                class="headline font-weight-light text-xs-right low-padding">
+                            <v-icon
+                                    color="primary"
+                                    class="mr-1"
+                                    size="30px">
+                                place
+                            </v-icon>
+                            {{ company.zipCode }} {{ company.place }}, {{ company.street }}
                         </v-flex>
                     </v-layout>
                 </v-card-text>
-                <v-card
-                        color="#377D93"
-                        v-if="(company.description || company.other)">
-                    <v-scroll-y-transition>
+                <v-hover>
+                    <v-card slot-scope="{ hover }"
+                            color="#377D93"
+                            v-if="(company.description || company.other)">
                         <v-card-text
+                                v-if="!hover"
                                 class="text-xs-left font-weight-light">
                             {{ company.description | truncate(325) }}
                         </v-card-text>
-                    </v-scroll-y-transition>
-                </v-card>
+                        <v-card-text
+                                v-if="hover"
+                                class="text-xs-left font-weight-light">
+                            {{ company.description }}
+                        </v-card-text>
+                    </v-card>
+                </v-hover>
                 <v-card-text
                         class="headline text-xs-left low-padding"
                         v-if="company.labels.length > 0">
@@ -65,7 +67,7 @@
                             class="mb-2"
                             v-bind:key="label"
                             v-for="label in company.labels">
-                        <span class="headline white--text">
+                        <span class="title font-weight-regular white--text">
                             {{ label }}
                         </span>
                     </v-chip>
