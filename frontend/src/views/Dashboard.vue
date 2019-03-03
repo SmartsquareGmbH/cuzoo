@@ -37,7 +37,7 @@
                 </v-layout>
                 <v-layout row wrap>
                     <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
-                        <div style="max-height: 675px">
+                        <div style="height: 675px;">
                             <v-flex xs12>
                                 <contact-point-card
                                         :contact-point="contactPoint"
@@ -133,7 +133,8 @@
             search: '',
             settings: {
                 maxScrollbarLength: 120,
-                wheelSpeed: 0.5
+                wheelSpeed: 0.5,
+                suppressScrollX: true
             },
         }),
         computed: {
