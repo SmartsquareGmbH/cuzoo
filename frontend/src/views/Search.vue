@@ -5,7 +5,7 @@
             <v-flex xs4>
                 <span class="display-3 font-weight-thin">CUZOO</span>
             </v-flex>
-            <v-flex xs2>
+            <v-flex xs2 text-xs-right>
                 <v-btn flat
                        class="mt-4 ml-5"
                        @click="expandOptionMenu = !expandOptionMenu">
