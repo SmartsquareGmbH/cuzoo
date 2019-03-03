@@ -10,9 +10,9 @@
                                 v-if="hover"
                                 @click.stop="editContactPoint()"
                                 class="elevation-12 mr-5"
-                                color="secondary"
+                                color="primary"
                                 absolute right top fab small>
-                            <v-icon size="24px" color="white">
+                            <v-icon size="24px" color="secondary">
                                 edit
                             </v-icon>
                         </v-btn>
@@ -21,9 +21,9 @@
                         <v-btn v-if="hover"
                                @click.stop="openConfirmDialog()"
                                class="elevation-12"
-                               color="secondary"
+                               color="error"
                                absolute right top fab small>
-                            <v-icon size="24px" color="error">
+                            <v-icon size="24px" color="secondary">
                                 delete
                             </v-icon>
                         </v-btn>
