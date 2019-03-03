@@ -53,7 +53,7 @@ export default new Router({
             component: ContactPoint
         },
         {
-            path: "/file/:contactPointId/:fileName",
+            path: "/:companyId/:contactPointId/:fileName",
             name: "filePreview",
             component: FilePreview
         }

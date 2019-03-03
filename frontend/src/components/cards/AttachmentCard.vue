@@ -64,7 +64,6 @@
                 this.$router.push({
                     name: 'filePreview',
                     params: {
-                        contactPointId: this.contactPoint.id,
                         fileName: fileName
                     }
                 });
