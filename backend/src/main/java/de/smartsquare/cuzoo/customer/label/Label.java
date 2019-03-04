@@ -107,5 +107,8 @@ public class Label {
         this.companies = companies;
     }
 
-    public void addCompany(Company company) { this.companies.add(company); }
+    public Label addCompany(Company company) {
+        this.companies.add(company);
+        return this;
+    }
 }

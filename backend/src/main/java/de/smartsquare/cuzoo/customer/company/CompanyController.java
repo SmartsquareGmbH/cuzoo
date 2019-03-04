@@ -53,10 +53,32 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Company company;
+        Company company = getOrCreateCompany(companyForm);
 
-        if (companyRepository.findById(companyForm.getId()).isPresent()) {
-            company = companyRepository.findById(companyForm.getId()).get();
+        Long companyIdBeforeSaving = companyForm.getId();
+
+        try {
+            if (companyForm.getLabels() != null) {
+                submitLabels(companyForm.getLabels(), company);
+            }
+
+            companyRepository.save(company);
+            labelRepository.deleteAllReferenceless();
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (companyIdBeforeSaving < 1) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private Company getOrCreateCompany(@RequestBody @Valid CompanyForm companyForm) {
+        Company company;
+        Optional<Company> byId = companyRepository.findById(companyForm.getId());
+        if (byId.isPresent()) {
+            company = byId.get();
 
             company.setName(companyForm.getName());
             company.setStreet(companyForm.getStreet());
@@ -75,46 +97,27 @@ public class CompanyController {
                     companyForm.getDescription(),
                     companyForm.getOther());
         }
-
-        Long companyIdBeforeSaving = companyForm.getId();
-
-        try {
-            if (companyForm.getLabels() != null) {
-                submitLabels(companyForm.getLabels(), company);
-            }
-
-            companyRepository.save(company);
-            labelRepository.deleteAllReferenceless();
-        } catch (DataAccessException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        if (companyIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+        return company;
     }
 
     private void submitLabels(List<String> titles, Company company) {
-        List<Label> companyLabels = new ArrayList<>();
-
-        titles.forEach(title -> {
-            Optional<Label> label = labelRepository.findByTitle(title);
-
-            if (label.isPresent()) {
-                label.get().addCompany(company);
-
-                companyLabels.add(label.get());
-            } else {
-                Label labelToSave = new Label(title);
-                labelToSave.addCompany(company);
-
-                companyLabels.add(labelToSave);
-            }
-        });
+        List<Label> companyLabels = titles.stream()
+                .map(title -> new Tuple(labelRepository.findByTitle(title), title))
+                .map(tuple -> tuple.optionalLabel.orElse(new Label(tuple.title)))
+                .map(label -> label.addCompany(company))
+                .collect(Collectors.toList());
 
         company.setLabels(companyLabels);
+    }
+
+    class Tuple {
+        final Optional<Label> optionalLabel;
+        final String title;
+
+        Tuple(Optional<Label> optionalLabel, String title) {
+            this.optionalLabel = optionalLabel;
+            this.title = title;
+        }
     }
 
     @DeleteMapping("/delete/{companyId}")
@@ -144,5 +147,4 @@ public class CompanyController {
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
     }
-
 }
