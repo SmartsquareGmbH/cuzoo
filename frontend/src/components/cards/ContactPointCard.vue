@@ -39,7 +39,8 @@
                 <v-card-title class="secondary title font-weight-light low-padding-y low-padding-left">
                     <v-icon :size="24">attach_file</v-icon>
                     <span class="mx-1 primary--text">{{ fileNames.length }}</span>
-                    <v-icon class="mx-1">share</v-icon>
+                    <v-icon class="mx-1"
+                            :style="`transform: rotate(${hover ? 360 : 0}deg)`">share</v-icon>
                     <v-chip small
                             class="subheading my-1 primary--text"
                             v-bind:key="type"
