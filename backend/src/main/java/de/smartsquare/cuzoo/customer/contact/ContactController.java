@@ -56,7 +56,7 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (isFreelancer(maybeCompanyName)) {
+        if (hasNoCompany(maybeCompanyName)) {
             if (!companyRepository.existsByName(maybeCompanyName)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -80,7 +80,7 @@ public class ContactController {
         }
     }
 
-    private boolean isFreelancer(String maybeCompanyName) {
+    private boolean hasNoCompany(String maybeCompanyName) {
         return maybeCompanyName != null;
     }
 
