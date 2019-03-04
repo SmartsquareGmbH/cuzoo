@@ -40,6 +40,7 @@
                         <div :style="`height: ${getContactPointDashHeight()}px`">
                             <v-flex xs12>
                                 <contact-point-card
+                                        class="less-margin-bottom"
                                         :contact-point="contactPoint"
                                         :search="true"
                                         v-bind:key="contactPoint.id"
@@ -84,7 +85,6 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex xs12>
                         <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
                             <div :style="`height: ${getTodoDashHeight()}px`">
                                 <v-layout row wrap>
@@ -96,7 +96,6 @@
                                 </v-layout>
                             </div>
                         </vue-perfect-scrollbar>
-                    </v-flex>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -202,5 +201,9 @@
 <style scoped>
     .more-padding-top {
         padding-top: 12px !important;
+    }
+
+    .less-margin-bottom {
+        margin-bottom: 12px !important;
     }
 </style>
