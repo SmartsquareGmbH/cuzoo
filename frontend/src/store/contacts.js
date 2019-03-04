@@ -4,6 +4,7 @@ export default {
     state: {
         contacts: [],
         editedIndex: -1,
+        editedCompanyName: "",
         editedContact: {
             value: false,
             id: 0,
@@ -18,8 +19,9 @@ export default {
     },
     getters: {
         contacts: state => state.contacts,
+        editedCompanyName: state => state.editedCompanyName,
         editedContact: state => state.editedContact,
-        editedContactIndex: state => state.editedIndex
+        editedContactIndex: state => state.editedIndex,
     },
     mutations: {
         storeContacts(state, payload) {
@@ -28,6 +30,9 @@ export default {
         storeEditedContactDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedContact = payload.editedContact
+        },
+        storeEditedCompanyName(state, payload) {
+            state.editedCompanyName = payload.editedCompanyName
         }
     },
     actions: {

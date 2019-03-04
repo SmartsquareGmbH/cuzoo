@@ -10,29 +10,29 @@
                         <v-layout wrap>
                             <v-flex xs12>
                                 <v-text-field
-                                v-model="editedContact.name"
-                                label="Vor- und Nachname"
-                                prepend-icon="person"
-                                hide-details
-                                suffix="*"
-                                required
-                                :rules="contactFieldRules"/>
+                                        v-model="editedContact.name"
+                                        label="Vor- und Nachname"
+                                        prepend-icon="person"
+                                        hide-details
+                                        suffix="*"
+                                        required
+                                        :rules="contactFieldRules"/>
                             </v-flex>
                             <v-flex xs12>
                                 <v-combobox
-                                v-model="this.companyName"
-                                :disabled="!this.companyFieldEnabled"
-                                :items="companyNames"
-                                label="Unternehmen"
-                                prepend-icon="business"
-                                hide-details/>
+                                        v-model="companyName"
+                                        :disabled="!this.companyFieldEnabled"
+                                        :items="this.companyNames"
+                                        label="Unternehmen"
+                                        prepend-icon="business"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
-                                v-model="editedContact.mail"
-                                prepend-icon="mail"
-                                label="E-Mail"
-                                hide-details/>
+                                        v-model="editedContact.mail"
+                                        prepend-icon="mail"
+                                        label="E-Mail"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
@@ -43,10 +43,10 @@
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
-                                v-model="editedContact.telephone"
-                                prepend-icon="call"
-                                label="Telefon"
-                                hide-details/>
+                                        v-model="editedContact.telephone"
+                                        prepend-icon="call"
+                                        label="Telefon"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
@@ -57,10 +57,10 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
-                                v-model="editedContact.comment"
-                                name="input-7-4"
-                                label="Bemerkung"
-                                rows="3" hide-details/>
+                                        v-model="editedContact.comment"
+                                        name="input-7-4"
+                                        label="Bemerkung"
+                                        rows="3" hide-details/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -86,11 +86,11 @@
         data() {
             return {
                 valid: false,
-                companyName: "",
                 companyFieldEnabled: true,
                 contactFieldRules: [
                     v => !!v || "Bitte geben Sie einen Namen an"
                 ],
+                companyName: "",
                 defaultContact: {
                     value: false,
                     id: 0,
@@ -107,7 +107,8 @@
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactIndex',
-                editedContact: 'editedContact'
+                editedContact: 'editedContact',
+                editedCompanyName: 'editedCompanyName'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
@@ -115,15 +116,25 @@
         },
         watch: {
             value() {
-                this.$refs.form.resetValidation()
+                this.$refs.form.resetValidation();
+            },
+            editedCompanyName() {
+                this.companyName = this.editedCompanyName;
+            },
+            companyNames() {
+                if (this.companyNames.length === 1) {
+                    this.companyName = this.companyNames[0];
+                    this.companyFieldEnabled = false;
+                } else {
+                    this.companyFieldEnabled = true;
+                    this.companyName = '';
+                }
             }
-        },
-        mounted() {
-            this.companyName = this.getCompanyName();
         },
         methods: {
             ...mapMutations({
-                storeContactDetails: 'storeEditedContactDetails'
+                storeContactDetails: 'storeEditedContactDetails',
+                storeCompanyName: 'storeEditedCompanyName'
             }),
             closeDialog() {
                 this.$emit('input');
@@ -132,7 +143,11 @@
                     this.storeContactDetails({
                         editedIndex: -1,
                         editedContact: Object.assign({}, this.defaultContact)
-                    })
+                    });
+
+                    this.storeCompanyName({editedCompanyName: ''});
+
+                    this.companyName = "";
                 }, 300)
             },
             clearDialog() {
@@ -143,14 +158,10 @@
                 }
             },
             submitContact() {
-                if (this.getCompanyName() == null || this.getCompanyName() === "") {
-                    this.editedContact.companyName = "";
-                    this.editedContact.role = "Freiberufler";
-                }
+                console.log(this.companyName);
+                let maybeCompany = this.companyName ? `?companyName=${this.companyName.replace("&", "%26")}` : '';
 
-                let companyOrFreelancer = this.companyName ? `?companyName=${this.companyName.replace("&", "%26")}` : '';
-                
-                api.put(`contact/submit${companyOrFreelancer}`, {
+                api.put(`contact/submit${maybeCompany}`, {
                     name: this.editedContact.name,
                     id: this.editedContact.id,
                     role: this.editedContact.role,
@@ -168,12 +179,13 @@
                 });
             },
             getCompanyName() {
-                if (this.companyNames.length === 1) {
+                if (this.editedContact.company) {
+                    return this.editedContact.company.name;
+                } else if (this.companyNames.length === 1) {
                     this.companyFieldEnabled = false;
                     return this.companyNames[0];
                 } else {
-                    this.companyFieldEnabled = true;
-                    return this.companyName;
+                    return null;
                 }
             }
         }
