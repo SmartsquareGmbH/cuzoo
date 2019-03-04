@@ -10,7 +10,7 @@
                                absolute top right fab small
                                color="success"
                                @click="taskIsDone(todo)"
-                               class="elevation-12">
+                               :class="`elevation-12 ${onDashboard ? 'more-margin-top' : ''}`">
                             <v-icon size="24px" color="secondary" class="ml-3">
                                 done_outline
                             </v-icon>
@@ -43,7 +43,7 @@
     const de = require('date-fns/locale/de');
 
     export default {
-        props: ['todo'],
+        props: ['todo', 'onDashboard'],
         data() {
             return {
             }

@@ -36,7 +36,7 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
+                    <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
                         <div :style="`height: ${getContactPointDashHeight()}px`">
                             <v-flex xs12>
                                 <contact-point-card
@@ -85,13 +85,12 @@
                 </v-layout>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings"
-                                               @ps-scroll-y="scrollHanle">
+                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
                             <div :style="`height: ${getTodoDashHeight()}px`">
                                 <v-layout row wrap>
                                     <todo-card
                                             :todo="todo"
-                                            :search="true"
+                                            :on-dashboard="true"
                                             v-bind:key="todo.id"
                                             v-for="todo in todos"/>
                                 </v-layout>
