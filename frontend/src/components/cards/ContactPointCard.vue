@@ -33,35 +33,40 @@
                         v-model="confirmDialogState"
                         :questionToBeConfirmed="deleteContactPointMessage"
                         @confirmed="deleteContactPoint()"/>
-                <v-card-title class="secondary title font-weight-light">
-                    <v-icon color="primary  " class="mr-1">forum</v-icon>
-                    <span class="headline font-weight-light mr-2">{{ contactPoint.title }}</span> •
-                    <span class="ml-2 primary--text mr-2">{{ dateFormatted }}</span> •
-                    <v-icon class="ml-1">attach_file</v-icon>
-                    <span class="ml-1 mr-1 primary--text">{{ fileNames.length }}</span>
-                    <v-icon class="ml-1 mr-1">share</v-icon>
-                    <v-chip
-                            class="subheading mt-1 mb-1 primary--text"
+                <v-card-title class="secondary no-padding-bottom">
+                    <span class="headline font-weight-light">{{ contactPoint.title }}</span>
+                </v-card-title>
+                <v-card-title class="secondary title font-weight-light low-padding-y low-padding-left">
+                    <v-icon :size="24">attach_file</v-icon>
+                    <span class="mx-1 primary--text">{{ fileNames.length }}</span>
+                    <v-icon class="mx-1">share</v-icon>
+                    <v-chip small
+                            class="subheading my-1 primary--text"
                             v-bind:key="type"
                             v-for="type in contactPoint.types">
                         {{ type }}
                     </v-chip>
+                    <v-icon class="mx-1">business</v-icon>
+                    <v-tooltip top>
+                        <v-chip small slot="activator"
+                                class="subheading my-1 primary--text">
+                            {{ contactPoint.contact.company.name | truncate(25) }}
+                        </v-chip>
+                        <span class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
+                    </v-tooltip>
                     <v-spacer></v-spacer>
-                    <v-chip
-                            :class="`mt-${hover ? 4 : 0}`"
-                            color="white">
-                        <v-avatar class="info white--text" size="35px">
-                            <v-icon>person</v-icon>
-                        </v-avatar>
-                        <span class="subheading secondary--text">
-                            {{ contactPoint.contact.name }}
-                        </span>
+                    <v-icon>person</v-icon>
+                    <v-chip small
+                            class="subheading my-1 primary--text">
+                        {{ contactPoint.contact.name }}
                     </v-chip>
                 </v-card-title>
-                <v-card-text class="text-xs-left text-truncate" width="20%">
+                <v-card-text
+                        v-if="contactPoint.comment"
+                        class="text-xs-left text-truncate" width="20%">
                     {{ contactPoint.comment }}
                 </v-card-text>
-                <v-divider/>
+                <v-divider v-if="contactPoint.labels.length > 0"/>
                 <v-card-text class="subheading text-xs-left low-padding">
                     <v-chip
                             color="info"
@@ -157,6 +162,19 @@
 
 <style scoped>
     .low-padding {
-        padding: 8px !important;
+        padding: 8px;
+    }
+
+    .no-padding-bottom {
+        padding-bottom: 0px;
+    }
+
+    .low-padding-y {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .low-padding-left {
+        padding-left: 10px;
     }
 </style>
