@@ -15,7 +15,7 @@
                 <vue-clip :options="options">
                     <template slot="clip-uploader-action">
                         <v-card class="bordered pa-1" color="transparent elevation-12 mb-4">
-                            <div id="drop-area" class="dz-message clickable">
+                            <div id="drop-area" class="dz-message clickable text-xs-center">
                                 <h2 class="mt-4 mb-1">
                                     Drag & Drop
                                 </h2>
