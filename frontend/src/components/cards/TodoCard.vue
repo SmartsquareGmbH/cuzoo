@@ -68,9 +68,9 @@
             getUrgency(expiration) {
                 let differenceInHours = datefns.differenceInHours(expiration, new Date());
 
-                if (differenceInHours < 24) {
+                if (differenceInHours < 48) {
                     return 'error';
-                } else if (differenceInHours < 72) {
+                } else if (differenceInHours < 168) {
                     return 'warning';
                 } else {
                     return 'primary';
