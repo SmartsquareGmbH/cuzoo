@@ -3,7 +3,6 @@
         <v-flex xs12 v-if="todo.done === false">
             <v-hover>
                 <v-card slot-scope="{ hover }"
-                        :color="getUrgency(todo.expiration)"
                         height="100%">
                     <v-scroll-x-transition>
                         <v-btn v-if="hover"
@@ -16,20 +15,25 @@
                             </v-icon>
                         </v-btn>
                     </v-scroll-x-transition>
-                    <v-card-text
-                            v-if="getUrgency(todo.expiration) !== 'secondary'"
-                            class="secondary--text headline text-xs-left">
-                        <v-icon size="32px" class="mr-2" color="secondary" :style="`transform: rotate(${hover ? 90 : 0}deg)`">
-                            {{ getUrgency(todo.expiration) }}
-                        </v-icon>
+                    <v-card-title class="secondary title font-weight-light low-padding-left no-padding-bottom">
+                        <v-icon class="mx-1"
+                                :style="`transform: rotate(${hover ? 360 : 0}deg)`">timer</v-icon>
+                        <v-chip small
+                                :class="`subheading my-1 ${getUrgency(todo.expiration)}--text`">
+                            {{ distanceInWords }}
+                        </v-chip>
+                        <v-icon class="mx-1">business</v-icon>
+                        <v-tooltip top>
+                            <v-chip small slot="activator"
+                                    class="subheading my-1 primary--text">
+                                {{ todo.company.name | truncate(25) }}
+                            </v-chip>
+                            <span class="title font-weight-light">{{ todo.company.name }}</span>
+                        </v-tooltip>
+                    </v-card-title>
+                    <v-card-title class="white--text headline font-weight-light text-xs-left">
                         {{ todo.description }}
-                    </v-card-text>
-                    <v-card-text v-else class="white--text headline text-xs-left">
-                        <v-icon size="32px" class="mr-2" color="white" :style="`transform: rotate(${hover ? 90 : 0}deg)`">
-                            info
-                        </v-icon>
-                        {{ todo.description }}
-                    </v-card-text>
+                    </v-card-title>
                 </v-card>
             </v-hover>
         </v-flex>
@@ -45,8 +49,19 @@
     export default {
         props: ['todo', 'onDashboard'],
         data() {
-            return {
+            return {}
+        },
+        computed: {
+            distanceInWords() {
+                return datefns.distanceInWords(
+                    this.todo.expiration,
+                    new Date(),
+                    {locale: de}
+                );
             }
+        },
+        mounted() {
+            console.log(this.todo);
         },
         methods: {
             taskIsDone(todo) {
@@ -61,9 +76,23 @@
                 } else if (differenceInHours < 72) {
                     return 'warning';
                 } else {
-                    return 'secondary';
+                    return 'primary';
                 }
             }
         }
     }
 </script>
+
+<style scoped>
+    .no-padding-bottom {
+        padding-bottom: 0px;
+    }
+
+    .low-padding-left {
+        padding-left: 10px;
+    }
+
+    .more-margin-top {
+        margin-top: 32px;
+    }
+</style>
