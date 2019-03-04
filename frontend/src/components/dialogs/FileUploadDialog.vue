@@ -1,4 +1,4 @@
-<template>
+<template text-xs-left>
     <v-dialog
             :value="value"
             :companyName="companyName"
@@ -23,7 +23,6 @@
                             </div>
                         </v-card>
                     </template>
-
                     <template slot="clip-uploader-body" scope="props">
                         <div v-bind:key="file.name" v-for="file in props.files" class="text-xs-left">
                             <p class="title text-xs-left font-weight-light">
@@ -31,7 +30,13 @@
                                 <v-icon size="30px" v-if="file.status === 'success'" color="success">
                                     done_outline
                                 </v-icon>
-                                <v-icon v-else size="30px" color="error">error_outline</v-icon>
+                                <v-progress-circular
+                                        v-if="file.status === 'added'"
+                                        color="primary" indeterminate
+                                        :width="2" :size="28"/>
+                                <v-icon v-if="file.status === 'error'" size="30px" color="error">
+                                    error_outline
+                                </v-icon>
                             </p>
                         </div>
                     </template>
