@@ -2,7 +2,7 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    :class="`mt-${search ? 2 : 0} mb-${search ? 3 : 2} clickable elevation-${hover ? 6 : 2}`"
+                    :class="`mb-${search ? 3 : 2} clickable elevation-${hover ? 10 : 2}`"
                     @click="viewContactPoint(contactPoint)">
                 <div v-if="search === false">
                     <v-scroll-x-transition>
