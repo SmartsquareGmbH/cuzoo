@@ -60,9 +60,6 @@
                 );
             }
         },
-        mounted() {
-            console.log(this.todo);
-        },
         methods: {
             taskIsDone(todo) {
                 todo.done = true;
