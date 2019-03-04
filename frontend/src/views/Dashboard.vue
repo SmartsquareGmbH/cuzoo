@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md fluid>
-        <v-layout row wrap v-if="!loading">
+        <v-layout row wrap v-if="!loading" v-resize="onResize">
             <v-flex xs6>
                 <v-layout row wrap class="text-xs-right">
                     <v-flex xs3 class="text-xs-left more-padding-top">
@@ -37,7 +37,7 @@
                 </v-layout>
                 <v-layout row wrap>
                     <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
-                        <div style="height: 675px;">
+                        <div :style="`height: ${getContactPointDashHeight()}px`">
                             <v-flex xs12>
                                 <contact-point-card
                                         :contact-point="contactPoint"
@@ -87,7 +87,7 @@
                     <v-flex xs12>
                         <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings"
                                                @ps-scroll-y="scrollHanle">
-                            <div style="max-height: 350px">
+                            <div :style="`height: ${getTodoDashHeight()}px`">
                                 <v-layout row wrap>
                                     <todo-card
                                             :todo="todo"
@@ -127,6 +127,7 @@
             ContactPointCard
         },
         data: () => ({
+            windowHeight: 0,
             contactPointDialogState: false,
             todoDialogState: false,
             loading: true,
@@ -143,10 +144,13 @@
                 'contacts',
                 'contactPoints',
                 'todos',
-            ]),
+            ])
         },
         beforeMount() {
             this.refreshData();
+        },
+        mounted() {
+            this.onResize();
         },
         methods: {
             ...mapActions([
@@ -177,8 +181,14 @@
                     this.getTodos().then(() => this.loading = false);
                 });
             },
-            scrollHanle(evt) {
-                console.log(evt)
+            onResize() {
+                this.windowHeight = window.innerHeight;
+            },
+            getContactPointDashHeight() {
+                return this.windowHeight - 245;
+            },
+            getTodoDashHeight() {
+                return (this.windowHeight - 245) / 2;
             },
             addContactPoint() {
                 this.contactPointDialogState = true;
