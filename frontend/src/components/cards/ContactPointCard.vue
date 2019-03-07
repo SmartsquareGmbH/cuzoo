@@ -4,31 +4,6 @@
             <v-card slot-scope="{ hover }"
                     :class="`mb-${search ? 3 : 2} clickable elevation-${hover ? 10 : 2}`"
                     @click="viewContactPoint(contactPoint)">
-                <div v-if="search === false">
-                    <v-scroll-x-transition>
-                        <v-btn
-                                v-if="hover"
-                                @click.stop="editContactPoint()"
-                                class="elevation-12 mr-5"
-                                color="primary"
-                                absolute right top fab small>
-                            <v-icon size="24px" color="secondary">
-                                edit
-                            </v-icon>
-                        </v-btn>
-                    </v-scroll-x-transition>
-                    <v-scroll-x-transition>
-                        <v-btn v-if="hover"
-                               @click.stop="openConfirmDialog()"
-                               class="elevation-12"
-                               color="error"
-                               absolute right top fab small>
-                            <v-icon size="24px" color="secondary">
-                                delete
-                            </v-icon>
-                        </v-btn>
-                    </v-scroll-x-transition>
-                </div>
                 <confirm-dialog
                         v-model="confirmDialogState"
                         :questionToBeConfirmed="deleteContactPointMessage"
@@ -129,30 +104,6 @@
                     .catch(error => {
                         alert(error);
                     });
-            },
-            editContactPoint() {
-                this.$parent.getContactsOfCompany().forEach(contact => {
-                    this.$parent.contactNames.push(contact.name)
-                });
-
-                this.$parent.contactNames.sort();
-
-                this.storeDetails({
-                    editedIndex: this.contactPoints.indexOf(this.contactPoint),
-                    editedContactPoint: Object.assign({}, this.contactPoint)
-                });
-
-                this.$parent.contactPointDialogState = true;
-            },
-            deleteContactPoint() {
-                api.delete(`point/delete/${this.contactPoint.id}`)
-                    .then(() => this.$parent.refreshData())
-                    .catch(error => {
-                        alert(error);
-                    });
-            },
-            openConfirmDialog() {
-                this.confirmDialogState = true;
             }
         }
     }
