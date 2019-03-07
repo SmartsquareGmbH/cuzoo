@@ -24,11 +24,21 @@
                 <contact-point-dialog
                         v-model="contactPointDialogState"
                         :contactNames="this.contactNames"/>
-                <v-flex xs6>
+                <v-flex xs3>
                     <v-btn id="upload-btn" @click="uploadFiles()" flat small>
                         <v-icon size="22px" class="mr-1" dark>publish</v-icon>
                         Dateien hochladen
                     </v-btn>
+                </v-flex>
+                <v-flex xs3 class="text-xs-right">
+                    <v-btn flat small @click="openConfirmDialog()">
+                        <v-icon size="22px" class="mr-1" dark>delete</v-icon>
+                        Kontaktpunkt löschen
+                    </v-btn>
+                    <confirm-dialog
+                            v-model="confirmDialogState"
+                            :questionToBeConfirmed="deleteContactPointMessage"
+                            @confirmed="deleteContactPoint()"/>
                 </v-flex>
                 <v-flex xs6>
                     <v-layout row wrap>
@@ -134,7 +144,7 @@
                         </v-flex>
                         <v-flex xs12>
                             <span v-if="contactPoint.comment"
-                              style="white-space: pre-wrap;">{{ contactPoint.comment }}
+                                  style="white-space: pre-wrap;">{{ contactPoint.comment }}
                         </span>
                         </v-flex>
                     </v-layout>
@@ -209,6 +219,8 @@
                 contactPointDialogState: false,
                 contactNames: [],
                 loading: true,
+                confirmDialogState: false,
+                deleteContactPointMessage: 'Bist du dir sicher, dass du diesen Kontaktpunkt löschen willst?'
             }
         },
         computed: {
@@ -230,7 +242,7 @@
             },
             dateFormatted() {
                 return datefns.format(this.contactPoint.date, 'DD.MM.YY', {locale: de});
-            }
+            },
         },
         mounted() {
             this.refreshData();
@@ -280,6 +292,16 @@
                 });
 
                 this.contactPointDialogState = true;
+            },
+            deleteContactPoint() {
+                api.delete(`point/delete/${this.contactPoint.id}`)
+                    .then(() => this.$router.go(-1))
+                    .catch(error => {
+                        alert(error);
+                    });
+            },
+            openConfirmDialog() {
+                this.confirmDialogState = true;
             },
             refreshData() {
                 this.getContactPoints();
