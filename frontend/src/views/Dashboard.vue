@@ -24,30 +24,33 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs6>
-                    <v-text-field
-                            ref="searchBarDashboard"
-                            v-model="search"
-                            @keyup.enter="goToFirstResult()"
-                            append-icon="search"
-                            label="Suche nach Kontaktpunkten"
-                            color="primary"
-                            hide-details
-                            solo/>
+                        <v-text-field
+                                ref="searchBarDashboard"
+                                v-model="search"
+                                @keyup.enter="goToFirstResult()"
+                                append-icon="search"
+                                label="Suche nach Kontaktpunkten"
+                                color="primary"
+                                hide-details
+                                solo/>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
-                        <div :style="`height: ${getContactPointDashHeight()}px`">
-                            <v-flex xs12>
-                                <contact-point-card
-                                        class="less-margin-bottom"
-                                        :contact-point="contactPoint"
-                                        :search="true"
-                                        v-bind:key="contactPoint.id"
-                                        v-for="contactPoint in contactPoints"/>
-                            </v-flex>
-                        </div>
-                    </vue-perfect-scrollbar>
+                    <div class="dash">
+                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
+                            <div :style="`height: ${getContactPointDashHeight()}px; position: relative`">
+                                <v-flex xs12>
+                                    <contact-point-card
+                                            class="less-margin-bottom"
+                                            :contact-point="contactPoint"
+                                            :search="true"
+                                            v-bind:key="contactPoint.id"
+                                            v-for="contactPoint in contactPoints"/>
+                                </v-flex>
+                            </div>
+                        </vue-perfect-scrollbar>
+                        <div class="fade-out-gradient"/>
+                    </div>
                 </v-layout>
             </v-flex>
             <v-flex xs6>
@@ -85,6 +88,7 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
+                    <div class="dash">
                         <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
                             <div :style="`height: ${getTodoDashHeight()}px`">
                                 <v-layout row wrap>
@@ -96,6 +100,8 @@
                                 </v-layout>
                             </div>
                         </vue-perfect-scrollbar>
+                        <div class="fade-out-gradient"/>
+                    </div>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -132,7 +138,7 @@
             search: '',
             settings: {
                 maxScrollbarLength: 120,
-                wheelSpeed: 0.5,
+                wheelSpeed: 0.75,
                 suppressScrollX: true
             },
         }),
@@ -199,6 +205,23 @@
 </script>
 
 <style scoped>
+    .dash {
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+
+    .fade-out-gradient {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        margin: 0; padding: 15px 0;
+
+        background-image: linear-gradient(to bottom, transparent, #333333);
+    }
+
     .more-padding-top {
         padding-top: 12px !important;
     }
