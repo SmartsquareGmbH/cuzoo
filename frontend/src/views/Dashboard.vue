@@ -25,8 +25,8 @@
                     </v-flex>
                     <v-flex xs6>
                         <v-text-field
-                                ref="searchBarDashboard"
-                                v-model="search"
+                                ref="searchBarContactPoints"
+                                v-model="searchContactPoints"
                                 @keyup.enter="goToFirstResult()"
                                 append-icon="search"
                                 label="Suche nach Kontaktpunkten"
@@ -40,12 +40,9 @@
                         <perfect-scrollbar :options="settings">
                             <div :style="`height: ${this.windowHeight - 245}px;`">
                                 <v-flex xs12>
-                                    <contact-point-card
-                                            class="less-margin-bottom"
-                                            :contact-point="contactPoint"
-                                            :search="true"
-                                            v-bind:key="contactPoint.id"
-                                            v-for="contactPoint in contactPoints"/>
+                                    <contact-point-results
+                                            :search="this.searchContactPoints"
+                                            :on-dashboard="true"/>
                                 </v-flex>
                             </div>
                         </perfect-scrollbar>
@@ -77,8 +74,8 @@
                     </v-flex>
                     <v-flex xs6>
                         <v-text-field
-                                ref="searchBarDashboard"
-                                v-model="search"
+                                ref="searchBarTodos"
+                                v-model="searchTodos"
                                 @keyup.enter="goToFirstResult()"
                                 append-icon="search"
                                 label="Suche nach TODOs"
@@ -120,21 +117,23 @@
     import TodoCard from '../components/cards/TodoCard.vue';
     import ContactPointDialog from "../components/dialogs/ContactPointDialog.vue";
     import ContactPointCard from "../components/cards/ContactPointCard.vue";
-    import VuePerfectScrollbar from "vue-perfect-scrollbar";
+    import ContactPointResults from "../components/search/ContactPointResults.vue";
 
     export default {
         components: {
             TodoDialog,
             TodoCard,
             ContactPointDialog,
-            ContactPointCard
+            ContactPointCard,
+            ContactPointResults
         },
         data: () => ({
             windowHeight: 0,
             contactPointDialogState: false,
             todoDialogState: false,
             loading: true,
-            search: '',
+            searchContactPoints: '',
+            searchTodos: '',
             settings: {
                 maxScrollbarLength: 120,
                 wheelSpeed: 0.75,
@@ -147,12 +146,11 @@
                 'contacts',
                 'contactPoints',
                 'todos',
+                'searchResults'
             ])
         },
         beforeMount() {
             this.refreshData();
-        },
-        mounted() {
             this.onResize();
         },
         methods: {
@@ -162,20 +160,16 @@
                 'getContactPoints',
                 'getTodos'
             ]),
+            addContactPoint() {
+                this.contactPointDialogState = true;
+            },
+            addTODO() {
+                this.todoDialogState = true;
+            },
             goToFirstResult() {
-                const isCompany = containsKey(this.searchResults[0], 'name');
-                let index;
+                let companyId = this.companies.find(it => it.id === this.searchResults[0].contact.company.id).id;
 
-                if (isCompany) {
-                    index = this.companies.findIndex(company => company.id === this.searchResults[0].id);
-
-                    this.$router.push('/' + (index));
-                } else {
-                    index = this.companies.findIndex(company => company.id === this.searchResults[0].contact.company.id);
-
-                    this.$router.push(`/${index}/${this.searchResults[0].id}`);
-
-                }
+                this.$router.push(`/${companyId}/${this.searchResults[0].id}`);
             },
             refreshData() {
                 this.getCompanies();
@@ -186,18 +180,6 @@
             },
             onResize() {
                 this.windowHeight = window.innerHeight;
-            },
-            getContactPointDashHeight() {
-                return this.windowHeight - 245;
-            },
-            getTodoDashHeight() {
-                return (this.windowHeight - 245) / 2;
-            },
-            addContactPoint() {
-                this.contactPointDialogState = true;
-            },
-            addTODO() {
-                this.todoDialogState = true;
             }
         }
     }
@@ -216,16 +198,13 @@
         left: 0;
         width: 100%;
         text-align: center;
-        margin: 0; padding: 15px 0;
+        margin: 0;
+        padding: 15px 0;
 
         background-image: linear-gradient(to bottom, transparent, #333333);
     }
 
     .more-padding-top {
         padding-top: 12px !important;
-    }
-
-    .less-margin-bottom {
-        margin-bottom: 12px !important;
     }
 </style>

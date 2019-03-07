@@ -1,10 +1,11 @@
 <template>
     <div>
         <contact-point-card
-                :contact-point="contactPoint"
-                :search="true"
+                :class="`less-margin-bottom mt-${onDashboard ? 0 : 1}`"
                 v-bind:key="contactPoint.id"
-                v-for="contactPoint in searchResults"/>
+                v-for="contactPoint in searchResults"
+                :contact-point="contactPoint"
+                :search="true"/>
     </div>
 </template>
 
@@ -13,7 +14,7 @@
     import ContactPointCard from "../cards/ContactPointCard.vue";
 
     export default {
-        props: ['search'],
+        props: ['search', 'onDashboard'],
         components: {
             ContactPointCard
         },
@@ -30,6 +31,8 @@
                         return this.searchTerms.some(term =>
                             term.includes(this.search.toLowerCase())
                         );
+                    } else if (this.onDashboard) {
+                        return this;
                     }
                 }).splice(0, 10);
             }
@@ -61,3 +64,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .less-margin-bottom {
+        margin-bottom: 12px !important;
+    }
+</style>
