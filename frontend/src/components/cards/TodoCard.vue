@@ -31,7 +31,7 @@
                             <span class="title font-weight-light">{{ todo.company.name }}</span>
                         </v-tooltip>
                     </v-card-title>
-                    <v-card-title class="white--text headline font-weight-light text-xs-left">
+                    <v-card-title class="white--text title font-weight-light text-xs-left">
                         {{ todo.description }}
                     </v-card-title>
                 </v-card>
