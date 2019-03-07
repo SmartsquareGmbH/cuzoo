@@ -157,11 +157,7 @@
                 })
             },
             addContactPoint() {
-                this.getContactsOfCompany().forEach(contact => {
-                    this.contactNames.push(contact.name)
-                });
-
-                this.contactNames.sort();
+                this.contactNames = this.getContactsOfCompany().map(it => it.name).sort();
                 this.contactPointDialogState = true;
             },
             addTODO() {
