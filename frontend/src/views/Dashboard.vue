@@ -37,8 +37,8 @@
                 </v-layout>
                 <v-layout row wrap>
                     <div class="dash">
-                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
-                            <div :style="`height: ${getContactPointDashHeight()}px; position: relative`">
+                        <perfect-scrollbar :options="settings">
+                            <div :style="`height: ${this.windowHeight - 245}px;`">
                                 <v-flex xs12>
                                     <contact-point-card
                                             class="less-margin-bottom"
@@ -48,7 +48,7 @@
                                             v-for="contactPoint in contactPoints"/>
                                 </v-flex>
                             </div>
-                        </vue-perfect-scrollbar>
+                        </perfect-scrollbar>
                         <div class="fade-out-gradient"/>
                     </div>
                 </v-layout>
@@ -89,8 +89,8 @@
                 </v-layout>
                 <v-layout row wrap>
                     <div class="dash">
-                        <vue-perfect-scrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="">
-                            <div :style="`height: ${getTodoDashHeight()}px`">
+                        <perfect-scrollbar :options="settings">
+                            <div :style="`height: ${(this.windowHeight - 245) / 2}px`">
                                 <v-layout row wrap>
                                     <todo-card
                                             :todo="todo"
@@ -99,7 +99,7 @@
                                             v-for="todo in todos"/>
                                 </v-layout>
                             </div>
-                        </vue-perfect-scrollbar>
+                        </perfect-scrollbar>
                         <div class="fade-out-gradient"/>
                     </div>
                 </v-layout>
@@ -124,7 +124,6 @@
 
     export default {
         components: {
-            VuePerfectScrollbar,
             TodoDialog,
             TodoCard,
             ContactPointDialog,
