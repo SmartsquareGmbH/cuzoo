@@ -167,11 +167,6 @@
         padding-bottom: 0px;
     }
 
-    .low-padding-y {
-        padding-top: 6px;
-        padding-bottom: 6px;
-    }
-
     .low-padding-left {
         padding-left: 10px;
     }
