@@ -282,11 +282,13 @@
             }),
             clearDialog() {
                 this.$refs.form.reset();
+                this.editedContactPoint.contact.name = '';
 
                 setTimeout(() => this.date = new Date().toISOString().substr(0, 10));
             },
             closeDialog() {
                 this.$emit('input');
+                this.editedContactPoint.contact.name = '';
 
                 setTimeout(() => {
                     this.storeDetails({
