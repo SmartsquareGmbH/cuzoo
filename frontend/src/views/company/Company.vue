@@ -9,7 +9,7 @@
             </v-flex>
             <v-flex xs5 text-xs-right>
                 <v-tooltip top>
-                    <v-btn flat small slot="activator" @click="viewContactPoints()">
+                    <v-btn disabled flat small slot="activator" @click="viewContactPoints()">
                         <v-icon size="22px" class="mr-1" dark>forum</v-icon>
                         Kontaktpunktliste
                     </v-btn>

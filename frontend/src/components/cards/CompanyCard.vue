@@ -4,7 +4,7 @@
             <v-card slot-scope="{ hover }"
                     style="border-radius: 10px"
                     :class="`secondary mt-2 mb-3 clickable elevation-${hover ? 2 : 2}`"
-                    @click.native="viewContactPoints(company)"
+                    @click.native="viewCompany(company)"
                     hover>
                 <v-card-text class="headline text-xs-left">
                     {{ company.name }}
@@ -92,8 +92,8 @@
 
                 return this.colorCache[id] || (this.colorCache[id] = `rgb(${random()}, ${random()}, ${random()})`);
             },
-            viewContactPoints(item) {
-                this.$router.push('/' + (item.id));
+            viewCompany(item) {
+                this.$router.push('/companies/' + (item.id));
             }
         }
     }

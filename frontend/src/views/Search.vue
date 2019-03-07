@@ -107,16 +107,15 @@
             ]),
             goToFirstResult() {
                 const isCompany = containsKey(this.searchResults[0], 'name');
-                let index;
 
                 if (isCompany) {
-                    index = this.companies.findIndex(company => company.id === this.searchResults[0].id);
+                    let companyId = this.companies.find(company => company.id === this.searchResults[0].id).id;
 
-                    this.$router.push('/' + (index));
+                    this.$router.push('/companies/' + (companyId));
                 } else {
-                    index = this.companies.findIndex(company => company.id === this.searchResults[0].contact.company.id);
+                    let companyId = this.companies.find(company => company.id === this.searchResults[0].contact.company.id).id;
 
-                    this.$router.push(`/${index}/${this.searchResults[0].id}`);
+                    this.$router.push(`/${companyId}/${this.searchResults[0].id}`);
 
                 }
             },

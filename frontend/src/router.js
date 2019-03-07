@@ -4,7 +4,6 @@ import Search from "./views/Search.vue";
 import CompanyTable from "./views/company/CompanyTable.vue";
 import Company from "./views/company/Company.vue";
 import ContactTable from "./views/contact/ContactTable.vue";
-import ContactPointList from "./views/contactpoint/ContactPointList.vue";
 import ContactPoint from "./views/contactpoint/ContactPoint";
 import Dashboard from "./views/Dashboard.vue";
 import FilePreview from "./views/FilePreview.vue";
@@ -41,11 +40,6 @@ export default new Router({
             path: "/companies/:companyId",
             name: "companyView",
             component: Company
-        },
-        {
-            path: "/:companyId",
-            name: "contactPoints",
-            component: ContactPointList
         },
         {
             path: "/:companyId/:contactPointId",
