@@ -1,7 +1,6 @@
 <template>
     <v-dialog
             v-model="value"
-            :company="company"
             @input="$emit('input')"
             persistent
             max-width="950">

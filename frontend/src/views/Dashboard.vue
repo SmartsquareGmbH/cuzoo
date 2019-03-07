@@ -95,11 +95,9 @@
                         <perfect-scrollbar :options="settings">
                             <div :style="`height: ${(this.windowHeight - 245) / 2}px`">
                                 <v-layout row wrap>
-                                    <todo-card
-                                            :todo="todo"
-                                            :on-dashboard="true"
-                                            v-bind:key="todo.id"
-                                            v-for="todo in todos"/>
+                                    <v-flex xs12>
+                                        <todo-results :search="this.searchTodos"/>
+                                    </v-flex>
                                 </v-layout>
                             </div>
                         </perfect-scrollbar>
@@ -121,6 +119,7 @@
 
     import TodoDialog from '../components/dialogs/TodoDialog.vue';
     import TodoCard from '../components/cards/TodoCard.vue';
+    import TodoResults from '../components/search/TodoResults.vue'
     import ContactPointDialog from "../components/dialogs/ContactPointDialog.vue";
     import ContactPointCard from "../components/cards/ContactPointCard.vue";
     import ContactPointResults from "../components/search/ContactPointResults.vue";
@@ -129,6 +128,7 @@
         components: {
             TodoDialog,
             TodoCard,
+            TodoResults,
             ContactPointDialog,
             ContactPointCard,
             ContactPointResults
