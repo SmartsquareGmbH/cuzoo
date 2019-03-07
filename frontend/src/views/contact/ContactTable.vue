@@ -38,7 +38,7 @@
                 :items="contacts"
                 :search="search"
                 :loading=loading
-                rows-per-page-text="Unternehmen pro Seite"
+                rows-per-page-text="Ansprechpartner pro Seite"
                 :rows-per-page-items=[10,25,50,100]
                 dark>
             <v-progress-linear slot="progress" color="blue" indeterminate/>
