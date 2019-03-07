@@ -34,9 +34,9 @@
                         :questionToBeConfirmed="deleteContactPointMessage"
                         @confirmed="deleteContactPoint()"/>
                 <v-card-title class="secondary no-padding-bottom">
-                    <span class="headline font-weight-light">{{ contactPoint.title }}</span>
+                    <span class="title font-weight-light">{{ contactPoint.title }}</span>
                 </v-card-title>
-                <v-card-title class="secondary title font-weight-light low-padding-y low-padding-left">
+                <v-card-title class="secondary title font-weight-light no-padding-bottom low-padding-left">
                     <v-icon :size="24">attach_file</v-icon>
                     <span class="mx-1 primary--text">{{ fileNames.length }}</span>
                     <v-icon class="mx-1"
@@ -62,14 +62,11 @@
                         {{ contactPoint.contact.name }}
                     </v-chip>
                 </v-card-title>
-                <v-card-text
-                        v-if="contactPoint.comment"
-                        class="text-xs-left text-truncate" width="20%">
-                    {{ contactPoint.comment }}
-                </v-card-text>
-                <v-divider v-if="contactPoint.labels.length > 0"/>
+                <v-divider
+                        class="mt-2"
+                        v-if="contactPoint.labels.length > 0"/>
                 <v-card-text class="subheading text-xs-left low-padding">
-                    <v-chip
+                    <v-chip small
                             color="info"
                             class="subheading mt-1 mb-1"
                             v-bind:key="contactPoint.label"
