@@ -68,6 +68,15 @@
                                     </template>
                                 </v-combobox>
                             </v-flex>
+                            <v-flex xs12>
+                                <v-combobox
+                                        v-model="companyName"
+                                        :items="companyNames"
+                                        :rules="companyRules"
+                                        prepend-icon="business"
+                                        suffix="*"
+                                        label="Unternehmen"/>
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-form>
@@ -94,7 +103,7 @@
     let reminderDate = new Date();
 
     export default {
-        props: ["value", "company"],
+        props: ["value", "companyNames"],
         data() {
             return {
                 formTitle: 'TODO hinzufügen',
@@ -105,10 +114,15 @@
                     '3 Tage vorher',
                     '1 Woche vorher'
                 ],
+                companyRules: [
+                    v => !!v || "Bitte geben Sie ein Unternehmen an",
+                    v => this.companyNames.includes(v) || "Dieses Unternehmen existiert nicht"
+                ],
                 reminderRules: [v => !!v || "Bitte geben Sie an, wann Sie erinnert werden möchten"],
                 descriptionRules: [v => !!v || "Bitte geben Sie eine Beschreibung an"],
                 menu: false,
                 valid: true,
+                companyName: '',
                 defaultTodo: {
                     id: 0,
                     description: '',
@@ -138,7 +152,7 @@
                 storeDetails: 'storeEditedTodoDetails'
             }),
             submitTodo() {
-                api.put(`todo/submit?companyName=${this.company.name.replace("&", "%26")}`, {
+                api.put(`todo/submit?companyName=${this.companyName.replace("&", "%26")}`, {
                     description: this.editedTodo.description,
                     expiration: datefns.parse(this.date).getTime(),
                     reminder: this.getReminderDate()
@@ -165,9 +179,11 @@
             },
             clearDialog() {
                 this.$refs.form.reset();
+                this.companyName = '';
             },
             closeDialog() {
                 this.$emit('input');
+                this.companyName = '';
 
                 setTimeout(() => {
                     this.storeDetails({

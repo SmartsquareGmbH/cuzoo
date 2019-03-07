@@ -74,6 +74,9 @@
                                 <span>TODO hinzufügen</span>
                             </v-tooltip>
                         </v-btn>
+                        <todo-dialog
+                                v-model="todoDialogState"
+                                :companyNames="this.companyNames"/>
                     </v-flex>
                     <v-flex xs6>
                         <v-text-field
@@ -134,6 +137,7 @@
             windowHeight: 0,
             contactNames: [],
             contactPointDialogState: false,
+            companyNames: [],
             todoDialogState: false,
             loading: true,
             searchContactPoints: '',
@@ -169,6 +173,7 @@
                 this.contactPointDialogState = true;
             },
             addTODO() {
+                this.companyNames = this.companies.map(it => it.name).sort();
                 this.todoDialogState = true;
             },
             goToFirstResult() {
