@@ -22,6 +22,9 @@
                                 <span>Kontaktpunkt hinzufügen</span>
                             </v-tooltip>
                         </v-btn>
+                        <contact-point-dialog
+                                v-model="contactPointDialogState"
+                                :contactNames="this.contactNames"/>
                     </v-flex>
                     <v-flex xs6>
                         <v-text-field
@@ -129,6 +132,7 @@
         },
         data: () => ({
             windowHeight: 0,
+            contactNames: [],
             contactPointDialogState: false,
             todoDialogState: false,
             loading: true,
@@ -161,6 +165,7 @@
                 'getTodos'
             ]),
             addContactPoint() {
+                this.contactNames = this.contacts.map(it => it.name).sort();
                 this.contactPointDialogState = true;
             },
             addTODO() {
