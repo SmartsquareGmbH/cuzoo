@@ -3,16 +3,9 @@ package de.smartsquare.cuzoo.customer.contact;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
+import de.smartsquare.cuzoo.customer.label.Label;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -21,19 +14,29 @@ import java.util.List;
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_generator")
-    @SequenceGenerator(name ="contact_generator", sequenceName = "contact_seq")
+    @SequenceGenerator(name = "contact_generator", sequenceName = "contact_seq")
     private Long id;
     @NotNull
     @NotBlank
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="company_id")
+    @JoinColumn(name = "company_id")
     private Company company;
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ContactPoint> contactPoints;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "contact_labels",
+            joinColumns = {@JoinColumn(name = "contact_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")})
+    private List<Label> labels;
 
     private String role;
     private String mail;
@@ -135,5 +138,13 @@ public class Contact {
 
     public void setContactPoints(List<ContactPoint> contactPoints) {
         this.contactPoints = contactPoints;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 }

@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.label;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 
 import javax.persistence.*;
@@ -47,6 +48,15 @@ public class Label {
             },
             mappedBy = "labels")
     private List<Company> companies;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "labels")
+    private List<Contact> contacts;
 
     Label() {
         this.contactPointsWithLabels = new ArrayList<>();
@@ -97,7 +107,9 @@ public class Label {
         this.contactPointsWithTypes = contactPointsWithTypes;
     }
 
-    public void addContactPointTypes(ContactPoint contactPoint) { this.contactPointsWithTypes.add(contactPoint); }
+    public void addContactPointTypes(ContactPoint contactPoint) {
+        this.contactPointsWithTypes.add(contactPoint);
+    }
 
     public List<Company> getCompanies() {
         return companies;
@@ -109,6 +121,19 @@ public class Label {
 
     public Label addCompany(Company company) {
         this.companies.add(company);
+        return this;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public Label addContact(Contact contact) {
+        this.contacts.add(contact);
         return this;
     }
 }
