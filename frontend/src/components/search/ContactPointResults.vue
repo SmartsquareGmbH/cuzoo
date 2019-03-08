@@ -67,6 +67,6 @@
 
 <style scoped>
     .less-margin-bottom {
-        margin-bottom: 12px !important;
+        margin-bottom: 8px !important;
     }
 </style>
