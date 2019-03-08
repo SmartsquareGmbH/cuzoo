@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md fluid>
-        <v-layout row wrap v-if="!loading" v-resize="onResize">
+        <v-layout row wrap v-if="!loadingData" v-resize="onResize">
             <v-flex xs6>
                 <v-layout row wrap class="text-xs-right">
                     <v-flex xs3 class="text-xs-left more-padding-top">
@@ -42,7 +42,7 @@
                     <div class="dash">
                         <perfect-scrollbar :options="settings">
                             <div :style="`height: ${this.windowHeight - 245}px;`">
-                                <v-flex xs12>
+                                <v-flex xs12 class="no-padding-top">
                                     <contact-point-results
                                             :search="this.searchContactPoints"
                                             :on-dashboard="true"/>
@@ -106,7 +106,7 @@
                 </v-layout>
             </v-flex>
         </v-layout>
-        <v-layout v-if="loading">
+        <v-layout v-if="loadingData">
             <v-flex xs12 class="text-xs-center">
                 <v-progress-circular :size="128" color="primary" indeterminate/>
             </v-flex>
@@ -139,7 +139,7 @@
             contactPointDialogState: false,
             companyNames: [],
             todoDialogState: false,
-            loading: true,
+            loadingData: true,
             searchContactPoints: '',
             searchTodos: '',
             settings: {
@@ -160,6 +160,9 @@
         beforeMount() {
             this.refreshData();
             this.onResize();
+        },
+        watch: {
+            companyId() {}
         },
         methods: {
             ...mapActions([
@@ -185,7 +188,7 @@
                 this.getCompanies();
                 this.getContacts();
                 this.getContactPoints().then(() => {
-                    this.getTodos().then(() => this.loading = false);
+                    this.getTodos().then(() => this.loadingData = false);
                 });
             },
             onResize() {
@@ -216,5 +219,9 @@
 
     .more-padding-top {
         padding-top: 12px !important;
+    }
+
+    .no-padding-top {
+        padding-top: 0px !important;
     }
 </style>
