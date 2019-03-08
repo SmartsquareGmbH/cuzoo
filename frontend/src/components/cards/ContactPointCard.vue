@@ -2,53 +2,35 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    :class="`mb-${search ? 3 : 2} clickable elevation-${hover ? 10 : 2}`"
+                    :class="`mb-${search ? 3 : 2} clickable elevation-${hover ? 8 : 2} font-weight-light`"
                     @click="viewContactPoint(contactPoint)">
-                <confirm-dialog
-                        v-model="confirmDialogState"
-                        :questionToBeConfirmed="deleteContactPointMessage"
-                        @confirmed="deleteContactPoint()"/>
-                <v-card-title class="secondary no-padding-bottom">
-                    <span class="title font-weight-light">{{ contactPoint.title }}</span>
+                <v-card-title class="no-padding-bottom font-weight-light title">
+                    {{ contactPoint.title }}
                 </v-card-title>
-                <v-card-title class="secondary title font-weight-light no-padding-bottom low-padding-left">
-                    <v-icon :size="24">attach_file</v-icon>
+                <v-card-title class="low-padding-left title">
+                    <v-icon>attach_file</v-icon>
                     <span class="mx-1 primary--text">{{ fileNames.length }}</span>
-                    <v-icon class="mx-1"
-                            :style="`transform: rotate(${hover ? 360 : 0}deg)`">share</v-icon>
-                    <v-chip small
-                            class="subheading my-1 primary--text"
-                            v-bind:key="type"
-                            v-for="type in contactPoint.types">
+                    <v-icon :style="`transform: rotate(${hover ? 360 : 0}deg)`"
+                            class="mx-1">
+                        share
+                    </v-icon>
+                    <chip v-bind:key="type"
+                          v-for="type in contactPoint.types"
+                          font-color="primary">
                         {{ type }}
-                    </v-chip>
+                    </chip>
                     <v-icon class="mx-1">business</v-icon>
                     <v-tooltip top>
-                        <v-chip small slot="activator"
-                                class="subheading my-1 primary--text">
+                        <chip slot="activator"
+                              font-color="primary">
                             {{ contactPoint.contact.company.name | truncate(25) }}
-                        </v-chip>
+                        </chip>
                         <span class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
                     </v-tooltip>
                     <v-spacer></v-spacer>
                     <v-icon>person</v-icon>
-                    <v-chip small
-                            class="subheading my-1 primary--text">
-                        {{ contactPoint.contact.name }}
-                    </v-chip>
+                    <chip font-color="primary">{{ contactPoint.contact.name }}</chip>
                 </v-card-title>
-                <v-divider
-                        class="mt-2"
-                        v-if="contactPoint.labels.length > 0"/>
-                <v-card-text class="subheading text-xs-left low-padding">
-                    <v-chip small
-                            color="info"
-                            class="subheading mt-1 mb-1"
-                            v-bind:key="contactPoint.label"
-                            v-for="label in contactPoint.labels">
-                        {{ label }}
-                    </v-chip>
-                </v-card-text>
             </v-card>
         </v-hover>
     </v-fade-transition>
@@ -58,7 +40,7 @@
     import api from '../../utils/http-common';
     import {mapGetters, mapMutations} from 'vuex';
 
-    import ConfirmDialog from "../dialogs/ConfirmDialog.vue";
+    import Chip from "../main/small/Chip.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -66,7 +48,7 @@
     export default {
         props: ['contactPoint', 'search'],
         components: {
-            ConfirmDialog
+            Chip
         },
         data() {
             return {
@@ -110,10 +92,6 @@
 </script>
 
 <style scoped>
-    .low-padding {
-        padding: 8px;
-    }
-
     .no-padding-bottom {
         padding-bottom: 0px;
     }
