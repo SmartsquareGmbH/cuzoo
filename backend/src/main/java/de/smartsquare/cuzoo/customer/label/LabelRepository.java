@@ -38,12 +38,19 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
             "AND l.companies IS NOT EMPTY")
     List<Label> findAllOfCompanyByPartOfTitle(@Param("input") String input);
 
+    @Query("SELECT l FROM Label l " +
+            "WHERE FUNCTION('REPLACE', FUNCTION('REPLACE', LOWER(l.title), '-', ''), ' ', '') " +
+            "LIKE CONCAT('%', LOWER(:input), '%') " +
+            "AND l.contacts IS NOT EMPTY")
+    List<Label> findAllOfContactByPartOfTitle(@Param("input") String input);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Label l " +
             "WHERE l.contactPointsWithLabels IS EMPTY " +
             "AND l.contactPointsWithTypes IS EMPTY " +
-            "AND l.companies IS EMPTY")
+            "AND l.companies IS EMPTY " +
+            "AND l.contacts IS EMPTY")
     void deleteAllReferenceless();
 
 }

@@ -4,6 +4,8 @@ import de.smartsquare.cuzoo.customer.CSVConverter;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
+import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/contact")
@@ -23,16 +26,20 @@ public class ContactController {
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
     private final ContactPointRepository contactPointRepository;
+    private final LabelRepository labelRepository;
 
     private final CSVConverter csvConverter;
     private final ContactExporter contactExporter;
 
     @Autowired
     public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository,
-                             final ContactPointRepository contactPointRepository, CSVConverter csvConverter) {
+                             final ContactPointRepository contactPointRepository, final LabelRepository labelRepository,
+                             CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.contactPointRepository = contactPointRepository;
+        this.labelRepository = labelRepository;
+
         this.csvConverter = csvConverter;
 
         contactExporter = new ContactExporter();
@@ -112,5 +119,14 @@ public class ContactController {
     @GetMapping("/get")
     public final ResponseEntity<List<Contact>> getContacts() {
         return ResponseEntity.ok(contactRepository.findAll());
+    }
+
+    @GetMapping("/get/labels/{input}")
+    public final ResponseEntity<List<String>> getContactPointLabelsWithInput(@PathVariable String input) {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfContactByPartOfTitle(input)
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
     }
 }
