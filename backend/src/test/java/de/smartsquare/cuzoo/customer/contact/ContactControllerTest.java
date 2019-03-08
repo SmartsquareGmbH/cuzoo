@@ -123,7 +123,7 @@ public class ContactControllerTest {
     }
 
     private String getContactInJson() {
-        return "{\"name\":\"Freddy Faulig\", \"role\":\"Boesewicht\"}";
+        return "{\"id\":\"0\", \"name\":\"Freddy Faulig\", \"role\":\"Boesewicht\"}";
     }
 
     @Test
@@ -208,7 +208,7 @@ public class ContactControllerTest {
     }
 
     private String getFreelancerInJson() {
-        return "{\"name\":\"Fred Feuerstein\", \"role\":\"Freiberufler\"}";
+        return "{\"id\":\"0\", \"name\":\"Fred Feuerstein\", \"role\":\"Freiberufler\"}";
     }
 
     @Test

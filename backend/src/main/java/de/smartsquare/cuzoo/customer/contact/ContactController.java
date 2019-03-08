@@ -66,6 +66,8 @@ public class ContactController {
 
         Contact contact = getOrCreateContact(contactForm);
 
+        Long contactIdBeforeSaving = contactForm.getId();
+
         if (hasNoCompany(maybeCompanyName)) {
             if (!companyRepository.existsByName(maybeCompanyName)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,8 +76,6 @@ public class ContactController {
             Company contactsCompany = companyRepository.findByName(maybeCompanyName);
             contact.setCompany(contactsCompany);
         }
-
-        Long contactIdBeforeSaving = contact.getId();
 
         try {
             if (contactForm.getLabels() != null) {
@@ -87,7 +87,7 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (contactIdBeforeSaving == null) {
+        if (contactIdBeforeSaving < 1) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
