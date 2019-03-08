@@ -31,9 +31,13 @@
                         <span class="title font-weight-light">{{ todo.company.name }}</span>
                     </v-tooltip>
                 </v-card-title>
-                <v-card-title class="white--text title font-weight-light text-xs-left">
-                    {{ todo.description | truncate(85) }}
-                </v-card-title>
+                <v-tooltip top max-width="750">
+                    <v-card-title slot="activator"
+                                  class="white--text title font-weight-light text-xs-left">
+                        {{ todo.description | truncate(85) }}
+                    </v-card-title>
+                    <span class="subheading font-weight-light">{{ todo.description }}</span>
+                </v-tooltip>
             </v-card>
         </v-hover>
     </v-fade-transition>
