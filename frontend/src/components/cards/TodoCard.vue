@@ -2,7 +2,7 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    height="100%">
+                    :class="`elevation-${hover ? 8 : 2}`">
                 <v-scroll-x-transition>
                     <v-btn v-if="hover"
                            absolute top right fab small
@@ -15,24 +15,24 @@
                     </v-btn>
                 </v-scroll-x-transition>
                 <v-card-title class="secondary title font-weight-light low-padding-left no-padding-bottom">
-                    <v-icon class="mx-1"
-                            :style="`transform: rotate(${hover ? 360 : 0}deg)`">timer
+                    <v-icon :style="`transform: rotate(${hover ? 360 : 0}deg)`"
+                            class="mx-1">
+                        timer
                     </v-icon>
-                    <v-chip small
-                            :class="`subheading my-1 ${getUrgency(todo.expiration)}--text`">
+                    <chip :font-color="getUrgency(todo.expiration)">
                         {{ distanceInWords }}
-                    </v-chip>
+                    </chip>
                     <v-icon class="mx-1">business</v-icon>
                     <v-tooltip top>
-                        <v-chip small slot="activator"
-                                class="subheading my-1 primary--text">
+                        <chip slot="activator"
+                              font-color="primary">
                             {{ todo.company.name | truncate(25) }}
-                        </v-chip>
+                        </chip>
                         <span class="title font-weight-light">{{ todo.company.name }}</span>
                     </v-tooltip>
                 </v-card-title>
                 <v-card-title class="white--text title font-weight-light text-xs-left">
-                    {{ todo.description }}
+                    {{ todo.description | truncate(85) }}
                 </v-card-title>
             </v-card>
         </v-hover>
@@ -42,14 +42,14 @@
 <script>
     import api from '../../utils/http-common'
 
+    import Chip from "../main/small/Chip.vue";
+
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
 
     export default {
         props: ['todo'],
-        data() {
-            return {}
-        },
+        components: {Chip},
         computed: {
             distanceInWords() {
                 return datefns.distanceInWords(
