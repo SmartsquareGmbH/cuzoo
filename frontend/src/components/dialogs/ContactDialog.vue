@@ -13,7 +13,6 @@
                                         v-model="editedContact.name"
                                         label="Vor- und Nachname"
                                         prepend-icon="person"
-                                        hide-details
                                         suffix="*"
                                         required
                                         :rules="contactFieldRules"/>
@@ -60,7 +59,12 @@
                                         v-model="editedContact.comment"
                                         name="input-7-4"
                                         label="Bemerkung"
-                                        rows="3" hide-details/>
+                                        rows="3"/>
+                            </v-flex>
+                            <v-flex xs12>
+                                <label-combo-box
+                                        @labelAdded="setCurrentLabels"
+                                        api-path="contact" type="Labels"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -81,8 +85,11 @@
     import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common'
 
+    import LabelComboBox from "../main/small/LabelComboBox.vue";
+
     export default {
         props: ["value", "companyNames"],
+        components: { LabelComboBox },
         data() {
             return {
                 valid: false,
@@ -100,7 +107,8 @@
                     mail: "",
                     telephone: "",
                     mobile: "",
-                    comment: ""
+                    comment: "",
+                    labels: []
                 }
             }
         },
@@ -169,7 +177,8 @@
                     mail: this.editedContact.mail,
                     telephone: this.editedContact.telephone,
                     mobile: this.editedContact.mobile,
-                    comment: this.editedContact.comment
+                    comment: this.editedContact.comment,
+                    labels: this.editedContact.labels
                 }).then(() => {
                     this.$parent.refreshTable();
                     this.closeDialog();
@@ -177,6 +186,9 @@
                     console.log(error);
                     alert(error);
                 });
+            },
+            setCurrentLabels(labels) {
+                this.editedContact.labels = labels;
             },
             getCompanyName() {
                 if (this.editedContact.company) {

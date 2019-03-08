@@ -14,7 +14,8 @@ export default {
             mail: "",
             telephone: "",
             mobile: "",
-            comment: ""
+            comment: "",
+            labels: []
         }
     },
     getters: {
@@ -38,10 +39,17 @@ export default {
     actions: {
         getContacts() {
             return api.get('contact/get').then(response => {
-                console.log(response.data);
+                let contacts = response.data;
+
+                contacts.forEach(contact => {
+                    contact.labels = contact.labels.map(label => {
+                        return label.title;
+                    });
+                });
+
                 this.commit({
                     type: 'storeContacts',
-                    contacts: response.data
+                    contacts: contacts
                 })
             }).catch(error => {
                 console.log(error);
