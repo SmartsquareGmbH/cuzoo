@@ -62,6 +62,7 @@ public class Label {
         this.contactPointsWithLabels = new ArrayList<>();
         this.contactPointsWithTypes = new ArrayList<>();
         this.companies = new ArrayList<>();
+        this.contacts = new ArrayList<>();
     }
 
     public Label(@NotNull @NotBlank String title) {
@@ -69,6 +70,7 @@ public class Label {
         this.contactPointsWithLabels = new ArrayList<>();
         this.contactPointsWithTypes = new ArrayList<>();
         this.companies = new ArrayList<>();
+        this.contacts = new ArrayList<>();
     }
 
     public Long getId() {

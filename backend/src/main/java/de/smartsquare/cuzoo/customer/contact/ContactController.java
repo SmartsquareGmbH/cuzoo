@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -57,11 +58,13 @@ public class ContactController {
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitContact(@RequestBody @Valid Contact contact, BindingResult bindingResult,
+    public final ResponseEntity<?> submitContact(@RequestBody @Valid ContactForm contactForm, BindingResult bindingResult,
                                                  @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Contact contact = getOrCreateContact(contactForm);
 
         if (hasNoCompany(maybeCompanyName)) {
             if (!companyRepository.existsByName(maybeCompanyName)) {
@@ -75,6 +78,10 @@ public class ContactController {
         Long contactIdBeforeSaving = contact.getId();
 
         try {
+            if (contactForm.getLabels() != null) {
+                submitLabels(contactForm.getLabels(), contact);
+            }
+
             contactRepository.save(contact);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,6 +91,52 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    private Contact getOrCreateContact(@RequestBody @Valid ContactForm contactForm) {
+        Contact contact;
+        Optional<Contact> byId = contactRepository.findById(contactForm.getId());
+
+        if (byId.isPresent()) {
+            contact = byId.get();
+
+            contact.setName(contactForm.getName());
+            contact.setRole(contactForm.getRole());
+            contact.setMail(contactForm.getMail());
+            contact.setTelephone(contactForm.getTelephone());
+            contact.setMobile(contactForm.getMobile());
+            contact.setComment(contactForm.getComment());
+        } else {
+            contact = new Contact(
+                    contactForm.getName(),
+                    contactForm.getRole(),
+                    contactForm.getMail(),
+                    contactForm.getTelephone(),
+                    contactForm.getMobile(),
+                    contactForm.getComment());
+        }
+
+        return contact;
+    }
+
+    private void submitLabels(List<String> titles, Contact contact) {
+        List<Label> companyLabels = titles.stream()
+                .map(title -> new Tuple(labelRepository.findByTitle(title), title))
+                .map(tuple -> tuple.optionalLabel.orElse(new Label(tuple.title)))
+                .map(label -> label.addContact(contact))
+                .collect(Collectors.toList());
+
+        contact.setLabels(companyLabels);
+    }
+
+    class Tuple {
+        final Optional<Label> optionalLabel;
+        final String title;
+
+        Tuple(Optional<Label> optionalLabel, String title) {
+            this.optionalLabel = optionalLabel;
+            this.title = title;
         }
     }
 
