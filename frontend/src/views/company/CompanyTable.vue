@@ -37,22 +37,6 @@
                 </v-tooltip>
             </v-btn>
             <company-dialog v-model="companyDialogState"/>
-            <v-layout row wrap class="pl-2 pt-1">
-                <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox
-                            v-model="selectedStatus"
-                            label="Leads"
-                            value="Lead"
-                            color="teal accent-2"/>
-                </v-flex>
-                <v-flex xl2 lg3 md4 xs5>
-                    <v-checkbox
-                            v-model="selectedStatus"
-                            label="Bestandskunden"
-                            value="Bestandskunde"
-                            color="teal accent-2"/>
-                </v-flex>
-            </v-layout>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"
@@ -93,7 +77,8 @@
                             Unternehmen bearbeiten
                         </v-tooltip>
                         <v-tooltip top>
-                            <v-icon @click.stop="openConfirmDialog(props.item)" size="22px" color="red lighten-1" slot="activator">
+                            <v-icon @click.stop="openConfirmDialog(props.item)" size="22px" color="red lighten-1"
+                                    slot="activator">
                                 delete
                             </v-icon>
                             Unternehmen löschen
@@ -147,20 +132,7 @@
             }
         },
         computed: {
-            ...mapGetters(['companies']),
-            filteredCompanies() {
-                return this.companies.filter((company) => {
-                    if (this.selectedStatus.indexOf("Lead") > -1 && this.selectedStatus.indexOf("Bestandskunde") > -1) {
-                        return company;
-                    } else if (this.selectedStatus.indexOf("Lead") > -1) {
-                        return company.status === "Lead";
-                    } else if (this.selectedStatus.indexOf("Bestandskunde") > -1) {
-                        return company.status === "Bestandskunde";
-                    } else {
-                        return company;
-                    }
-                })
-            }
+            ...mapGetters(['companies'])
         },
         mounted() {
             this.refreshTable()
