@@ -63,7 +63,7 @@
                             </v-flex>
                             <v-flex xs12>
                                 <label-combo-box
-                                        @labelAdded="setCurrentLabels"
+                                        @label-added="setCurrentLabels"
                                         api-path="contact" type="Labels"/>
                             </v-flex>
                         </v-layout>

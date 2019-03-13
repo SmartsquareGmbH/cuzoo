@@ -1,6 +1,6 @@
 <template>
     <v-combobox
-            v-model="labels"
+            v-model="editedContact.labels"
             :items="responseLabels"
             :search-input.sync="labelBoxInput"
             @change="resetLabels()"
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
     import api from '../../../utils/http-common';
     import debounce from 'lodash.debounce';
 
@@ -44,13 +45,13 @@
     export default {
         props: ['apiPath', 'type'],
         data: () => ({
-            labels: [],
             responseLabels: [],
             labelBoxInput: ''
         }),
         computed: {
+            ...mapGetters(['editedContact']),
             temporaryLabels() {
-                return this.labels;
+                return this.editedContact.labels;
             }
         },
         watch: {
@@ -70,7 +71,7 @@
                 }
             },
             temporaryLabels() {
-                this.labels
+                this.editedContact.labels
                     .map(it => removeNonLetters(it))
                     .map(it => {
                         if (it === '') this.removeLabel(it)
@@ -85,11 +86,11 @@
                 this.responseLabels = [];
             },
             passCurrentLabels() {
-                this.$emit('labelAdded', this.labels);
+                this.$emit('label-added', this.editedContact.labels);
             },
             removeLabel(item) {
-                this.labels.splice(this.labels.indexOf(item), 1);
-                this.labels = [...this.labels];
+                this.editedContact.labels.splice(this.editedContact.labels.indexOf(item), 1);
+                this.editedContact.labels = [...this.editedContact.labels]
             },
         }
     }
