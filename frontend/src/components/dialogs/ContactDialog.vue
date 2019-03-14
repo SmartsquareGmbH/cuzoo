@@ -64,6 +64,7 @@
                             <v-flex xs12>
                                 <label-box
                                         @label-added="setCurrentLabels"
+                                        :current-labels="editedContact.labels"
                                         api-path="contact" type="Labels"/>
                             </v-flex>
                         </v-layout>

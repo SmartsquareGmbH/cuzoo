@@ -1,6 +1,6 @@
 <template>
     <v-combobox
-            v-model="editedContact.labels"
+            v-model="labels"
             :items="responseLabels"
             :search-input.sync="labelBoxInput"
             @change="resetLabels()"
@@ -36,25 +36,27 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
     import api from '../../../utils/http-common';
     import debounce from 'lodash.debounce';
 
     const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
 
     export default {
-        props: ['apiPath', 'type'],
+        props: ['apiPath', 'type', 'currentLabels'],
         data: () => ({
+            labels: [],
             responseLabels: [],
             labelBoxInput: ''
         }),
         computed: {
-            ...mapGetters(['editedContact']),
             temporaryLabels() {
-                return this.editedContact.labels;
+                return this.labels;
             }
         },
         watch: {
+            currentLabels() {
+                this.labels = this.currentLabels;
+            },
             labelBoxInput(input) {
                 if (input && removeNonLetters(input) !== '') {
                     let call = debouncedLabelApiCall(this.apiPath, input);
@@ -71,7 +73,7 @@
                 }
             },
             temporaryLabels() {
-                this.editedContact.labels
+                this.labels
                     .map(it => removeNonLetters(it))
                     .map(it => {
                         if (it === '') this.removeLabel(it)
@@ -86,11 +88,11 @@
                 this.responseLabels = [];
             },
             passCurrentLabels() {
-                this.$emit('label-added', this.editedContact.labels);
+                this.$emit('label-added', this.labels);
             },
             removeLabel(item) {
-                this.editedContact.labels.splice(this.editedContact.labels.indexOf(item), 1);
-                this.editedContact.labels = [...this.editedContact.labels]
+                this.labels.splice(this.labels.indexOf(item), 1);
+                this.labels = [...this.labels]
             },
         }
     }
