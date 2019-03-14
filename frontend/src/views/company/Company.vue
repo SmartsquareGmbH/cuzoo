@@ -298,6 +298,21 @@
                                     <span style="white-space: pre-wrap">{{ contact.comment }}
                                     </span>
                                 </v-flex>
+                                <v-flex xs2 v-if="contact.labels.length > 0">
+                                    <v-card dark color="info">
+                                        <v-card-text class="headline text-xs-center">
+                                            <v-icon size="30px" class="pt-1">label</v-icon>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex xs10 class="text-xs-left" v-if="contact.labels.length > 0">
+                                    <v-chip
+                                            class="title mt-3"
+                                            v-for="label in contact.labels"
+                                            v-bind:key="label">
+                                        {{ label }}
+                                    </v-chip>
+                                </v-flex>
                             </v-layout>
                         </v-tab-item>
                     </v-tabs-items>
