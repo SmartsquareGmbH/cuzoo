@@ -98,7 +98,7 @@
     }
 
     function getLabelsByInput(apiPath, input) {
-        return api.get(`${apiPath}/get/labels/${removeNonLetters(input)}`)
+        return api.get(`${apiPath}/${removeNonLetters(input)}`)
             .then(res => {
                 return res.data;
             });

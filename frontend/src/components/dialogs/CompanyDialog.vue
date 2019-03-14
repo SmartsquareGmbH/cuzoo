@@ -66,9 +66,9 @@
                             </v-flex>
                             <v-flex xs12>
                                 <label-box
-                                        @label-added="setCurrentLabels"
+                                        @label-added="setCompanyLabels"
                                         :current-labels="editedCompany.labels"
-                                        api-path="company" type="Labels"/>
+                                        api-path="company/get/labels" type="Labels"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -166,7 +166,7 @@
                     alert(error);
                 });
             },
-            setCurrentLabels(labels) {
+            setCompanyLabels(labels) {
                 this.editedCompany.labels = labels;
             }
         }
