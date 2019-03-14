@@ -1,20 +1,15 @@
 export default {
     state: {
-        darkState: true,
         authorized: false,
         username: '',
         password: ''
     },
     getters: {
-        darkState: state => state.darkState,
         authorized: state => state.authorized,
         username: state => state.username,
         password: state => state.password,
     },
     mutations: {
-        storeDarkState(state, payload) {
-            state.darkState = payload.darkState
-        },
         storeLogData(state, payload) {
             state.authorized = payload.authorized,
             state.username = payload.username,

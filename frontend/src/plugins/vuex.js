@@ -1,11 +1,12 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import Auth from "../store/auth"
-import Companies from "../store/companies"
-import Contacts from "../store/contacts"
-import ContactPoints from "../store/contactpoints"
-import Todos from "../store/todos"
-import SearchResults from "../store/searchResults"
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Main from '../store/main';
+import Auth from '../store/auth';
+import Companies from '../store/companies';
+import Contacts from '../store/contacts';
+import ContactPoints from '../store/contactpoints';
+import Todos from '../store/todos';
+import SearchResults from '../store/searchResults';
 
 import createPersistedState from 'vuex-persistedstate'
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
         paths: ["Auth.authorized", "Auth.username", "Auth.password"]
     })],
     modules: {
+        Main,
         Auth,
         Companies,
         Contacts,
