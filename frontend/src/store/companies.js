@@ -2,7 +2,6 @@ import api from '../utils/http-common'
 
 export default {
     state: {
-        labels: [],
         companies: [],
         editedIndex: -1,
         editedCompany: {
@@ -21,8 +20,7 @@ export default {
     getters: {
         companies: state => state.companies,
         editedCompany: state => state.editedCompany,
-        editedCompanyIndex: state => state.editedIndex,
-        companyLabels: state => state.labels
+        editedCompanyIndex: state => state.editedIndex
     },
     mutations: {
         storeCompanies(state, payload) {
@@ -31,9 +29,6 @@ export default {
         storeEditedCompanyDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
             state.editedCompany = payload.editedCompany
-        },
-        storeCompanyLabels(state, payload) {
-            state.labels = payload.labels
         }
     },
     actions: {

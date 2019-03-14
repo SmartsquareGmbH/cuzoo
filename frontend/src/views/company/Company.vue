@@ -166,8 +166,8 @@
                                 Sonstige Angaben zum Unternehmen
                             </v-tooltip>
                             Sonstiges
-                            </v-card-text>
-                            <v-divider class="mb-3"/>
+                        </v-card-text>
+                        <v-divider class="mb-3"/>
                     </v-flex>
                     <v-flex xs12>
                         <span v-if="this.company.other"
