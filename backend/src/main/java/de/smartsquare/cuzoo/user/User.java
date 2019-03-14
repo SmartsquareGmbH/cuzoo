@@ -1,6 +1,10 @@
 package de.smartsquare.cuzoo.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.smartsquare.cuzoo.customer.contact.Contact;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "user", schema = "cuzoo")
 @Entity
@@ -14,6 +18,10 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Contact> contacts;
 
     public Long getId() {
         return id;
@@ -37,5 +45,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 }

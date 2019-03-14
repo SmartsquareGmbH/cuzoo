@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,6 +38,11 @@ public class Contact {
             joinColumns = {@JoinColumn(name = "contact_id")},
             inverseJoinColumns = {@JoinColumn(name = "label_id")})
     private List<Label> labels;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    @NotNull
+    private User manager;
 
     private String role;
     private String mail;
@@ -146,5 +152,13 @@ public class Contact {
 
     public void setLabels(List<Label> labels) {
         this.labels = labels;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }
