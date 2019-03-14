@@ -62,7 +62,7 @@
                                         rows="3"/>
                             </v-flex>
                             <v-flex xs12>
-                                <label-combo-box
+                                <label-box
                                         @label-added="setCurrentLabels"
                                         api-path="contact" type="Labels"/>
                             </v-flex>
@@ -85,11 +85,11 @@
     import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common'
 
-    import LabelComboBox from "../main/small/LabelComboBox.vue";
+    import LabelBox from "../main/small/LabelBox.vue";
 
     export default {
         props: ["value", "companyNames"],
-        components: { LabelComboBox },
+        components: { LabelBox },
         data() {
             return {
                 valid: false,
