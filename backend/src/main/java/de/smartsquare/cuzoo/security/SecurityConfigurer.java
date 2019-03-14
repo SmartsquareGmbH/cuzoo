@@ -1,10 +1,12 @@
 package de.smartsquare.cuzoo.security;
 
+import de.smartsquare.cuzoo.user.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +25,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyBasicAuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private MyUserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,12 +45,17 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("drs").password(passwordEncoder().encode("bonanzabob42"))
-                .authorities("ROLE_USER")
-                .and()
-                .withUser("alex").password(passwordEncoder().encode("53erbsensaft"))
-                .authorities("ROLE_USER");
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
     }
 
     @Bean
