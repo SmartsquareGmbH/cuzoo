@@ -64,42 +64,11 @@
                                         rows="3"
                                 ></v-textarea>
                             </v-flex>
-
                             <v-flex xs12>
-                                <v-combobox
-                                        v-model="editedCompany.labels"
-                                        :items="labels"
-                                        :search-input.sync="labelBoxInput"
-                                        @change="resetLabels()"
-                                        prepend-icon="label"
-                                        color="primary"
-                                        label="Labels"
-                                        outline
-                                        clearable
-                                        multiple
-                                        solo
-                                        hide-details>
-                                    <template slot="selection" slot-scope="label" tabindex="-1">
-                                        <v-chip tabindex="-1"
-                                                class="title"
-                                                :selected="label.selected"
-                                                close
-                                                @input="removeLabel(label.item)">
-                                            {{ label.item }}
-                                        </v-chip>
-                                    </template>
-                                    <template slot="no-data" v-if="labelBoxInput" tabindex="-1">
-                                        <v-list-tile v-if="labelBoxInput.replace(/ /g, '') !== ''">
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>
-                                                    Keine Labels für
-                                                    "<strong class="primary--text">{{ labelBoxInput }}</strong>"
-                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
-                                                </v-list-tile-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                    </template>
-                                </v-combobox>
+                                <label-box
+                                        @label-added="setCurrentLabels"
+                                        :current-labels="editedCompany.labels"
+                                        api-path="company" type="Labels"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -119,12 +88,12 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
-    import debounce from 'lodash.debounce';
 
-    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
+    import LabelBox from "../main/small/LabelBox.vue";
 
     export default {
         props: ["value"],
+        components: { LabelBox },
         data() {
             return {
                 valid: false,
@@ -149,41 +118,15 @@
         computed: {
             ...mapGetters({
                 editedCompany: 'editedCompany',
-                editedIndex: 'editedCompanyIndex',
-                labels: 'companyLabels'
+                editedIndex: 'editedCompanyIndex'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Unternehmen hinzufügen' : 'Unternehmen bearbeiten'
-            },
-            temporaryLabels() {
-                return this.editedCompany.labels;
-            },
+            }
         },
         watch: {
             value() {
                 this.$refs.form.resetValidation()
-            },
-            labelBoxInput(input) {
-                if (input && removeNonLetters(input) !== '') {
-                    let call = debouncedLabelApiCall(input);
-
-                    if (call) {
-                        call.then(res => this.storeLabels(res));
-                    }
-
-                    this.labels.forEach(label => {
-                        if (removeNonLetters(label) === removeNonLetters(input)) {
-                            this.labelBoxInput = label;
-                        }
-                    });
-                }
-            },
-            temporaryLabels() {
-                this.editedCompany.labels.forEach(label => {
-                    if (removeNonLetters(label) === '') {
-                        this.removeLabel(label);
-                    }
-                })
             }
         },
         methods: {
@@ -223,24 +166,9 @@
                     alert(error);
                 });
             },
-            resetLabels() {
-                this.labelBoxInput = '';
-                this.storeLabels({labels: []});
-            },
-            removeLabel(item) {
-                this.editedCompany.labels.splice(this.editedCompany.labels.indexOf(item), 1);
-                this.editedCompany.labels = [...this.editedCompany.labels]
-            },
+            setCurrentLabels(labels) {
+                this.editedCompany.labels = labels;
+            }
         }
-    }
-
-    function getLabelsByInput(input) {
-        return api.get(`company/get/labels/${removeNonLetters(input)}`).then(response => {
-            return {labels: response.data};
-        })
-    }
-
-    function removeNonLetters(string) {
-        return string.replace(/-/g, '').replace(/ /g, '').toLowerCase();
     }
 </script>
