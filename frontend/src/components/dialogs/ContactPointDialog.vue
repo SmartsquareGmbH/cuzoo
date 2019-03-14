@@ -17,41 +17,10 @@
                                         suffix="*"/>
                             </v-flex>
                             <v-flex xs5>
-                                <v-combobox
-                                        v-model="editedContactPoint.types"
-                                        :items="types"
-                                        :search-input.sync="mediumLabelBoxInput"
-                                        @change="resetTypes()"
-                                        :rules="pointRules"
-                                        prepend-icon="share"
-                                        color="primary"
-                                        label="Art"
-                                        chips
-                                        outline
-                                        multiple
-                                        solo
-                                        hide-details>
-                                    <template slot="selection" slot-scope="type">
-                                        <v-chip
-                                                class="subheading"
-                                                :selected="type.selected"
-                                                close
-                                                @input="removeType(type.item)">
-                                            {{ type.item }}
-                                        </v-chip>
-                                    </template>
-                                    <template slot="no-data" v-if="mediumLabelBoxInput">
-                                        <v-list-tile v-if="mediumLabelBoxInput.replace(/ /g, '') !== ''">
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>
-                                                    Keine Labels für
-                                                    "<strong class="primary--text">{{ mediumLabelBoxInput }}</strong>"
-                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
-                                                </v-list-tile-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                    </template>
-                                </v-combobox>
+                                <label-box
+                                        @label-added="setContactPointTypes"
+                                        :current-labels="editedContactPoint.types"
+                                        api-path="point/get/types" type="Art"/>
                             </v-flex>
                             <v-flex xs7>
                                 <v-combobox
@@ -100,40 +69,10 @@
                                         rows="5"/>
                             </v-flex>
                             <v-flex xs12>
-                                <v-combobox
-                                        v-model="editedContactPoint.labels"
-                                        :items="labels"
-                                        :search-input.sync="labelBoxInput"
-                                        @change="resetLabels()"
-                                        prepend-icon="label"
-                                        color="primary"
-                                        label="Labels"
-                                        outline
-                                        clearable
-                                        multiple
-                                        solo
-                                        hide-details>
-                                    <template slot="selection" slot-scope="label" tabindex="-1">
-                                        <v-chip tabindex="-1"
-                                                class="title"
-                                                :selected="label.selected"
-                                                close
-                                                @input="removeLabel(label.item)">
-                                            {{ label.item }}
-                                        </v-chip>
-                                    </template>
-                                    <template slot="no-data" v-if="labelBoxInput" tabindex="-1">
-                                        <v-list-tile v-if="labelBoxInput.replace(/ /g, '') !== ''">
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>
-                                                    Keine Labels für
-                                                    "<strong class="primary--text">{{ labelBoxInput }}</strong>"
-                                                    gefunden. Drücke <kbd>Enter</kbd> um es zu erstellen.
-                                                </v-list-tile-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                    </template>
-                                </v-combobox>
+                                <label-box
+                                        @label-added="setContactPointLabels"
+                                        :current-labels="editedContactPoint.labels"
+                                        api-path="point/get/labels" type="Labels"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -153,23 +92,22 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
-    import debounce from 'lodash.debounce';
+
+    import LabelBox from "../main/small/LabelBox.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
 
-    const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
-    const debouncedTypeApiCall = debounce(getTypesByInput, 150, {leading: true});
-
     export default {
         props: ["value", "contactNames"],
+        components: {
+            LabelBox
+        },
         data() {
             return {
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: false,
-                labelBoxInput: null,
-                mediumLabelBoxInput: null,
                 pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
                 pointRules: [
                     v => !!v || "Bitte geben Sie eine Kontaktpunktart an"
@@ -202,58 +140,12 @@
                 } else {
                     this.date = new Date().toISOString().substr(0, 10);
                 }
-            },
-            labelBoxInput(input) {
-                if (input && removeNonLetters(input) !== '') {
-                    let call = debouncedLabelApiCall(input);
-
-                    if (call) {
-                        call.then(res => this.storeLabels(res));
-                    }
-
-                    this.labels.forEach(label => {
-                        if (removeNonLetters(label) === removeNonLetters(input)) {
-                            this.labelBoxInput = label;
-                        }
-                    });
-                }
-            },
-            mediumLabelBoxInput(input) {
-                if (input && removeNonLetters(input) !== '') {
-                    let call = debouncedTypeApiCall(input);
-
-                    if (call) {
-                        call.then(res => this.storeTypes(res));
-                    }
-
-                    this.types.forEach(type => {
-                        if (removeNonLetters(type) === removeNonLetters(input)) {
-                            this.mediumLabelBoxInput = type;
-                        }
-                    });
-                }
-            },
-            temporaryLabels() {
-                this.editedContactPoint.labels.forEach(label => {
-                    if (removeNonLetters(label) === '') {
-                        this.removeLabel(label);
-                    }
-                })
-            },
-            temporaryTypes() {
-                this.editedContactPoint.types.forEach(type => {
-                    if (removeNonLetters(type) === '') {
-                        this.removeType(type);
-                    }
-                })
             }
         },
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
-                editedContactPoint: 'editedContactPoint',
-                labels: 'contactPointLabels',
-                types: 'contactPointTypes'
+                editedContactPoint: 'editedContactPoint'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
@@ -265,20 +157,12 @@
                 set(newDate) {
                     this.date = newDate;
                 }
-            },
-            temporaryLabels() {
-                return this.editedContactPoint.labels;
-            },
-            temporaryTypes() {
-                return this.editedContactPoint.types;
             }
         },
         methods: {
             ...mapActions(['getContactPointLabels']),
             ...mapMutations({
                 storeDetails: 'storeEditedContactPointDetails',
-                storeLabels: 'storeContactPointLabels',
-                storeTypes: 'storeContactPointTypes'
             }),
             clearDialog() {
                 this.$refs.form.reset();
@@ -313,38 +197,12 @@
                     alert(error);
                 });
             },
-            resetLabels() {
-                this.labelBoxInput = '';
-                this.storeLabels({labels: []});
+            setContactPointLabels(labels) {
+                this.editedContactPoint.labels = labels;
             },
-            resetTypes() {
-                this.mediumLabelBoxInput = '';
-                this.storeTypes({types: []});
-            },
-            removeLabel(item) {
-                this.editedContactPoint.labels.splice(this.editedContactPoint.labels.indexOf(item), 1);
-                this.editedContactPoint.labels = [...this.editedContactPoint.labels]
-            },
-            removeType(item) {
-                this.editedContactPoint.types.splice(this.editedContactPoint.types.indexOf(item), 1);
-                this.editedContactPoint.types = [...this.editedContactPoint.types]
+            setContactPointTypes(types) {
+                this.editedContactPoint.types = types;
             }
         }
-    }
-
-    function getLabelsByInput(input) {
-        return api.get(`point/get/labels/${removeNonLetters(input)}`).then(response => {
-            return {labels: response.data};
-        })
-    }
-
-    function getTypesByInput(input) {
-        return api.get(`point/get/types/${removeNonLetters(input)}`).then(response => {
-            return {types: response.data};
-        })
-    }
-
-    function removeNonLetters(string) {
-        return string.replace(/-/g, '').replace(/ /g, '').toLowerCase();
     }
 </script>
