@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import api from '../../../utils/http-common';
+    import api from '../../utils/http-common';
     import debounce from 'lodash.debounce';
 
     const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});

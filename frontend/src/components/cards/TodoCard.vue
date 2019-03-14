@@ -50,7 +50,7 @@
 <script>
     import api from '../../utils/http-common'
 
-    import Chip from "../main/small/Chip.vue";
+    import Chip from "../main/Chip.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');

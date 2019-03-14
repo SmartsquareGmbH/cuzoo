@@ -89,7 +89,7 @@
     import {mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
-    import LabelBox from "../main/small/LabelBox.vue";
+    import LabelBox from "../main/LabelBox.vue";
 
     export default {
         props: ["value"],

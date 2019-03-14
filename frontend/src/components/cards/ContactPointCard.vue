@@ -40,7 +40,7 @@
     import api from '../../utils/http-common';
     import {mapGetters, mapMutations} from 'vuex';
 
-    import Chip from "../main/small/Chip.vue";
+    import Chip from "../main/Chip.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');

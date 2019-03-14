@@ -93,7 +93,7 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
-    import LabelBox from "../main/small/LabelBox.vue";
+    import LabelBox from "../main/LabelBox.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
