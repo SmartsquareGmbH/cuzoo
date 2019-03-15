@@ -55,6 +55,7 @@ public class ContactPointControllerTest {
 
     @Before
     public void initialize() {
+        userRepository.deleteAll();
         manager = new User("mustername", "1234");
         userRepository.save(manager);
 
