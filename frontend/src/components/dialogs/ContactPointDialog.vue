@@ -145,7 +145,8 @@
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
-                editedContactPoint: 'editedContactPoint'
+                editedContactPoint: 'editedContactPoint',
+                username: 'username'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
@@ -188,7 +189,8 @@
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment,
                     types: this.editedContactPoint.types,
-                    labels: this.editedContactPoint.labels
+                    labels: this.editedContactPoint.labels,
+                    creator: this.username
                 }).then(() => {
                     this.$parent.refreshData();
                     this.closeDialog();
