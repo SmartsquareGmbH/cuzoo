@@ -2,6 +2,8 @@ package de.smartsquare.cuzoo.customer.todo;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,24 +20,32 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/todo")
 public class TodoController {
     private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
 
     @Autowired
-    public TodoController(final TodoRepository todoRepository, final CompanyRepository companyRepository) {
+    public TodoController(final TodoRepository todoRepository, final CompanyRepository companyRepository,
+                          final UserRepository userRepository) {
         this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
         this.companyRepository = companyRepository;
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitTodo(@RequestBody @Valid Todo todo,
+    public final ResponseEntity<?> submitTodo(@RequestBody @Valid TodoForm todoForm,
                                               @RequestParam("companyName") String companyName,
                                               BindingResult bindingResult) {
-        if (bindingResult.hasErrors() || !companyRepository.existsByName(companyName)) {
+        Optional<User> creator = userRepository.findMaybeByUsername(todoForm.getCreator());
+        Optional<Company> company = companyRepository.findMaybeByName(companyName);
+
+        if (bindingResult.hasErrors() || !company.isPresent() || !creator.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Company companyOfTodo = companyRepository.findByName(companyName);
-        todo.setCompany(companyOfTodo);
+        Todo todo = getOrCreateTodo(todoForm, company.get());
+
+        todo.setCreator(creator.get());
+        todo.setCompany(company.get());
 
         Long todoIdBeforeSaving = todo.getId();
 
@@ -50,6 +60,28 @@ public class TodoController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    private Todo getOrCreateTodo(@RequestBody @Valid TodoForm todoForm, Company company) {
+        Optional<Todo> maybeTodo = todoRepository.findById(todoForm.getId());
+        Todo todo;
+
+        if (maybeTodo.isPresent()) {
+            todo = maybeTodo.get();
+
+            todo.setDescription(todoForm.getDescription());
+            todo.setCompany(company);
+            todo.setExpiration(todoForm.getExpiration());
+            todo.setReminder(todoForm.getReminder());
+        } else {
+            todo = new Todo(
+                    todoForm.getDescription(),
+                    company,
+                    todoForm.getExpiration(),
+                    todoForm.getReminder());
+        }
+
+        return todo;
     }
 
     @PutMapping("/done/{todoId}")

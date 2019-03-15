@@ -2,6 +2,8 @@ package de.smartsquare.cuzoo.customer.todo;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +31,9 @@ public class TodoControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private UserRepository userRepository;
+    private User creator;
+    @Autowired
     private TodoRepository todoRepository;
     @Autowired
     private CompanyRepository companyRepository;
@@ -37,6 +42,10 @@ public class TodoControllerTest {
 
     @Before
     public void initialize() {
+        userRepository.deleteAll();
+        creator = new User("user", "", "");
+        userRepository.save(creator);
+
         company = new Company("Smartsquare", "", "", "", "", "", "");
         companyRepository.save(company);
     }
@@ -68,7 +77,7 @@ public class TodoControllerTest {
     }
 
     private String getTodoInJson() {
-        return "{\"description\":\"Muell rausbringen\", \"expiration\":\"0\", \"reminder\":\"0\"}";
+        return "{\"description\":\"Muell rausbringen\", \"expiration\":\"0\", \"id\":\"0\", \"reminder\":\"0\", \"creator\":\"user\"}";
     }
 
 }

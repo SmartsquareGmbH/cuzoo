@@ -78,16 +78,16 @@ public class Todo {
         return expiration;
     }
 
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
+    public void setExpiration(Long expiration) {
+        this.expiration = new Date(expiration);
     }
 
     public Date getReminder() {
         return reminder;
     }
 
-    public void setReminder(Date reminder) {
-        this.reminder = reminder;
+    public void setReminder(Long reminder) {
+        this.reminder = new Date(reminder);
     }
 
     public boolean isDone() {
