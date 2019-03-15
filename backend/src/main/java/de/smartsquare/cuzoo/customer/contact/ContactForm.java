@@ -5,11 +5,15 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ContactForm {
-
     private Long id;
+
     @NotNull
     @NotBlank
     private String name;
+
+    @NotNull
+    @NotBlank
+    private String manager;
 
     private String role;
     private String mail;
@@ -19,19 +23,39 @@ public class ContactForm {
 
     private List<String> labels;
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getRole() { return role; }
+    public String getManager() {
+        return manager;
+    }
 
-    public String getMail() { return mail; }
+    public String getRole() {
+        return role;
+    }
 
-    public String getTelephone() { return telephone; }
+    public String getMail() {
+        return mail;
+    }
 
-    public String getMobile() { return mobile; }
+    public String getTelephone() {
+        return telephone;
+    }
 
-    public String getComment() { return comment; }
+    public String getMobile() {
+        return mobile;
+    }
 
-    public List<String> getLabels() { return labels; }
+    public String getComment() {
+        return comment;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
 }

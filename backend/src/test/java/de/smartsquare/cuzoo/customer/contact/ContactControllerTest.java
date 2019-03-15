@@ -2,7 +2,10 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +42,23 @@ public class ContactControllerTest {
     private CompanyRepository companyRepository;
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    private User manager;
 
     @After
     public void tearDown() throws Exception {
-        companyRepository.deleteAll();
+        userRepository.deleteAll();
         contactRepository.deleteAll();
+        companyRepository.deleteAll();
+    }
+
+    @Before
+    public void initialize() throws Exception {
+        manager = new User("alex", "1234");
+        manager.setId(1L);
+        userRepository.save(manager);
     }
 
     @Test
@@ -108,6 +123,7 @@ public class ContactControllerTest {
     @Test
     public void that_contact_does_not_get_registered_when_company_does_not_exists() throws Exception {
         String companyName = "Smartsquare GmbH";
+        manager.setId(1L);
 
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
@@ -123,7 +139,7 @@ public class ContactControllerTest {
     }
 
     private String getContactInJson() {
-        return "{\"id\":\"0\", \"name\":\"Freddy Faulig\", \"role\":\"Boesewicht\"}";
+        return "{\"id\":\"0\", \"name\":\"Freddy Faulig\", \"role\":\"Boesewicht\", \"manager\":\"alex\"}";
     }
 
     @Test
@@ -159,11 +175,11 @@ public class ContactControllerTest {
     }
 
     private String getOutdatedContactInJson() {
-        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Azubi\"}";
+        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Azubi\", \"manager\":\"alex\"}";
     }
 
     private String getUpdatedContactInJson() {
-        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Softwareentwickler\"}";
+        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Softwareentwickler\", \"manager\":\"alex\"}";
     }
 
     @Test
@@ -208,12 +224,13 @@ public class ContactControllerTest {
     }
 
     private String getFreelancerInJson() {
-        return "{\"id\":\"0\", \"name\":\"Fred Feuerstein\", \"role\":\"Freiberufler\"}";
+        return "{\"id\":\"0\", \"name\":\"Fred Feuerstein\", \"role\":\"Freiberufler\", \"manager\":\"alex\"}";
     }
 
     @Test
     public void that_contact_is_getting_deleted() throws Exception {
         Contact contact = new Contact("Zoey", "", "", "", "", "");
+        contact.setManager(userRepository.findByUsername("alex"));
         contactRepository.save(contact);
 
         MockHttpServletRequestBuilder builder =
@@ -247,6 +264,7 @@ public class ContactControllerTest {
     @Test
     public void that_downloading_contacts_information_is_successfully() throws Exception {
         Contact contact = new Contact("Tom", "Azubi", "", "123", "", "");
+        contact.setManager(userRepository.findByUsername("alex"));
         Company company = new Company("Tom AG", "", "", "", "", "", "");
         companyRepository.save(company);
         contact.setCompany(company);

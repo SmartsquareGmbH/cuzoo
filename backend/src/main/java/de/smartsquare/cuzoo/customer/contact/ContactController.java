@@ -6,6 +6,7 @@ import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class ContactController {
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
     private final ContactPointRepository contactPointRepository;
+    private final UserRepository userRepository;
     private final LabelRepository labelRepository;
 
     private final CSVConverter csvConverter;
@@ -35,10 +37,11 @@ public class ContactController {
     @Autowired
     public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository,
                              final ContactPointRepository contactPointRepository, final LabelRepository labelRepository,
-                             CSVConverter csvConverter) {
+                             final UserRepository userRepository, CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.contactPointRepository = contactPointRepository;
+        this.userRepository = userRepository;
         this.labelRepository = labelRepository;
 
         this.csvConverter = csvConverter;
@@ -52,7 +55,10 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
-        insertedContacts.forEach(contactRepository::save);
+        insertedContacts.forEach(contact -> {
+            contact.setManager(userRepository.findByUsername("alex"));
+            contactRepository.save(contact);
+        });
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -60,7 +66,8 @@ public class ContactController {
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContact(@RequestBody @Valid ContactForm contactForm, BindingResult bindingResult,
                                                  @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() ||
+                (hasNoCompany(maybeCompanyName) && !companyRepository.existsByName(maybeCompanyName))) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -69,10 +76,6 @@ public class ContactController {
         Long contactIdBeforeSaving = contactForm.getId();
 
         if (hasNoCompany(maybeCompanyName)) {
-            if (!companyRepository.existsByName(maybeCompanyName)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
             Company contactsCompany = companyRepository.findByName(maybeCompanyName);
             contact.setCompany(contactsCompany);
         }
@@ -116,6 +119,8 @@ public class ContactController {
                     contactForm.getMobile(),
                     contactForm.getComment());
         }
+
+        contact.setManager(userRepository.findByUsername(contactForm.getManager()));
 
         return contact;
     }

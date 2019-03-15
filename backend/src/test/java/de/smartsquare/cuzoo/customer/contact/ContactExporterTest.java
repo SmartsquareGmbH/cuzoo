@@ -4,6 +4,8 @@ import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ContactExporterTest {
+    private User manager;
     private Company smartsquare;
     private Contact darius;
     private ContactPoint firstContactPoint;
@@ -33,13 +36,20 @@ public class ContactExporterTest {
     private ContactRepository contactRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Before
     public void initialize() {
+        manager = new User("Test", "Test");
+        manager.setId(1L);
+        userRepository.save(manager);
+
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(smartsquare);
 
         darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "3456356453", "");
+        darius.setManager(manager);
         contactRepository.save(darius);
 
         firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "");

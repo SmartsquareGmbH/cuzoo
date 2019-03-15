@@ -6,6 +6,8 @@ import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,30 +37,37 @@ public class ContactPointControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ContactPointRepository contactPointRepository;
-    @Autowired
-    private ContactRepository contactRepository;
+    private UserRepository userRepository;
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
+    private ContactRepository contactRepository;
+    @Autowired
+    private ContactPointRepository contactPointRepository;
+    @Autowired
     private LabelRepository labelRepository;
 
-    private Contact contact;
+    private User manager;
     private Company company;
+    private Contact contact;
     private ContactPoint contactPoint;
     private Label label;
 
     @Before
     public void initialize() {
+        manager = new User("mustername", "1234");
+        userRepository.save(manager);
+
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(company);
 
         contact = new Contact("Darius", "", "", "", "", "");
         contact.setCompany(company);
+        contact.setManager(manager);
         contactRepository.save(contact);
 
-        label = new Label("Cloud Flyer");
         contactPoint = new ContactPoint("Beratung", 0L, contact, "");
+        label = new Label("Cloud Flyer");
 
         contactPoint.addLabel(label);
         label.addContactPointWithLabel(contactPoint);
@@ -69,9 +78,10 @@ public class ContactPointControllerTest {
 
     @After
     public void tearDown() throws Exception {
-        contactPointRepository.deleteAll();
-        contactRepository.deleteAll();
+        userRepository.deleteAll();
         companyRepository.deleteAll();
+        contactRepository.deleteAll();
+        contactPointRepository.deleteAll();
         labelRepository.deleteAll();
     }
 

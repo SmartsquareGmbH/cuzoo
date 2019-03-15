@@ -2,7 +2,10 @@ package de.smartsquare.cuzoo.customer.contactpoint;
 
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +20,36 @@ public class ContactPointRepositoryTest {
 
     @Autowired
     private ContactPointRepository contactPointRepository;
-
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    private User manager;
+    private Contact contact;
+    private ContactPoint contactPoint;
+
+    @Before
+    public void initialize() {
+        manager = new User("tesfdasdfasd", "1234");
+        userRepository.save(manager);
+
+        contact = new Contact("Darius Tack", "", "", "", "", "");
+        contact.setManager(manager);
+        contactRepository.save(contact);
+    }
 
     @After
     public void tearDown() throws Exception {
         contactPointRepository.deleteAll();
         contactRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     public final void that_saves_contact_point_correctly() {
-        Contact contact = new Contact("Darius Tack", "", "", "", "", "");
         ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "");
 
-        contactRepository.save(contact);
         contactPointRepository.save(contactPoint);
 
         assertThat(contactPointRepository.findAll().size()).isEqualTo(1);
