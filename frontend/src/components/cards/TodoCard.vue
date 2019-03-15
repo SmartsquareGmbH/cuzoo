@@ -30,6 +30,12 @@
                         </chip>
                         <span class="title font-weight-light">{{ todo.company.name }}</span>
                     </v-tooltip>
+                    <v-spacer/>
+                    <v-icon>person</v-icon>
+                    <chip font-color="primary"
+                          :class="`mr-${hover ? 5 : 0}`">
+                        {{ todo.creator }}
+                    </chip>
                 </v-card-title>
                 <v-tooltip top max-width="750" v-if="todo.description.length > 85">
                     <v-card-title slot="activator"
