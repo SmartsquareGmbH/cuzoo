@@ -8,14 +8,26 @@
                 <v-form ref="form" v-model="valid">
                     <v-container grid-list-md>
                         <v-layout wrap>
-                            <v-flex xs12>
+                            <v-flex xs6>
                                 <v-text-field
                                         v-model="editedContact.name"
                                         label="Vor- und Nachname"
                                         prepend-icon="person"
                                         suffix="*"
                                         required
-                                        :rules="contactFieldRules"/>
+                                        :rules="[v => !!v || 'Bitte geben Sie einen Namen an']"
+                                        hide-details/>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-combobox
+                                        v-model="editedContact.manager"
+                                        :items="this.usernames"
+                                        label="Manager"
+                                        prepend-icon="account_circle"
+                                        suffix="*"
+                                        required
+                                        :rules="managerRules"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs12>
                                 <v-combobox
@@ -95,8 +107,9 @@
             return {
                 valid: false,
                 companyFieldEnabled: true,
-                contactFieldRules: [
-                    v => !!v || "Bitte geben Sie einen Namen an"
+                managerRules: [
+                    v => !!v || "Bitte geben Sie einen Manager an!",
+                    v => this.usernames.includes(v) || "Der Manager existiert nicht!"
                 ],
                 companyName: "",
                 defaultContact: {
@@ -109,6 +122,7 @@
                     telephone: "",
                     mobile: "",
                     comment: "",
+                    manager: "",
                     labels: []
                 }
             }
@@ -120,7 +134,8 @@
             ...mapGetters({
                 editedIndex: 'editedContactIndex',
                 editedContact: 'editedContact',
-                editedCompanyName: 'editedCompanyName'
+                editedCompanyName: 'editedCompanyName',
+                usernames: 'usernames'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Ansprechpartner hinzufügen' : 'Ansprechpartner bearbeiten'
@@ -171,7 +186,6 @@
                 }
             },
             submitContact() {
-                console.log(this.companyName);
                 let maybeCompany = this.companyName ? `?companyName=${this.companyName.replace("&", "%26")}` : '';
 
                 api.put(`contact/submit${maybeCompany}`, {
@@ -183,6 +197,7 @@
                     telephone: this.editedContact.telephone,
                     mobile: this.editedContact.mobile,
                     comment: this.editedContact.comment,
+                    manager: this.editedContact.manager,
                     labels: this.editedContact.labels
                 }).then(() => {
                     this.$parent.refreshTable();

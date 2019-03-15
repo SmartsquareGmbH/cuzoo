@@ -15,6 +15,7 @@ export default {
             telephone: "",
             mobile: "",
             comment: "",
+            manager: "",
             labels: []
         }
     },
@@ -45,6 +46,8 @@ export default {
                     contact.labels = contact.labels.map(label => {
                         return label.title;
                     });
+
+                    contact.manager = contact.manager.username;
                 });
 
                 this.commit({
