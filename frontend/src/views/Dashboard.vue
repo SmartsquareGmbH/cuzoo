@@ -154,7 +154,8 @@
                 'contacts',
                 'contactPoints',
                 'todos',
-                'searchResults'
+                'searchResults',
+                'selectedCompany'
             ])
         },
         beforeMount() {
@@ -162,7 +163,12 @@
             this.onResize();
         },
         watch: {
-            companyId() {}
+            selectedCompany() {
+                if (!this.selectedCompany || this.companies.map(it => it.name).includes(this.selectedCompany)) {
+                    this.searchContactPoints = this.selectedCompany;
+                    this.searchTodos = this.selectedCompany;
+                }
+            }
         },
         methods: {
             ...mapActions([

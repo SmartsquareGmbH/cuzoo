@@ -33,6 +33,21 @@
                     </v-btn>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
+                <v-fade-transition>
+                    <v-combobox
+                            clearable
+                            @change="companySelected()"
+                            v-model="selectedCompany"
+                            :loading="loadingCompanies"
+                            :items="companyNames"
+                            v-if="this.$route.name.includes('dashboard')"
+                            class="mr-3"
+                            ref="searchBar"
+                            prepend-icon="search"
+                            label="Suche nach Unternehmen ..."
+                            hide-details
+                            solo/>
+                </v-fade-transition>
                 <v-toolbar-items>
                     <v-menu offset-y>
                         <v-btn slot="activator" color="primary">
@@ -68,7 +83,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
 
     import Login from "@/components/main/single/Login.vue";
     import Settings from "@/components/main/single/Settings.vue";
@@ -81,7 +96,10 @@
         data() {
             return {
                 drawer: null,
-                settingState: false
+                settingState: false,
+                selectedCompany: '',
+                companyNames: [],
+                loadingCompanies: true
             }
         },
         computed: {
@@ -89,11 +107,19 @@
                 dark: 'darkState',
                 authorized: 'authorized',
                 username: 'username',
-                password: 'password'
+                password: 'password',
+                companies: 'companies'
+            })
+        },
+        beforeMount() {
+            this.getCompanies().then(() => {
+                this.companyNames = this.companies.map(it => it.name);
+                this.loadingCompanies = false;
             })
         },
         methods: {
-            ...mapMutations(['storeLogData']),
+            ...mapMutations(['storeLogData', 'storeSelectedCompany']),
+            ...mapActions(['getCompanies']),
             openSettings() {
                 this.settingState = true;
             },
@@ -101,6 +127,9 @@
                 this.storeLogData({
                     authorized: false
                 });
+            },
+            companySelected() {
+                this.storeSelectedCompany({selectedCompanyOnDash: this.selectedCompany});
             }
         }
     }
