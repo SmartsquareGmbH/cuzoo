@@ -45,28 +45,13 @@ public class ContactPointController {
                                                       @RequestBody @Valid ContactPointForm contactPointForm,
                                                       BindingResult bindingResult) {
         Optional<User> creator = userRepository.findMaybeByUsername(contactPointForm.getCreator());
+        Optional<Contact> contact = contactRepository.findMaybeByName(contactName);
 
-        if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName) || !creator.isPresent()) {
+        if (bindingResult.hasErrors() || !contact.isPresent() || !creator.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Contact contactPointsContact = contactRepository.findByName(contactName);
-        ContactPoint contactPoint;
-
-        if (contactPointRepository.findById(contactPointForm.getId()).isPresent()) {
-            contactPoint = contactPointRepository.findById(contactPointForm.getId()).get();
-
-            contactPoint.setTitle(contactPointForm.getTitle());
-            contactPoint.setDate(contactPointForm.getDate());
-            contactPoint.setContact(contactPointsContact);
-            contactPoint.setComment(contactPointForm.getComment());
-        } else {
-            contactPoint = new ContactPoint(
-                    contactPointForm.getTitle(),
-                    contactPointForm.getDate(),
-                    contactPointsContact,
-                    contactPointForm.getComment());
-        }
+        ContactPoint contactPoint = getOrCreateContactPoint(contactPointForm, contact.get());
 
         contactPoint.setCreator(creator.get());
         Long contactPointIdBeforeSaving = contactPointForm.getId();
@@ -91,6 +76,27 @@ public class ContactPointController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    private ContactPoint getOrCreateContactPoint(@RequestBody @Valid ContactPointForm contactPointForm, Contact contactPointsContact) {
+        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointForm.getId());
+        ContactPoint contactPoint;
+
+        if (maybeContactPoint.isPresent()) {
+            contactPoint = maybeContactPoint.get();
+
+            contactPoint.setTitle(contactPointForm.getTitle());
+            contactPoint.setDate(contactPointForm.getDate());
+            contactPoint.setContact(contactPointsContact);
+            contactPoint.setComment(contactPointForm.getComment());
+        } else {
+            contactPoint = new ContactPoint(
+                    contactPointForm.getTitle(),
+                    contactPointForm.getDate(),
+                    contactPointsContact,
+                    contactPointForm.getComment());
+        }
+        return contactPoint;
     }
 
     private void submitLabels(List<String> titles, ContactPoint contactPoint, boolean mediaTypes) {
