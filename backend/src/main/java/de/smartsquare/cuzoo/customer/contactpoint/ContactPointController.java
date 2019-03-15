@@ -5,6 +5,8 @@ import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -24,13 +26,14 @@ public class ContactPointController {
     private final ContactPointRepository contactPointRepository;
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
     private final LabelRepository labelRepository;
 
     @Autowired
     public ContactPointController(final ContactPointRepository contactPointRepository,
-                                  final ContactRepository contactRepository,
-                                  final CompanyRepository companyRepository,
-                                  final LabelRepository labelRepository) {
+                                  final ContactRepository contactRepository, final LabelRepository labelRepository,
+                                  final CompanyRepository companyRepository, final UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.contactPointRepository = contactPointRepository;
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
@@ -41,7 +44,9 @@ public class ContactPointController {
     public final ResponseEntity<?> submitContactPoint(@PathVariable("contactName") String contactName,
                                                       @RequestBody @Valid ContactPointForm contactPointForm,
                                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName)) {
+        Optional<User> creator = userRepository.findMaybeByUsername(contactPointForm.getCreator());
+
+        if (bindingResult.hasErrors() || !contactRepository.existsByName(contactName) || !creator.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -63,6 +68,7 @@ public class ContactPointController {
                     contactPointForm.getComment());
         }
 
+        contactPoint.setCreator(creator.get());
         Long contactPointIdBeforeSaving = contactPointForm.getId();
 
         try {

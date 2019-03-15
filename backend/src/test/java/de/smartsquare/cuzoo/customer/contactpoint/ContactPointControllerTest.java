@@ -47,7 +47,7 @@ public class ContactPointControllerTest {
     @Autowired
     private LabelRepository labelRepository;
 
-    private User manager;
+    private User user;
     private Company company;
     private Contact contact;
     private ContactPoint contactPoint;
@@ -56,20 +56,21 @@ public class ContactPointControllerTest {
     @Before
     public void initialize() {
         userRepository.deleteAll();
-        manager = new User("mustername", "1234", "");
-        userRepository.save(manager);
+        user = new User("user", "", "");
+        userRepository.save(user);
 
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(company);
 
         contact = new Contact("Darius", "", "", "", "", "");
         contact.setCompany(company);
-        contact.setManager(manager);
+        contact.setManager(user);
         contactRepository.save(contact);
 
         contactPoint = new ContactPoint("Beratung", 0L, contact, "");
         label = new Label("Cloud Flyer");
 
+        contactPoint.setCreator(user);
         contactPoint.addLabel(label);
         label.addContactPointWithLabel(contactPoint);
 
@@ -123,7 +124,7 @@ public class ContactPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"]}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
     @Test
@@ -148,7 +149,9 @@ public class ContactPointControllerTest {
     }
 
     private String getContactPointInJsonWithNonExistingLabels() {
-        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"comment\":\"\", \"labels\": [\"Weihnachtskarte\"], \"types\":[\"Social Media\"]}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", " +
+                "\"date\":\"0\", \"creator\":\"user\", " +
+                "\"labels\": [\"Weihnachtskarte\"], \"types\":[\"Social Media\"]}";
     }
 
     @Test
@@ -173,7 +176,9 @@ public class ContactPointControllerTest {
     }
 
     private String getContactPointInJsonWithExistingLabels() {
-        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"comment\":\"\", \"labels\": [\"" + label.getTitle() + "\"], \"types\":[\"Social Media\"]}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", " +
+                "\"date\":\"0\", \"creator\":\"user\"," +
+                "\"labels\": [\"" + label.getTitle() + "\"], \"types\":[\"Social Media\"]}";
     }
 
     @Test
@@ -206,11 +211,11 @@ public class ContactPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"]}";
+        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
     private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"date\":\"0\", \"types\":[\"Social Media\"]}";
+        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
     @Test
@@ -235,6 +240,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
         ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "");
+        contactPoint.setCreator(user);
         contactPointRepository.save(contactPoint);
 
         MockHttpServletRequestBuilder builder =

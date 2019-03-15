@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ContactExporterTest {
-    private User manager;
+    private User user;
     private Company smartsquare;
     private Contact darius;
     private ContactPoint firstContactPoint;
@@ -41,19 +41,21 @@ public class ContactExporterTest {
 
     @Before
     public void initialize() {
-        manager = new User("Test", "Test", "");
-        manager.setId(1L);
-        userRepository.save(manager);
+        userRepository.deleteAll();
+        user = new User("Test", "Test", "");
+        userRepository.save(user);
 
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");
         companyRepository.save(smartsquare);
 
         darius = new Contact("Darius Tack", smartsquare, "Azubi", "darius@tack.de", "012345678910", "3456356453", "");
-        darius.setManager(manager);
+        darius.setManager(user);
         contactRepository.save(darius);
 
         firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "");
         secondContactPoint = new ContactPoint("Anfrage", 600000L, darius, "");
+        firstContactPoint.setCreator(user);
+        secondContactPoint.setCreator(user);
         contactPointRepository.save(firstContactPoint);
         contactPointRepository.save(secondContactPoint);
 

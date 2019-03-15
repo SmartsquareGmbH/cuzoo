@@ -16,6 +16,9 @@ public class ContactPointForm {
     private List<String> types;
     private List<String> labels;
 
+    @NotNull
+    @NotBlank
+    private String creator;
     private String comment;
 
     public Long getId() {
@@ -36,6 +39,10 @@ public class ContactPointForm {
 
     public String getComment() {
         return comment;
+    }
+
+    public String getCreator() {
+        return creator;
     }
 
     public List<String> getLabels() {
