@@ -4,17 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Table(name = "user", schema = "cuzoo")
+@Table(name = "users")
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
-    @SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @SequenceGenerator(name = "users_generator", sequenceName = "user_seq")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotNull
+    @Column(unique = true)
     private String username;
 
     private String password;
@@ -22,6 +25,13 @@ public class User {
     @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Contact> contacts;
+
+    public User(@NotNull @NotBlank final String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User() { }
 
     public Long getId() {
         return id;
