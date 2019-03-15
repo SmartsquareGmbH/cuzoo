@@ -54,6 +54,9 @@
                     if (contactPoint.hasOwnProperty(key) && contactPoint[key]) {
                         if (key === 'contact') {
                             this.searchTerms.push(contactPoint[key].name.toLowerCase());
+
+                            contactPoint[key].labels.map(it => this.searchTerms.push(it));
+
                             if (contactPoint[key].company) {
                                 this.searchTerms.push(contactPoint[key].company.name.toLowerCase());
                             }
