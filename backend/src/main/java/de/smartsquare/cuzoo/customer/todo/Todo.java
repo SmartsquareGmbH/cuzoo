@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.todo;
 
 import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +30,11 @@ public class Todo {
     private Date reminder;
 
     private boolean done;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
 
     Todo() {
 
@@ -90,5 +96,13 @@ public class Todo {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

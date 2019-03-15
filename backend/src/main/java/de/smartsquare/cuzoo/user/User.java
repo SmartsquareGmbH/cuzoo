@@ -2,6 +2,8 @@ package de.smartsquare.cuzoo.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
+import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
+import de.smartsquare.cuzoo.customer.todo.Todo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -26,6 +28,14 @@ public class User {
     @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Contact> contacts;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<ContactPoint> contactPoints;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Todo> todos;
 
     public User(@NotNull @NotBlank final String username, String password, String fullname) {
         this.username = username;
@@ -74,5 +84,21 @@ public class User {
 
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
+    }
+
+    public List<ContactPoint> getContactPoints() {
+        return contactPoints;
+    }
+
+    public void setContactPoints(List<ContactPoint> contactPoints) {
+        this.contactPoints = contactPoints;
+    }
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 }

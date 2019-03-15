@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
 import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -58,6 +59,10 @@ public class ContactPoint {
             inverseJoinColumns = {@JoinColumn(name = "label_id")})
     private List<Label> types;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
     public ContactPoint() {
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();
@@ -91,6 +96,7 @@ public class ContactPoint {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public Contact getContact() {
         return contact;
     }
@@ -141,5 +147,13 @@ public class ContactPoint {
 
     public void setTypes(List<Label> types) {
         this.types = types;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }
