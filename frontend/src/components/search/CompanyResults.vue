@@ -56,7 +56,7 @@
 
                 contactsOfCompany.forEach(contact => {
                     this.searchTerms.push(contact.name.toLowerCase());
-                    contact.labels.forEach(it => this.searchTerms.push(it));
+                    contact.labels.map(it => this.searchTerms.push(it.toLowerCase()));
                 });
 
                 contactPointsOfCompany.forEach(contactPoint => {
