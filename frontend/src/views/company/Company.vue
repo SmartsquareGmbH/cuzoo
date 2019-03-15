@@ -305,13 +305,31 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-flex>
-                                <v-flex xs10 class="text-xs-left" v-if="contact.labels.length > 0">
+                                <v-flex xs4 class="text-xs-left" v-if="contact.labels.length > 0">
                                     <v-chip
                                             class="title mt-3"
                                             v-for="label in contact.labels"
                                             v-bind:key="label">
                                         {{ label }}
                                     </v-chip>
+                                </v-flex>
+                                <v-flex xs2>
+                                    <v-card dark color="info">
+                                        <v-tooltip top>
+                                            <v-card-text slot="activator"
+                                                         class="headline text-xs-center">
+                                                <v-icon size="30px">account_circle</v-icon>
+                                            </v-card-text>
+                                            Verantwortlicher Manager für diesen Kontakt
+                                        </v-tooltip>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex xs4>
+                                    <v-card dark>
+                                        <v-card-text class="headline text-xs-left font-weight-light">
+                                            {{ contact.manager }}
+                                        </v-card-text>
+                                    </v-card>
                                 </v-flex>
                             </v-layout>
                         </v-tab-item>
