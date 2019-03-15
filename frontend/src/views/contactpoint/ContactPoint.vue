@@ -104,6 +104,23 @@
                         <v-flex xs2>
                             <v-card dark color="info" height="100%">
                                 <v-card-text class="headline text-xs-center">
+                                    <v-tooltip top>
+                                        <v-icon size="30px" slot="activator">account_circle</v-icon>
+                                        Ersteller des Kontaktpunktes
+                                    </v-tooltip>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs4>
+                            <v-card height="100%">
+                                <v-card-text class="headline text-xs-left font-weight-light">
+                                    {{ contactPoint.creator }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex xs2>
+                            <v-card dark color="info">
+                                <v-card-text class="headline text-xs-center">
                                     <v-icon size="30px">share</v-icon>
                                 </v-card-text>
                             </v-card>
@@ -123,7 +140,7 @@
                                 </v-card-text>
                             </v-card>
                         </v-flex>
-                        <v-flex xs10 class="text-xs-left" v-if="contactPoint.labels.length > 0">
+                        <v-flex xs4 class="text-xs-left" v-if="contactPoint.labels.length > 0">
                             <v-chip
                                     class="title mt-3"
                                     v-for="label in contactPoint.labels"
