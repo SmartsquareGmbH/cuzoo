@@ -2,8 +2,11 @@ package de.smartsquare.cuzoo.customer.contactpoint.attachment;
 
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactControllerTest;
+import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
+import de.smartsquare.cuzoo.user.User;
+import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,11 +42,16 @@ public class AttachmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private ContactRepository contactRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ContactPointRepository contactPointRepository;
     @Autowired
     private AttachmentRepository attachmentRepository;
 
     private Contact contact;
+    private User user;
     private ContactPoint contactPoint;
     private MockMultipartFile file;
 
@@ -53,9 +61,17 @@ public class AttachmentControllerTest {
         URI uri = Objects.requireNonNull(url).toURI();
         Path path = new File(uri).toPath();
 
+        userRepository.deleteAll();
+        user = new User("User", "", "");
+        userRepository.save(user);
+
+        contact = new Contact("Contact", "", "", "", "", "");
+        contact.setManager(user);
+        contactRepository.save(contact);
+
         file = new MockMultipartFile("file", "TestCompanies.csv", "text/plain", Files.readAllBytes(path));
         contactPoint = new ContactPoint("Besprechung", 0L, contact, "");
-
+        contactPoint.setCreator(user);
         contactPointRepository.save(contactPoint);
     }
 

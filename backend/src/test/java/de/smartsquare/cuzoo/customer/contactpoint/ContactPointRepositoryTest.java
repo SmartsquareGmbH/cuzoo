@@ -25,17 +25,18 @@ public class ContactPointRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User manager;
+    private User user;
     private Contact contact;
     private ContactPoint contactPoint;
 
     @Before
     public void initialize() {
-        manager = new User("tesfdasdfasd", "1234", "");
-        userRepository.save(manager);
+        userRepository.deleteAll();
+        user = new User("user", "1234", "");
+        userRepository.save(user);
 
         contact = new Contact("Darius Tack", "", "", "", "", "");
-        contact.setManager(manager);
+        contact.setManager(user);
         contactRepository.save(contact);
     }
 
@@ -49,6 +50,7 @@ public class ContactPointRepositoryTest {
     @Test
     public final void that_saves_contact_point_correctly() {
         ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "");
+        contactPoint.setCreator(user);
 
         contactPointRepository.save(contactPoint);
 
