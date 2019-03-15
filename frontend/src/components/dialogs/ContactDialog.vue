@@ -83,7 +83,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex';
+    import {mapGetters, mapMutations, mapActions} from 'vuex';
     import api from '../../utils/http-common'
 
     import LabelBox from "../main/LabelBox.vue";
@@ -113,6 +113,9 @@
                 }
             }
         },
+        beforeMount() {
+            this.getUsernames();
+        },
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactIndex',
@@ -141,6 +144,7 @@
             }
         },
         methods: {
+            ...mapActions(['getUsernames']),
             ...mapMutations({
                 storeContactDetails: 'storeEditedContactDetails',
                 storeCompanyName: 'storeEditedCompanyName'
