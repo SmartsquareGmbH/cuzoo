@@ -45,7 +45,7 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
-                <td v-else class="text-xs-center font-weight-light error--text">N/A</td>
+                <td v-else class="text-xs-left font-weight-light error--text">N/A</td>
                 <td class="text-xs-left">{{ props.item.role }}</td>
                 <td class="text-xs-left">{{ props.item.mail }}</td>
                 <td class="text-xs-left">{{ props.item.telephone }}</td>
@@ -180,7 +180,6 @@
             },
             deleteContact() {
                 api.delete(`contact/delete/${this.editedContact.id}`).then(response => {
-                    console.log(response.data);
                     this.refreshTable();
                 }).catch(error => {
                     console.log(error);
