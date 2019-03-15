@@ -3,7 +3,7 @@
         <v-hover>
             <v-card slot-scope="{ hover }"
                     :class="`elevation-${hover ? 8 : 2}`">
-                <v-scroll-x-transition>
+                <v-scroll-x-reverse-transition>
                     <v-btn v-if="hover"
                            absolute top right fab small
                            color="success"
@@ -13,7 +13,7 @@
                             done_outline
                         </v-icon>
                     </v-btn>
-                </v-scroll-x-transition>
+                </v-scroll-x-reverse-transition>
                 <v-card-title class="secondary title font-weight-light low-padding-left no-padding-bottom">
                     <v-icon :style="`transform: rotate(${hover ? 360 : 0}deg)`"
                             class="mx-1">
