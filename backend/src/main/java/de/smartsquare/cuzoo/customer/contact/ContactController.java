@@ -6,6 +6,7 @@ import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.user.User;
 import de.smartsquare.cuzoo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -66,18 +67,22 @@ public class ContactController {
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContact(@RequestBody @Valid ContactForm contactForm, BindingResult bindingResult,
                                                  @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
-        if (bindingResult.hasErrors() ||
-                (hasNoCompany(maybeCompanyName) && !companyRepository.existsByName(maybeCompanyName))) {
+        Optional<User> manager = userRepository.findMaybeByUsername(contactForm.getManager());
+        Optional<Company> company = companyRepository.findMaybeByName(maybeCompanyName);
+
+        if (bindingResult.hasErrors()
+                || !manager.isPresent()
+                || (hasCompany(maybeCompanyName) && !company.isPresent())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Contact contact = getOrCreateContact(contactForm);
+        contact.setManager(manager.get());
 
         Long contactIdBeforeSaving = contactForm.getId();
 
-        if (hasNoCompany(maybeCompanyName)) {
-            Company contactsCompany = companyRepository.findByName(maybeCompanyName);
-            contact.setCompany(contactsCompany);
+        if (hasCompany(maybeCompanyName)) {
+            contact.setCompany(company.get());
         }
 
         try {
@@ -120,8 +125,6 @@ public class ContactController {
                     contactForm.getComment());
         }
 
-        contact.setManager(userRepository.findByUsername(contactForm.getManager()));
-
         return contact;
     }
 
@@ -145,7 +148,7 @@ public class ContactController {
         }
     }
 
-    private boolean hasNoCompany(String maybeCompanyName) {
+    private boolean hasCompany(String maybeCompanyName) {
         return maybeCompanyName != null;
     }
 
