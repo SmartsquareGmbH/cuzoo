@@ -57,6 +57,8 @@ export default {
                     contactPoint.types = contactPoint.types.map(label => {
                         return label.title;
                     });
+
+                    contactPoint.creator = contactPoint.creator.username;
                 });
 
 
