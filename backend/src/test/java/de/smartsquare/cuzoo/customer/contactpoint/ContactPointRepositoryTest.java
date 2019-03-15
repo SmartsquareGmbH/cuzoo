@@ -31,7 +31,7 @@ public class ContactPointRepositoryTest {
 
     @Before
     public void initialize() {
-        manager = new User("tesfdasdfasd", "1234");
+        manager = new User("tesfdasdfasd", "1234", "");
         userRepository.save(manager);
 
         contact = new Contact("Darius Tack", "", "", "", "", "");

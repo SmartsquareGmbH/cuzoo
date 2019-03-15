@@ -30,7 +30,7 @@ public class ContactRepositoryTest {
 
     @Before
     public void initialize() {
-        manager = new User("mustername", "1234");
+        manager = new User("mustername", "1234", "");
         userRepository.save(manager);
 
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");

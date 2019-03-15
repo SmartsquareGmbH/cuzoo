@@ -41,7 +41,7 @@ public class ContactExporterTest {
 
     @Before
     public void initialize() {
-        manager = new User("Test", "Test");
+        manager = new User("Test", "Test", "");
         manager.setId(1L);
         userRepository.save(manager);
 

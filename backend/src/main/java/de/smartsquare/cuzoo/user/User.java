@@ -21,17 +21,20 @@ public class User {
     private String username;
 
     private String password;
+    private String fullname;
 
     @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Contact> contacts;
 
-    public User(@NotNull @NotBlank final String username, String password) {
+    public User(@NotNull @NotBlank final String username, String password, String fullname) {
         this.username = username;
         this.password = password;
+        this.fullname = fullname;
     }
 
-    public User() { }
+    public User() {
+    }
 
     public Long getId() {
         return id;
@@ -55,6 +58,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public List<Contact> getContacts() {

@@ -56,7 +56,7 @@ public class ContactControllerTest {
 
     @Before
     public void initialize() throws Exception {
-        manager = new User("alex", "1234");
+        manager = new User("alex", "1234", "Alexander Mustermann");
         manager.setId(1L);
         userRepository.save(manager);
     }
