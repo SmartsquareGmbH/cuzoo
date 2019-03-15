@@ -34,6 +34,10 @@ export default {
             return api.get('todo/get/').then(response => {
                 let todos = response.data;
 
+                this.todos.forEach(it => {
+                    it.creator = it.creator.username;
+                });
+
                 this.commit({
                     type: 'storeTodos',
                     todos: todos.sort(compareTodos)
