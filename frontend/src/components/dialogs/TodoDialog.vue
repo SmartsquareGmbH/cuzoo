@@ -134,6 +134,7 @@
         },
         computed: {
             ...mapGetters({
+                username: 'username',
                 editedIndex: 'editedTodoIndex',
                 editedTodo: 'editedTodo'
             }),
@@ -152,9 +153,11 @@
             }),
             submitTodo() {
                 api.put(`todo/submit?companyName=${this.companyName.replace("&", "%26")}`, {
+                    id: this.editedTodo.id,
                     description: this.editedTodo.description,
                     expiration: datefns.parse(this.date).getTime(),
-                    reminder: this.getReminderDate()
+                    reminder: this.getReminderDate(),
+                    creator: this.username
                 }).then(() => {
                     this.$parent.refreshData();
                     this.closeDialog();
