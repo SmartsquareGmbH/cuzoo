@@ -28,8 +28,8 @@
                     this.defineSearchTerms(contactPoint);
 
                     if (this.search) {
-                        return this.searchTerms.some(term =>
-                            term.includes(this.search.toLowerCase())
+                        return this.searchTerms.some(it =>
+                            it.includes(this.search.toLowerCase())
                         );
                     } else if (this.onDashboard) {
                         return this;
@@ -55,7 +55,7 @@
                         if (key === 'contact') {
                             this.searchTerms.push(contactPoint[key].name.toLowerCase());
 
-                            contactPoint[key].labels.map(it => this.searchTerms.push(it));
+                            contactPoint[key].labels.map(it => this.searchTerms.push(it.title.toString().toLowerCase()));
 
                             if (contactPoint[key].company) {
                                 this.searchTerms.push(contactPoint[key].company.name.toLowerCase());
