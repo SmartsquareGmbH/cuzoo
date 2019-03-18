@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
 import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.customer.opportunity.Opportunity;
 import de.smartsquare.cuzoo.user.User;
 
 import javax.persistence.*;
@@ -62,6 +63,10 @@ public class ContactPoint {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+
+    @ManyToOne
+    @JoinColumn(name = "opportunity_id")
+    private Opportunity opportunity;
 
     public ContactPoint() {
         this.files = new ArrayList<>();
