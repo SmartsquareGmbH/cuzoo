@@ -72,9 +72,9 @@ public class ContactPointController {
         }
 
         if (contactPointIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<Long>(contactPoint.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<Long>(contactPoint.getId(), HttpStatus.OK);
         }
     }
 
