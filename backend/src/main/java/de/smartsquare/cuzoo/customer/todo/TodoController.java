@@ -86,16 +86,17 @@ public class TodoController {
 
     @PutMapping("/done/{todoId}")
     public final ResponseEntity<?> doneTodo(@PathVariable Long todoId) {
-        Optional<Todo> todo = todoRepository.findById(todoId);
+        Optional<Todo> maybeTodo = todoRepository.findById(todoId);
 
-        if (!todo.isPresent()) {
+        if (!maybeTodo.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        todo.get().setDone(true);
+        Todo todo = maybeTodo.get();
+        todo.setDone(true);
 
         try {
-            todoRepository.save(todo.get());
+            todoRepository.save(todo);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
