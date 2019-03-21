@@ -6,6 +6,7 @@ import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,12 @@ public class Opportunity {
         this.title = title;
         this.state = state;
         this.description = description;
+
+        this.contactPoints = new ArrayList<>();
+    }
+
+    public Opportunity() {
+        this.contactPoints = new ArrayList<>();
     }
 
     public Long getId() {
