@@ -139,7 +139,7 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 v-if="this.company.description">
                         <v-card-text class="headline text-xs-left no-padding-left">
                             <v-tooltip top>
                                 <v-icon color="info" size="30px" slot="activator">info</v-icon>
@@ -149,17 +149,10 @@
                         </v-card-text>
                         <v-divider class="mb-3"/>
                     </v-flex>
-                    <v-flex xs12>
-                        <span v-if="this.company.description"
-                              style="white-space: pre-wrap">{{ this.company.description }}
-                        </span>
-                        <v-card-text
-                                v-else
-                                class="headline text-xs-left font-weight-light font-italic error--text">
-                            N/A
-                        </v-card-text>
+                    <v-flex xs12 v-if="this.company.description">
+                        <span style="white-space: pre-wrap">{{ this.company.description }}</span>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 v-if="this.company.other">
                         <v-card-text class="headline text-xs-left no-padding-left">
                             <v-tooltip top>
                                 <v-icon color="info" size="30px" slot="activator">info</v-icon>
@@ -169,15 +162,8 @@
                         </v-card-text>
                         <v-divider class="mb-3"/>
                     </v-flex>
-                    <v-flex xs12>
-                        <span v-if="this.company.other"
-                              style="white-space: pre-wrap">{{ this.company.other }}
-                        </span>
-                        <v-card-text
-                                v-else
-                                class="headline text-xs-left font-weight-light font-italic error--text">
-                            N/A
-                        </v-card-text>
+                    <v-flex xs12 v-if="this.company.other">>
+                        <span style="white-space: pre-wrap">{{ this.company.other }}</span>
                     </v-flex>
                     <v-flex xs2 v-if="this.company.labels.length > 0">
                         <v-card dark color="info">
