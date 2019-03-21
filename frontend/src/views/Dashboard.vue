@@ -2,58 +2,7 @@
     <v-container grid-list-md fluid>
         <v-fade-transition>
             <v-layout row wrap v-if="!loadingData" v-resize="onResize">
-                <v-flex xs6>
-                    <v-layout row wrap class="text-xs-right">
-                        <v-flex xs3 class="text-xs-left more-padding-top">
-                            <v-icon color="primary" size="24px">forum</v-icon>
-                            <span class="headline font-weight-light">
-                            Kontaktpunkte
-                        </span>
-                        </v-flex>
-                        <v-flex xs3>
-                            <v-btn small flat fab
-                                   @click="addContactPoint()"
-                                   color="transparent">
-                                <v-tooltip top>
-                                    <v-icon large
-                                            color="light-green accent-2"
-                                            slot="activator">
-                                        add
-                                    </v-icon>
-                                    <span>Kontaktpunkt hinzufügen</span>
-                                </v-tooltip>
-                            </v-btn>
-                            <contact-point-dialog
-                                    v-model="contactPointDialogState"
-                                    :contactNames="this.contactNames"/>
-                        </v-flex>
-                        <v-flex xs6>
-                            <v-text-field
-                                    ref="searchBarContactPoints"
-                                    v-model="searchContactPoints"
-                                    @keyup.enter="goToFirstResult()"
-                                    append-icon="search"
-                                    label="Suche nach Kontaktpunkten"
-                                    color="primary"
-                                    hide-details
-                                    solo/>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <div class="dash">
-                            <perfect-scrollbar :options="settings">
-                                <div :style="`height: ${this.windowHeight - 245}px;`">
-                                    <v-flex xs12 class="no-padding-top">
-                                        <contact-point-results
-                                                :search="this.searchContactPoints"
-                                                :on-dashboard="true"/>
-                                    </v-flex>
-                                </div>
-                            </perfect-scrollbar>
-                            <div class="fade-out-gradient"/>
-                        </div>
-                    </v-layout>
-                </v-flex>
+                <v-flex xs6></v-flex>
                 <v-flex xs6>
                     <v-layout row wrap class="text-xs-right">
                         <v-flex xs3 class="text-xs-left more-padding-top">
@@ -94,12 +43,65 @@
                     <v-layout row wrap>
                         <div class="dash">
                             <perfect-scrollbar :options="settings">
-                                <div :style="`height: ${(this.windowHeight - 245) / 2}px`">
+                                <div :style="`height: ${(this.windowHeight - 320) / 2}px`">
                                     <v-layout row wrap>
                                         <v-flex xs12>
                                             <todo-results :search="this.searchTodos"/>
                                         </v-flex>
                                     </v-layout>
+                                </div>
+                            </perfect-scrollbar>
+                            <div class="fade-out-gradient"/>
+                        </div>
+                    </v-layout>
+                </v-flex>
+                <v-flex xs6></v-flex>
+                <v-flex xs6 class="mt-3">
+                    <v-layout row wrap class="text-xs-right">
+                        <v-flex xs3 class="text-xs-left more-padding-top">
+                            <v-icon color="primary" size="24px">forum</v-icon>
+                            <span class="headline font-weight-light">
+                            Kontaktpunkte
+                        </span>
+                        </v-flex>
+                        <v-flex xs3>
+                            <v-btn small flat fab
+                                   @click="addContactPoint()"
+                                   color="transparent">
+                                <v-tooltip top>
+                                    <v-icon large
+                                            color="light-green accent-2"
+                                            slot="activator">
+                                        add
+                                    </v-icon>
+                                    <span>Kontaktpunkt hinzufügen</span>
+                                </v-tooltip>
+                            </v-btn>
+                            <contact-point-dialog
+                                    v-model="contactPointDialogState"
+                                    :contactNames="this.contactNames"/>
+                        </v-flex>
+                        <v-flex xs6>
+                            <v-text-field
+                                    ref="searchBarContactPoints"
+                                    v-model="searchContactPoints"
+                                    @keyup.enter="goToFirstResult()"
+                                    append-icon="search"
+                                    label="Suche nach Kontaktpunkten"
+                                    color="primary"
+                                    hide-details
+                                    solo/>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <div class="dash">
+                            <perfect-scrollbar :options="settings">
+                                <div :style="`height: ${(this.windowHeight - 320) / 2}px;`">
+                                    <v-flex xs12 class="no-padding-top">
+                                        <contact-point-results
+                                                :search="this.searchContactPoints"
+                                                :on-dashboard="true"/>
+                                    </v-flex>
                                 </div>
                             </perfect-scrollbar>
                             <div class="fade-out-gradient"/>
@@ -220,7 +222,7 @@
         width: 100%;
         text-align: center;
         margin: 0;
-        padding: 15px 0;
+        padding: 6px 0;
 
         background-image: linear-gradient(to bottom, transparent, #333333);
     }
