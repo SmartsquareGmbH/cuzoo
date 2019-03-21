@@ -7,7 +7,9 @@ CREATE TABLE opportunity
 );
 
 ALTER TABLE contact_point
-  ADD COLUMN opportunity_id BIGINT,
+  ADD COLUMN opportunity_id BIGINT;
+
+ALTER TABLE contact_point
   ADD FOREIGN KEY (opportunity_id) REFERENCES opportunity (id) ON DELETE CASCADE;
 
 CREATE SEQUENCE opportunity_seq;
