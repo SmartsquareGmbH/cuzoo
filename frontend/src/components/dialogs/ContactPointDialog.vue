@@ -11,10 +11,11 @@
                             <v-flex xs7>
                                 <v-text-field
                                         v-model="editedContactPoint.title"
-                                        :rules="titleRules"
+                                        :rules="compulsory"
                                         prepend-icon="title"
                                         label="Titel"
-                                        suffix="*"/>
+                                        suffix="*"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs5>
                                 <label-box
@@ -30,7 +31,8 @@
                                         :rules="contactRules"
                                         prepend-icon="person"
                                         suffix="*"
-                                        label="Ansprechpartner"/>
+                                        label="Ansprechpartner"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs5>
                                 <v-menu
@@ -42,15 +44,17 @@
                                         transition="scale-transition"
                                         offset-y
                                         full-width
-                                        min-width="290px">
+                                        min-width="290px"
+                                        hide-details>
                                     <v-text-field
                                             slot="activator"
                                             v-model="dateFormatted"
-                                            :rules="dateRules"
+                                            :rules="compulsory"
                                             prepend-icon="event"
                                             label="Datum"
                                             suffix="*"
-                                            readonly/>
+                                            readonly
+                                            hide-details/>
                                     <v-date-picker
                                             v-model="date"
                                             :max="new Date().toISOString()"
@@ -76,12 +80,49 @@
                                         api-path="point/get/labels" type="Labels" hide-details
                                         :class="`mb-${opportunityMenu ? 2 : 0}`"/>
                             </v-flex>
+                            <v-flex xs12>
+                                <v-expand-transition>
+                                    <v-layout row wrap v-if="opportunityMenu">
+                                        <v-flex xs8>
+                                            <v-text-field
+                                                    v-model="editedOpportunity.title"
+                                                    :rules="oppTitleRules"
+                                                    suffix="*"
+                                                    prepend-icon="title"
+                                                    label="Opportunity-Titel"
+                                                    hide-details/>
+                                        </v-flex>
+                                        <v-flex xs4>
+                                            <v-combobox
+                                                    v-model="editedOpportunity.state"
+                                                    :items="oppStatuses"
+                                                    :rules="oppStatusRules"
+                                                    suffix="*"
+                                                    prepend-icon="timeline"
+                                                    label="Status"
+                                                    hide-details/>
+                                        </v-flex>
+                                        <v-flex xs12>
+                                            <v-textarea
+                                                    v-model="editedOpportunity.description"
+                                                    prepend-icon="description"
+                                                    label="Kurzbeschreibung"
+                                                    rows="5" hide-details/>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-expand-transition>
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-form>
                 <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
+                <v-btn color="success" flat @click.native="opportunityMenu = !opportunityMenu">Neue
+                    Opportunity
+                    <v-icon v-if="opportunityMenu">keyboard_arrow_down</v-icon>
+                    <v-icon v-if="!opportunityMenu">keyboard_arrow_up</v-icon>
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
@@ -111,16 +152,21 @@
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: false,
-                pointTypes: ["Telefon", "E-Mail", "Social Media", "Persönlich"],
-                pointRules: [
-                    v => !!v || "Bitte geben Sie eine Kontaktpunktart an"
-                ],
+                compulsory: [v => !!v || "Bitte geben Sie etwas ein"],
                 contactRules: [
                     v => !!v || "Bitte geben Sie einen Ansprechpartner an",
                     v => this.contactNames.includes(v) || "Dieser Ansprechpartner existiert nicht"
                 ],
-                titleRules: [v => !!v || "Bitte geben Sie einen Titel an"],
-                dateRules: [v => !!v || "Bitte geben Sie ein Datum an"],
+                oppStatuses: ['Lead', 'Prospect', 'Quote'],
+                oppStatusRules: [
+                    v => !!v || "Bitte geben Sie einen Status an",
+                    v => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
+                    this.opportunityMenu === true
+                ],
+                oppTitleRules: [
+                    v => !!v || "Bitte geben Sie einen Titel an",
+                    this.opportunityMenu === true
+                ],
                 defaultContactPoint: {
                     value: false,
                     id: 0,
@@ -131,6 +177,13 @@
                     comment: "",
                     types: [],
                     labels: []
+                },
+                defaultOpportunity: {
+                    value: false,
+                    id: 0,
+                    title: "",
+                    state: "Lead",
+                    description: ""
                 }
             }
         },
@@ -149,6 +202,7 @@
             ...mapGetters({
                 editedIndex: 'editedContactPointIndex',
                 editedContactPoint: 'editedContactPoint',
+                editedOpportunity: 'editedOpportunity',
                 username: 'username'
             }),
             formTitle() {
@@ -166,23 +220,35 @@
         methods: {
             ...mapActions(['getContactPointLabels']),
             ...mapMutations({
-                storeDetails: 'storeEditedContactPointDetails',
+                storeContactPointDetails: 'storeEditedContactPointDetails',
+                storeOpportunityDetails: 'storeEditedOpportunityDetails',
             }),
             clearDialog() {
                 this.$refs.form.reset();
                 this.editedContactPoint.contact.name = '';
 
-                setTimeout(() => this.date = new Date().toISOString().substr(0, 10));
+                setTimeout(() => {
+                    this.date = new Date().toISOString().substr(0, 10);
+                    this.editedOpportunity.state = "Lead";
+                    this.opportunityMenu = false;
+                });
             },
             closeDialog() {
                 this.$emit('input');
                 this.editedContactPoint.contact.name = '';
 
                 setTimeout(() => {
-                    this.storeDetails({
+                    this.storeContactPointDetails({
                         editedIndex: -1,
                         editedContactPoint: Object.assign({}, this.defaultContactPoint)
                     });
+
+                    this.storeOpportunityDetails({
+                        editedIndex: -1,
+                        editedOpportunity: Object.assign({}, this.defaultOpportunity)
+                    });
+
+                    this.opportunityMenu = false;
                 }, 300)
             },
             submitContactPoint() {
@@ -211,3 +277,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .no-padding-top {
+        padding-top: 0px !important;
+    }
+</style>
