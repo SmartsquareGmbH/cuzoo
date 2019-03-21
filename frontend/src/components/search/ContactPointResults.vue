@@ -64,7 +64,7 @@
                 if (contact.company) this.pushValue(contact.company.name);
             },
             pushValue(value) {
-                this.searchTerms.push(value.toString().toLowerCase());
+                if (value) this.searchTerms.push(value.toString().toLowerCase());
             }
         }
     }
