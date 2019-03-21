@@ -50,21 +50,21 @@
             defineSearchTerms(contactPoint) {
                 this.searchTerms = [];
 
-                for (let key in contactPoint) {
-                    if (contactPoint.hasOwnProperty(key) && contactPoint[key]) {
-                        if (key === 'contact') {
-                            this.searchTerms.push(contactPoint[key].name.toLowerCase());
+                Object.keys(contactPoint).forEach(key => {
+                    let property = contactPoint[key];
 
-                            contactPoint[key].labels.map(it => this.searchTerms.push(it.title.toString().toLowerCase()));
+                    key === 'contact' ? this.pushContactValues(property) : this.pushValue(property);
+                });
+            },
+            pushContactValues(contact) {
+                this.pushValue(contact.name);
 
-                            if (contactPoint[key].company) {
-                                this.searchTerms.push(contactPoint[key].company.name.toLowerCase());
-                            }
-                        } else {
-                            this.searchTerms.push(contactPoint[key].toString().toLowerCase());
-                        }
-                    }
-                }
+                contact.labels.map(it => this.pushValue(it.title));
+
+                if (contact.company) this.pushValue(contact.company.name);
+            },
+            pushValue(value) {
+                this.searchTerms.push(value.toString().toLowerCase());
             }
         }
     }
