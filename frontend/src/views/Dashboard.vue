@@ -1,111 +1,113 @@
 <template>
     <v-container grid-list-md fluid>
-        <v-layout row wrap v-if="!loadingData" v-resize="onResize">
-            <v-flex xs6>
-                <v-layout row wrap class="text-xs-right">
-                    <v-flex xs3 class="text-xs-left more-padding-top">
-                        <v-icon color="primary" size="24px">forum</v-icon>
-                        <span class="headline font-weight-light">
+        <v-fade-transition>
+            <v-layout row wrap v-if="!loadingData" v-resize="onResize">
+                <v-flex xs6>
+                    <v-layout row wrap class="text-xs-right">
+                        <v-flex xs3 class="text-xs-left more-padding-top">
+                            <v-icon color="primary" size="24px">forum</v-icon>
+                            <span class="headline font-weight-light">
                             Kontaktpunkte
                         </span>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn small flat fab
-                               @click="addContactPoint()"
-                               color="transparent">
-                            <v-tooltip top>
-                                <v-icon large
-                                        color="light-green accent-2"
-                                        slot="activator">
-                                    add
-                                </v-icon>
-                                <span>Kontaktpunkt hinzufügen</span>
-                            </v-tooltip>
-                        </v-btn>
-                        <contact-point-dialog
-                                v-model="contactPointDialogState"
-                                :contactNames="this.contactNames"/>
-                    </v-flex>
-                    <v-flex xs6>
-                        <v-text-field
-                                ref="searchBarContactPoints"
-                                v-model="searchContactPoints"
-                                @keyup.enter="goToFirstResult()"
-                                append-icon="search"
-                                label="Suche nach Kontaktpunkten"
-                                color="primary"
-                                hide-details
-                                solo/>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <div class="dash">
-                        <perfect-scrollbar :options="settings">
-                            <div :style="`height: ${this.windowHeight - 245}px;`">
-                                <v-flex xs12 class="no-padding-top">
-                                    <contact-point-results
-                                            :search="this.searchContactPoints"
-                                            :on-dashboard="true"/>
-                                </v-flex>
-                            </div>
-                        </perfect-scrollbar>
-                        <div class="fade-out-gradient"/>
-                    </div>
-                </v-layout>
-            </v-flex>
-            <v-flex xs6>
-                <v-layout row wrap class="text-xs-right">
-                    <v-flex xs3 class="text-xs-left more-padding-top">
-                        <v-icon color="primary" size="24px">done_all</v-icon>
-                        <span class="headline font-weight-light">
+                        </v-flex>
+                        <v-flex xs3>
+                            <v-btn small flat fab
+                                   @click="addContactPoint()"
+                                   color="transparent">
+                                <v-tooltip top>
+                                    <v-icon large
+                                            color="light-green accent-2"
+                                            slot="activator">
+                                        add
+                                    </v-icon>
+                                    <span>Kontaktpunkt hinzufügen</span>
+                                </v-tooltip>
+                            </v-btn>
+                            <contact-point-dialog
+                                    v-model="contactPointDialogState"
+                                    :contactNames="this.contactNames"/>
+                        </v-flex>
+                        <v-flex xs6>
+                            <v-text-field
+                                    ref="searchBarContactPoints"
+                                    v-model="searchContactPoints"
+                                    @keyup.enter="goToFirstResult()"
+                                    append-icon="search"
+                                    label="Suche nach Kontaktpunkten"
+                                    color="primary"
+                                    hide-details
+                                    solo/>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <div class="dash">
+                            <perfect-scrollbar :options="settings">
+                                <div :style="`height: ${this.windowHeight - 245}px;`">
+                                    <v-flex xs12 class="no-padding-top">
+                                        <contact-point-results
+                                                :search="this.searchContactPoints"
+                                                :on-dashboard="true"/>
+                                    </v-flex>
+                                </div>
+                            </perfect-scrollbar>
+                            <div class="fade-out-gradient"/>
+                        </div>
+                    </v-layout>
+                </v-flex>
+                <v-flex xs6>
+                    <v-layout row wrap class="text-xs-right">
+                        <v-flex xs3 class="text-xs-left more-padding-top">
+                            <v-icon color="primary" size="24px">done_all</v-icon>
+                            <span class="headline font-weight-light">
                             TODOs
                         </span>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn small flat fab
-                               @click="addTODO()"
-                               color="transparent">
-                            <v-tooltip top>
-                                <v-icon large
-                                        color="light-green accent-2"
-                                        slot="activator">
-                                    add
-                                </v-icon>
-                                <span>TODO hinzufügen</span>
-                            </v-tooltip>
-                        </v-btn>
-                        <todo-dialog
-                                v-model="todoDialogState"
-                                :companyNames="this.companyNames"/>
-                    </v-flex>
-                    <v-flex xs6>
-                        <v-text-field
-                                ref="searchBarTodos"
-                                v-model="searchTodos"
-                                @keyup.enter="goToFirstResult()"
-                                append-icon="search"
-                                label="Suche nach TODOs"
-                                color="primary"
-                                hide-details
-                                solo/>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <div class="dash">
-                        <perfect-scrollbar :options="settings">
-                            <div :style="`height: ${(this.windowHeight - 245) / 2}px`">
-                                <v-layout row wrap>
-                                    <v-flex xs12>
-                                        <todo-results :search="this.searchTodos"/>
-                                    </v-flex>
-                                </v-layout>
-                            </div>
-                        </perfect-scrollbar>
-                        <div class="fade-out-gradient"/>
-                    </div>
-                </v-layout>
-            </v-flex>
-        </v-layout>
+                        </v-flex>
+                        <v-flex xs3>
+                            <v-btn small flat fab
+                                   @click="addTODO()"
+                                   color="transparent">
+                                <v-tooltip top>
+                                    <v-icon large
+                                            color="light-green accent-2"
+                                            slot="activator">
+                                        add
+                                    </v-icon>
+                                    <span>TODO hinzufügen</span>
+                                </v-tooltip>
+                            </v-btn>
+                            <todo-dialog
+                                    v-model="todoDialogState"
+                                    :companyNames="this.companyNames"/>
+                        </v-flex>
+                        <v-flex xs6>
+                            <v-text-field
+                                    ref="searchBarTodos"
+                                    v-model="searchTodos"
+                                    @keyup.enter="goToFirstResult()"
+                                    append-icon="search"
+                                    label="Suche nach TODOs"
+                                    color="primary"
+                                    hide-details
+                                    solo/>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <div class="dash">
+                            <perfect-scrollbar :options="settings">
+                                <div :style="`height: ${(this.windowHeight - 245) / 2}px`">
+                                    <v-layout row wrap>
+                                        <v-flex xs12>
+                                            <todo-results :search="this.searchTodos"/>
+                                        </v-flex>
+                                    </v-layout>
+                                </div>
+                            </perfect-scrollbar>
+                            <div class="fade-out-gradient"/>
+                        </div>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+        </v-fade-transition>
         <v-layout v-if="loadingData">
             <v-flex xs12 class="text-xs-center">
                 <v-progress-circular :size="128" color="primary" indeterminate/>
