@@ -260,7 +260,18 @@
                     types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels,
                     creator: this.username
-                }).then(() => {
+                }).then(res => {
+                    let contactPointId = res.data;
+
+                    if (this.opportunityMenu) {
+                        api.put(`opportunity/submit/${contactPointId}`, {
+                            id: this.editedOpportunity.id,
+                            title: this.editedOpportunity.title,
+                            state: this.editedOpportunity.state,
+                            description: this.editedOpportunity.description
+                        });
+                    }
+
                     this.$parent.refreshData();
                     this.closeDialog();
                 }).catch(error => {
