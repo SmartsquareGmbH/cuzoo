@@ -11,7 +11,7 @@
             clearable
             multiple
             solo
-            hide-details>
+            :hide-details="hideDetails">
         <template slot="selection" slot-scope="label" tabindex="-1">
             <v-chip tabindex="-1"
                     class="title"
@@ -42,7 +42,7 @@
     const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
 
     export default {
-        props: ['apiPath', 'type', 'currentLabels'],
+        props: ['apiPath', 'type', 'currentLabels', 'hideDetails'],
         data: () => ({
             labels: [],
             responseLabels: [],

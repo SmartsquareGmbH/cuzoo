@@ -20,7 +20,8 @@
                                 <label-box
                                         @label-added="setContactPointTypes"
                                         :current-labels="editedContactPoint.types"
-                                        api-path="point/get/types" type="Art"/>
+                                        api-path="point/get/types" type="Art"
+                                        hide-details/>
                             </v-flex>
                             <v-flex xs7>
                                 <v-combobox
@@ -72,7 +73,8 @@
                                 <label-box
                                         @label-added="setContactPointLabels"
                                         :current-labels="editedContactPoint.labels"
-                                        api-path="point/get/labels" type="Labels"/>
+                                        api-path="point/get/labels" type="Labels" hide-details
+                                        :class="`mb-${opportunityMenu ? 2 : 0}`"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -105,6 +107,7 @@
         },
         data() {
             return {
+                opportunityMenu: false,
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: false,
