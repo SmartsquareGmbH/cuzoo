@@ -5,6 +5,7 @@ import Auth from '../store/auth';
 import Companies from '../store/companies';
 import Contacts from '../store/contacts';
 import ContactPoints from '../store/contactpoints';
+import Opportunities from '../store/opportunities';
 import Todos from '../store/todos';
 import SearchResults from '../store/searchResults';
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         Companies,
         Contacts,
         ContactPoints,
+        Opportunities,
         Todos,
         SearchResults
     }
