@@ -161,4 +161,12 @@ public class ContactPoint {
     public void setCreator(User creator) {
         this.creator = creator;
     }
+
+    public Opportunity getOpportunity() {
+        return opportunity;
+    }
+
+    public void setOpportunity(Opportunity opportunity) {
+        this.opportunity = opportunity;
+    }
 }

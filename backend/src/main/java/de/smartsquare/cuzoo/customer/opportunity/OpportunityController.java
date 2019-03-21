@@ -30,17 +30,21 @@ public class OpportunityController {
     public final ResponseEntity<?> submitContactPoint(@PathVariable("contactPointId") Long contactPointId,
                                                       @RequestBody @Valid Opportunity opportunity,
                                                       BindingResult bindingResult) {
-        Optional<ContactPoint> contactPoint = contactPointRepository.findById(contactPointId);
+        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
 
-        if (bindingResult.hasErrors() || !contactPoint.isPresent()) {
+        if (bindingResult.hasErrors() || !maybeContactPoint.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        opportunity.addContactPoint(contactPoint.get());
+        ContactPoint contactPoint = maybeContactPoint.get();
+
         Long opportunityIdBeforeSaving = opportunity.getId();
 
         try {
-            opportunityRepository.save(opportunity);
+            Opportunity savedOpportunity = opportunityRepository.save(opportunity);
+
+            contactPoint.setOpportunity(savedOpportunity);
+            contactPointRepository.save(contactPoint);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
