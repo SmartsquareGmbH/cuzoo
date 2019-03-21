@@ -2,7 +2,9 @@
     <v-container grid-list-md fluid>
         <v-fade-transition>
             <v-layout row wrap v-if="!loadingData" v-resize="onResize">
-                <v-flex xs6></v-flex>
+                <v-flex xs6>
+                    <opportunity-widget/>
+                </v-flex>
                 <v-flex xs6>
                     <v-layout row wrap class="text-xs-right">
                         <v-flex xs3 class="text-xs-left more-padding-top">
@@ -121,6 +123,8 @@
 <script>
     import {mapActions, mapGetters} from 'vuex';
 
+    import OpportunityWidget from '../components/dashboard/OpportunityWidget.vue';
+
     import TodoDialog from '../components/dialogs/TodoDialog.vue';
     import TodoCard from '../components/cards/TodoCard.vue';
     import TodoResults from '../components/search/TodoResults.vue'
@@ -130,6 +134,7 @@
 
     export default {
         components: {
+            OpportunityWidget,
             TodoDialog,
             TodoCard,
             TodoResults,
@@ -179,6 +184,7 @@
                 'getCompanies',
                 'getContacts',
                 'getContactPoints',
+                'getOpportunities',
                 'getTodos'
             ]),
             addContactPoint() {
@@ -198,7 +204,8 @@
                 this.getCompanies();
                 this.getContacts();
                 this.getContactPoints().then(() => {
-                    this.getTodos().then(() => this.loadingData = false);
+                    this.getTodos();
+                    this.getOpportunities().then(() => this.loadingData = false);
                 });
             },
             onResize() {

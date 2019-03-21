@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -54,5 +55,10 @@ public class OpportunityController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/get")
+    public final ResponseEntity<List<Opportunity>> getAllOpportunities() {
+        return ResponseEntity.ok(opportunityRepository.findAll());
     }
 }
