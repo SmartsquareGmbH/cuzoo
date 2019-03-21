@@ -74,4 +74,8 @@ public class Opportunity {
     public void setContactPoints(List<ContactPoint> contactPoints) {
         this.contactPoints = contactPoints;
     }
+
+    public void addContactPoint(ContactPoint contactPoint) {
+        this.contactPoints.add(contactPoint);
+    }
 }
