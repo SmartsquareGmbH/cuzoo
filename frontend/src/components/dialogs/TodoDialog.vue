@@ -159,7 +159,7 @@
                     reminder: this.getReminderDate(),
                     creator: this.username
                 }).then(() => {
-                    this.$parent.refreshData();
+                    this.$emit('refresh');
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);

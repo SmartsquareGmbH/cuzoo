@@ -2,60 +2,11 @@
     <v-container grid-list-md fluid>
         <v-fade-transition>
             <v-layout row wrap v-if="!loadingData" v-resize="onResize">
-                <v-flex xs6>
-                    <opportunity-widget/>
+                <v-flex xs7>
+                    <opportunity-widget class="mr-1"/>
                 </v-flex>
-                <v-flex xs6>
-                    <v-layout row wrap class="text-xs-right">
-                        <v-flex xs3 class="text-xs-left more-padding-top">
-                            <v-icon color="primary" size="24px">done_all</v-icon>
-                            <span class="headline font-weight-light">
-                            TODOs
-                        </span>
-                        </v-flex>
-                        <v-flex xs3>
-                            <v-btn small flat fab
-                                   @click="addTODO()"
-                                   color="transparent">
-                                <v-tooltip top>
-                                    <v-icon large
-                                            color="light-green accent-2"
-                                            slot="activator">
-                                        add
-                                    </v-icon>
-                                    <span>TODO hinzufügen</span>
-                                </v-tooltip>
-                            </v-btn>
-                            <todo-dialog
-                                    v-model="todoDialogState"
-                                    :companyNames="this.companyNames"/>
-                        </v-flex>
-                        <v-flex xs6>
-                            <v-text-field
-                                    ref="searchBarTodos"
-                                    v-model="searchTodos"
-                                    @keyup.enter="goToFirstResult()"
-                                    append-icon="search"
-                                    label="Suche nach TODOs"
-                                    color="primary"
-                                    hide-details
-                                    solo/>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <div class="dash">
-                            <perfect-scrollbar :options="settings">
-                                <div :style="`height: ${(this.windowHeight - 320) / 2}px`">
-                                    <v-layout row wrap>
-                                        <v-flex xs12>
-                                            <todo-results :search="this.searchTodos"/>
-                                        </v-flex>
-                                    </v-layout>
-                                </div>
-                            </perfect-scrollbar>
-                            <div v-if="todos.length >= 3" class="fade-out-gradient"/>
-                        </div>
-                    </v-layout>
+                <v-flex xs5>
+                    <todo-widget/>
                     <v-layout row wrap class="text-xs-right pt-2">
                         <v-flex xs3 class="text-xs-left more-padding-top">
                             <v-icon color="primary" size="24px">forum</v-icon>
@@ -121,10 +72,8 @@
     import {mapActions, mapGetters} from 'vuex';
 
     import OpportunityWidget from '../components/dashboard/OpportunityWidget.vue';
+    import TodoWidget from '../components/dashboard/TodoWidget.vue';
 
-    import TodoDialog from '../components/dialogs/TodoDialog.vue';
-    import TodoCard from '../components/cards/TodoCard.vue';
-    import TodoResults from '../components/search/TodoResults.vue'
     import ContactPointDialog from "../components/dialogs/ContactPointDialog.vue";
     import ContactPointCard from "../components/cards/ContactPointCard.vue";
     import ContactPointResults from "../components/search/ContactPointResults.vue";
@@ -132,9 +81,7 @@
     export default {
         components: {
             OpportunityWidget,
-            TodoDialog,
-            TodoCard,
-            TodoResults,
+            TodoWidget,
             ContactPointDialog,
             ContactPointCard,
             ContactPointResults
@@ -143,11 +90,9 @@
             windowHeight: 0,
             contactNames: [],
             contactPointDialogState: false,
-            companyNames: [],
             todoDialogState: false,
             loadingData: true,
             searchContactPoints: '',
-            searchTodos: '',
             settings: {
                 maxScrollbarLength: 120,
                 wheelSpeed: 0.75,
@@ -159,9 +104,9 @@
                 'companies',
                 'contacts',
                 'contactPoints',
-                'todos',
                 'searchResults',
-                'selectedCompany'
+                'selectedCompany',
+                'opportunities'
             ])
         },
         beforeMount() {
@@ -187,10 +132,6 @@
             addContactPoint() {
                 this.contactNames = this.contacts.map(it => it.name).sort();
                 this.contactPointDialogState = true;
-            },
-            addTODO() {
-                this.companyNames = this.companies.map(it => it.name).sort();
-                this.todoDialogState = true;
             },
             goToFirstResult() {
                 let companyId = this.companies.find(it => it.id === this.searchResults[0].contact.company.id).id;

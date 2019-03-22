@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <v-flex xs12>
         <todo-card
-                class="less-margin-bottom"
+                class="todo-results"
                 v-bind:key="todo.id"
                 v-for="todo in searchResults"
                 :todo="todo"/>
-    </div>
+    </v-flex>
 </template>
 
 <script>
@@ -60,7 +60,9 @@
 </script>
 
 <style scoped>
-    .less-margin-bottom {
+    .todo-results {
         margin-bottom: 8px !important;
+        margin-left: 2px !important;
+        margin-right: 2px !important;
     }
 </style>
