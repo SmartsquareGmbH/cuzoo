@@ -6,12 +6,12 @@
             <v-layout row wrap text-xs-left>
                 <v-flex xs2>
                     <v-sheet
-                            elevation="12"
+                            elevation="8"
                             class="v-sheet--offset text-xs-center"
                             height="75"
                             width="100"
-                            :color="color">
-                        <v-icon color="primary" size="56px" class="pt-2">
+                            color="primary">
+                        <v-icon color="secondary" size="56px" class="pt-2">
                             done_all
                         </v-icon>
                     </v-sheet>
