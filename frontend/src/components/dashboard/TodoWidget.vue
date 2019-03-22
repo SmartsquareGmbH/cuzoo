@@ -61,7 +61,6 @@
                         </v-flex>
                     </div>
                 </perfect-scrollbar>
-                <div v-if="todos.length >= 3" class="fade-out-gradient"/>
             </div>
         </v-layout>
     </v-flex>
