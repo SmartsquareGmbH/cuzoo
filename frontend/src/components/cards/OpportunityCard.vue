@@ -28,7 +28,7 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex';
 
-    import Chip from "../main/Chip.vue";
+    import Chip from "../core/Chip.vue";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');

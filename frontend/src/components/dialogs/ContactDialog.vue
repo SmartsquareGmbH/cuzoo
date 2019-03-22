@@ -98,7 +98,7 @@
     import {mapGetters, mapMutations, mapActions} from 'vuex';
     import api from '../../utils/http-common'
 
-    import LabelBox from "../main/LabelBox.vue";
+    import LabelBox from "../core/LabelBox.vue";
 
     export default {
         props: ["value", "companyNames"],

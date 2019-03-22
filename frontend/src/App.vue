@@ -85,8 +85,8 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
 
-    import Login from "@/components/main/single/Login.vue";
-    import Settings from "@/components/main/single/Settings.vue";
+    import Login from "@/components/core/single/Login.vue";
+    import Settings from "@/components/core/single/Settings.vue";
 
     export default {
         components: {
