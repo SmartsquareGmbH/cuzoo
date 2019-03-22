@@ -33,8 +33,11 @@ public class OpportunityController {
                                                       BindingResult bindingResult) {
         Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
 
-        if (bindingResult.hasErrors() || !maybeContactPoint.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Opportunities benötigen einen Titel und einen Status");
+        }
+        if (!maybeContactPoint.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
 
         ContactPoint contactPoint = maybeContactPoint.get();

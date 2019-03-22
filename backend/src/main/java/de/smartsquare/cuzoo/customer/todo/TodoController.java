@@ -38,8 +38,15 @@ public class TodoController {
         Optional<User> creator = userRepository.findMaybeByUsername(todoForm.getCreator());
         Optional<Company> company = companyRepository.findMaybeByName(companyName);
 
-        if (bindingResult.hasErrors() || !company.isPresent() || !creator.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body("Todos benötigen eine Beschreibung, sowie ein Fälligkeits- und ein Erinnerungsdatum!");
+        }
+        if (!company.isPresent()) {
+            return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
+        }
+        if (!creator.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Ersteller existiert nicht!");
         }
 
         Todo todo = getOrCreateTodo(todoForm, company.get());
@@ -89,7 +96,7 @@ public class TodoController {
         Optional<Todo> maybeTodo = todoRepository.findById(todoId);
 
         if (!maybeTodo.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Das Todo wurde nicht gefunden!");
         }
 
         Todo todo = maybeTodo.get();
@@ -104,9 +111,9 @@ public class TodoController {
     }
 
     @GetMapping("/get/{companyName}")
-    public final ResponseEntity<List<Todo>> getTodosOfCompany(@PathVariable String companyName) {
+    public final ResponseEntity<?> getTodosOfCompany(@PathVariable String companyName) {
         if (!companyRepository.existsByName(companyName)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Das Unternehmen existiert nicht!");
         }
 
         return ResponseEntity.ok(todoRepository.findAll()

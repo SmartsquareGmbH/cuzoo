@@ -32,8 +32,11 @@ public class AttachmentController {
                                               @RequestParam("file") MultipartFile file) throws IOException {
         Optional<ContactPoint> fileDestinationPoint = contactPointRepository.findById(contactPointId);
 
-        if (!fileDestinationPoint.isPresent() || file.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Die hoch zu ladende Datei ist leer!");
+        }
+        if (!fileDestinationPoint.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
 
         Attachment attachment = new Attachment(file.getOriginalFilename(), file.getBytes());
@@ -59,19 +62,19 @@ public class AttachmentController {
     }
 
     @GetMapping("/download/{contactPointId}/{fileName}")
-    public final ResponseEntity<byte[]> downloadFile(@PathVariable Long contactPointId,
+    public final ResponseEntity<?> downloadFile(@PathVariable Long contactPointId,
                                                      @PathVariable String fileName) {
         Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
 
         if (!fileOriginPoint.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
 
         if (fileOriginPoint
                 .get().getFiles()
                 .stream()
                 .noneMatch(file -> file.getFilename().equals(fileName))) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Die Datei wurde nicht gefunden!");
         }
 
         return ResponseEntity.ok(getFile(fileOriginPoint.get().getFiles(), fileName).getContent());
@@ -91,14 +94,14 @@ public class AttachmentController {
         Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
 
         if (!fileOriginPoint.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
 
         if (fileOriginPoint
                 .get().getFiles()
                 .stream()
                 .noneMatch(file -> file.getFilename().equals(fileName))) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Die Datei wurde nicht gefunden!");
         }
 
         fileOriginPoint
@@ -113,11 +116,11 @@ public class AttachmentController {
     }
 
     @GetMapping("/get/names/{contactPointId}")
-    public final ResponseEntity<List<String>> getAllFileNamesOfContactPoint(@PathVariable Long contactPointId) {
+    public final ResponseEntity<?> getAllFileNamesOfContactPoint(@PathVariable Long contactPointId) {
         Optional<ContactPoint> fileOriginPoint = contactPointRepository.findById(contactPointId);
 
         if (!fileOriginPoint.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
 
         if (fileOriginPoint.get().getFiles().size() < 1) {

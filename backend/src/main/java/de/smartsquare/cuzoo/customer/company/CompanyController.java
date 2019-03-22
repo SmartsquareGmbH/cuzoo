@@ -37,8 +37,9 @@ public class CompanyController {
     @PostMapping("/import")
     public final ResponseEntity<?> postCSV(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Die hoch zu ladende Datei ist leer!");
         }
+
         List<Company> insertedCompanies = csvConverter.getConvertedCompanies(file.getInputStream());
 
         insertedCompanies.forEach(companyRepository::save);
@@ -50,7 +51,7 @@ public class CompanyController {
     public final ResponseEntity<?> submitCompany(@RequestBody @Valid CompanyForm companyForm,
                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Ein Unternehmen kann nicht ohne Namen eingereicht werden!");
         }
 
         Company company = getOrCreateCompany(companyForm);
@@ -123,7 +124,7 @@ public class CompanyController {
     @DeleteMapping("/delete/{companyId}")
     public final ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
         if (!companyRepository.existsById(companyId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Das Unternehmen wurde nicht gefunden!");
         }
 
         try {

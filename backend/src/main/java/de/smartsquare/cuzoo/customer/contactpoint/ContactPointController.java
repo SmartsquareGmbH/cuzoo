@@ -47,8 +47,14 @@ public class ContactPointController {
         Optional<User> creator = userRepository.findMaybeByUsername(contactPointForm.getCreator());
         Optional<Contact> contact = contactRepository.findMaybeByName(contactName);
 
-        if (bindingResult.hasErrors() || !contact.isPresent() || !creator.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Kontaktpunkte benötigt einen Titel und ein Datum!");
+        }
+        if (!contact.isPresent()) {
+            return ResponseEntity.badRequest().body("Der angegebene Ansprechpartner existiert nicht!");
+        }
+        if (!creator.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Ersteller existiert nicht!");
         }
 
         ContactPoint contactPoint = getOrCreateContactPoint(contactPointForm, contact.get());
@@ -136,7 +142,7 @@ public class ContactPointController {
     @DeleteMapping("/delete/{contactPointId}")
     public final ResponseEntity<?> deleteContactPoint(@PathVariable Long contactPointId) {
         if (!contactPointRepository.existsById(contactPointId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Der Ansprechpartner wurde nicht gefunden!");
         }
         try {
             contactPointRepository.deleteById(contactPointId);
@@ -152,9 +158,9 @@ public class ContactPointController {
     }
 
     @GetMapping("/get/{companyName}")
-    public final ResponseEntity<List<ContactPoint>> getContactPointsOfCompany(@PathVariable String companyName) {
+    public final ResponseEntity<?> getContactPointsOfCompany(@PathVariable String companyName) {
         if (!companyRepository.existsByName(companyName)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Das Unternehmen existiert nicht!");
         }
 
         return ResponseEntity.ok(contactPointRepository

@@ -37,8 +37,8 @@ public class ContactController {
 
     @Autowired
     public ContactController(final ContactRepository contactRepository, final CompanyRepository companyRepository,
-                             final ContactPointRepository contactPointRepository, final LabelRepository labelRepository,
-                             final UserRepository userRepository, CSVConverter csvConverter) {
+                             final UserRepository userRepository, final LabelRepository labelRepository,
+                             final ContactPointRepository contactPointRepository, CSVConverter csvConverter) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.contactPointRepository = contactPointRepository;
@@ -53,8 +53,9 @@ public class ContactController {
     @PostMapping("/import")
     public final ResponseEntity<?> postCSV(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Die hoch zu ladende Datei ist leer!");
         }
+
         List<Contact> insertedContacts = csvConverter.getConvertedContacts(file.getInputStream());
         insertedContacts.forEach(contact -> {
             contact.setManager(userRepository.findByUsername("alex"));
@@ -70,10 +71,14 @@ public class ContactController {
         Optional<User> manager = userRepository.findMaybeByUsername(contactForm.getManager());
         Optional<Company> company = companyRepository.findMaybeByName(maybeCompanyName);
 
-        if (bindingResult.hasErrors()
-                || !manager.isPresent()
-                || (hasCompany(maybeCompanyName) && !company.isPresent())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Ansprechpartner benötigen einen Namen und einen Manager!");
+        }
+        if (!manager.isPresent()) {
+            return ResponseEntity.badRequest().body("Der angegebene Manager existiert nicht!");
+        }
+        if (hasCompany(maybeCompanyName) && !company.isPresent()) {
+            return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
         }
 
         Contact contact = getOrCreateContact(contactForm);
@@ -155,8 +160,9 @@ public class ContactController {
     @DeleteMapping("/delete/{contactId}")
     public final ResponseEntity<?> deleteContact(@PathVariable Long contactId) {
         if (!contactRepository.existsById(contactId)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Der Ansprechpartner existiert nicht!");
         }
+
         try {
             contactRepository.deleteById(contactId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -167,11 +173,13 @@ public class ContactController {
 
     @GetMapping("/download/{contactId}")
     public final ResponseEntity<String> getContactInformation(@PathVariable Long contactId) {
-        if (!contactRepository.findById(contactId).isPresent()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Optional<Contact> maybeContact = contactRepository.findById(contactId);
+
+        if (!maybeContact.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Ansprechpartner existiert nicht!");
         }
 
-        Contact contact = contactRepository.findById(contactId).get();
+        Contact contact = maybeContact.get();
 
         return ResponseEntity
                 .ok(String.join("\n", contactExporter.getContactContent(contact, this.contactPointRepository)));
