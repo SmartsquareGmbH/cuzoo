@@ -1,46 +1,61 @@
 <template>
     <v-flex xs12>
-        <v-layout row wrap class="text-xs-right pt-2">
-            <v-flex xs3 class="text-xs-left more-padding-top">
-                <v-icon color="primary" size="24px">forum</v-icon>
-                <span class="headline font-weight-light">
-                            Kontaktpunkte
-                        </span>
-            </v-flex>
-            <v-flex xs3>
-                <v-btn small flat fab
-                       @click="addContactPoint()"
-                       color="transparent">
-                    <v-tooltip top>
-                        <v-icon large
-                                color="light-green accent-2"
-                                slot="activator">
-                            add
+        <v-card class="pl-3 mt-1"
+                elevation="6"
+                height="75">
+            <v-layout row wrap text-xs-left>
+                <v-flex xs2>
+                    <v-sheet
+                            elevation="12"
+                            class="v-sheet--offset text-xs-center"
+                            height="75"
+                            width="100"
+                            :color="color">
+                        <v-icon color="primary" size="56px" class="pt-2">
+                            forum
                         </v-icon>
-                        <span>Kontaktpunkt hinzufügen</span>
-                    </v-tooltip>
-                </v-btn>
-                <contact-point-dialog
-                        v-model="contactPointDialogState"
-                        :contactNames="this.contactNames"
-                        @refresh="refreshContactPoints()"/>
-            </v-flex>
-            <v-flex xs6>
-                <v-text-field
-                        ref="searchBarContactPoints"
-                        v-model="searchContactPoints"
-                        @keyup.enter="goToFirstResult()"
-                        append-icon="search"
-                        label="Suche nach Kontaktpunkten"
-                        color="primary"
-                        hide-details
-                        solo/>
-            </v-flex>
-        </v-layout>
+                    </v-sheet>
+                </v-flex>
+                <v-flex xs2 class="more-padding-top">
+                <span class="headline font-weight-light">
+                    Kontaktpunkte
+                </span>
+                </v-flex>
+                <v-flex xs2 style="padding-top: 12px;" class="text-xs-right">
+                    <v-btn small flat fab
+                           @click="addContactPoint()"
+                           color="transparent">
+                        <v-tooltip top>
+                            <v-icon large
+                                    color="light-green accent-2"
+                                    slot="activator">
+                                add
+                            </v-icon>
+                            <span>Kontaktpunkt hinzufügen</span>
+                        </v-tooltip>
+                    </v-btn>
+                    <contact-point-dialog
+                            v-model="contactPointDialogState"
+                            :contactNames="this.contactNames"
+                            @refresh="refreshContactPoints()"/>
+                </v-flex>
+                <v-flex xs6>
+                    <v-text-field
+                            class="pr-3"
+                            ref="searchBarContactPoints"
+                            v-model="searchContactPoints"
+                            @keyup.enter="goToFirstResult()"
+                            append-icon="search"
+                            label="Suche nach Kontaktpunkten"
+                            color="primary"
+                            hide-details/>
+                </v-flex>
+            </v-layout>
+        </v-card>
         <v-layout row wrap>
             <div class="dash">
                 <perfect-scrollbar :options="settings">
-                    <div :style="`height: ${(this.windowHeight - 320) / 2}px;`">
+                    <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
                         <v-flex xs12 class="no-padding-top">
                             <contact-point-results
                                     :search="this.searchContactPoints"

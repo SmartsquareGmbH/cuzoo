@@ -6,7 +6,7 @@
                     <opportunity-widget class="mr-1"/>
                 </v-flex>
                 <v-flex xs5>
-                    <todo-widget/>
+                    <todo-widget class="mb-4"/>
                     <contact-point-widget/>
                 </v-flex>
             </v-layout>
@@ -33,12 +33,10 @@
             ContactPointWidget
         },
         data: () => ({
-            windowHeight: 0,
             loadingData: true,
         }),
         beforeMount() {
             this.refreshData();
-            this.onResize();
         },
         methods: {
             ...mapActions([
@@ -55,9 +53,6 @@
                     this.getTodos();
                     this.getOpportunities().then(() => this.loadingData = false);
                 });
-            },
-            onResize() {
-                this.windowHeight = window.innerHeight;
             }
         }
     }

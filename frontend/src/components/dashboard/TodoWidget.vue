@@ -3,15 +3,15 @@
         <v-card class="pl-3 mt-1"
                 elevation="6"
                 height="75">
-            <v-layout row wrap text-xs-center>
+            <v-layout row wrap text-xs-left>
                 <v-flex xs2>
                     <v-sheet
                             elevation="12"
-                            class="v-sheet--offset"
+                            class="v-sheet--offset text-xs-center"
                             height="75"
                             width="100"
                             :color="color">
-                        <v-icon color="primary" size="64px" class="pt-1">
+                        <v-icon color="primary" size="56px" class="pt-2">
                             done_all
                         </v-icon>
                     </v-sheet>
@@ -55,7 +55,7 @@
         <v-layout row wrap>
             <div class="dash">
                 <perfect-scrollbar :options="settings">
-                    <div :style="`height: ${(this.windowHeight - 340) / 2}px`">
+                    <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
                         <v-flex xs12>
                             <todo-results :search="this.searchTodos"/>
                         </v-flex>
