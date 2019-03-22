@@ -272,7 +272,7 @@
                         });
                     }
 
-                    this.$parent.refreshData();
+                    this.$emit('refresh');
                     this.closeDialog();
                 }).catch(error => {
                     console.log(error);

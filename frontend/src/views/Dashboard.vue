@@ -7,56 +7,7 @@
                 </v-flex>
                 <v-flex xs5>
                     <todo-widget/>
-                    <v-layout row wrap class="text-xs-right pt-2">
-                        <v-flex xs3 class="text-xs-left more-padding-top">
-                            <v-icon color="primary" size="24px">forum</v-icon>
-                            <span class="headline font-weight-light">
-                            Kontaktpunkte
-                        </span>
-                        </v-flex>
-                        <v-flex xs3>
-                            <v-btn small flat fab
-                                   @click="addContactPoint()"
-                                   color="transparent">
-                                <v-tooltip top>
-                                    <v-icon large
-                                            color="light-green accent-2"
-                                            slot="activator">
-                                        add
-                                    </v-icon>
-                                    <span>Kontaktpunkt hinzufügen</span>
-                                </v-tooltip>
-                            </v-btn>
-                            <contact-point-dialog
-                                    v-model="contactPointDialogState"
-                                    :contactNames="this.contactNames"/>
-                        </v-flex>
-                        <v-flex xs6>
-                            <v-text-field
-                                    ref="searchBarContactPoints"
-                                    v-model="searchContactPoints"
-                                    @keyup.enter="goToFirstResult()"
-                                    append-icon="search"
-                                    label="Suche nach Kontaktpunkten"
-                                    color="primary"
-                                    hide-details
-                                    solo/>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <div class="dash">
-                            <perfect-scrollbar :options="settings">
-                                <div :style="`height: ${(this.windowHeight - 320) / 2}px;`">
-                                    <v-flex xs12 class="no-padding-top">
-                                        <contact-point-results
-                                                :search="this.searchContactPoints"
-                                                :on-dashboard="true"/>
-                                    </v-flex>
-                                </div>
-                            </perfect-scrollbar>
-                            <div v-if="contactPoints.length >= 3" class="fade-out-gradient"/>
-                        </div>
-                    </v-layout>
+                    <contact-point-widget/>
                 </v-flex>
             </v-layout>
         </v-fade-transition>
@@ -69,57 +20,25 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import {mapActions} from 'vuex';
 
     import OpportunityWidget from '../components/dashboard/OpportunityWidget.vue';
     import TodoWidget from '../components/dashboard/TodoWidget.vue';
-
-    import ContactPointDialog from "../components/dialogs/ContactPointDialog.vue";
-    import ContactPointCard from "../components/cards/ContactPointCard.vue";
-    import ContactPointResults from "../components/search/ContactPointResults.vue";
+    import ContactPointWidget from '../components/dashboard/ContactPointWidge.vue';
 
     export default {
         components: {
             OpportunityWidget,
             TodoWidget,
-            ContactPointDialog,
-            ContactPointCard,
-            ContactPointResults
+            ContactPointWidget
         },
         data: () => ({
             windowHeight: 0,
-            contactNames: [],
-            contactPointDialogState: false,
-            todoDialogState: false,
             loadingData: true,
-            searchContactPoints: '',
-            settings: {
-                maxScrollbarLength: 120,
-                wheelSpeed: 0.75,
-                suppressScrollX: true
-            },
         }),
-        computed: {
-            ...mapGetters([
-                'companies',
-                'contacts',
-                'contactPoints',
-                'searchResults',
-                'selectedCompany',
-                'opportunities'
-            ])
-        },
         beforeMount() {
             this.refreshData();
             this.onResize();
-        },
-        watch: {
-            selectedCompany() {
-                if (!this.selectedCompany || this.companies.map(it => it.name).includes(this.selectedCompany)) {
-                    this.searchContactPoints = this.selectedCompany;
-                    this.searchTodos = this.selectedCompany;
-                }
-            }
         },
         methods: {
             ...mapActions([
@@ -129,15 +48,6 @@
                 'getOpportunities',
                 'getTodos'
             ]),
-            addContactPoint() {
-                this.contactNames = this.contacts.map(it => it.name).sort();
-                this.contactPointDialogState = true;
-            },
-            goToFirstResult() {
-                let companyId = this.companies.find(it => it.id === this.searchResults[0].contact.company.id).id;
-
-                this.$router.push(`/${companyId}/${this.searchResults[0].id}`);
-            },
             refreshData() {
                 this.getCompanies();
                 this.getContacts();
@@ -152,31 +62,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .dash {
-        height: 100%;
-        width: 100%;
-        position: relative;
-    }
-
-    .fade-out-gradient {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        margin: 0;
-        padding: 6px 0;
-
-        background-image: linear-gradient(to bottom, transparent, #333333);
-    }
-
-    .more-padding-top {
-        padding-top: 12px !important;
-    }
-
-    .no-padding-top {
-        padding-top: 0px !important;
-    }
-</style>
