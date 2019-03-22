@@ -53,13 +53,10 @@
                                     </v-layout>
                                 </div>
                             </perfect-scrollbar>
-                            <div class="fade-out-gradient"/>
+                            <div v-if="todos.length >= 3" class="fade-out-gradient"/>
                         </div>
                     </v-layout>
-                </v-flex>
-                <v-flex xs6></v-flex>
-                <v-flex xs6 class="mt-3">
-                    <v-layout row wrap class="text-xs-right">
+                    <v-layout row wrap class="text-xs-right pt-2">
                         <v-flex xs3 class="text-xs-left more-padding-top">
                             <v-icon color="primary" size="24px">forum</v-icon>
                             <span class="headline font-weight-light">
@@ -106,7 +103,7 @@
                                     </v-flex>
                                 </div>
                             </perfect-scrollbar>
-                            <div class="fade-out-gradient"/>
+                            <div v-if="contactPoints.length >= 3" class="fade-out-gradient"/>
                         </div>
                     </v-layout>
                 </v-flex>
