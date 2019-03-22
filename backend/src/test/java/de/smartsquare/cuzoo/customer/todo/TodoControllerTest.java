@@ -87,28 +87,33 @@ public class TodoControllerTest {
                         .characterEncoding("UTF-8")
                         .content(getTodoInJson());
 
+        this.mockMvc.perform(builder);
+
+        Todo outdatedTodo = todoRepository.findAll()
+                .stream()
+                .filter(todo -> todo.getDescription().equals("Muell rausbringen"))
+                .findFirst().orElse(null);
+
         MockHttpServletRequestBuilder updateBuilder =
                 MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getUpdatedTodoInJson());
+                        .content(getUpdatedTodoInJson(outdatedTodo.getId()));
 
-        this.mockMvc.perform(builder);
         this.mockMvc.perform(updateBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(todoRepository.findAll()
-                .stream()
-                .anyMatch(todo -> todo.getDescription()
-                        .equals("Muelltonnen an die Strasse stellen")))
+        assertThat(todoRepository
+                .findById(outdatedTodo.getId()).get()
+                .getDescription().equals("Muelltonnen an die Strasse stellen"))
                 .isTrue();
     }
 
-    private String getUpdatedTodoInJson() {
-        return "{\"description\":\"Muelltonnen an die Strasse stellen\", \"expiration\":\"0\", \"id\":\"1\", \"reminder\":\"0\", \"creator\":\"user\"}";
+    private String getUpdatedTodoInJson(Long id) {
+        return "{\"description\":\"Muelltonnen an die Strasse stellen\", \"expiration\":\"0\", \"id\":\"" + id + "\", \"reminder\":\"0\", \"creator\":\"user\"}";
     }
 
     @Test
@@ -120,13 +125,19 @@ public class TodoControllerTest {
                         .characterEncoding("UTF-8")
                         .content(getUndoneTodoInJson());
 
+        this.mockMvc.perform(builder);
+
+        Todo undoneTodo = todoRepository.findAll()
+                .stream()
+                .filter(todo -> todo.getDescription().equals("Foo Bar"))
+                .findFirst().orElse(null);
+
         MockHttpServletRequestBuilder doneBuilder =
-                MockMvcRequestBuilders.put("/api/todo/done/3")
+                MockMvcRequestBuilders.put("/api/todo/done/" + undoneTodo.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder);
         this.mockMvc.perform(doneBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
