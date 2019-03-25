@@ -1,7 +1,7 @@
 <template>
     <div>
         <contact-point-card
-                class="mt-1 contact-point-results"
+                class="contact-point-results"
                 v-bind:key="contactPoint.id"
                 v-for="contactPoint in searchResults"
                 :contact-point="contactPoint"
@@ -73,7 +73,7 @@
 <style scoped>
     .contact-point-results {
         margin-bottom: 8px !important;
-        margin-left: 6px !important;
-        margin-right: 6px !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
     }
 </style>
