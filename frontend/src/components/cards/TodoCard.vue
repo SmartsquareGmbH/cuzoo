@@ -3,51 +3,56 @@
         <v-hover>
             <v-card slot-scope="{ hover }"
                     :class="`elevation-${hover ? 8 : 2}`">
-                <v-scroll-x-reverse-transition>
-                    <v-btn v-if="hover"
-                           absolute top right fab small
-                           color="success"
-                           @click="taskIsDone(todo)"
-                           class="elevation-12 more-margin-top">
-                        <v-icon size="24px" color="secondary" class="ml-3">
-                            done_outline
-                        </v-icon>
-                    </v-btn>
-                </v-scroll-x-reverse-transition>
-                <v-card-title class="secondary title font-weight-light low-padding-left no-padding-bottom">
-                    <v-icon :style="`transform: rotate(${hover ? 360 : 0}deg)`"
-                            class="mx-1">
-                        timer
-                    </v-icon>
-                    <chip :font-color="getUrgency(todo.expiration)">
-                        {{ distanceInWords }}
-                    </chip>
-                    <v-icon class="mx-1">business</v-icon>
-                    <v-tooltip top>
-                        <chip slot="activator"
-                              font-color="primary">
-                            {{ todo.company.name | truncate(25) }}
-                        </chip>
-                        <span class="title font-weight-light">{{ todo.company.name }}</span>
-                    </v-tooltip>
-                    <v-spacer/>
-                    <v-icon>person</v-icon>
-                    <chip font-color="primary"
-                          :class="`mr-${hover ? 5 : 0}`">
-                        {{ todo.creator }}
-                    </chip>
+                <v-card-title class="white--text subheading text-xs-left low-padding-bottom">
+
+                    <v-layout row wrap>
+                        <v-flex xs8 v-if="!hover">
+                            <p class="text-truncate mb-0">
+                                {{ todo.description }}
+                            </p>
+                        </v-flex>
+                        <v-flex xs12 v-else>
+                            <p class="mb-0">
+                                {{ todo.description }}
+                            </p>
+                        </v-flex>
+                        <v-flex xs4 class="text-xs-right expiration" v-if="!hover">
+                            <v-icon :style="`transform: rotate(${hover ? 0 : 0}deg)`"
+                                    class="mr-1">
+                                timer
+                            </v-icon>
+                            <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
+                                {{ distanceInWords }}
+                            </chip>
+                        </v-flex>
+                    </v-layout>
                 </v-card-title>
-                <v-tooltip top max-width="750" v-if="todo.description.length > 85">
-                    <v-card-title slot="activator"
-                                  class="white--text title font-weight-light text-xs-left">
-                        {{ todo.description | truncate(85) }}
-                    </v-card-title>
-                    <span class="subheading font-weight-light">{{ todo.description }}</span>
-                </v-tooltip>
-                <v-card-title class="white--text title font-weight-light text-xs-left"
-                              v-else>
-                    {{ todo.description }}
-                </v-card-title>
+                <v-expand-transition>
+                    <div v-if="hover">
+                        <v-card-title class="secondary title font-weight-light todo-footer">
+                            <v-icon>person</v-icon>
+                            <chip font-color="primary">
+                                {{ todo.creator }}
+                            </chip>
+                            <v-icon class="mx-1">business</v-icon>
+                            <v-tooltip top>
+                                <chip slot="activator"
+                                      font-color="primary">
+                                    {{ todo.company.name | truncate(40) }}
+                                </chip>
+                                <span class="title font-weight-light">{{ todo.company.name }}</span>
+                            </v-tooltip>
+                            <v-spacer/>
+                                <v-btn flat color="success"
+                                       @click="taskIsDone(todo)">
+                                    DONE
+                                </v-btn>
+                        </v-card-title>
+                    </div>
+
+                </v-expand-transition>
+
+
             </v-card>
         </v-hover>
     </v-fade-transition>
@@ -71,7 +76,15 @@
                     new Date(),
                     {locale: de}
                 );
+            },
+            todoDescription() {
+                return this.todo.description;
             }
+        },
+        mounted() {
+            console.log(this.todo.id + ": ");
+            console.log(this.todoDescription.slice(0, 50));
+            console.log(this.todoDescription.slice(50));
         },
         methods: {
             taskIsDone(todo) {
@@ -94,15 +107,14 @@
 </script>
 
 <style scoped>
-    .no-padding-bottom {
-        padding-bottom: 0px;
+
+    .low-padding-bottom {
+        padding-bottom: 6px;
     }
 
-    .low-padding-left {
+    .todo-footer {
+        padding-top: 0px;
+        padding-bottom: 6px;
         padding-left: 10px;
-    }
-
-    .more-margin-top {
-        margin-top: 32px;
     }
 </style>
