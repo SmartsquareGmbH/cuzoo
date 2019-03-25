@@ -1,5 +1,5 @@
 <template>
-    <v-chip :class="`subheading ${fontColor}--text my-1`"
+    <v-chip :class="`body-2 ${fontColor}--text my-0`"
             small>
         <slot/>
     </v-chip>
