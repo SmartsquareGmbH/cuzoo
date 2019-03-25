@@ -4,42 +4,42 @@
             <number-card
                     color="primary"
                     title="Leads"
-                    :number="numberOfLeads"/>
+                    :number="leads.length"/>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <opportunity-card
+                            v-bind:key="opportunity.id"
+                            v-for="opportunity in leads"
+                            :opportunity="opportunity"/>
+                </v-flex>
+            </v-layout>
         </v-flex>
         <v-flex xs4>
             <number-card
                     color="warning"
                     title="Prospects"
-                    :number="numberOfProspects"/>
+                    :number="prospects.length"/>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <opportunity-card
+                            v-bind:key="opportunity.id"
+                            v-for="opportunity in prospects"
+                            :opportunity="opportunity"/>
+                </v-flex>
+            </v-layout>
         </v-flex>
         <v-flex xs4>
             <number-card
                     color="success"
                     title="Quotes"
-                    :number="numberOfQuotes"/>
-        </v-flex>
-        <v-flex xs12 class="text-xs-left mt-4">
-            <v-icon color="primary" size="24px">bubble_chart</v-icon>
-            <span class="headline font-weight-light">
-                Opportunities
-            </span>
-        </v-flex>
-        <v-flex xs12>
-            <v-layout row wrap  class="text-xs-right opp-dash">
-                <div class="dash">
-                    <perfect-scrollbar :options="settings">
-                        <div :style="`height: ${this.windowHeight - 365}px`">
-                            <v-layout row wrap>
-                                <v-flex xs12>
-                                    <opportunity-card
-                                            v-bind:key="opportunity.id"
-                                            v-for="opportunity in opportunities"
-                                            :opportunity="opportunity"/>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </perfect-scrollbar>
-                </div>
+                    :number="quotes.length"/>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <opportunity-card
+                            v-bind:key="opportunity.id"
+                            v-for="opportunity in quotes"
+                            :opportunity="opportunity"/>
+                </v-flex>
             </v-layout>
         </v-flex>
     </v-layout>
@@ -66,14 +66,14 @@
         },
         computed: {
             ...mapGetters(['opportunities']),
-            numberOfLeads() {
-                return this.opportunities.filter(it => it.state === "Lead").length;
+            leads() {
+                return this.opportunities.filter(it => it.state === "Lead");
             },
-            numberOfProspects() {
-                return this.opportunities.filter(it => it.state === "Prospect").length;
+            prospects() {
+                return this.opportunities.filter(it => it.state === "Prospect");
             },
-            numberOfQuotes() {
-                return this.opportunities.filter(it => it.state === "Quote").length;
+            quotes() {
+                return this.opportunities.filter(it => it.state === "Quote");
             }
         },
         beforeMount() {
