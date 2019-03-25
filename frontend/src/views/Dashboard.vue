@@ -50,8 +50,8 @@
                 this.getCompanies();
                 this.getContacts();
                 this.getContactPoints().then(() => {
-                    this.getTodos();
-                    this.getOpportunities().then(() => this.loadingData = false);
+                    this.getOpportunities();
+                    this.getTodos().then(() => this.loadingData = false);
                 });
             }
         }
