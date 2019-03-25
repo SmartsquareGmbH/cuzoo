@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12>
-        <v-card class="pl-3 mt-1"
+        <v-card class="pl-0 mb-3 mt-1"
                 elevation="6"
                 height="75">
             <v-layout row wrap text-xs-left>
@@ -17,7 +17,7 @@
                     </v-sheet>
                 </v-flex>
                 <v-flex xs2 class="more-padding-top">
-                <span class="headline font-weight-light">
+                <span class="headline font-weight-light pl-3">
                     TODOs
                 </span>
                 </v-flex>
@@ -52,17 +52,19 @@
                 </v-flex>
             </v-layout>
         </v-card>
-        <v-layout row wrap>
-            <div class="dash">
-                <perfect-scrollbar :options="settings">
-                    <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
-                        <v-flex xs12>
-                            <todo-results :search="this.searchTodos"/>
-                        </v-flex>
-                    </div>
-                </perfect-scrollbar>
-            </div>
-        </v-layout>
+        <v-card elevation="6">
+            <v-layout row wrap>
+                <div class="dash">
+                    <perfect-scrollbar :options="settings">
+                        <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
+                            <v-flex xs12>
+                                <todo-results :search="this.searchTodos" class="mx-2"/>
+                            </v-flex>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </v-layout>
+        </v-card>
     </v-flex>
 </template>
 
@@ -120,6 +122,7 @@
 
 <style scoped>
     .dash {
+        padding-right: 4px;
         height: 100%;
         width: 100%;
         position: relative;
@@ -127,6 +130,7 @@
 
     .v-sheet--offset {
         top: -24px;
+        left: 16px;
         position: relative;
     }
 
