@@ -1,7 +1,7 @@
 <template>
     <v-flex xs12>
         <todo-card
-                class="todo-results"
+                class="todo-results mr-3"
                 v-bind:key="todo.id"
                 v-for="todo in searchResults"
                 :todo="todo"/>
@@ -61,8 +61,8 @@
 
 <style scoped>
     .todo-results {
-        margin-bottom: 8px !important;
-        margin-left: 2px !important;
-        margin-right: 2px !important;
+        margin-bottom: 0px !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
     }
 </style>
