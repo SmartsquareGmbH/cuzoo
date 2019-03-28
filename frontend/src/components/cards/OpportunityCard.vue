@@ -8,9 +8,12 @@
                 </v-card-title>
                 <v-card-title class="opp-data">
                     <v-icon class="mx-1">business</v-icon>
-                    <chip>
-                        {{ getCompanyName() | truncate(30) }}
-                    </chip>
+                    <v-tooltip top>
+                        <chip slot="activator">
+                            {{ getCompanyName() | truncate(30) }}
+                        </chip>
+                        <span class="subheading">{{ getCompanyName() }}</span>
+                    </v-tooltip>
                     <v-flex xs12/>
                     <v-icon :style="`transform: rotate(${hover ? 180 : 0}deg)`"
                             class="mx-1">
