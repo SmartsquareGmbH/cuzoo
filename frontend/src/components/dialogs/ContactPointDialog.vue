@@ -118,11 +118,31 @@
                 <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="success" flat @click.native="opportunityMenu = !opportunityMenu">Neue
-                    Opportunity
-                    <v-icon v-if="opportunityMenu">keyboard_arrow_down</v-icon>
-                    <v-icon v-if="!opportunityMenu">keyboard_arrow_up</v-icon>
+                <v-btn v-if="this.companyOpportunities.length === 0"
+                       @click.native="opportunityMenu = !opportunityMenu"
+                       color="success" flat>
+                    Neue Opportunity
+                    <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
+                    <v-icon v-if="!opportunityMenu">keyboard_arrow_down</v-icon>
                 </v-btn>
+                <v-menu v-else top offset-y>
+                    <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
+                        {{ companyOpportunities.length }} Opportunities
+                        <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
+                        <v-icon v-if="!opportunityList">keyboard_arrow_up</v-icon>
+                    </v-btn>
+                    <v-list>
+                        <v-list-tile @click="updateOpportunity()" v-for="opp in companyOpportunities" v-bind:key="opp.id">
+                            <v-icon :color="getStateColor(opp.state)" class="mr-2">bubble_chart</v-icon>
+                            <v-list-tile-title>{{ opp.title }}</v-list-tile-title>
+                        </v-list-tile>
+                        <v-divider class="my-2"/>
+                        <v-list-tile @click="opportunityMenu = !opportunityMenu">
+                            <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
+                            <v-list-tile-title>Neue Opportunity</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
@@ -149,6 +169,7 @@
         data() {
             return {
                 opportunityMenu: false,
+                opportunityList: false,
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: false,
@@ -313,6 +334,19 @@
 
                 return companyOpportunities;
             },
+            updateOpportunity() {
+
+            },
+            getStateColor(state) {
+                switch (state) {
+                    case 'Lead':
+                        return 'primary';
+                    case 'Prospect':
+                        return 'warning';
+                    case 'Quote':
+                        return 'success';
+                }
+            }
         }
     }
 </script>
