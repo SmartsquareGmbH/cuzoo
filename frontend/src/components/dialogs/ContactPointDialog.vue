@@ -157,6 +157,7 @@
                     v => !!v || "Bitte geben Sie einen Ansprechpartner an",
                     v => this.contactNames.includes(v) || "Dieser Ansprechpartner existiert nicht"
                 ],
+                companyOpportunities: [],
                 oppStatuses: ['Lead', 'Prospect', 'Quote'],
                 oppStatusRules: [
                     v => !!v || "Bitte geben Sie einen Status an",
@@ -196,6 +197,11 @@
                 } else {
                     this.date = new Date().toISOString().substr(0, 10);
                 }
+            },
+            contactName(value) {
+                let contact = this.contacts.find(it => it.name === value);
+
+                this.companyOpportunities = this.getOpportunities(contact.company.name);
             }
         },
         computed: {
@@ -203,7 +209,9 @@
                 editedIndex: 'editedContactPointIndex',
                 editedContactPoint: 'editedContactPoint',
                 editedOpportunity: 'editedOpportunity',
-                username: 'username'
+                username: 'username',
+                contacts: 'contacts',
+                contactPoints: 'contactPoints'
             }),
             formTitle() {
                 return this.editedIndex === -1 ? 'Kontaktpunkt hinzufügen' : 'Kontaktpunkt bearbeiten'
@@ -215,6 +223,9 @@
                 set(newDate) {
                     this.date = newDate;
                 }
+            },
+            contactName() {
+                return this.editedContactPoint.contact.name;
             }
         },
         methods: {
@@ -285,7 +296,23 @@
             },
             setContactPointTypes(types) {
                 this.editedContactPoint.types = types;
-            }
+            },
+            getOpportunities(companyName) {
+                let companyOpportunities = [];
+
+                let contactPointsOfCompanyWithOpportunities = this.contactPoints.filter(it =>
+                    it.contact.company.name === companyName && it.opportunity !== null);
+
+                contactPointsOfCompanyWithOpportunities.forEach(it => {
+                    let index = companyOpportunities.findIndex(opp => opp.id === it.opportunity.id);
+
+                    if (index === -1) {
+                        companyOpportunities.push(it.opportunity);
+                    }
+                });
+
+                return companyOpportunities;
+            },
         }
     }
 </script>
