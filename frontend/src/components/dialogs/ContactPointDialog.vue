@@ -118,7 +118,7 @@
                 <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
-                <v-btn v-if="this.companyOpportunities.length === 0"
+                <v-btn v-if="this.companyOpportunities.length === 0 || opportunityMenu"
                        @click.native="opportunityMenu = !opportunityMenu"
                        color="success" flat>
                     Neue Opportunity
