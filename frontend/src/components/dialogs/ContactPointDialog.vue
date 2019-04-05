@@ -86,6 +86,7 @@
                                         <v-flex xs8>
                                             <v-text-field
                                                     v-model="editedOpportunity.title"
+                                                    :disabled="!newOpportunity"
                                                     :rules="oppTitleRules"
                                                     suffix="*"
                                                     prepend-icon="title"
