@@ -102,7 +102,7 @@
                                                     label="Status"
                                                     hide-details/>
                                         </v-flex>
-                                        <v-flex xs12>
+                                        <v-flex xs12 v-if="newOpportunity">
                                             <v-textarea
                                                     v-model="editedOpportunity.description"
                                                     prepend-icon="description"
@@ -118,7 +118,7 @@
                 <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
-                <v-btn v-if="this.companyOpportunities.length === 0 || opportunityMenu"
+                <v-btn v-if="this.companyOpportunities.length === 0 || (opportunityMenu && newOpportunity)"
                        @click.native="opportunityMenu = !opportunityMenu"
                        color="success" flat>
                     Neue Opportunity
@@ -127,17 +127,22 @@
                 </v-btn>
                 <v-menu v-else top offset-y>
                     <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
-                        {{ companyOpportunities.length }} Opportunities
-                        <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
-                        <v-icon v-if="!opportunityList">keyboard_arrow_up</v-icon>
+                        {{ opportunityButtonTitle }}
+                        <v-icon v-if="opportunityList">keyboard_arrow_up</v-icon>
+                        <v-icon v-if="!opportunityList">keyboard_arrow_down</v-icon>
                     </v-btn>
-                    <v-list>
-                        <v-list-tile @click="updateOpportunity()" v-for="opp in companyOpportunities" v-bind:key="opp.id">
-                            <v-icon :color="getStateColor(opp.state)" class="mr-2">bubble_chart</v-icon>
+                    <v-list class="py-0">
+                        <v-list-tile @click="updateOpportunity(opp)"
+                                     v-for="opp in companyOpportunities"
+                                     v-bind:key="opp.id">
+                            <v-icon :color="getStateColor(opp.state)"
+                                    class="mr-2">
+                                bubble_chart
+                            </v-icon>
                             <v-list-tile-title>{{ opp.title }}</v-list-tile-title>
                         </v-list-tile>
-                        <v-divider class="my-2"/>
-                        <v-list-tile @click="opportunityMenu = !opportunityMenu">
+                        <v-divider class="my-0"/>
+                        <v-list-tile @click="createOpportunity()" class="my-0 py-0">
                             <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
                             <v-list-tile-title>Neue Opportunity</v-list-tile-title>
                         </v-list-tile>
@@ -178,6 +183,7 @@
                     v => !!v || "Bitte geben Sie einen Ansprechpartner an",
                     v => this.contactNames.includes(v) || "Dieser Ansprechpartner existiert nicht"
                 ],
+                newOpportunity: false,
                 companyOpportunities: [],
                 oppStatuses: ['Lead', 'Prospect', 'Quote'],
                 oppStatusRules: [
@@ -247,6 +253,9 @@
             },
             contactName() {
                 return this.editedContactPoint.contact.name;
+            },
+            opportunityButtonTitle() {
+                return this.companyOpportunities.length + " Opportunities";
             }
         },
         methods: {
@@ -327,15 +336,32 @@
                 contactPointsOfCompanyWithOpportunities.forEach(it => {
                     let index = companyOpportunities.findIndex(opp => opp.id === it.opportunity.id);
 
-                    if (index === -1) {
-                        companyOpportunities.push(it.opportunity);
-                    }
+                    if (index === -1) companyOpportunities.push(it.opportunity);
                 });
 
                 return companyOpportunities;
             },
-            updateOpportunity() {
+            createOpportunity() {
+                this.newOpportunity = true;
+                this.opportunityMenu = !this.opportunityMenu;
+            },
+            updateOpportunity(opportunity) {
+                if (this.editedOpportunity.title.includes(opportunity.title)) {
+                    this.storeOpportunityDetails({
+                        editedIndex: -1,
+                        editedOpportunity: Object.assign({}, this.defaultOpportunity)
+                    });
 
+                    this.opportunityMenu = false;
+                } else {
+                    this.storeOpportunityDetails({
+                        editedIndex: opportunity.id,
+                        editedOpportunity: Object.assign({}, opportunity)
+                    });
+
+                    this.newOpportunity = false;
+                    this.opportunityMenu = true;
+                }
             },
             getStateColor(state) {
                 switch (state) {
@@ -350,9 +376,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .no-padding-top {
-        padding-top: 0px !important;
-    }
-</style>
