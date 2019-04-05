@@ -226,13 +226,12 @@
                 }
             },
             contactName(value) {
-                let contact = this.contacts.find(it => it.name === value);
-
-                this.companyOpportunities = this.getOpportunities(contact.company.name);
-            },
-            companyOpportunities(opportunities) {
-                if (opportunities.length < 1) {
+                if (value) {
+                    let contact = this.contacts.find(it => it.name === value);
+                    this.companyOpportunities = this.getOpportunities(contact.company.name);
+                } else {
                     this.newOpportunity = true;
+                    this.companyOpportunities = [];
                 }
             }
         },
