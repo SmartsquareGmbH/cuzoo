@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Search from "./views/Search.vue";
-import CompanyTable from "./views/company/CompanyTable.vue";
-import Company from "./views/company/Company.vue";
-import ContactTable from "./views/contact/ContactTable.vue";
-import ContactPoint from "./views/contactpoint/ContactPoint";
+import CompanyTable from "./views/tables/CompanyTable.vue";
+import Company from "./views/detail/Company.vue";
+import ContactTable from "./views/tables/ContactTable.vue";
+import Opportunity from "./views/detail/Opportunity.vue"
+import ContactPoint from "./views/detail/ContactPoint";
 import Dashboard from "./views/Dashboard.vue";
 import FilePreview from "./views/FilePreview.vue";
 
@@ -40,6 +41,11 @@ export default new Router({
             path: "/companies/:companyId",
             name: "companyView",
             component: Company
+        },
+        {
+            path: "/opportunities/:oppId",
+            name: "oppView",
+            component: Opportunity
         },
         {
             path: "/:companyId/:contactPointId",

@@ -94,7 +94,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex/types';
     import api from '../../utils/http-common'
 
     import ContactDialog from "../../components/dialogs/ContactDialog.vue";

@@ -333,7 +333,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex/types'
     import api from '../../utils/http-common'
 
     import CompanyDialog from '../../components/dialogs/CompanyDialog.vue'
