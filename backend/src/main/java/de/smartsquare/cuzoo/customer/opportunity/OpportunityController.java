@@ -19,7 +19,6 @@ public class OpportunityController {
     private final OpportunityRepository opportunityRepository;
     private final ContactPointRepository contactPointRepository;
 
-
     @Autowired
     public OpportunityController(final ContactPointRepository contactPointRepository,
                                  final OpportunityRepository opportunityRepository) {
@@ -28,7 +27,7 @@ public class OpportunityController {
     }
 
     @PutMapping("/submit/{contactPointId}")
-    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactPointId") Long contactPointId,
+    public final ResponseEntity<?> submitOpportunity(@PathVariable("contactPointId") Long contactPointId,
                                                       @RequestBody @Valid Opportunity opportunity,
                                                       BindingResult bindingResult) {
         Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);

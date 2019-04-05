@@ -119,7 +119,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn v-if="this.companyOpportunities.length === 0 || (opportunityMenu && newOpportunity)"
-                       @click.native="opportunityMenu = !opportunityMenu"
+                       @click.native="createOpportunity()"
                        color="success" flat>
                     Neue Opportunity
                     <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
@@ -229,6 +229,11 @@
                 let contact = this.contacts.find(it => it.name === value);
 
                 this.companyOpportunities = this.getOpportunities(contact.company.name);
+            },
+            companyOpportunities(opportunities) {
+                if (opportunities.length < 1) {
+                    this.newOpportunity = true;
+                }
             }
         },
         computed: {
@@ -284,10 +289,7 @@
                         editedContactPoint: Object.assign({}, this.defaultContactPoint)
                     });
 
-                    this.storeOpportunityDetails({
-                        editedIndex: -1,
-                        editedOpportunity: Object.assign({}, this.defaultOpportunity)
-                    });
+                    this.resetEditedOpportunity();
 
                     this.opportunityMenu = false;
                 }, 300)
@@ -342,26 +344,32 @@
                 return companyOpportunities;
             },
             createOpportunity() {
-                this.newOpportunity = true;
-                this.opportunityMenu = !this.opportunityMenu;
+                this.resetEditedOpportunity();
+
+                if (this.opportunityMenu && this.newOpportunity) {
+                    this.opportunityMenu = false;
+                } else {
+                    this.newOpportunity = true;
+                    this.opportunityMenu = true;
+                }
             },
             updateOpportunity(opportunity) {
                 if (this.editedOpportunity.title.includes(opportunity.title)) {
-                    this.storeOpportunityDetails({
-                        editedIndex: -1,
-                        editedOpportunity: Object.assign({}, this.defaultOpportunity)
-                    });
+                    this.resetEditedOpportunity();
 
                     this.opportunityMenu = false;
                 } else {
-                    this.storeOpportunityDetails({
-                        editedIndex: opportunity.id,
-                        editedOpportunity: Object.assign({}, opportunity)
-                    });
+                    this.resetEditedOpportunity(opportunity);
 
                     this.newOpportunity = false;
                     this.opportunityMenu = true;
                 }
+            },
+            resetEditedOpportunity(opp) {
+                this.storeOpportunityDetails({
+                    editedIndex: opp ? opp.id : -1,
+                    editedOpportunity: Object.assign({}, opp ? opp : this.defaultOpportunity)
+                });
             },
             getStateColor(state) {
                 switch (state) {
