@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12>
-        <v-card class="pl-0 mb-3 mt-1"
+        <v-card class="pl-0 mb-3"
                 elevation="6"
                 height="75">
             <v-layout row wrap text-xs-left>
@@ -58,7 +58,8 @@
                     <perfect-scrollbar :options="settings">
                         <div :style="`max-height: ${(this.windowHeight - 398) / 2}px`">
                             <v-flex xs12 class="todo-results">
-                                <todo-results :search="this.searchTodos"/>
+                                <todo-results
+                                        :search="this.searchTodos"/>
                             </v-flex>
                         </div>
                     </perfect-scrollbar>

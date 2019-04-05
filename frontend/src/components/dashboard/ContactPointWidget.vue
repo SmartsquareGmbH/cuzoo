@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12>
-        <v-card class="pl-0 mb-2 mt-1"
+        <v-card class="pl-0 mb-3 mt-1"
                 elevation="6"
                 height="75">
             <v-layout row wrap text-xs-left>

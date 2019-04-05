@@ -5,7 +5,7 @@
                 <v-flex xs7>
                     <opportunity-widget class="mr-1"/>
                 </v-flex>
-                <v-flex xs5>
+                <v-flex xs5 class="pt-0">
                     <todo-widget class="mb-4 pb-2"/>
                     <contact-point-widget/>
                 </v-flex>

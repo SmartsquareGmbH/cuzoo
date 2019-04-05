@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pl-3 mt-2"
+    <v-card class="pl-3"
             elevation="6"
             height="75">
         <v-layout row wrap>
