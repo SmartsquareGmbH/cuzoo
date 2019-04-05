@@ -43,8 +43,8 @@ export default new Router({
             component: Company
         },
         {
-            path: "/opportunities/:oppId",
-            name: "oppView",
+            path: "/opportunities/:opportunityId",
+            name: "opportunityView",
             component: Opportunity
         },
         {

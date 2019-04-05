@@ -3,7 +3,8 @@
         <v-hover>
             <v-card slot-scope="{ hover }"
                     :class="`mt-2 clickable elevation-${hover ? 6 : 2} font-weight-light`"
-                    :color="`${hover ? '#616161' : ''}`">
+                    :color="`${hover ? '#616161' : ''}`"
+                    @click="viewOpportunity(opportunity)">
                 <v-card-title :class="`subheading no-padding-bottom ${getStateColor()}--text`">
                     {{ opportunity.title }}
                 </v-card-title>
@@ -75,6 +76,9 @@
                     case 'Quote':
                         return 'success';
                 }
+            },
+            viewOpportunity(opportunity) {
+                this.$router.push(`/opportunities/${opportunity.id}`);
             }
         }
     }
