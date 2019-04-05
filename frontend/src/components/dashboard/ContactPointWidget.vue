@@ -55,7 +55,7 @@
         <v-layout row wrap>
             <div class="dash">
                 <perfect-scrollbar :options="settings">
-                    <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
+                    <div :style="`max-height: ${(this.windowHeight - 398) / 2}px`">
                         <v-flex xs12 class="no-padding-top">
                             <contact-point-results
                                     :search="this.searchContactPoints"
