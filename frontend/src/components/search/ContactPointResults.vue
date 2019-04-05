@@ -72,8 +72,9 @@
 
 <style scoped>
     .contact-point-results {
-        margin-bottom: 8px !important;
-        margin-left: 0px !important;
-        margin-right: 0px !important;
+        margin: 0px !important;
+        padding: 0px !important;
+        margin-left: 4px !important;
+        margin-right: 4px !important;
     }
 </style>

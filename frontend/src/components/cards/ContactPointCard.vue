@@ -2,15 +2,16 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    :class="`mb-${search ? 3 : 2} clickable elevation-${hover ? 8 : 2} font-weight-light`"
+                    :class="`ma-${search ? 0 : 0} pa-0 clickable elevation-${hover ? 0 : 0} font-weight-light`"
+                    :color="`${hover ? '#616161' : ''}`"
                     @click="viewContactPoint(contactPoint)">
-                <v-card-title class="no-padding-bottom font-weight-light title">
+                <v-card-title class="no-padding-bottom subheading">
                     {{ contactPoint.title }}
                 </v-card-title>
-                <v-card-title class="low-padding-left title">
+                <v-card-title class="low-padding-left subheading pt-2">
                     <v-icon>attach_file</v-icon>
                     <span class="mx-1 primary--text">{{ fileNames.length }}</span>
-                    <v-icon :style="`transform: rotate(${hover ? 360 : 0}deg)`"
+                    <v-icon :style="`transform: rotate(${hover ? 180 : 0}deg)`"
                             class="mx-1">
                         share
                     </v-icon>
@@ -99,4 +100,5 @@
     .low-padding-left {
         padding-left: 10px;
     }
+
 </style>

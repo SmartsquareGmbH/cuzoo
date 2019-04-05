@@ -52,19 +52,21 @@
                 </v-flex>
             </v-layout>
         </v-card>
-        <v-layout row wrap>
-            <div class="dash">
-                <perfect-scrollbar :options="settings">
-                    <div :style="`max-height: ${(this.windowHeight - 398) / 2}px`">
-                        <v-flex xs12 class="no-padding-top">
-                            <contact-point-results
-                                    :search="this.searchContactPoints"
-                                    :on-dashboard="true"/>
-                        </v-flex>
-                    </div>
-                </perfect-scrollbar>
-            </div>
-        </v-layout>
+        <v-card elevation="6">
+            <v-layout row wrap>
+                <div class="dash">
+                    <perfect-scrollbar :options="settings">
+                        <div :style="`max-height: ${(this.windowHeight - 398) / 2}px`">
+                            <v-flex xs12 class="pa-0">
+                                <contact-point-results
+                                        :search="this.searchContactPoints"
+                                        :on-dashboard="true"/>
+                            </v-flex>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </v-layout>
+        </v-card>
     </v-flex>
 </template>
 
