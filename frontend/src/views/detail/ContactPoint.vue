@@ -209,7 +209,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex/types';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
 
     import FileUploadDialog from '../../components/dialogs/FileUploadDialog.vue';
@@ -217,8 +217,8 @@
     import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
     import AttachmentCard from "../../components/cards/AttachmentCard.vue";
 
-    const datefns = require('date-fns/typings');
-    const de = require('date-fns/typings');
+    const datefns = require('date-fns');
+    const de = require('date-fns');
 
     export default {
         components: {
