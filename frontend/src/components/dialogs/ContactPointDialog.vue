@@ -103,13 +103,15 @@
                                                     label="Status"
                                                     hide-details/>
                                         </v-flex>
-                                        <v-flex xs12 v-if="newOpportunity">
-                                            <v-textarea
-                                                    v-model="editedOpportunity.description"
-                                                    prepend-icon="description"
-                                                    label="Kurzbeschreibung"
-                                                    rows="5" hide-details/>
-                                        </v-flex>
+                                        <v-expand-transition>
+                                            <v-flex xs12 v-if="newOpportunity">
+                                                <v-textarea
+                                                        v-model="editedOpportunity.description"
+                                                        prepend-icon="description"
+                                                        label="Kurzbeschreibung"
+                                                        rows="5" hide-details/>
+                                            </v-flex>
+                                        </v-expand-transition>
                                     </v-layout>
                                 </v-expand-transition>
                             </v-flex>
