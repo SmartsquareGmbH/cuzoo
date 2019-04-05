@@ -1,12 +1,12 @@
 <template>
-    <v-flex xs12 v-if="searchResults.length > 0">
+    <v-flex xs12 v-if="searchResults.length > 0" class="pa-0 ma-0">
         <todo-card
-                class="todo-results mr-3"
+                class="todo-results"
                 v-bind:key="todo.id"
                 v-for="todo in searchResults"
                 :todo="todo"/>
     </v-flex>
-    <v-flex v-else text-xs-center>
+    <v-flex v-else text-xs-center class="my-3">
         <span class="error--text font-italic subheading">Keine TODOs gefunden</span>
     </v-flex>
 </template>

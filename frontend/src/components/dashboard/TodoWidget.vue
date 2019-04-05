@@ -7,7 +7,7 @@
                 <v-flex xs2>
                     <v-sheet
                             elevation="8"
-                            class="v-sheet--offset text-xs-center"
+                            class="v-sheet--offset text-xs-center px-0 mx-0"
                             height="75"
                             width="100"
                             color="primary">
@@ -57,8 +57,8 @@
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
                         <div :style="`max-height: ${(this.windowHeight - 375) / 2}px`">
-                            <v-flex xs12>
-                                <todo-results :search="this.searchTodos" class="mx-2"/>
+                            <v-flex xs12 class="todo-results">
+                                <todo-results :search="this.searchTodos"/>
                             </v-flex>
                         </div>
                     </perfect-scrollbar>
@@ -136,5 +136,13 @@
 
     .more-padding-top {
         padding-top: 20px !important;
+    }
+
+    .todo-results {
+        padding-left: 4px !important;
+        padding-top: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        margin: 0px !important;
     }
 </style>
