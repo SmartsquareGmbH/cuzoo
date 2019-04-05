@@ -2,7 +2,8 @@
     <v-fade-transition>
         <v-hover>
             <v-card slot-scope="{ hover }"
-                    :class="`mt-2 clickable elevation-${hover ? 6 : 2} font-weight-light`">
+                    :class="`mt-2 clickable elevation-${hover ? 6 : 2} font-weight-light`"
+                    :color="`${hover ? '#616161' : ''}`">
                 <v-card-title :class="`subheading no-padding-bottom ${getStateColor()}--text`">
                     {{ opportunity.title }}
                 </v-card-title>
