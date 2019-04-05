@@ -24,7 +24,7 @@
 
     import OpportunityWidget from '../components/dashboard/OpportunityWidget.vue';
     import TodoWidget from '../components/dashboard/TodoWidget.vue';
-    import ContactPointWidget from '../components/dashboard/ContactPointWidge.vue';
+    import ContactPointWidget from '../components/dashboard/ContactPointWidget.vue';
 
     export default {
         components: {

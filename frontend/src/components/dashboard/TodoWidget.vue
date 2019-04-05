@@ -7,7 +7,7 @@
                 <v-flex xs2>
                     <v-sheet
                             elevation="8"
-                            class="v-sheet--offset text-xs-center px-0 mx-0"
+                            class="v-sheet--offset text-xs-center"
                             height="75"
                             width="100"
                             color="primary">

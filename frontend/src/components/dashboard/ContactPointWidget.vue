@@ -1,13 +1,13 @@
 <template>
     <v-flex xs12>
-        <v-card class="pl-3 mt-1 mb-2"
+        <v-card class="pl-0 mb-2 mt-1"
                 elevation="6"
                 height="75">
             <v-layout row wrap text-xs-left>
                 <v-flex xs2>
                     <v-sheet
                             elevation="8"
-                            class="v-sheet--offset text-xs-center"
+                            class="v-sheet--offset text-xs-center ml-3"
                             height="75"
                             width="100"
                             color="primary">
@@ -17,7 +17,7 @@
                     </v-sheet>
                 </v-flex>
                 <v-flex xs2 class="more-padding-top">
-                <span class="headline font-weight-light">
+                <span class="headline font-weight-light pl-3">
                     Kontaktpunkte
                 </span>
                 </v-flex>
