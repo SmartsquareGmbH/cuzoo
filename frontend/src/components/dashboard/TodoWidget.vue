@@ -56,7 +56,7 @@
             <v-layout row wrap>
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`height: ${(this.windowHeight - 375) / 2}px`">
+                        <div :style="`max-height: ${(this.windowHeight - 375) / 2}px`">
                             <v-flex xs12>
                                 <todo-results :search="this.searchTodos" class="mx-2"/>
                             </v-flex>
