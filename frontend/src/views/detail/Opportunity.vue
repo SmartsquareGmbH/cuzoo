@@ -2,45 +2,60 @@
     <v-container>
         <v-fade-transition>
             <v-layout v-if="!loadingData" row wrap text-xs-left>
-                <v-flex xs12 class="mb-3">
+                <v-flex xs12>
                     <v-btn flat small @click="$router.go(-1)">
                         <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
                         Zurück
                     </v-btn>
-                    <v-divider/>
+                    <v-divider class="mt-2"/>
                 </v-flex>
-                <v-flex xs6>
+                <v-flex xs4 class="pt-4">
                     <span :class="`display-1 ${getStateColor(opportunity.state)}--text`">
                         {{ opportunity.title }}
                     </span>
                     <p class="mt-2 mr-5">{{ opportunity.description }}</p>
                 </v-flex>
-                <v-flex xs6>
+                <v-flex xs8>
                     <v-timeline>
                         <v-timeline-item
+                                fill-dot
                                 icon="forum"
                                 :color="`${getStateColor(opportunity.state)}`"
-                                fill-dot
                                 v-for="contactPoint in contactPoints"
                                 v-bind:key="contactPoint.id">
                             <template v-slot:opposite>
-                                <span>{{ dateFormatted(contactPoint.date) }} <span class="font-italic">mit {{ contactPoint.contact.name }}</span></span>
+                                <span class="font-italic">
+                                    {{ dateFormatted(contactPoint.date) }} mit
+                                    <span :class="`${getStateColor(opportunity.state)}--text`">
+                                        {{ contactPoint.contact.name }}
+                                    </span>
+                                </span>
+                                <p class="font-italic ma-0">
+                                    via
+                                    <span v-for="type in contactPoint.types"
+                                          v-bind:key="type.id"
+                                          :class="`${getStateColor(opportunity.state)}--text`">
+                                        {{ type.title }}
+                                    </span>
+                                </p>
                             </template>
                             <v-card>
-                                <v-card-title :class="`${getStateColor(opportunity.state)}`">
-
-                                    <h2 class="headline white--text font-weight-light">{{ contactPoint.title }}</h2>
+                                <v-card-title
+                                        :class="`${getStateColor(opportunity.state)}
+                                        headline white--text font-weight-light`">
+                                    {{ contactPoint.title }}
                                 </v-card-title>
                                 <v-container>
                                     <v-layout>
                                         <v-flex xs12>
-                                            {{ contactPoint.comment }}
+                                            {{ contactPoint.comment | truncate(500) }}
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
                     </v-timeline>
+                    <v-divider/>
                 </v-flex>
             </v-layout>
         </v-fade-transition>
@@ -55,10 +70,15 @@
     import api from '../../utils/http-common';
     import {mapActions, mapGetters} from 'vuex';
 
+    import Chip from '../../components/core/Chip.vue'
+
     const datefns = require('date-fns');
     const de = require('date-fns');
 
     export default {
+        components: {
+            Chip
+        },
         data() {
             return {
                 loadingData: true,
