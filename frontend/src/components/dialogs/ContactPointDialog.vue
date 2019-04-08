@@ -324,6 +324,9 @@
                             console.log(error);
                             alert(error);
                         });
+                    } else {
+                        this.$emit('refresh');
+                        this.closeDialog();
                     }
                 }).catch(error => {
                     console.log(error);
