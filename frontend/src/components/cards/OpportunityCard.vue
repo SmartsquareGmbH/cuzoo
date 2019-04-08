@@ -43,15 +43,14 @@
         components: {
             Chip
         },
-        data() {
-            return {}
-        },
+        data: () => ({
+        }),
         computed: {
             ...mapGetters(['opportunities', 'contactPoints']),
             oppContactPoints() {
                 return this.contactPoints.filter(it => {
                     if (it.opportunity) return it.opportunity.id === this.opportunity.id;
-                });
+                }).sort(compareContactPoints);
             },
             lastContactPoint() {
                 return this.oppContactPoints[this.oppContactPoints.length - 1];
@@ -80,6 +79,17 @@
             viewOpportunity(opportunity) {
                 this.$router.push(`/opportunities/${opportunity.id}`);
             }
+        }
+    }
+
+    function compareContactPoints(a, b) {
+        if (datefns.compareAsc(a.date, b.date) === 0) {
+            if (a.id < b.id)
+                return 1;
+            if (a.id > b.id)
+                return -1;
+        } else {
+            return datefns.compareAsc(a.date, b.date);
         }
     }
 </script>
