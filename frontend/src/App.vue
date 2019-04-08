@@ -146,4 +146,9 @@
         padding: 0px;
         font-family: "Avenir", Helvetica, Arial, sans-serif;
     }
+
+    .v-toolbar__content, .v-toolbar__extension {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
 </style>
