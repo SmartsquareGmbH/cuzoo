@@ -39,20 +39,25 @@
                                     </span>
                                 </p>
                             </template>
-                            <v-card>
-                                <v-card-title
-                                        :class="`${getStateColor(opportunity.state)}
+                            <v-hover>
+                                <v-card slot-scope="{ hover }"
+                                        class="clickable"
+                                        @click="viewContactPoint(contactPoint)"
+                                        :color="`${hover ? '#616161' : ''}`">
+                                    <v-card-title
+                                            :class="`${getStateColor(opportunity.state)}
                                         headline white--text font-weight-light`">
-                                    {{ contactPoint.title }}
-                                </v-card-title>
-                                <v-container>
-                                    <v-layout>
-                                        <v-flex xs12>
-                                            {{ contactPoint.comment | truncate(500) }}
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-card>
+                                        {{ contactPoint.title }}
+                                    </v-card-title>
+                                    <v-container>
+                                        <v-layout>
+                                            <v-flex xs12>
+                                                {{ contactPoint.comment | truncate(500) }}
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-hover>
                         </v-timeline-item>
                     </v-timeline>
                     <v-divider/>
@@ -109,6 +114,9 @@
                     case 'Quote':
                         return 'success';
                 }
+            },
+            viewContactPoint(contactPoint) {
+                this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`);
             },
             refreshData() {
                 this.getOpportunities()
