@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-md fluid>
         <v-fade-transition>
-            <v-layout row wrap v-if="!loadingData" v-resize="onResize">
+            <v-layout row wrap v-if="!loadingData">
                 <v-flex xs7>
                     <opportunity-widget class="mr-1"/>
                 </v-flex>
