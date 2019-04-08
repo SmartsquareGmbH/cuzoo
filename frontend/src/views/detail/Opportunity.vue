@@ -17,7 +17,7 @@
                     <chip class="ml-2 mb-2">
                         {{ companyName }}
                     </chip>
-                    <p class="mt-2 mr-5">{{ opportunity.description }}</p>
+                    <p class="mt-2 mr-5" style="white-space: pre-wrap;">{{ opportunity.description }}</p>
                 </v-flex>
                 <v-flex xs8>
                     <v-timeline>
@@ -56,7 +56,7 @@
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs12>
-                                                {{ contactPoint.comment | truncate(500) }}
+                                                <span style="white-space: pre-wrap;">{{ contactPoint.comment | truncate(500) }}</span>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
