@@ -229,9 +229,12 @@
                 }
             },
             contactName(value) {
+                this.resetEditedOpportunity();
+                this.opportunityMenu = false;
+
                 if (value) {
                     let contact = this.contacts.find(it => it.name === value);
-                    this.companyOpportunities = this.getOpportunities(contact.company.name);
+                    this.getOpportunities(contact.company.name);
                 } else {
                     this.newOpportunity = true;
                     this.companyOpportunities = [];
@@ -332,18 +335,9 @@
                 this.editedContactPoint.types = types;
             },
             getOpportunities(companyName) {
-                let companyOpportunities = [];
-
-                let contactPointsOfCompanyWithOpportunities = this.contactPoints.filter(it =>
-                    it.contact.company.name === companyName && it.opportunity !== null);
-
-                contactPointsOfCompanyWithOpportunities.forEach(it => {
-                    let index = companyOpportunities.findIndex(opp => opp.id === it.opportunity.id);
-
-                    if (index === -1) companyOpportunities.push(it.opportunity);
+                api.get(`opportunity/get/${companyName}`).then(res => {
+                    this.companyOpportunities = res.data;
                 });
-
-                return companyOpportunities;
             },
             createOpportunity() {
                 this.resetEditedOpportunity();

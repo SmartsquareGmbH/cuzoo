@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,8 @@ public class OpportunityController {
 
     @PutMapping("/submit/{contactPointId}")
     public final ResponseEntity<?> submitOpportunity(@PathVariable("contactPointId") Long contactPointId,
-                                                      @RequestBody @Valid Opportunity opportunity,
-                                                      BindingResult bindingResult) {
+                                                     @RequestBody @Valid Opportunity opportunity,
+                                                     BindingResult bindingResult) {
         Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
 
         if (bindingResult.hasErrors()) {
@@ -57,6 +58,15 @@ public class OpportunityController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/get/{companyName}")
+    public final ResponseEntity<List<Opportunity>> getOpportunitiesOfCompany(@PathVariable String companyName) {
+        return ResponseEntity.ok(
+                new ArrayList<>(
+                        contactPointRepository.findAllOpportunitiesOfCompany(companyName)
+                )
+        );
     }
 
     @GetMapping("/get")
