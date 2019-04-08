@@ -318,11 +318,13 @@
                             state: this.editedOpportunity.state,
                             description: this.editedOpportunity.description
                         }).then(() => {
-                            this.$emit('refresh')
+                            this.$emit('refresh');
+                            this.closeDialog();
+                        }).catch(error => {
+                            console.log(error);
+                            alert(error);
                         });
                     }
-
-                    this.closeDialog();
                 }).catch(error => {
                     console.log(error);
                     alert(error);
