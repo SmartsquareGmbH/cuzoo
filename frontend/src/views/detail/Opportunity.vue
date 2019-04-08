@@ -14,12 +14,48 @@
     </v-container>
 </template>
 <script>
+    import api from '../../utils/http-common';
+    import {mapActions, mapGetters} from 'vuex';
+
     export default {
-        data: () => ({
-        }),
+        data() {
+            return {
+                loadingData: true,
+                opportunityId: this.$route.params.opportunityId,
+                contactPoints: []
+            }
+        },
         computed: {
-            opportunityId() {
-                return this.$route.params.opportunityId;
+            ...mapGetters(['opportunities']),
+            opportunity() {
+                return this.opportunities.find(it => {
+                        return it.id == this.opportunityId;
+                    }
+                );
+            }
+        },
+        beforeMount() {
+            this.refreshData();
+        },
+        methods: {
+            ...mapActions(['getOpportunities']),
+            getStateColor(state) {
+                switch (state) {
+                    case 'Lead':
+                        return 'primary';
+                    case 'Prospect':
+                        return 'warning';
+                    case 'Quote':
+                        return 'success';
+                }
+            },
+            refreshData() {
+                this.getOpportunities().then(() => {
+                    api.get(`point/get/opportunity/${this.opportunityId}`).then(res => {
+                        this.contactPoints = res.data;
+                        this.loadingData = false;
+                    }).catch(err => alert(err));
+                });
             }
         }
     }
