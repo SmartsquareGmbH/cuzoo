@@ -12,7 +12,7 @@
                     fixed
                     app>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn color="primary" href="#/search">
+                    <v-btn color="primary" href="#/dashboard">
                         <span class="headline font-weight-light black--text">CUZOO</span>
                     </v-btn>
                     <v-btn flat href="#/dashboard">
