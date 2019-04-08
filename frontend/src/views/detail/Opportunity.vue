@@ -10,9 +10,13 @@
                     <v-divider class="mt-2"/>
                 </v-flex>
                 <v-flex xs4 class="pt-4">
-                    <span :class="`display-1 ${getStateColor(opportunity.state)}--text`">
+                    <p :class="`display-1 ${getStateColor(opportunity.state)}--text`">
                         {{ opportunity.title }}
-                    </span>
+                    </p>
+                    <v-icon>business</v-icon>
+                    <chip class="ml-2 mb-2">
+                        {{ companyName }}
+                    </chip>
                     <p class="mt-2 mr-5">{{ opportunity.description }}</p>
                 </v-flex>
                 <v-flex xs8>
@@ -98,6 +102,9 @@
                         return it.id == this.opportunityId;
                     }
                 );
+            },
+            companyName() {
+                return this.contactPoints[0].contact.company.name;
             }
         },
         beforeMount() {
