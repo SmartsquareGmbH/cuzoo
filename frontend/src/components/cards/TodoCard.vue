@@ -46,6 +46,7 @@
                         </v-card-title>
                     </div>
                 </v-expand-transition>
+                <slot/>
             </v-card>
         </v-hover>
     </v-fade-transition>

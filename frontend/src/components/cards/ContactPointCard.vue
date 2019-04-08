@@ -32,6 +32,7 @@
                     <v-icon>person</v-icon>
                     <chip font-color="primary" class="mr-0">{{ contactPoint.contact.name }}</chip>
                 </v-card-title>
+                <slot/>
             </v-card>
         </v-hover>
     </v-fade-transition>

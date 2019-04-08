@@ -3,9 +3,11 @@
         <contact-point-card
                 class="contact-point-results"
                 v-bind:key="contactPoint.id"
-                v-for="contactPoint in searchResults"
+                v-for="(contactPoint, index) in searchResults"
                 :contact-point="contactPoint"
-                :search="true"/>
+                :search="true">
+            <v-divider v-if="index !== searchResults.length -1"/>
+        </contact-point-card>
     </div>
 </template>
 

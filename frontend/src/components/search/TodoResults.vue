@@ -3,8 +3,10 @@
         <todo-card
                 class="todo-results"
                 v-bind:key="todo.id"
-                v-for="todo in searchResults"
-                :todo="todo"/>
+                v-for="(todo, index) in searchResults"
+                :todo="todo">
+            <v-divider v-if="index !== searchResults.length -1"/>
+        </todo-card>
     </v-flex>
     <v-flex v-else text-xs-center class="my-3">
         <span class="error--text font-italic subheading">Keine TODOs gefunden</span>
