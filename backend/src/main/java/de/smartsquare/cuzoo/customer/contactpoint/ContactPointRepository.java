@@ -15,4 +15,9 @@ public interface ContactPointRepository extends JpaRepository<ContactPoint, Long
             "WHERE c.contact.company.name LIKE :companyName")
     List<Opportunity> findAllOpportunitiesOfCompany(@Param("companyName") String companyName);
 
+
+    @Query("SELECT c FROM ContactPoint c " +
+            "WHERE c.opportunity.id = :opportunityId")
+    List<ContactPoint> findAllContactPointsOfOpportunity(@Param("opportunityId") Long opportunityId);
+
 }

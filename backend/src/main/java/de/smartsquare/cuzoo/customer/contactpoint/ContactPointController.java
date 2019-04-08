@@ -5,6 +5,7 @@ import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.customer.opportunity.OpportunityRepository;
 import de.smartsquare.cuzoo.user.User;
 import de.smartsquare.cuzoo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,18 @@ public class ContactPointController {
     private final ContactPointRepository contactPointRepository;
     private final ContactRepository contactRepository;
     private final CompanyRepository companyRepository;
+    private final OpportunityRepository opportunityRepository;
     private final UserRepository userRepository;
     private final LabelRepository labelRepository;
 
     @Autowired
     public ContactPointController(final ContactPointRepository contactPointRepository,
+                                  final OpportunityRepository opportunityRepository,
                                   final ContactRepository contactRepository, final LabelRepository labelRepository,
                                   final CompanyRepository companyRepository, final UserRepository userRepository) {
         this.userRepository = userRepository;
         this.contactPointRepository = contactPointRepository;
+        this.opportunityRepository = opportunityRepository;
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.labelRepository = labelRepository;
@@ -187,4 +191,18 @@ public class ContactPointController {
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/get/opportunity/{opportunityId}")
+    public final ResponseEntity<?> getContactPointsOfOpportunity(@PathVariable Long opportunityId) {
+        if (!opportunityRepository.existsById(opportunityId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diese Opportunity wurde nicht gefunden!");
+        }
+
+        return ResponseEntity.ok(
+                new ArrayList<>(
+                        contactPointRepository.findAllContactPointsOfOpportunity(opportunityId)
+                )
+        );
+    }
+
 }
