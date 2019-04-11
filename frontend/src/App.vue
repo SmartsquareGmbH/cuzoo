@@ -31,8 +31,12 @@
                         <v-icon>people</v-icon>
                         <span class="ml-2">Ansprechpartner</span>
                     </v-btn>
+                    <v-btn flat href="#/opportunities">
+                        <v-icon>bubble_chart</v-icon>
+                        <span class="ml-2">Opportunities</span>
+                    </v-btn>
                 </v-toolbar-items>
-                <v-spacer></v-spacer>
+                <v-spacer/>
                 <v-fade-transition>
                     <v-combobox
                             clearable
@@ -41,7 +45,7 @@
                             :loading="loadingCompanies"
                             :items="companyNames"
                             v-if="this.$route.name.includes('dashboard')"
-                            class="mr-3"
+                            class="search-bar"
                             ref="searchBar"
                             prepend-icon="search"
                             label="Suche nach Unternehmen ..."
@@ -154,5 +158,9 @@
     .v-toolbar__content, .v-toolbar__extension {
         padding-left: 0px !important;
         padding-right: 0px !important;
+    }
+
+    .search-bar {
+        margin-right: 24px !important;
     }
 </style>
