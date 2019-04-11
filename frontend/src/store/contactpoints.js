@@ -17,6 +17,7 @@ export default {
             contactName: "",
             date: "",
             comment: "",
+            opportunityState: "",
             types: [],
             labels: []
         }

@@ -131,8 +131,8 @@
                 <v-menu v-else top offset-y>
                     <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
                         {{ opportunityButtonTitle }}
-                        <v-icon v-if="opportunityList">keyboard_arrow_up</v-icon>
-                        <v-icon v-if="!opportunityList">keyboard_arrow_down</v-icon>
+                        <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
+                        <v-icon v-if="!opportunityList">keyboard_arrow_up</v-icon>
                     </v-btn>
                     <v-list class="py-0">
                         <v-list-tile @click="updateOpportunity(opp)"
@@ -206,6 +206,7 @@
                     contactName: "",
                     date: "",
                     comment: "",
+                    opportunityState: "",
                     types: [],
                     labels: []
                 },
@@ -305,6 +306,7 @@
                     id: this.editedContactPoint.id,
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment,
+                    opportunityState: this.editedOpportunity.state,
                     types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels,
                     creator: this.username
