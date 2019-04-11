@@ -14,7 +14,8 @@
                         </v-flex>
                         <v-flex xs4 class="text-xs-right">
                             <v-icon :style="`transform: rotate(${hover ? 0 : 0}deg)`"
-                                    class="mr-1">
+                                    class="mr-1"
+                                    :color="`${dateIsExpired(todo.expiration) ? 'error' : 'white'}`">
                                 timer
                             </v-icon>
                             <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
@@ -69,6 +70,10 @@
         }),
         computed: {
             distanceInWords() {
+                if (this.dateIsExpired(this.todo.expiration)) {
+                    return "Abgelaufen";
+                }
+
                 return datefns.distanceInWords(
                     this.todo.expiration,
                     new Date(),
@@ -105,6 +110,9 @@
                 } else {
                     return 'primary';
                 }
+            },
+            dateIsExpired(date) {
+                return datefns.isPast(date);
             }
         }
     }
