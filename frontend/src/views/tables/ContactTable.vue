@@ -43,41 +43,46 @@
                 dark>
             <v-progress-linear slot="progress" color="blue" indeterminate/>
             <template slot="items" slot-scope="props">
-                <td class="text-xs-left">{{ props.item.name }}</td>
-                <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
-                <td v-else class="text-xs-left font-weight-light error--text">N/A</td>
-                <td class="text-xs-left">{{ props.item.role }}</td>
-                <td class="text-xs-left">{{ props.item.mail }}</td>
-                <td class="text-xs-left">{{ props.item.telephone }}</td>
-                <td class="text-xs-left">{{ props.item.mobile }}</td>
-                <td class="justify-center layout px-0">
-                    <v-icon
-                            @click="editContact(props.item)"
-                            size="22px"
-                            class="mr-0 mt-2">
-                        edit
-                    </v-icon>
-                    <v-tooltip top>
-                        <v-btn
-                                @click="downloadInfo(props.item)"
-                                color="transparent"
-                                class="mr-2"
-                                slot="activator"
-                                flat icon small>
-                            <v-icon size="22px" color="white" style="transform: rotate(180deg)" dark>
-                                publish
-                            </v-icon>
-                        </v-btn>
-                        <span>Export Informationen</span>
-                    </v-tooltip>
-                    <v-icon
-                            @click="openConfirmDialog(props.item)"
-                            size="22px"
-                            class="mr-2 mt-2"
-                            color="red lighten-1">
-                        delete
-                    </v-icon>
-                </td>
+                <tr v-if="!!props.item"
+                    style="cursor: pointer;"
+                    @click="editContact(props.item)"
+                    class="text-xs-left vertical-center">
+                    <td class="text-xs-left">{{ props.item.name }}</td>
+                    <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
+                    <td v-else class="text-xs-left font-weight-light error--text">N/A</td>
+                    <td class="text-xs-left">{{ props.item.role }}</td>
+                    <td class="text-xs-left">{{ props.item.mail }}</td>
+                    <td class="text-xs-left">{{ props.item.telephone }}</td>
+                    <td class="text-xs-left">{{ props.item.mobile }}</td>
+                    <td class="justify-center layout px-0">
+                        <v-icon
+                                @click="editContact(props.item)"
+                                size="22px"
+                                class="mr-0 mt-2">
+                            edit
+                        </v-icon>
+                        <v-tooltip top>
+                            <v-btn
+                                    @click="downloadInfo(props.item)"
+                                    color="transparent"
+                                    class="mr-2"
+                                    slot="activator"
+                                    flat icon small>
+                                <v-icon size="22px" color="white" style="transform: rotate(180deg)" dark>
+                                    publish
+                                </v-icon>
+                            </v-btn>
+                            <span>Export Informationen</span>
+                        </v-tooltip>
+                        <v-icon
+                                @click="openConfirmDialog(props.item)"
+                                size="22px"
+                                class="mr-2 mt-2"
+                                color="red lighten-1">
+                            delete
+                        </v-icon>
+                    </td>
+                </tr>
             </template>
             <span slot="no-data">
                 Keine Daten verfügbar :'(
