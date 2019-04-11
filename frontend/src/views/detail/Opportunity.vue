@@ -49,6 +49,7 @@
                                         @click="viewContactPoint(contactPoint)"
                                         :color="`${hover ? '#616161' : ''}`">
                                     <v-card-title
+                                            style="background-color: #616161;"
                                             :class="`${getStateColor(contactPoint.opportunityState)}
                                         headline white--text font-weight-light`">
                                         {{ contactPoint.title }}
@@ -120,6 +121,8 @@
                         return 'warning';
                     case 'Quote':
                         return 'success';
+                    default:
+                        return '#616161';
                 }
             },
             viewContactPoint(contactPoint) {
