@@ -78,10 +78,6 @@
                         delete
                     </v-icon>
                 </td>
-                <confirm-dialog
-                        v-model="confirmDialogState"
-                        :questionToBeConfirmed="deleteContactMessage"
-                        @confirmed="deleteContact"/>
             </template>
             <span slot="no-data">
                 Keine Daten verfügbar :'(
@@ -90,6 +86,10 @@
                 Deine Suche nach "{{ search }}" ergab keinen Treffer :'(
             </v-alert>
         </v-data-table>
+        <confirm-dialog
+                v-model="confirmDialogState"
+                :questionToBeConfirmed="deleteContactMessage"
+                @confirmed="deleteContact"/>
     </v-container>
 </template>
 
@@ -158,16 +158,11 @@
             },
             refreshTable() {
                 this.getCompanies().then(() => {
-                    this.getContacts().then(() => this.loading = false);
+                    this.getContacts().then(() => {
+                        this.companyNames = this.companies.map(company => company.name).sort();
+                        this.loading = false;
+                    });
                 });
-
-                this.companyNames = [];
-
-                this.companies.forEach(company => {
-                    this.companyNames.push(company.name)
-                });
-
-                this.companyNames.sort();
             },
             editContact(item) {
                 this.storeEditedDetails({
