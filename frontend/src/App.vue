@@ -19,10 +19,6 @@
                         <v-icon>dashboard</v-icon>
                         <span class="ml-2">Dashboard</span>
                     </v-btn>
-                    <v-btn flat href="#/search">
-                        <v-icon>search</v-icon>
-                        <span class="ml-2">Suche</span>
-                    </v-btn>
                     <v-btn flat href="#/companies">
                         <v-icon>business</v-icon>
                         <span class="ml-2">Unternehmen</span>
