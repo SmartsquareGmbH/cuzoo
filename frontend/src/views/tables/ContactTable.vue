@@ -1,7 +1,10 @@
 <template>
     <v-container fluid>
         <v-card-title>
-            <h1 class="mr-3">ANSPRECHPARTNER</h1>
+            <h1 class="mr-3">
+                <v-icon size="32px">people</v-icon>
+                ANSPRECHPARTNER
+            </h1>
             <input
                     class="input-file"
                     type="file"

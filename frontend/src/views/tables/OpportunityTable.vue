@@ -1,7 +1,10 @@
 <template>
     <v-container fluid>
         <v-card-title>
-            <h1 class="mr-3">OPPORTUNITIES</h1>
+            <h1 class="mr-3">
+                <v-icon size="32px">bubble_chart</v-icon>
+                OPPORTUNITIES
+            </h1>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"
