@@ -66,7 +66,7 @@
                         password: this.password
                     })
                 }).then(() => {
-                    this.$router.replace('/search')
+                    this.$router.replace('/dashboard')
                 }).catch(error => {
                     if (error.message === "Request failed with status code 401") {
                         this.loginFailedMessage = "Die Anmeldedaten sind ungültig!"
