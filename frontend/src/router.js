@@ -5,6 +5,7 @@ import CompanyTable from "./views/tables/CompanyTable.vue";
 import Company from "./views/detail/Company.vue";
 import ContactTable from "./views/tables/ContactTable.vue";
 import Opportunity from "./views/detail/Opportunity.vue"
+import OpportunityTable from "./views/tables/OpportunityTable.vue"
 import ContactPoint from "./views/detail/ContactPoint";
 import Dashboard from "./views/Dashboard.vue";
 import FilePreview from "./views/FilePreview.vue";
@@ -36,6 +37,11 @@ export default new Router({
             path: "/contacts",
             name: "contacts",
             component: ContactTable
+        },
+        {
+            path: "/opportunities",
+            name: "opportunities",
+            component: OpportunityTable
         },
         {
             path: "/companies/:companyId",
