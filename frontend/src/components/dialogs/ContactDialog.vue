@@ -129,12 +129,14 @@
         },
         beforeMount() {
             this.getUsernames();
+            this.editedContact.manager = this.username;
         },
         computed: {
             ...mapGetters({
                 editedIndex: 'editedContactIndex',
                 editedContact: 'editedContact',
                 editedCompanyName: 'editedCompanyName',
+                username: 'username',
                 usernames: 'usernames'
             }),
             formTitle() {
