@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,13 +59,22 @@ public class OpportunityController {
         }
     }
 
+    @DeleteMapping("/delete/{opportunityId}")
+    public final ResponseEntity<?> deleteOpportunity(@PathVariable Long opportunityId) {
+        if (!opportunityRepository.existsById(opportunityId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diese Opportunity wurde nicht gefunden!");
+        }
+        try {
+            opportunityRepository.deleteById(opportunityId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/get/{companyName}")
     public final ResponseEntity<List<Opportunity>> getOpportunitiesOfCompany(@PathVariable String companyName) {
-        return ResponseEntity.ok(
-                new ArrayList<>(
-                        contactPointRepository.findAllOpportunitiesOfCompany(companyName)
-                )
-        );
+        return ResponseEntity.ok(contactPointRepository.findAllOpportunitiesOfCompany(companyName));
     }
 
     @GetMapping("/get")
