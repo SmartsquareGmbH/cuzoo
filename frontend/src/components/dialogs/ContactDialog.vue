@@ -95,14 +95,14 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapActions} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common'
 
     import LabelBox from "../core/LabelBox.vue";
 
     export default {
         props: ["value", "companyNames"],
-        components: { LabelBox },
+        components: {LabelBox},
         data() {
             return {
                 valid: false,
@@ -188,7 +188,7 @@
                 }
             },
             submitContact() {
-                let maybeCompany = this.companyName ? `?companyName=${this.companyName.replace("&", "%26")}` : '';
+                let maybeCompany = this.companyName ? `?companyName=${this.encodeString(this.companyName)}` : '';
 
                 api.put(`contact/submit${maybeCompany}`, {
                     name: this.editedContact.name,
@@ -221,6 +221,9 @@
                 } else {
                     return null;
                 }
+            },
+            encodeString(value) {
+                return value.replace("&", "%26").replace("|", "%7C");
             }
         }
     }
