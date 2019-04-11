@@ -3,7 +3,7 @@
         <v-layout align-center justify-center>
             <v-flex xs12 sm8 md4>
                 <v-card class="elevation-12">
-                    <v-toolbar dark color="primary">
+                    <v-toolbar dark color="primary" class="login-header">
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer/>
                         <v-img
@@ -80,3 +80,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .login-header {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+</style>
