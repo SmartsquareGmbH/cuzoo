@@ -60,6 +60,7 @@
             },
             pushContactValues(contact) {
                 this.pushValue(contact.name);
+                this.pushValue(contact.manager);
 
                 contact.labels.map(it => this.pushValue(it.title));
 

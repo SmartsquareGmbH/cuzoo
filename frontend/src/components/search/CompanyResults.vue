@@ -55,6 +55,7 @@
                 let contactPointsOfCompany = this.getContactPointsOfCompany(company.name);
 
                 contactsOfCompany.forEach(contact => {
+                    this.searchTerms.push(contact.manager);
                     this.searchTerms.push(contact.name.toLowerCase());
                     contact.labels.map(it => this.searchTerms.push(it.toLowerCase()));
                 });
