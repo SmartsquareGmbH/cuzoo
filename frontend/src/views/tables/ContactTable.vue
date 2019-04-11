@@ -47,13 +47,14 @@
                     style="cursor: pointer;"
                     @click="editContact(props.item)"
                     class="text-xs-left vertical-center">
-                    <td class="text-xs-left">{{ props.item.name }}</td>
+                    <td>{{ props.item.name }}</td>
                     <td v-if="props.item.company != null" class="text-xs-left">{{ props.item.company.name }}</td>
-                    <td v-else class="text-xs-left font-weight-light error--text">N/A</td>
-                    <td class="text-xs-left">{{ props.item.role }}</td>
-                    <td class="text-xs-left">{{ props.item.mail }}</td>
-                    <td class="text-xs-left">{{ props.item.telephone }}</td>
-                    <td class="text-xs-left">{{ props.item.mobile }}</td>
+                    <td v-else class="font-weight-light error--text">N/A</td>
+                    <td>{{ props.item.role }}</td>
+                    <td>{{ props.item.mail }}</td>
+                    <td>{{ props.item.telephone }}</td>
+                    <td>{{ props.item.mobile }}</td>
+                    <td>{{ props.item.manager }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                                 @click="editContact(props.item)"
@@ -124,6 +125,7 @@
                     {text: 'E-Mail', value: 'mail'},
                     {text: 'Telefon', value: 'telephone'},
                     {text: 'Mobil', value: 'mobile'},
+                    {text: 'Manager', value: 'manager'},
                     {text: 'Aktionen', value: 'name', sortable: false}
                 ],
                 confirmDialogState: false,
