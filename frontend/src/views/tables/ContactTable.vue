@@ -132,7 +132,7 @@
             this.refreshTable()
         },
         methods: {
-            ...mapActions(['getContacts']),
+            ...mapActions(['getContacts', 'getCompanies']),
             ...mapMutations({
                 storeEditedDetails: 'storeEditedContactDetails',
                 storeCompanyName: 'storeEditedCompanyName'
@@ -157,7 +157,10 @@
                 });
             },
             refreshTable() {
-                this.getContacts().then(() => this.loading = false);
+                this.getCompanies().then(() => {
+                    this.getContacts().then(() => this.loading = false);
+                });
+
                 this.companyNames = [];
 
                 this.companies.forEach(company => {
