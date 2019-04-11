@@ -52,8 +52,8 @@ public class ContactExporterTest {
         darius.setManager(user);
         contactRepository.save(darius);
 
-        firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "");
-        secondContactPoint = new ContactPoint("Anfrage", 600000L, darius, "");
+        firstContactPoint = new ContactPoint("Besprechung", 1200L, darius, "", "");
+        secondContactPoint = new ContactPoint("Anfrage", 600000L, darius, "", "");
         firstContactPoint.setCreator(user);
         secondContactPoint.setCreator(user);
         contactPointRepository.save(firstContactPoint);

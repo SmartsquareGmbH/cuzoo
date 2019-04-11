@@ -20,6 +20,7 @@ public class ContactPointForm {
     @NotBlank
     private String creator;
     private String comment;
+    private String opportunityState;
 
     public Long getId() {
         return id;
@@ -40,6 +41,8 @@ public class ContactPointForm {
     public String getComment() {
         return comment;
     }
+
+    public String getOpportunityState() { return opportunityState; }
 
     public String getCreator() {
         return creator;

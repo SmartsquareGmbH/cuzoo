@@ -67,7 +67,7 @@ public class ContactPointControllerTest {
         contact.setManager(user);
         contactRepository.save(contact);
 
-        contactPoint = new ContactPoint("Beratung", 0L, contact, "");
+        contactPoint = new ContactPoint("Beratung", 0L, contact, "", "");
         label = new Label("Cloud Flyer");
 
         contactPoint.setCreator(user);
@@ -239,7 +239,7 @@ public class ContactPointControllerTest {
 
     @Test
     public void that_contact_point_is_getting_deleted() throws Exception {
-        ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "");
+        ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "", "");
         contactPoint.setCreator(user);
         contactPointRepository.save(contactPoint);
 

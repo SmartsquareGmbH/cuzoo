@@ -82,9 +82,9 @@ public class ContactPointController {
         }
 
         if (contactPointIdBeforeSaving < 1) {
-            return new ResponseEntity<Long>(contactPoint.getId(), HttpStatus.CREATED);
+            return new ResponseEntity<>(contactPoint.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<Long>(contactPoint.getId(), HttpStatus.OK);
+            return new ResponseEntity<>(contactPoint.getId(), HttpStatus.OK);
         }
     }
 
@@ -99,12 +99,14 @@ public class ContactPointController {
             contactPoint.setDate(contactPointForm.getDate());
             contactPoint.setContact(contactPointsContact);
             contactPoint.setComment(contactPointForm.getComment());
+            contactPoint.setOpportunityState(contactPointForm.getOpportunityState());
         } else {
             contactPoint = new ContactPoint(
                     contactPointForm.getTitle(),
                     contactPointForm.getDate(),
                     contactPointsContact,
-                    contactPointForm.getComment());
+                    contactPointForm.getComment(),
+                    contactPointForm.getOpportunityState());
         }
         return contactPoint;
     }

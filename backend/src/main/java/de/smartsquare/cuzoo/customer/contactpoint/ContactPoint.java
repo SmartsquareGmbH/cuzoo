@@ -68,6 +68,8 @@ public class ContactPoint {
     @JoinColumn(name = "opportunity_id")
     private Opportunity opportunity;
 
+    private String opportunityState;
+
     public ContactPoint() {
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();
@@ -75,11 +77,12 @@ public class ContactPoint {
     }
 
     public ContactPoint(@NotNull @NotBlank String title, @NotNull Long date,
-                        @NotNull Contact contact, String comment) {
+                        @NotNull Contact contact, String comment, String opportunityState) {
         this.title = title;
         this.contact = contact;
         this.date = new Date(date);
         this.comment = comment;
+        this.opportunityState = opportunityState;
 
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();
@@ -168,5 +171,13 @@ public class ContactPoint {
 
     public void setOpportunity(Opportunity opportunity) {
         this.opportunity = opportunity;
+    }
+
+    public String getOpportunityState() {
+        return opportunityState;
+    }
+
+    public void setOpportunityState(String opportunityState) {
+        this.opportunityState = opportunityState;
     }
 }
