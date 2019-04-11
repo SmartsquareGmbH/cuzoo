@@ -88,9 +88,13 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat v-on:click="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
-                <v-btn color="primary" flat v-on:click="submitContact()" :disabled="!valid">Speichern</v-btn>
+                <v-btn color="primary" flat v-on:click="submit()" :disabled="!valid">Speichern</v-btn>
             </v-card-actions>
         </v-card>
+        <confirm-dialog
+                v-model="confirmDialogState"
+                :questionToBeConfirmed="createCompanyMessage"
+                @confirmed="submitCompany()"/>
     </v-dialog>
 </template>
 
@@ -99,14 +103,20 @@
     import api from '../../utils/http-common'
 
     import LabelBox from "../core/LabelBox.vue";
+    import ConfirmDialog from "../dialogs/ConfirmDialog.vue";
 
     export default {
         props: ["value", "companyNames"],
-        components: {LabelBox},
+        components: {
+            LabelBox,
+            ConfirmDialog
+        },
         data() {
             return {
                 valid: false,
                 companyFieldEnabled: true,
+                confirmDialogState: false,
+                createCompanyMessage: "Das angegebene Unternehmen existiert nicht, möchtest du es anlegen?",
                 managerRules: [
                     v => !!v || "Bitte geben Sie einen Manager an!",
                     v => this.usernames.includes(v) || "Der Manager existiert nicht!"
@@ -187,6 +197,17 @@
                     setTimeout(() => this.companyName = this.getCompanyName());
                 }
             },
+            submit() {
+                if (this.companyName) {
+                    if (this.companyNames.includes(this.companyName)) {
+                        this.submitContact();
+                    } else {
+                        this.confirmDialogState = true;
+                    }
+                } else {
+                    this.submitContact();
+                }
+            },
             submitContact() {
                 let maybeCompany = this.companyName ? `?companyName=${this.encodeString(this.companyName)}` : '';
 
@@ -204,6 +225,24 @@
                 }).then(() => {
                     this.$parent.refreshTable();
                     this.closeDialog();
+                }).catch(error => {
+                    console.log(error);
+                    alert(error);
+                });
+            },
+            submitCompany() {
+                api.put('company/submit', {
+                    name: this.companyName,
+                    id: -1,
+                    street: "",
+                    zipcode: "",
+                    place: "",
+                    homepage: "",
+                    description: "",
+                    other: "",
+                    labels: []
+                }).then(() => {
+                    this.submitContact();
                 }).catch(error => {
                     console.log(error);
                     alert(error);
