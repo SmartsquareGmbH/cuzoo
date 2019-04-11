@@ -19,7 +19,7 @@ public class Attachment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attachment_generator")
-    @SequenceGenerator(name = "attachment_generator", sequenceName = "attachment_seq")
+    @SequenceGenerator(name = "attachment_generator", sequenceName = "attachment_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

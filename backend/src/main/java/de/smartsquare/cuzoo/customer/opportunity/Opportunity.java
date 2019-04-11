@@ -13,7 +13,7 @@ import java.util.List;
 public class Opportunity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "opportunity_generator")
-    @SequenceGenerator(name = "opportunity_generator", sequenceName = "opportunity_seq")
+    @SequenceGenerator(name = "opportunity_generator", sequenceName = "opportunity_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

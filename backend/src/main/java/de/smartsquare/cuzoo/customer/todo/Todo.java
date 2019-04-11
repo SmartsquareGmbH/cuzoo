@@ -12,7 +12,7 @@ import java.util.Date;
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_generator")
-    @SequenceGenerator(name = "todo_generator", sequenceName = "todo_seq")
+    @SequenceGenerator(name = "todo_generator", sequenceName = "todo_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

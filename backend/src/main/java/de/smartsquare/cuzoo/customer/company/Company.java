@@ -14,7 +14,7 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_generator")
-    @SequenceGenerator(name = "company_generator", sequenceName = "company_seq")
+    @SequenceGenerator(name = "company_generator", sequenceName = "company_seq", allocationSize = 1)
     private Long id;
     @NotNull
     @NotBlank

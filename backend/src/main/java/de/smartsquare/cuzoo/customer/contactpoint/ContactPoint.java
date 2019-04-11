@@ -18,7 +18,7 @@ import java.util.List;
 public class ContactPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contactPoint_generator")
-    @SequenceGenerator(name = "contactPoint_generator", sequenceName = "contactPoint_seq")
+    @SequenceGenerator(name = "contactPoint_generator", sequenceName = "contactPoint_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

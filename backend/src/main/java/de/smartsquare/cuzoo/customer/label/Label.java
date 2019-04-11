@@ -15,7 +15,7 @@ import java.util.List;
 public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "label_generator")
-    @SequenceGenerator(name = "label_generator", sequenceName = "label_seq")
+    @SequenceGenerator(name = "label_generator", sequenceName = "label_seq", allocationSize = 1)
     private Long id;
 
     @NotNull
