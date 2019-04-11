@@ -188,7 +188,7 @@
                 ],
                 newOpportunity: false,
                 companyOpportunities: [],
-                oppStatuses: ['Lead', 'Prospect', 'Quote'],
+                oppStatuses: ['Lose', 'Lead', 'Prospect', 'Quote', 'Win'],
                 oppStatusRules: [
                     v => !!v || "Bitte geben Sie einen Status an",
                     v => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
