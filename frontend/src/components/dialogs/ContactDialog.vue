@@ -188,7 +188,9 @@
                     this.storeCompanyName({editedCompanyName: ''});
 
                     this.companyName = "";
-                }, 300)
+                    this.editedContact.manager = this.username;
+                }, 300);
+
             },
             clearDialog() {
                 this.$refs.form.reset();
@@ -196,6 +198,8 @@
                 if (this.$route.name === 'companyView') {
                     setTimeout(() => this.companyName = this.getCompanyName());
                 }
+
+                this.editedContact.manager = this.username;
             },
             submit() {
                 if (this.companyName) {
