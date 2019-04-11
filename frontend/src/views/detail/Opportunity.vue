@@ -24,13 +24,13 @@
                         <v-timeline-item
                                 fill-dot
                                 icon="forum"
-                                :color="`${getStateColor(opportunity.state)}`"
+                                :color="`${getStateColor(contactPoint.opportunityState)}`"
                                 v-for="contactPoint in contactPoints"
                                 v-bind:key="contactPoint.id">
                             <template v-slot:opposite>
                                 <span class="font-italic">
                                     {{ dateFormatted(contactPoint.date) }} mit
-                                    <span :class="`${getStateColor(opportunity.state)}--text`">
+                                    <span :class="`${getStateColor(contactPoint.opportunityState)}--text`">
                                         {{ contactPoint.contact.name }}
                                     </span>
                                 </span>
@@ -38,7 +38,7 @@
                                     via
                                     <span v-for="type in contactPoint.types"
                                           v-bind:key="type.id"
-                                          :class="`${getStateColor(opportunity.state)}--text`">
+                                          :class="`${getStateColor(contactPoint.opportunityState)}--text`">
                                         {{ type.title }}
                                     </span>
                                 </p>
@@ -49,7 +49,7 @@
                                         @click="viewContactPoint(contactPoint)"
                                         :color="`${hover ? '#616161' : ''}`">
                                     <v-card-title
-                                            :class="`${getStateColor(opportunity.state)}
+                                            :class="`${getStateColor(contactPoint.opportunityState)}
                                         headline white--text font-weight-light`">
                                         {{ contactPoint.title }}
                                     </v-card-title>
