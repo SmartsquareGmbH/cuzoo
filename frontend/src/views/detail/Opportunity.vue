@@ -98,6 +98,8 @@
                 </v-flex>
             </v-layout>
         </v-fade-transition>
+        <opp-progress-dialog
+                v-model="oppProgressDialogState"/>
         <contact-point-dialog
                 v-model="contactPointDialogState"
                 :contactNames="contactNames"
@@ -110,6 +112,7 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
 
     import Chip from '../../components/core/Chip.vue'
+    import OppProgressDialog from '../../components/dialogs/OppProgressDialog.vue'
     import ContactPointDialog from '../../components/dialogs/ContactPointDialog.vue'
 
     const datefns = require('date-fns');
@@ -118,12 +121,14 @@
     export default {
         components: {
             Chip,
+            OppProgressDialog,
             ContactPointDialog
         },
         data() {
             return {
                 loadingData: true,
                 opportunityId: this.$route.params.opportunityId,
+                oppProgressDialogState: false,
                 contactPointDialogState: false,
                 contactPoints: [],
                 contactNames: []
@@ -174,6 +179,14 @@
             },
             dateFormatted(date) {
                 return datefns.format(date, 'DD.MM.YYYY', {locale: de});
+            },
+            addProgress() {
+                this.storeEditedOpportunityDetails({
+                    editedIndex: this.opportunity.id,
+                    editedOpportunity: Object.assign({}, this.opportunity)
+                });
+
+              this.oppProgressDialogState = true;
             },
             addContactPoint() {
                 this.storeEditedOpportunityDetails({
