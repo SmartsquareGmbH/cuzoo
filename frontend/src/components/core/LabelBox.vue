@@ -14,8 +14,9 @@
             :hide-details="hideDetails">
         <template slot="selection" slot-scope="label" tabindex="-1">
             <v-chip tabindex="-1"
-                    class="title"
+                    class="subheading"
                     :selected="label.selected"
+                    small
                     close
                     @input="removeLabel(label.item)">
                 {{ label.item }}
