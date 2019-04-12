@@ -34,9 +34,9 @@
                         </v-icon>
                         {{ props.item.state }}
                     </td>
-                    <v-tooltip top v-if="props.item.description.length > 100" max-width="750">
+                    <v-tooltip top v-if="props.item.description.length > 140" max-width="750">
                         <td slot="activator" class="vertical-center">
-                            {{ props.item.description | truncate(100) }}
+                            {{ props.item.description | truncate(140) }}
                         </td>
                         {{ props.item.description }}
                     </v-tooltip>
