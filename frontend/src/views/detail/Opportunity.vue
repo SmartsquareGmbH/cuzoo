@@ -2,12 +2,34 @@
     <v-container>
         <v-fade-transition>
             <v-layout v-if="!loadingData" row wrap text-xs-left>
-                <v-flex xs12>
-                    <v-btn flat small @click="$router.go(-1)">
-                        <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
-                        Zurück
-                    </v-btn>
-                    <v-divider class="mt-2"/>
+                <v-flex xs12 class="ma-0 pa-0">
+                    <v-layout row wrap>
+                        <v-flex xs6>
+                            <v-btn flat small @click="$router.go(-1)">
+                                <v-icon size="22px" class="mr-1" dark>arrow_back</v-icon>
+                                Zurück
+                            </v-btn>
+                        </v-flex>
+                        <v-flex xs6 text-xs-right>
+                            <v-menu bottom left offset-y>
+                                <v-btn slot="activator" flat small @click="addProgressList = !addProgressList">
+                                    <v-icon size="22px" class="mr-1" dark>add</v-icon>
+                                    Fortschritt
+                                </v-btn>
+                                <v-list class="py-0">
+                                    <v-list-tile @click="addContactPoint()" class="my-0 py-0">
+                                        <v-icon color="primary" class="mr-2">timeline</v-icon>
+                                        <v-list-tile-title>Status ändern</v-list-tile-title>
+                                    </v-list-tile>
+                                    <v-list-tile @click="addContactPoint()" class="my-0 py-0">
+                                        <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
+                                        <v-list-tile-title>Kontaktpunkt hinzufügen</v-list-tile-title>
+                                    </v-list-tile>
+                                </v-list>
+                            </v-menu>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider/>
                 </v-flex>
                 <v-flex xs4 class="pt-4">
                     <p :class="`display-1 ${getStateColor(opportunity.state)}--text`">
