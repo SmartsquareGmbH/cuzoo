@@ -82,11 +82,10 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-expand-transition>
-                                    <v-layout row wrap v-if="opportunityMenu">
+                                    <v-layout row wrap v-if="opportunityMenu || opportunity">
                                         <v-flex xs8>
                                             <v-text-field
                                                     v-model="editedOpportunity.title"
-                                                    :disabled="!newOpportunity"
                                                     :rules="oppTitleRules"
                                                     suffix="*"
                                                     prepend-icon="title"
@@ -121,36 +120,38 @@
                 <div class="mr-2">* Pflichtfelder</div>
             </v-card-text>
             <v-card-actions>
-                <v-btn v-if="this.companyOpportunities.length === 0 || (opportunityMenu && newOpportunity)"
-                       @click.native="createOpportunity()"
-                       color="success" flat>
-                    Neue Opportunity
-                    <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
-                    <v-icon v-if="!opportunityMenu">keyboard_arrow_down</v-icon>
-                </v-btn>
-                <v-menu v-else top offset-y>
-                    <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
-                        {{ opportunityButtonTitle }}
-                        <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
-                        <v-icon v-if="!opportunityList">keyboard_arrow_up</v-icon>
+                <div v-if="!opportunity">
+                    <v-btn v-if="this.companyOpportunities.length === 0 || (opportunityMenu && newOpportunity)"
+                           @click.native="createOpportunity()"
+                           color="success" flat>
+                        Neue Opportunity
+                        <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
+                        <v-icon v-if="!opportunityMenu">keyboard_arrow_down</v-icon>
                     </v-btn>
-                    <v-list class="py-0">
-                        <v-list-tile @click="updateOpportunity(opp)"
-                                     v-for="opp in companyOpportunities"
-                                     v-bind:key="opp.id">
-                            <v-icon :color="getStateColor(opp.state)"
-                                    class="mr-2">
-                                bubble_chart
-                            </v-icon>
-                            <v-list-tile-title>{{ opp.title }}</v-list-tile-title>
-                        </v-list-tile>
-                        <v-divider class="my-0"/>
-                        <v-list-tile @click="createOpportunity()" class="my-0 py-0">
-                            <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
-                            <v-list-tile-title>Neue Opportunity</v-list-tile-title>
-                        </v-list-tile>
-                    </v-list>
-                </v-menu>
+                    <v-menu v-else top offset-y>
+                        <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
+                            {{ opportunityButtonTitle }}
+                            <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
+                            <v-icon v-if="!opportunityList">keyboard_arrow_up</v-icon>
+                        </v-btn>
+                        <v-list class="py-0">
+                            <v-list-tile @click="updateOpportunity(opp)"
+                                         v-for="opp in companyOpportunities"
+                                         v-bind:key="opp.id">
+                                <v-icon :color="getStateColor(opp.state)"
+                                        class="mr-2">
+                                    bubble_chart
+                                </v-icon>
+                                <v-list-tile-title>{{ opp.title }}</v-list-tile-title>
+                            </v-list-tile>
+                            <v-divider class="my-0"/>
+                            <v-list-tile @click="createOpportunity()" class="my-0 py-0">
+                                <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
+                                <v-list-tile-title>Neue Opportunity</v-list-tile-title>
+                            </v-list-tile>
+                        </v-list>
+                    </v-menu>
+                </div>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
@@ -170,7 +171,7 @@
     const de = require('date-fns/locale/de');
 
     export default {
-        props: ["value", "contactNames"],
+        props: ["value", "contactNames", "opportunity"],
         components: {
             LabelBox
         },
@@ -230,15 +231,17 @@
                 }
             },
             contactName(value) {
-                this.resetEditedOpportunity();
-                this.opportunityMenu = false;
+                if (!this.opportunity) {
+                    this.resetEditedOpportunity();
+                    this.opportunityMenu = false;
 
-                if (value) {
-                    let contact = this.contacts.find(it => it.name === value);
-                    this.getOpportunities(contact.company.name);
-                } else {
-                    this.newOpportunity = true;
-                    this.companyOpportunities = [];
+                    if (value) {
+                        let contact = this.contacts.find(it => it.name === value);
+                        this.getOpportunities(contact.company.name);
+                    } else {
+                        this.newOpportunity = true;
+                        this.companyOpportunities = [];
+                    }
                 }
             }
         },
@@ -313,7 +316,7 @@
                 }).then(res => {
                     let contactPointId = res.data;
 
-                    if (this.opportunityMenu) {
+                    if (this.opportunityMenu || this.opportunity) {
                         api.put(`opportunity/submit/${contactPointId}`, {
                             id: this.editedOpportunity.id,
                             title: this.editedOpportunity.title,

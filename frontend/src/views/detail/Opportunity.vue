@@ -12,7 +12,7 @@
                         </v-flex>
                         <v-flex xs6 text-xs-right>
                             <v-menu bottom left offset-y>
-                                <v-btn slot="activator" flat small @click="addProgressList = !addProgressList">
+                                <v-btn slot="activator" flat small>
                                     <v-icon size="22px" class="mr-1" dark>add</v-icon>
                                     Fortschritt
                                 </v-btn>
@@ -91,35 +91,46 @@
                 </v-flex>
             </v-layout>
         </v-fade-transition>
-        <v-layout v-if="loadingData">
-            <v-flex xs12 class="text-xs-center">
-                <v-progress-circular :size="128" color="primary" indeterminate/>
-            </v-flex>
-        </v-layout>
+        <v-fade-transition>
+            <v-layout v-if="loadingData">
+                <v-flex xs12 class="text-xs-center">
+                    <v-progress-circular :size="128" color="primary" indeterminate/>
+                </v-flex>
+            </v-layout>
+        </v-fade-transition>
+        <contact-point-dialog
+                v-model="contactPointDialogState"
+                :contactNames="contactNames"
+                :opportunity="opportunity"
+                @refresh="refreshData()"/>
     </v-container>
 </template>
 <script>
     import api from '../../utils/http-common';
-    import {mapActions, mapGetters} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
 
     import Chip from '../../components/core/Chip.vue'
+    import ContactPointDialog from '../../components/dialogs/ContactPointDialog.vue'
 
     const datefns = require('date-fns');
     const de = require('date-fns');
 
     export default {
         components: {
-            Chip
+            Chip,
+            ContactPointDialog
         },
         data() {
             return {
                 loadingData: true,
                 opportunityId: this.$route.params.opportunityId,
-                contactPoints: []
+                contactPointDialogState: false,
+                contactPoints: [],
+                contactNames: []
             }
         },
         computed: {
-            ...mapGetters(['opportunities']),
+            ...mapGetters(['opportunities', 'contacts']),
             opportunity() {
                 return this.opportunities.find(it => {
                         return it.id == this.opportunityId;
@@ -134,6 +145,7 @@
             this.refreshData();
         },
         methods: {
+            ...mapMutations(['storeEditedOpportunityDetails']),
             ...mapActions(['getOpportunities']),
             getStateColor(state) {
                 switch (state) {
@@ -151,6 +163,7 @@
                 this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`);
             },
             refreshData() {
+                this.loadingData = true;
                 this.getOpportunities()
                     .then(() => {
                         api.get(`point/get/opportunity/${this.opportunityId}`).then(res => {
@@ -161,6 +174,18 @@
             },
             dateFormatted(date) {
                 return datefns.format(date, 'DD.MM.YYYY', {locale: de});
+            },
+            addContactPoint() {
+                this.storeEditedOpportunityDetails({
+                    editedIndex: this.opportunity.id,
+                    editedOpportunity: Object.assign({}, this.opportunity)
+                });
+
+                this.contactNames = this.contacts
+                    .filter(it => it.company.name.includes(this.companyName))
+                    .map(it => it.name)
+                    .sort();
+                this.contactPointDialogState = true;
             }
         }
     }
