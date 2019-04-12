@@ -17,11 +17,11 @@
                                     Fortschritt
                                 </v-btn>
                                 <v-list class="py-0">
-                                    <v-list-tile @click="addContactPoint()" class="my-0 py-0">
+                                    <v-list-tile @click="addContactPoint()">
                                         <v-icon color="primary" class="mr-2">timeline</v-icon>
                                         <v-list-tile-title>Status ändern</v-list-tile-title>
                                     </v-list-tile>
-                                    <v-list-tile @click="addContactPoint()" class="my-0 py-0">
+                                    <v-list-tile @click="addContactPoint()">
                                         <v-icon color="light-green accent-2" class="mr-2">add</v-icon>
                                         <v-list-tile-title>Kontaktpunkt hinzufügen</v-list-tile-title>
                                     </v-list-tile>
