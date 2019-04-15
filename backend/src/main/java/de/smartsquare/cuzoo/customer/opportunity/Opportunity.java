@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,8 @@ public class Opportunity {
     @NotNull
     @NotBlank
     private String state;
+
+    private Date lastProgress;
 
     private String description;
 
@@ -72,6 +75,14 @@ public class Opportunity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastProgress() {
+        return lastProgress;
+    }
+
+    public void setLastProgress(Date lastProgress) {
+        this.lastProgress = lastProgress;
     }
 
     public List<ContactPoint> getContactPoints() {
