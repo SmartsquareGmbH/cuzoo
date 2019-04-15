@@ -27,6 +27,10 @@
                                     </v-list-tile>
                                 </v-list>
                             </v-menu>
+                            <v-btn flat small @click="openConfirmDialog()">
+                                <v-icon size="22px" class="mr-1" dark>delete</v-icon>
+                                Opportunity löschen
+                            </v-btn>
                         </v-flex>
                     </v-layout>
                     <v-divider/>
@@ -101,6 +105,10 @@
                 :contactNames="contactNames"
                 :opportunity="opportunity"
                 @refresh="refreshData()"/>
+        <confirm-dialog
+                v-model="confirmDialogState"
+                :questionToBeConfirmed="deleteOpportunityMessage"
+                @confirmed="deleteOpportunity()"/>
     </v-container>
 </template>
 <script>
@@ -111,6 +119,7 @@
     import Chip from '../../components/core/Chip.vue'
     import OppProgressDialog from '../../components/dialogs/OppProgressDialog.vue'
     import ContactPointDialog from '../../components/dialogs/ContactPointDialog.vue'
+    import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue"
 
     const datefns = require('date-fns');
     const de = require('date-fns');
@@ -119,12 +128,15 @@
         components: {
             Chip,
             OppProgressDialog,
-            ContactPointDialog
+            ContactPointDialog,
+            ConfirmDialog
         },
         data() {
             return {
                 loadingData: true,
                 opportunityId: this.$route.params.opportunityId,
+                confirmDialogState: false,
+                deleteOpportunityMessage: 'Bist du dir sicher, dass du diese Opportunity entgültig löschen willst?',
                 oppProgressDialogState: false,
                 contactPointDialogState: false,
                 contactPoints: [],
@@ -198,6 +210,17 @@
                     .map(it => it.name)
                     .sort();
                 this.contactPointDialogState = true;
+            },
+            openConfirmDialog() {
+                this.confirmDialogState = true;
+            },
+            deleteOpportunity() {
+                api.delete(`opportunity/delete/${this.opportunityId}`)
+                    .then(() => this.$router.go(-1))
+                    .catch(error => {
+                        console.log(error);
+                        alert(error);
+                    });
             },
             markdownify(value) {
                 return marked(value, {sanitize: true}).trim();
