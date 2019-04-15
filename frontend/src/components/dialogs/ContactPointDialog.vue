@@ -346,7 +346,8 @@
             },
             getOpportunities(companyName) {
                 api.get(`opportunity/get/${companyName}`).then(res => {
-                    this.companyOpportunities = res.data;
+                    this.companyOpportunities = res.data
+                        .filter(it => it.state !== 'Win' && it.state !== 'Lose');
                 });
             },
             createOpportunity() {
