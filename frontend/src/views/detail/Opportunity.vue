@@ -39,7 +39,7 @@
                     <chip class="ml-2 mb-2">
                         {{ companyName }}
                     </chip>
-                    <p class="mt-2 mr-5" style="white-space: pre-wrap;">{{ opportunity.description }}</p>
+                    <p class="mt-2 mr-5" v-html="markdownify(opportunity.description)"/>
                 </v-flex>
                 <v-flex xs8>
                     <v-timeline>
@@ -79,7 +79,7 @@
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs12>
-                                                <span style="white-space: pre-wrap;">{{ contactPoint.comment | truncate(500) }}</span>
+                                                <span class="marked" v-html="markdownify(contactPoint.comment)"/>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -110,6 +110,7 @@
 <script>
     import api from '../../utils/http-common';
     import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import marked from 'marked';
 
     import Chip from '../../components/core/Chip.vue'
     import OppProgressDialog from '../../components/dialogs/OppProgressDialog.vue'
@@ -186,7 +187,7 @@
                     editedOpportunity: Object.assign({}, this.opportunity)
                 });
 
-              this.oppProgressDialogState = true;
+                this.oppProgressDialogState = true;
             },
             addContactPoint() {
                 this.storeEditedOpportunityDetails({
@@ -199,6 +200,9 @@
                     .map(it => it.name)
                     .sort();
                 this.contactPointDialogState = true;
+            },
+            markdownify(value) {
+                return marked(value, {sanitize: true})
             }
         }
     }
@@ -214,3 +218,10 @@
         }
     }
 </script>
+
+<style scoped>
+    >>> .marked p {
+        margin-bottom: 0px !important;
+    }
+
+</style>
