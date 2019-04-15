@@ -70,15 +70,15 @@
         }),
         computed: {
             distanceInWords() {
-                if (this.dateIsExpired(this.todo.expiration)) {
-                    return "Abgelaufen";
-                }
+                if (this.expandMenu) return this.expirationDate;
+                if (this.dateIsExpired(this.todo.expiration)) return "Abgelaufen";
 
                 return datefns.distanceInWords(
-                    this.todo.expiration,
-                    new Date(),
-                    {locale: de}
+                    this.todo.expiration, new Date(), {locale: de}
                 );
+            },
+            expirationDate() {
+                return datefns.format(this.todo.expiration, 'DD.MM.YY', {locale: de})
             },
             todoDescription() {
                 return this.todo.description;
