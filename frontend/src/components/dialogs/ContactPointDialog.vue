@@ -380,7 +380,7 @@
             getStateColor(state) {
                 switch (state) {
                     case 'Lead':
-                        return 'primary';
+                        return 'error';
                     case 'Prospect':
                         return 'warning';
                     case 'Quote':

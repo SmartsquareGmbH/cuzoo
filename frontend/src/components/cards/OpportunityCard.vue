@@ -69,7 +69,7 @@
             getStateColor() {
                 switch (this.opportunity.state) {
                     case 'Lead':
-                        return 'primary';
+                        return 'error';
                     case 'Prospect':
                         return 'warning';
                     case 'Quote':

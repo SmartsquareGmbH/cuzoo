@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-flex xs4>
             <number-card
-                    color="primary"
+                    color="error"
                     title="Leads"
                     :number="leads.length"/>
             <v-layout row wrap>

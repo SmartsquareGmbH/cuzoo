@@ -119,11 +119,13 @@
             getStateColor(state) {
                 switch (state) {
                     case 'Lead':
-                        return 'primary';
+                        return 'error';
                     case 'Prospect':
                         return 'warning';
                     case 'Quote':
                         return 'success';
+                    case 'Win':
+                        return 'primary';
                 }
             }
         }
