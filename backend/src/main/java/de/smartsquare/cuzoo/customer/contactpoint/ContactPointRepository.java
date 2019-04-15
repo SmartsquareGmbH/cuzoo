@@ -20,4 +20,6 @@ public interface ContactPointRepository extends JpaRepository<ContactPoint, Long
             "WHERE c.opportunity.id = :opportunityId")
     List<ContactPoint> findAllContactPointsOfOpportunity(@Param("opportunityId") Long opportunityId);
 
+    ContactPoint findFirstByOpportunityIdOrderByDateDesc(Long opportunityId);
+
 }

@@ -48,6 +48,14 @@ public class OpportunityController {
 
             contactPoint.setOpportunity(savedOpportunity);
             contactPointRepository.save(contactPoint);
+
+            savedOpportunity.setLastProgress(
+                    contactPointRepository
+                            .findFirstByOpportunityIdOrderByDateDesc(savedOpportunity.getId())
+                            .getDate()
+            );
+
+            opportunityRepository.save(savedOpportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
