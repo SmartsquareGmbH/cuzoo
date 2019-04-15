@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <v-card-title>
+        <v-card-title class="px-1">
             <h1 class="mr-3">
                 <v-icon size="32px">bubble_chart</v-icon>
                 OPPORTUNITIES
