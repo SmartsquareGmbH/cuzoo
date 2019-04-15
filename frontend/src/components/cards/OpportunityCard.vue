@@ -52,11 +52,8 @@
                     if (it.opportunity) return it.opportunity.id === this.opportunity.id;
                 }).sort(compareContactPoints);
             },
-            lastContactPoint() {
-                return this.oppContactPoints[this.oppContactPoints.length - 1];
-            },
             lastProgress() {
-                return datefns.format(this.lastContactPoint.date, 'DD.MM.YY', {locale: de});
+                return datefns.format(this.opportunity.lastProgress, 'DD.MM.YY', {locale: de});
             }
         },
         methods: {

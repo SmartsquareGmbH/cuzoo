@@ -216,7 +216,8 @@
                     id: 0,
                     title: "",
                     state: "Lead",
-                    description: ""
+                    description: "",
+                    lastProgress: ""
                 }
             }
         },
