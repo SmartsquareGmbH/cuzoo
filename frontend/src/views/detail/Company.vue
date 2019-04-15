@@ -150,7 +150,7 @@
                         <v-divider class="mb-3"/>
                     </v-flex>
                     <v-flex xs12 v-if="this.company.description">
-                        <span style="white-space: pre-wrap">{{ this.company.description }}</span>
+                        <span class="marked" v-html="markdownify(company.description)"/>
                     </v-flex>
                     <v-flex xs12 v-if="this.company.other">
                         <v-card-text class="headline text-xs-left no-padding-left">
@@ -163,7 +163,7 @@
                         <v-divider class="mb-3"/>
                     </v-flex>
                     <v-flex xs12 v-if="this.company.other">>
-                        <span style="white-space: pre-wrap">{{ this.company.other }}</span>
+                        <span class="marked" v-html="markdownify(company.other)"/>
                     </v-flex>
                     <v-flex xs2 v-if="this.company.labels.length > 0">
                         <v-card dark color="info">
@@ -281,8 +281,7 @@
                                     <v-divider class="mb-3"/>
                                 </v-flex>
                                 <v-flex xs12 v-if="contact.comment">
-                                    <span style="white-space: pre-wrap">{{ contact.comment }}
-                                    </span>
+                                    <span class="marked" v-html="markdownify(contact.comment)"/>
                                 </v-flex>
                                 <v-flex xs2 v-if="contact.labels.length > 0">
                                     <v-card dark color="info">
@@ -335,6 +334,7 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex'
     import api from '../../utils/http-common'
+    import marked from 'marked'
 
     import CompanyDialog from '../../components/dialogs/CompanyDialog.vue'
     import ContactDialog from '../../components/dialogs/ContactDialog.vue'
@@ -413,6 +413,9 @@
             },
             viewContactPoints() {
                 this.$router.push('/' + (this.companyId));
+            },
+            markdownify(value) {
+                return marked(value, {sanitize: true})
             }
         }
     }
@@ -427,7 +430,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .centered {
         display: flex;
         align-items: center;
@@ -437,5 +440,13 @@
 
     .no-padding-left {
         padding-left: 0px;
+    }
+
+    .marked {
+        white-space: pre-wrap;
+    }
+
+    >>> .marked p {
+        margin-bottom: 0px !important;
     }
 </style>
