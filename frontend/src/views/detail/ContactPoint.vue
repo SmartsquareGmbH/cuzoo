@@ -149,7 +149,7 @@
                             </v-chip>
                         </v-flex>
                         <v-flex xs12>
-                            <v-card-text class="headline text-xs-left no-padding-left"
+                            <v-card-text class="headline text-xs-left pl-0"
                                          v-if="contactPoint.comment">
                                 <v-tooltip top>
                                     <v-icon color="info" size="30px" slot="activator">comment</v-icon>
@@ -160,7 +160,8 @@
                             <v-divider class="mb-3" v-if="contactPoint.comment"/>
                         </v-flex>
                         <v-flex xs12>
-                            <span v-if="contactPoint.comment" v-html="markdownify(contactPoint.comment)"/>
+                            <span v-if="contactPoint.comment" class="marked"
+                                  v-html="markdownify(contactPoint.comment)"/>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -333,7 +334,7 @@
                 this.$router.push('/' + (this.companyId));
             },
             markdownify(value) {
-                return marked(value, {sanitize: true})
+                return marked(value, {sanitize: true}).trim();
             }
         }
     }
@@ -347,3 +348,9 @@
         link.click();
     }
 </script>
+
+<style scoped>
+    .marked {
+        white-space: pre-wrap;
+    }
+</style>

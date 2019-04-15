@@ -415,7 +415,7 @@
                 this.$router.push('/' + (this.companyId));
             },
             markdownify(value) {
-                return marked(value, {sanitize: true})
+                return marked(value, {sanitize: true}).trim();
             }
         }
     }
@@ -444,9 +444,5 @@
 
     .marked {
         white-space: pre-wrap;
-    }
-
-    >>> .marked p {
-        margin-bottom: 0px !important;
     }
 </style>

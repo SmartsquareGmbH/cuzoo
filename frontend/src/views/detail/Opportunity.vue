@@ -77,11 +77,7 @@
                                         {{ contactPoint.title }}
                                     </v-card-title>
                                     <v-container>
-                                        <v-layout>
-                                            <v-flex xs12>
-                                                <span class="marked" v-html="markdownify(contactPoint.comment)"/>
-                                            </v-flex>
-                                        </v-layout>
+                                        <span class="marked" v-html="markdownify(contactPoint.comment)"/>
                                     </v-container>
                                 </v-card>
                             </v-hover>
@@ -204,7 +200,7 @@
                 this.contactPointDialogState = true;
             },
             markdownify(value) {
-                return marked(value, {sanitize: true})
+                return marked(value, {sanitize: true}).trim();
             }
         }
     }
@@ -222,8 +218,20 @@
 </script>
 
 <style scoped>
+    .marked {
+        white-space: pre-wrap;
+    }
+
     >>> .marked p {
         margin-bottom: 0px !important;
     }
 
+    >>> .marked ul {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    >>> .marked ul li {
+        padding: 0px !important;
+    }
 </style>
