@@ -160,9 +160,7 @@
                             <v-divider class="mb-3" v-if="contactPoint.comment"/>
                         </v-flex>
                         <v-flex xs12>
-                            <span v-if="contactPoint.comment"
-                                  style="white-space: pre-wrap;">{{ contactPoint.comment }}
-                        </span>
+                            <span v-if="contactPoint.comment" v-html="markdownify(contactPoint.comment)"/>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -211,6 +209,7 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import api from '../../utils/http-common';
+    import marked from 'marked';
 
     import FileUploadDialog from '../../components/dialogs/FileUploadDialog.vue';
     import ContactPointDialog from "../../components/dialogs/ContactPointDialog.vue";
@@ -332,6 +331,9 @@
             },
             viewContactPoints() {
                 this.$router.push('/' + (this.companyId));
+            },
+            markdownify(value) {
+                return marked(value, {sanitize: true})
             }
         }
     }
