@@ -1,13 +1,12 @@
 <template>
-    <v-app :dark="dark">
+    <v-app dark>
         <v-content v-if="!authorized">
             <login></login>
         </v-content>
         <v-container v-if="authorized">
             <v-toolbar
                     class="elevation-0"
-                    :light="dark"
-                    :dark="!dark"
+                    light
                     clipped-left
                     fixed
                     app>
@@ -73,8 +72,7 @@
             </v-content>
             <v-footer
                     class="justify-center"
-                    :light="!dark"
-                    :dark="dark"
+                    dark
                     app>
                 &copy; 2019 Smartsquare GmbH
             </v-footer>
@@ -104,7 +102,6 @@
         },
         computed: {
             ...mapGetters({
-                dark: 'darkState',
                 authorized: 'authorized',
                 username: 'username',
                 password: 'password',
