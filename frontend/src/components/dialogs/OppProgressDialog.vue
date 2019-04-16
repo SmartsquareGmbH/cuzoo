@@ -16,7 +16,6 @@
                                 <v-flex xs8>
                                     <v-text-field
                                             v-model="editedOpportunity.title"
-                                            :rules="oppTitleRules"
                                             suffix="*"
                                             prepend-icon="title"
                                             label="Opportunity-Titel"
@@ -25,8 +24,6 @@
                                 <v-flex xs4>
                                     <v-combobox
                                             v-model="editedOpportunity.state"
-                                            :items="oppStatuses"
-                                            :rules="oppStatusRules"
                                             suffix="*"
                                             prepend-icon="bubble_chart"
                                             label="Status"
@@ -72,7 +69,8 @@
         props: ['value'],
         data() {
             return {
-                confirmDialog: false
+                confirmDialog: false,
+                valid: false
             }
         },
         computed: {

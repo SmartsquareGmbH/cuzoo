@@ -160,7 +160,7 @@
         },
         methods: {
             ...mapMutations(['storeEditedOpportunityDetails']),
-            ...mapActions(['getOpportunities']),
+            ...mapActions(['getOpportunities', 'getContacts']),
             getStateColor(state) {
                 switch (state) {
                     case 'Lead':
@@ -180,13 +180,17 @@
             },
             refreshData() {
                 this.loadingData = true;
-                this.getOpportunities()
-                    .then(() => {
-                        api.get(`point/get/opportunity/${this.opportunityId}`).then(res => {
-                            this.contactPoints = res.data.sort(compareContactPoints);
-                            this.loadingData = false;
-                        }).catch(err => alert(err));
-                    });
+                this.getContacts().then(() => {
+                    this.getOpportunities()
+                        .then(() => {
+                            api.get(`point/get/opportunity/${this.opportunityId}`)
+                                .then(res => {
+                                        this.contactPoints = res.data.sort(compareContactPoints);
+                                    }
+                                ).catch(err => alert(err))
+                                .then(() => this.loadingData = false);
+                        });
+                });
             },
             dateFormatted(date) {
                 return datefns.format(date, 'DD.MM.YYYY', {locale: de});
