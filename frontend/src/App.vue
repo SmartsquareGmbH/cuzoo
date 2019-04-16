@@ -137,7 +137,7 @@
 
 <style>
     html {
-        overflow-y: auto !important;
+        overflow-y: scroll !important;
     }
 
     .nav-header h1 {

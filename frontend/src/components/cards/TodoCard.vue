@@ -89,6 +89,12 @@
                         this.fullDescription = value;
                     }, 65);
                 }
+
+                setTimeout(() => {
+                    this.storeTodoWidgetListHeight({
+                        todoWidgetListHeight: document.getElementById('todo-widget').offsetHeight
+                    });
+                }, 200);
             }
         },
         methods: {

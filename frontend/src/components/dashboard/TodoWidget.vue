@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12>
+    <v-flex xs12 id="todo-widget">
         <v-card class="pl-0 mb-3"
                 elevation="6"
                 height="75">

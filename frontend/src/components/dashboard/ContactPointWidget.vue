@@ -36,7 +36,7 @@
                     </v-btn>
                     <contact-point-dialog
                             v-model="contactPointDialogState"
-                            :contactNames="this.contactNames"
+                            :contactNames="contactNames"
                             @refresh="refreshContactPoints()"/>
                 </v-flex>
                 <v-flex xs6>
@@ -56,10 +56,10 @@
             <v-layout row wrap>
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`max-height: ${(this.windowHeight - 394) / 2}px`">
+                        <div :style="`max-height: ${(windowHeight * 0.6) - todoWidgetHeight + 65}px`">
                             <v-flex xs12 class="pa-0">
                                 <contact-point-results
-                                        :search="this.searchContactPoints"
+                                        :search="searchContactPoints"
                                         :on-dashboard="true"/>
                             </v-flex>
                         </div>
@@ -86,6 +86,7 @@
         data: () => ({
             contactNames: [],
             contactPointDialogState: false,
+            todoWidgetHeight: 32,
             windowHeight: 0,
             searchContactPoints: '',
             settings: {
@@ -101,6 +102,8 @@
                 'contactPoints',
                 'selectedCompany',
                 'searchResults',
+                'todos',
+                'todoWidgetListHeight'
             ])
         },
         watch: {
@@ -108,10 +111,19 @@
                 if (!this.selectedCompany || this.companies.map(it => it.name).includes(this.selectedCompany)) {
                     this.searchContactPoints = this.selectedCompany;
                 }
+            },
+            todos() {
+                this.todoWidgetHeight = this.getTodoWidgetHeight();
+            },
+            todoWidgetListHeight() {
+                this.todoWidgetHeight = this.todoWidgetListHeight;
             }
         },
         beforeMount() {
             this.onResize();
+            this.$nextTick(() => {
+                this.todoWidgetHeight = this.getTodoWidgetHeight();
+            });
         },
         methods: {
             addContactPoint() {
@@ -128,6 +140,9 @@
             },
             refreshContactPoints() {
                 this.$parent.refreshData();
+            },
+            getTodoWidgetHeight() {
+                return document.getElementById('todo-widget').offsetHeight;
             }
         }
     }
