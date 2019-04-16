@@ -52,6 +52,7 @@
 </template>
 
 <script>
+    import {mapActions, mapMutations} from 'vuex'
     import api from '../../utils/http-common'
 
     import Chip from "../core/Chip.vue";
@@ -77,9 +78,6 @@
             },
             expirationDate() {
                 return datefns.format(this.todo.expiration, 'DD.MM.YY', {locale: de})
-            },
-            todoDescription() {
-                return this.todo.description;
             }
         },
         watch: {
@@ -94,9 +92,13 @@
             }
         },
         methods: {
+            ...mapActions(['spliceTodo']),
+            ...mapMutations(['storeTodoWidgetListHeight']),
             taskIsDone(todo) {
                 todo.done = true;
                 api.put(`todo/done/${this.todo.id}`);
+
+                this.spliceTodo(todo);
             },
             getUrgency(expiration) {
                 let differenceInHours = datefns.differenceInHours(expiration, new Date());
