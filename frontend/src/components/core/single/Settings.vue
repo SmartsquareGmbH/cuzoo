@@ -2,16 +2,17 @@
     <v-dialog :value="value" @input="$emit('input')" persistent max-width="750">
         <v-card>
             <v-card-title class="headline primary" primary-title>
-                Einstellungen
+                Einstellungen für {{ username }}
             </v-card-title>
-            <v-card-text class="text-xs-cent    er rimary--text">
-                <v-switch
-                        disabled
-                        color="primary"
-                        class="dm-switch pt-1 mt-3"
-                        label="Darkmode"
-                        v-model="darkmodeState"
-                        @change="storeState()"/>
+            <v-card-text class="text-xs-center primary--text">
+                <v-container>
+                        <v-text-field
+                                v-model="user.fullname" prepend-icon="person"
+                                name="username" label="Name"/>
+                        <v-text-field
+                                v-model="user.mail" prepend-icon="mail"
+                                name="password" label="E-Mail"/>
+                </v-container>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -24,30 +25,24 @@
 
 
 <script>
-    import {mapMutations} from 'vuex';
+    import {mapGetters, mapMutations, mapActions} from 'vuex';
 
     export default {
         props: ["value"],
-        data() {
-            return {
-                valid: false,
-                darkmodeState: true
-            }
+        data: () => ({
+            valid: false
+        }),
+        computed: {
+            ...mapGetters(['username', 'user']),
+        },
+        beforeMount() {
+            this.getUserInformation();
         },
         methods: {
-            ...mapMutations(["storeDarkState"]),
-            storeState() {
-                this.storeDarkState({darkState: this.darkmodeState});
-            },
+            ...mapActions(['getUserInformation']),
             closeSettings() {
                 this.$emit("input");
             }
         }
     }
 </script>
-
-<style scoped>
-    .dm-switch {
-        padding: 1em;
-    }
-</style>
