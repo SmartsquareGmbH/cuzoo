@@ -60,14 +60,14 @@
                     <td>{{ props.item.manager }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
-                                @click="editContact(props.item)"
+                                @click.stop="editContact(props.item)"
                                 size="22px"
                                 class="mr-0 mt-2">
                             edit
                         </v-icon>
                         <v-tooltip top>
                             <v-btn
-                                    @click="downloadInfo(props.item)"
+                                    @click.stop="downloadInfo(props.item)"
                                     color="transparent"
                                     class="mr-2"
                                     slot="activator"
@@ -79,7 +79,7 @@
                             <span>Export Informationen</span>
                         </v-tooltip>
                         <v-icon
-                                @click="openConfirmDialog(props.item)"
+                                @click.stop="openConfirmDialog(props.item)"
                                 size="22px"
                                 class="mr-2 mt-2"
                                 color="red lighten-1">
