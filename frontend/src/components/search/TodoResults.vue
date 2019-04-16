@@ -25,11 +25,6 @@
         data: () => ({
             searchTerms: [],
         }),
-        watch: {
-            searchResults() {
-                console.log(this.searchResults.map(it => it.description));
-            }
-        },
         computed: {
             ...mapGetters(['todos']),
             searchResults() {
