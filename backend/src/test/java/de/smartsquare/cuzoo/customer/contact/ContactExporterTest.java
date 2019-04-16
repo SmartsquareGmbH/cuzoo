@@ -42,7 +42,7 @@ public class ContactExporterTest {
     @Before
     public void initialize() {
         userRepository.deleteAll();
-        user = new User("Test", "Test", "");
+        user = new User("Test", "Test", "", "");
         userRepository.save(user);
 
         smartsquare = new Company("Smartsquare GmbH", "", "", "", "", "", "");

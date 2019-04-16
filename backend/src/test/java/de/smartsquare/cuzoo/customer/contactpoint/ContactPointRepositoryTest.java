@@ -32,7 +32,7 @@ public class ContactPointRepositoryTest {
     @Before
     public void initialize() {
         userRepository.deleteAll();
-        user = new User("user", "1234", "");
+        user = new User("user", "1234", "", "");
         userRepository.save(user);
 
         contact = new Contact("Darius Tack", "", "", "", "", "");

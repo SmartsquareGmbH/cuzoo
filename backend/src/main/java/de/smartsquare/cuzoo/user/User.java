@@ -24,6 +24,7 @@ public class User {
 
     private String password;
     private String fullname;
+    private String mail;
 
     @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -37,10 +38,11 @@ public class User {
     @JsonIgnore
     private List<Todo> todos;
 
-    public User(@NotNull @NotBlank final String username, String password, String fullname) {
+    public User(@NotNull @NotBlank final String username, String password, String fullname, String mail) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
+        this.mail = mail;
     }
 
     public User() {
@@ -76,6 +78,14 @@ public class User {
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public List<Contact> getContacts() {

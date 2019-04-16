@@ -62,7 +62,7 @@ public class AttachmentControllerTest {
         Path path = new File(uri).toPath();
 
         userRepository.deleteAll();
-        user = new User("User", "", "");
+        user = new User("User", "", "", "");
         userRepository.save(user);
 
         contact = new Contact("Contact", "", "", "", "", "");

@@ -43,7 +43,7 @@ public class TodoControllerTest {
     @Before
     public void initialize() {
         userRepository.deleteAll();
-        creator = new User("user", "", "");
+        creator = new User("user", "", "", "");
         userRepository.save(creator);
 
         company = new Company("Smartsquare", "", "", "", "", "", "");

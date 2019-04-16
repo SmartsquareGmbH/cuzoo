@@ -56,7 +56,7 @@ public class ContactPointControllerTest {
     @Before
     public void initialize() {
         userRepository.deleteAll();
-        user = new User("user", "", "");
+        user = new User("user", "", "", "");
         userRepository.save(user);
 
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
