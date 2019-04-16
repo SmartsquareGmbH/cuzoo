@@ -10,6 +10,7 @@
                         <v-layout wrap>
                             <v-flex xs6>
                                 <v-text-field
+                                        ref="nameField"
                                         v-model="editedContact.name"
                                         label="Vor- und Nachname"
                                         prepend-icon="person"
@@ -202,15 +203,19 @@
                 this.editedContact.manager = this.username;
             },
             submit() {
-                if (this.companyName) {
-                    if (this.companyNames.includes(this.companyName)) {
-                        this.submitContact();
+                this.$refs.nameField.focus();
+
+                setTimeout(() => {
+                    if (this.companyName) {
+                        if (this.companyNames.includes(this.companyName)) {
+                            this.submitContact();
+                        } else {
+                            this.confirmDialogState = true;
+                        }
                     } else {
-                        this.confirmDialogState = true;
+                        this.submitContact();
                     }
-                } else {
-                    this.submitContact();
-                }
+                }, 10);
             },
             submitContact() {
                 let maybeCompany = this.companyName ? `?companyName=${this.encodeString(this.companyName)}` : '';
