@@ -353,4 +353,8 @@
     .marked {
         white-space: pre-wrap;
     }
+
+    .marked > p {
+        margin-bottom: 0px !important;
+    }
 </style>
