@@ -1,56 +1,54 @@
 <template>
-    <v-fade-transition>
-        <v-hover>
-            <v-card slot-scope="{ hover }"
-                    :color="`${hover || expandMenu ? '#616161' : ''}`"
-                    class="clickable elevation-0"
-                    @click="expandMenu = !expandMenu">
-                <v-card-title class="white--text subheading text-xs-left low-padding-bottom">
-                    <v-layout row wrap>
-                        <v-flex xs8>
-                            <p :class="`mb-0 ${fullDescription? `` : `text-truncate`}`">
-                                {{ todo.description }}
-                            </p>
-                        </v-flex>
-                        <v-flex xs4 class="text-xs-right">
-                            <v-icon :style="`transform: rotate(${hover ? 0 : 0}deg)`"
-                                    class="mr-1"
-                                    :color="`${dateIsExpired(todo.expiration) ? 'error' : 'white'}`">
-                                timer
-                            </v-icon>
-                            <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
-                                {{ distanceInWords }}
+    <v-hover>
+        <v-card slot-scope="{ hover }"
+                :color="`${hover || expandMenu ? '#616161' : ''}`"
+                class="clickable elevation-0"
+                @click="expandMenu = !expandMenu">
+            <v-card-title class="white--text subheading text-xs-left low-padding-bottom">
+                <v-layout row wrap>
+                    <v-flex xs8>
+                        <p :class="`mb-0 ${fullDescription? `` : `text-truncate`}`">
+                            {{ todo.description }}
+                        </p>
+                    </v-flex>
+                    <v-flex xs4 class="text-xs-right">
+                        <v-icon :style="`transform: rotate(${hover ? 0 : 0}deg)`"
+                                class="mr-1"
+                                :color="`${dateIsExpired(todo.expiration) ? 'error' : 'white'}`">
+                            timer
+                        </v-icon>
+                        <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
+                            {{ distanceInWords }}
+                        </chip>
+                    </v-flex>
+                </v-layout>
+            </v-card-title>
+            <v-expand-transition>
+                <div v-if="expandMenu" color="success">
+                    <v-card-title class="title font-weight-light todo-footer">
+                        <v-icon class="mr-1">business</v-icon>
+                        <v-tooltip top>
+                            <chip slot="activator"
+                                  font-color="primary">
+                                {{ todo.company.name | truncate(30) }}
                             </chip>
-                        </v-flex>
-                    </v-layout>
-                </v-card-title>
-                <v-expand-transition>
-                    <div v-if="expandMenu" color="success">
-                        <v-card-title class="title font-weight-light todo-footer">
-                            <v-icon class="mr-1">business</v-icon>
-                            <v-tooltip top>
-                                <chip slot="activator"
-                                      font-color="primary">
-                                    {{ todo.company.name | truncate(30) }}
-                                </chip>
-                                <span class="title font-weight-light">{{ todo.company.name }}</span>
-                            </v-tooltip>
-                            <v-icon class="ml-1">person</v-icon>
-                            <chip font-color="primary">
-                                {{ todo.creator }}
-                            </chip>
-                            <v-spacer/>
-                            <v-btn small color="success"
-                                   @click="taskIsDone(todo)">
-                                <v-icon size="24px" class="ml-0">done</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                    </div>
-                </v-expand-transition>
-                <slot/>
-            </v-card>
-        </v-hover>
-    </v-fade-transition>
+                            <span class="title font-weight-light">{{ todo.company.name }}</span>
+                        </v-tooltip>
+                        <v-icon class="ml-1">person</v-icon>
+                        <chip font-color="primary">
+                            {{ todo.creator }}
+                        </chip>
+                        <v-spacer/>
+                        <v-btn small color="success"
+                               @click="taskIsDone(todo)">
+                            <v-icon size="24px" class="ml-0">done</v-icon>
+                        </v-btn>
+                    </v-card-title>
+                </div>
+            </v-expand-transition>
+            <slot/>
+        </v-card>
+    </v-hover>
 </template>
 
 <script>
