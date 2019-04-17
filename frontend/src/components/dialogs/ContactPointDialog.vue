@@ -305,12 +305,14 @@
                 }, 300)
             },
             submitContactPoint() {
-                api.put(`point/submit/${this.editedContactPoint.contact.name}`, {
+                let contact = this.contacts.find(it => it.name.includes(this.editedContactPoint.contact.name));
+
+                api.put(`point/submit/${contact.id}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment,
-                    opportunityState: this.editedOpportunity.state,
+                    opportunityState: this.getOpportunityState(),
                     types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels,
                     creator: this.username
@@ -378,6 +380,12 @@
                     editedIndex: opp ? opp.id : -1,
                     editedOpportunity: Object.assign({}, opp ? opp : this.defaultOpportunity)
                 });
+            },
+            getOpportunityState() {
+                if (this.opportunityMenu || this.opportunity) return this.editedOpportunity.state;
+                if (this.editedContactPoint.id > 0) return this.editedContactPoint.opportunityState;
+
+                return "Lead";
             },
             getStateColor(state) {
                 switch (state) {
