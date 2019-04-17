@@ -1,17 +1,19 @@
 <template>
-    <v-layout row wrap>
+    <v-layout row wrap v-resize="onResize">
         <v-flex xs4>
             <number-card
                     color="error"
                     title="Leads"
                     :number="leads.length"/>
             <v-layout row wrap>
-                <v-flex xs12>
-                    <opportunity-card
-                            v-bind:key="opportunity.id"
-                            v-for="opportunity in leads"
-                            :opportunity="opportunity"/>
-                </v-flex>
+                <perfect-scrollbar :options="settings">
+                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                        <opportunity-card
+                                v-bind:key="opportunity.id"
+                                v-for="opportunity in leads"
+                                :opportunity="opportunity"/>
+                    </v-flex>
+                </perfect-scrollbar>
             </v-layout>
         </v-flex>
         <v-flex xs4>
@@ -20,12 +22,14 @@
                     title="Prospects"
                     :number="prospects.length"/>
             <v-layout row wrap>
-                <v-flex xs12>
-                    <opportunity-card
-                            v-bind:key="opportunity.id"
-                            v-for="opportunity in prospects"
-                            :opportunity="opportunity"/>
-                </v-flex>
+                <perfect-scrollbar :options="settings">
+                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                        <opportunity-card
+                                v-bind:key="opportunity.id"
+                                v-for="opportunity in prospects"
+                                :opportunity="opportunity"/>
+                    </v-flex>
+                </perfect-scrollbar>
             </v-layout>
         </v-flex>
         <v-flex xs4>
@@ -34,12 +38,14 @@
                     title="Quotes"
                     :number="quotes.length"/>
             <v-layout row wrap>
-                <v-flex xs12>
-                    <opportunity-card
-                            v-bind:key="opportunity.id"
-                            v-for="opportunity in quotes"
-                            :opportunity="opportunity"/>
-                </v-flex>
+                <perfect-scrollbar :options="settings">
+                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                        <opportunity-card
+                                v-bind:key="opportunity.id"
+                                v-for="opportunity in quotes"
+                                :opportunity="opportunity"/>
+                    </v-flex>
+                </perfect-scrollbar>
             </v-layout>
         </v-flex>
     </v-layout>
