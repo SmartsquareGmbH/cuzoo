@@ -348,7 +348,7 @@
                 this.editedContactPoint.types = types;
             },
             getOpportunities(companyId) {
-                api.get(`opportunity/get/${companyId}`).then(res => {
+                api.get(`opportunity/get/list/${companyId}`).then(res => {
                     this.companyOpportunities = res.data
                         .filter(it => it.state !== 'Win' && it.state !== 'Lose');
                 });

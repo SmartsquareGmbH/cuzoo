@@ -85,7 +85,7 @@ public class OpportunityController {
         }
     }
 
-    @GetMapping("/get/{companyId}")
+    @GetMapping("/get/list/{companyId}")
     public final ResponseEntity<?> getOpportunitiesOfCompany(@PathVariable Long companyId) {
         if (!companyRepository.existsById(companyId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dieses Unternehmen wurde nicht gefunden!");
