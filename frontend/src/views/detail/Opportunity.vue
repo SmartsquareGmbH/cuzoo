@@ -74,15 +74,18 @@
                                         class="clickable"
                                         @click="viewContactPoint(contactPoint)"
                                         :color="`${hover ? '#616161' : ''}`">
-                                    <v-card-title
-                                            style="background-color: #616161;"
-                                            :class="`${getStateColor(contactPoint.opportunityState)}
+                                    <v-card-title style="background-color: #616161;"
+                                                  :class="`${getStateColor(contactPoint.opportunityState)}
                                         headline white--text font-weight-light`">
                                         {{ contactPoint.title }}
                                     </v-card-title>
-                                    <v-container>
-                                        <span class="marked" v-html="markdownify(contactPoint.comment)"/>
-                                    </v-container>
+                                    <v-tooltip top max-width="750">
+                                        <v-container slot="activator">
+                                        <span class="marked"
+                                              v-html="truncatedDescription(contactPoint.comment)"/>
+                                        </v-container>
+                                        <span v-html="markdownify(contactPoint.comment)"/>
+                                    </v-tooltip>
                                 </v-card>
                             </v-hover>
                         </v-timeline-item>
@@ -228,6 +231,12 @@
             },
             markdownify(value) {
                 return marked(value, {sanitize: true}).trim();
+            },
+            truncatedDescription(value) {
+                let markedTruncatedValue = this.markdownify(value).substr(0, 300);
+                let lastIndexOfSpace = markedTruncatedValue.lastIndexOf(' ');
+
+                return this.markdownify(value).substr(0, lastIndexOfSpace) + "...";
             }
         }
     }
@@ -260,5 +269,10 @@
 
     >>> .marked ul li {
         padding: 0px !important;
+    }
+
+    .menuable__content__active {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
     }
 </style>
