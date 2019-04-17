@@ -36,7 +36,7 @@
                     <v-divider/>
                 </v-flex>
                 <v-flex xs4 class="pt-4">
-                    <p :class="`display-1 ${getStateColor(opportunity.state)}--text`">
+                    <p :class="`display-1 ${getStateColor(opportunity.state)}--text mr-5`">
                         {{ opportunity.title }}
                     </p>
                     <v-icon>business</v-icon>
