@@ -56,13 +56,12 @@
             <v-layout row wrap v-resize="onResize">
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`height: ${windowHeight / 2.5725}px`">
-                            <v-flex xs12 class="pa-0">
-                                <contact-point-results
-                                        :search="searchContactPoints"
-                                        :on-dashboard="true"/>
-                            </v-flex>
-                        </div>
+                        <v-flex xs12 class="pa-0"
+                                :style="`height: ${windowHeight / 2.5725}px`">
+                            <contact-point-results
+                                    :search="searchContactPoints"
+                                    :on-dashboard="true"/>
+                        </v-flex>
                     </perfect-scrollbar>
                 </div>
             </v-layout>

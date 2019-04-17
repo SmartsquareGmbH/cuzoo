@@ -56,12 +56,11 @@
             <v-layout row wrap v-resize="onResize">
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`height: ${this.windowHeight / 5.54}px`">
-                            <v-flex xs12 class="todo-results">
-                                <todo-results
-                                        :search="this.searchTodos"/>
-                            </v-flex>
-                        </div>
+                        <v-flex xs12 class="todo-results"
+                                :style="`height: ${this.windowHeight / 5.54}px`">
+                            <todo-results
+                                    :search="this.searchTodos"/>
+                        </v-flex>
                     </perfect-scrollbar>
                 </div>
             </v-layout>
