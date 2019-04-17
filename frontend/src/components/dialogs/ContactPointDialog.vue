@@ -280,8 +280,9 @@
                 storeOpportunityDetails: 'storeEditedOpportunityDetails',
             }),
             clearDialog() {
+                let tempContactName = this.editedContactPoint.contact.name;
                 this.$refs.form.reset();
-                this.editedContactPoint.contact.name = '';
+                this.editedContactPoint.contact.name = tempContactName;
 
                 setTimeout(() => {
                     this.date = new Date().toISOString().substr(0, 10);
@@ -291,7 +292,6 @@
             },
             closeDialog() {
                 this.$emit('input');
-                this.editedContactPoint.contact.name = '';
 
                 setTimeout(() => {
                     this.storeContactPointDetails({
