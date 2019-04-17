@@ -33,11 +33,23 @@
                             <v-flex xs12>
                                 <v-combobox
                                         v-model="companyName"
+                                        :search-input.sync="companyNameEntered"
                                         :disabled="!this.companyFieldEnabled"
                                         :items="this.companyNames"
                                         label="Unternehmen"
                                         prepend-icon="business"
-                                        hide-details/>
+                                        hide-details>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content max-height="700">
+                                                <v-list-tile-title>
+                                                    Das Unternehmen "<strong class="primary--text">{{ companyNameEntered }}</strong>"
+                                                    wurde gefunden. Beim <kbd>SPEICHERN</kbd> kann dies angelegt werden.
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                </v-combobox>
                             </v-flex>
                             <v-flex xs6>
                                 <v-text-field
@@ -123,6 +135,7 @@
                     v => this.usernames.includes(v) || "Der Manager existiert nicht!"
                 ],
                 companyName: "",
+                companyNameEntered: '',
                 defaultContact: {
                     value: false,
                     id: 0,
