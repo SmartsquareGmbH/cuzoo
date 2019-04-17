@@ -233,10 +233,11 @@
                 return marked(value, {sanitize: true}).trim();
             },
             truncatedDescription(value) {
-                let markedTruncatedValue = this.markdownify(value).substr(0, 300);
-                let lastIndexOfSpace = markedTruncatedValue.lastIndexOf(' ');
+                let markedValue = this.markdownify(value);
+                if (markedValue.length < 300) return markedValue;
 
-                return this.markdownify(value).substr(0, lastIndexOfSpace) + "...";
+                let lastIndexOfSpace = markedValue.substr(0, 300).lastIndexOf(' ');
+                return markedValue.substr(0, lastIndexOfSpace) + "...";
             }
         }
     }
