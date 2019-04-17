@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 id="todo-widget">
+    <v-flex xs12>
         <v-card class="pl-0 mb-3"
                 elevation="6"
                 height="75">
@@ -53,10 +53,10 @@
             </v-layout>
         </v-card>
         <v-card elevation="6">
-            <v-layout row wrap>
+            <v-layout row wrap v-resize="onResize">
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`max-height: ${(this.windowHeight - 394) / 2}px`">
+                        <div :style="`height: ${this.windowHeight / 5.54}px`">
                             <v-flex xs12 class="todo-results">
                                 <todo-results
                                         :search="this.searchTodos"/>

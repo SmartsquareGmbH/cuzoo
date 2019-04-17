@@ -53,10 +53,10 @@
             </v-layout>
         </v-card>
         <v-card elevation="6">
-            <v-layout row wrap>
+            <v-layout row wrap v-resize="onResize">
                 <div class="dash">
                     <perfect-scrollbar :options="settings">
-                        <div :style="`max-height: ${(windowHeight * 0.6) - todoWidgetHeight + 65}px`">
+                        <div :style="`height: ${windowHeight / 2.5725}px`">
                             <v-flex xs12 class="pa-0">
                                 <contact-point-results
                                         :search="searchContactPoints"
@@ -86,7 +86,6 @@
         data: () => ({
             contactNames: [],
             contactPointDialogState: false,
-            todoWidgetHeight: 32,
             windowHeight: 0,
             searchContactPoints: '',
             settings: {
@@ -101,9 +100,7 @@
                 'contacts',
                 'contactPoints',
                 'selectedCompany',
-                'searchResults',
-                'todos',
-                'todoWidgetListHeight'
+                'searchResults'
             ])
         },
         watch: {
@@ -112,18 +109,9 @@
                     this.searchContactPoints = this.selectedCompany;
                 }
             },
-            todos() {
-                this.todoWidgetHeight = this.getTodoWidgetHeight();
-            },
-            todoWidgetListHeight() {
-                this.todoWidgetHeight = this.todoWidgetListHeight;
-            }
         },
         beforeMount() {
             this.onResize();
-            this.$nextTick(() => {
-                this.todoWidgetHeight = this.getTodoWidgetHeight();
-            });
         },
         methods: {
             addContactPoint() {
@@ -140,9 +128,6 @@
             },
             refreshContactPoints() {
                 this.$parent.refreshData();
-            },
-            getTodoWidgetHeight() {
-                return document.getElementById('todo-widget').offsetHeight;
             }
         }
     }
