@@ -44,7 +44,7 @@
                                             <v-list-tile-content max-height="700">
                                                 <v-list-tile-title>
                                                     Das Unternehmen "<strong class="primary--text">{{ companyNameEntered }}</strong>"
-                                                    wurde gefunden. Beim <kbd>SPEICHERN</kbd> kann dies angelegt werden.
+                                                    wurde nicht gefunden. Beim <kbd>SPEICHERN</kbd> kann dies angelegt werden.
                                                 </v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
