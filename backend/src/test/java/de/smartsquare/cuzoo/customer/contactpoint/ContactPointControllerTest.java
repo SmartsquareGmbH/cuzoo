@@ -90,7 +90,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_contact_point_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -130,7 +130,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_non_existing_labels_are_getting_registered_by_submitting_contact_point() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -158,7 +158,7 @@ public class ContactPointControllerTest {
     @Transactional
     public void that_existing_labels_are_getting_assigned() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -191,7 +191,7 @@ public class ContactPointControllerTest {
                         .content(getOutdatedContactPointInJson());
 
         MockHttpServletRequestBuilder updatedBuilder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")

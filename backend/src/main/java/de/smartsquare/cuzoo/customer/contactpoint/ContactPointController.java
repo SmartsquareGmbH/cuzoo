@@ -44,12 +44,12 @@ public class ContactPointController {
         this.labelRepository = labelRepository;
     }
 
-    @PutMapping("/submit/{contactName}")
-    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactName") String contactName,
+    @PutMapping("/submit/{contactId}")
+    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactId") Long contactName,
                                                       @RequestBody @Valid ContactPointForm contactPointForm,
                                                       BindingResult bindingResult) {
         Optional<User> creator = userRepository.findMaybeByUsername(contactPointForm.getCreator());
-        Optional<Contact> contact = contactRepository.findMaybeByName(contactName);
+        Optional<Contact> contact = contactRepository.findMaybeById(contactName);
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Kontaktpunkte benötigt einen Titel und ein Datum!");

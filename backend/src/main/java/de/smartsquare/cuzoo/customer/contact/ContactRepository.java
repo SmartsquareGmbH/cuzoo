@@ -11,5 +11,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 
     Optional<Contact> findMaybeByName(String name);
 
+    Optional<Contact> findMaybeById(Long id);
+
     boolean existsByName(String contactName);
 }
