@@ -210,7 +210,7 @@
                 });
 
                 this.contactNames = this.contacts
-                    .filter(it => it.company.name.includes(this.companyName))
+                    .filter(it => it.company && it.company.name.includes(this.companyName))
                     .map(it => it.name)
                     .sort();
                 this.contactPointDialogState = true;
