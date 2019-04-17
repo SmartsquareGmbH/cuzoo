@@ -12,8 +12,8 @@ import java.util.List;
 public interface ContactPointRepository extends JpaRepository<ContactPoint, Long> {
 
     @Query("SELECT DISTINCT c.opportunity FROM ContactPoint c " +
-            "WHERE c.contact.company.name LIKE :companyName")
-    List<Opportunity> findAllOpportunitiesOfCompany(@Param("companyName") String companyName);
+            "WHERE c.contact.company.id = :companyId")
+    List<Opportunity> findAllOpportunitiesOfCompany(@Param("companyId") Long companyId);
 
 
     @Query("SELECT c FROM ContactPoint c " +

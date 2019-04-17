@@ -1,5 +1,6 @@
 package de.smartsquare.cuzoo.customer.opportunity;
 
+import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,15 @@ import java.util.Optional;
 public class OpportunityController {
     private final OpportunityRepository opportunityRepository;
     private final ContactPointRepository contactPointRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
     public OpportunityController(final ContactPointRepository contactPointRepository,
-                                 final OpportunityRepository opportunityRepository) {
+                                 final OpportunityRepository opportunityRepository,
+                                 final CompanyRepository companyRepository) {
         this.opportunityRepository = opportunityRepository;
         this.contactPointRepository = contactPointRepository;
+        this.companyRepository = companyRepository;
     }
 
     @PutMapping("/submit/{contactPointId}")
@@ -72,6 +76,7 @@ public class OpportunityController {
         if (!opportunityRepository.existsById(opportunityId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diese Opportunity wurde nicht gefunden!");
         }
+
         try {
             opportunityRepository.deleteById(opportunityId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -80,9 +85,13 @@ public class OpportunityController {
         }
     }
 
-    @GetMapping("/get/{companyName}")
-    public final ResponseEntity<List<Opportunity>> getOpportunitiesOfCompany(@PathVariable String companyName) {
-        return ResponseEntity.ok(contactPointRepository.findAllOpportunitiesOfCompany(companyName));
+    @GetMapping("/get/{companyId}")
+    public final ResponseEntity<?> getOpportunitiesOfCompany(@PathVariable Long companyId) {
+        if (!companyRepository.existsById(companyId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dieses Unternehmen wurde nicht gefunden!");
+        }
+
+        return ResponseEntity.ok(contactPointRepository.findAllOpportunitiesOfCompany(companyId));
     }
 
     @GetMapping("/get")
