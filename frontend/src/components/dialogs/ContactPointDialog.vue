@@ -238,7 +238,7 @@
 
                     if (value) {
                         let contact = this.contacts.find(it => it.name === value);
-                        this.getOpportunities(contact.company.name);
+                        this.getOpportunities(contact.company.id);
                     } else {
                         this.newOpportunity = true;
                         this.companyOpportunities = [];
@@ -345,8 +345,8 @@
             setContactPointTypes(types) {
                 this.editedContactPoint.types = types;
             },
-            getOpportunities(companyName) {
-                api.get(`opportunity/get/${companyName}`).then(res => {
+            getOpportunities(companyId) {
+                api.get(`opportunity/get/${companyId}`).then(res => {
                     this.companyOpportunities = res.data
                         .filter(it => it.state !== 'Win' && it.state !== 'Lose');
                 });
