@@ -92,12 +92,9 @@
             }
         },
         methods: {
-            ...mapActions(['spliceTodo']),
             taskIsDone(todo) {
                 todo.done = true;
                 api.put(`todo/done/${this.todo.id}`);
-
-                this.spliceTodo(todo);
             },
             getUrgency(expiration) {
                 let differenceInHours = datefns.differenceInHours(expiration, new Date());

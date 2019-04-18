@@ -27,9 +27,6 @@ export default {
         storeEditedTodoDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
                 state.editedTodo = payload.editedTodo
-        },
-        spliceTodo(state, payload) {
-            state.todos.splice(state.todos.indexOf(payload.todos))
         }
     },
     actions: {
@@ -48,10 +45,6 @@ export default {
             }).catch(error => {
                 console.log(error)
             });
-        },
-        spliceTodo({state}, todo) {
-            let index = state.todos.indexOf(todo);
-            state.todos = state.todos.splice(index);
         }
     }
 }
