@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="searchResults.length > 0">
         <contact-point-card
                 class="contact-point-results"
                 v-bind:key="contactPoint.id"
@@ -8,6 +8,9 @@
                 :search="true">
             <v-divider v-if="index !== searchResults.length -1"/>
         </contact-point-card>
+    </div>
+    <div v-else class="text-xs-center pt-4">
+        <span class="error--text font-italic subheading">Keine Kontaktpunkte gefunden</span>
     </div>
 </template>
 

@@ -8,7 +8,7 @@
             <v-divider v-if="index !== searchResults.length -1"/>
         </todo-card>
     </v-flex>
-    <v-flex v-else text-xs-center class="my-2">
+    <v-flex v-else text-xs-center class="pt-4">
         <span class="error--text font-italic subheading">Keine TODOs gefunden</span>
     </v-flex>
 </template>
