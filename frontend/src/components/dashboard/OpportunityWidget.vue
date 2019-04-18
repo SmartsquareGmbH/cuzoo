@@ -2,48 +2,57 @@
     <v-layout row wrap v-resize="onResize">
         <v-flex xs4>
             <number-card
+                    class="opp-column-header"
                     color="error"
                     title="Leads"
                     :number="leads.length"/>
             <v-layout row wrap>
                 <perfect-scrollbar :options="settings">
-                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                    <v-flex xs12 class="pt-0"
+                            :style="`height: ${windowHeight * 0.70625}px`">
                         <opportunity-card
                                 v-bind:key="opportunity.id"
-                                v-for="opportunity in leads"
-                                :opportunity="opportunity"/>
+                                v-for="(opportunity, index) in leads"
+                                :opportunity="opportunity"
+                                :class="`mb-${index === leads.length -1 ? 0 : 2 }`"/>
                     </v-flex>
                 </perfect-scrollbar>
             </v-layout>
         </v-flex>
         <v-flex xs4>
             <number-card
+                    class="opp-column-header"
                     color="warning"
                     title="Prospects"
                     :number="prospects.length"/>
             <v-layout row wrap>
                 <perfect-scrollbar :options="settings">
-                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                    <v-flex xs12 class="pt-0"
+                            :style="`height: ${windowHeight * 0.70625}px`">
                         <opportunity-card
                                 v-bind:key="opportunity.id"
-                                v-for="opportunity in prospects"
-                                :opportunity="opportunity"/>
+                                v-for="(opportunity, index) in prospects"
+                                :opportunity="opportunity"
+                                :class="`mb-${index === prospects.length -1 ? 0 : 2 }`"/>
                     </v-flex>
                 </perfect-scrollbar>
             </v-layout>
         </v-flex>
         <v-flex xs4>
             <number-card
+                    class="opp-column-header"
                     color="success"
                     title="Quotes"
                     :number="quotes.length"/>
             <v-layout row wrap>
                 <perfect-scrollbar :options="settings">
-                    <v-flex xs12 :style="`height: ${windowHeight * 0.7125}px`">
+                    <v-flex xs12 class="pt-0"
+                            :style="`height: ${windowHeight * 0.70625}px`">
                         <opportunity-card
                                 v-bind:key="opportunity.id"
-                                v-for="opportunity in quotes"
-                                :opportunity="opportunity"/>
+                                v-for="(opportunity, index) in quotes"
+                                :opportunity="opportunity"
+                                :class="`mb-${index === quotes.length -1 ? 0 : 2 }`"/>
                     </v-flex>
                 </perfect-scrollbar>
             </v-layout>
@@ -97,12 +106,6 @@
 
 
 <style scoped>
-    .dash {
-        height: 100%;
-        width: 100%;
-        position: relative;
-    }
-
     .fade-out-gradient {
         position: absolute;
         bottom: 0;
@@ -115,8 +118,8 @@
         background-image: linear-gradient(to bottom, transparent, #333333);
     }
 
-    .opp-dash {
-        padding: 5px !important;
+    .opp-column-header {
+        margin-bottom: 12px !important;
     }
 
 </style>
