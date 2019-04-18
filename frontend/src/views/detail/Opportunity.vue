@@ -14,16 +14,16 @@
                             <v-menu bottom left offset-y>
                                 <v-btn slot="activator" flat small>
                                     <v-icon size="22px" class="mr-1" dark>add</v-icon>
-                                    Fortschritt hinzufügen
+                                    Fortschritt
                                 </v-btn>
                                 <v-list class="py-0">
                                     <v-list-tile @click="addProgress()">
                                         <v-icon color="primary" class="mr-2">timeline</v-icon>
-                                        <v-list-tile-title>Status</v-list-tile-title>
+                                        <v-list-tile-title>Status ändern</v-list-tile-title>
                                     </v-list-tile>
                                     <v-list-tile @click="addContactPoint()">
                                         <v-icon color="light-green accent-2" class="mr-2">forum</v-icon>
-                                        <v-list-tile-title>Kontaktpunkt</v-list-tile-title>
+                                        <v-list-tile-title>Kontaktpunkt hinzufügen</v-list-tile-title>
                                     </v-list-tile>
                                 </v-list>
                             </v-menu>
@@ -79,7 +79,7 @@
                                         headline white--text font-weight-light`">
                                         {{ contactPoint.title }}
                                     </v-card-title>
-                                    <v-tooltip top max-width="750">
+                                    <v-tooltip top max-width="750" v-show="contactPoint.comment">
                                         <v-container slot="activator">
                                         <span class="marked"
                                               v-html="truncatedDescription(contactPoint.comment)"/>
