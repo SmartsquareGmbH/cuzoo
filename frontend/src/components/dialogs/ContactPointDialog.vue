@@ -98,7 +98,7 @@
                                                     :items="oppStatuses"
                                                     :rules="oppStatusRules"
                                                     suffix="*"
-                                                    prepend-icon="timeline"
+                                                    prepend-icon="bubble_chart"
                                                     label="Status"
                                                     hide-details/>
                                         </v-flex>
