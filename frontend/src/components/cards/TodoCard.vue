@@ -89,17 +89,10 @@
                         this.fullDescription = value;
                     }, 65);
                 }
-
-                setTimeout(() => {
-                    this.storeTodoWidgetListHeight({
-                        todoWidgetListHeight: document.getElementById('todo-widget').offsetHeight
-                    });
-                }, 200);
             }
         },
         methods: {
             ...mapActions(['spliceTodo']),
-            ...mapMutations(['storeTodoWidgetListHeight']),
             taskIsDone(todo) {
                 todo.done = true;
                 api.put(`todo/done/${this.todo.id}`);
