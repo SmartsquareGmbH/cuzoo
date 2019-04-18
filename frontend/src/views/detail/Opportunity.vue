@@ -102,7 +102,8 @@
             </v-layout>
         </v-fade-transition>
         <opp-progress-dialog
-                v-model="oppProgressDialogState"/>
+                v-model="oppProgressDialogState"
+                @refresh="refreshData()"/>
         <contact-point-dialog
                 v-model="contactPointDialogState"
                 :contactNames="contactNames"
