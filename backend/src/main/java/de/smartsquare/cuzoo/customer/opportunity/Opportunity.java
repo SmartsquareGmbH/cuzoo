@@ -25,9 +25,11 @@ public class Opportunity {
     @NotBlank
     private String state;
 
+    private String description;
     private Date lastProgress;
 
-    private String description;
+    @ElementCollection(targetClass = Opportunity.Progress.class, fetch = FetchType.LAZY)
+    private List<Progress> progress;
 
     @OneToMany(mappedBy = "opportunity", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -39,10 +41,12 @@ public class Opportunity {
         this.description = description;
 
         this.contactPoints = new ArrayList<>();
+        this.progress = new ArrayList<>();
     }
 
     public Opportunity() {
         this.contactPoints = new ArrayList<>();
+        this.progress = new ArrayList<>();
     }
 
     public Long getId() {
@@ -95,5 +99,41 @@ public class Opportunity {
 
     public void addContactPoint(ContactPoint contactPoint) {
         this.contactPoints.add(contactPoint);
+    }
+
+    public List<Progress> getProgress() {
+        return progress;
+    }
+
+    public void setProgress(List<Progress> progress) {
+        this.progress = progress;
+    }
+
+    public void addProgress(Progress progress) {
+        this.progress.add(progress);
+    }
+
+    @Embeddable
+    public static class Progress {
+
+        @NotNull @NotBlank
+        private String opportunityState;
+
+        private Date date;
+        private String progressText;
+
+        public Progress() { }
+
+        Progress(String progressText, @NotNull @NotBlank String opportunityState) {
+            this.progressText = progressText;
+            this.opportunityState = opportunityState;
+            this.date = new Date();
+        }
+
+        String getOpportunityState() { return this.opportunityState; }
+
+        String getProgressText() { return this.progressText; }
+
+        Date getDate() { return this.date; }
     }
 }
