@@ -44,7 +44,6 @@ public class OpportunityController {
         }
 
         ContactPoint contactPoint = maybeContactPoint.get();
-
         Long opportunityIdBeforeSaving = opportunity.getId();
 
         try {
@@ -60,6 +59,40 @@ public class OpportunityController {
             );
 
             opportunityRepository.save(savedOpportunity);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (opportunityIdBeforeSaving < 1) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/submit/progress/{opportunityId}")
+    public final ResponseEntity<?> submitOpportunityProgress(@PathVariable("opportunityId") Long opportunityId,
+                                                             @RequestBody @Valid ProgressForm progressForm,
+                                                             BindingResult bindingResult) {
+        Optional<Opportunity> maybeOpportunity = opportunityRepository.findById(opportunityId);
+
+        System.out.println(progressForm.getProgressText() + progressForm.getOpportunityState());
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Fortschritte von Opportunities benötigen einen Status");
+        }
+        if (!maybeOpportunity.isPresent()) {
+            return ResponseEntity.badRequest().body("Diese Opportunity existiert nicht!");
+        }
+
+        Opportunity opportunity = maybeOpportunity.get();
+        Opportunity.Progress progress = new Opportunity.Progress(progressForm.getProgressText(), progressForm.getOpportunityState());
+
+        Long opportunityIdBeforeSaving = opportunity.getId();
+
+        try {
+            opportunity.addProgress(progress);
+            opportunityRepository.save(opportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
