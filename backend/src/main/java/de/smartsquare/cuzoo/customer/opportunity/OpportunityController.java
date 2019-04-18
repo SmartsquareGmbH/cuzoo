@@ -92,6 +92,7 @@ public class OpportunityController {
 
         try {
             opportunity.addProgress(progress);
+            opportunity.setState(progress.getOpportunityState());
             opportunityRepository.save(opportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
