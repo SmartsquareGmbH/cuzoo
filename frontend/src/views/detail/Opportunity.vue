@@ -144,7 +144,10 @@
                 oppProgressDialogState: false,
                 contactPointDialogState: false,
                 contactPoints: [],
-                contactNames: []
+                contactNames: [],
+                companyName: '',
+                progress: [],
+                timelineItems: []
             }
         },
         computed: {
@@ -184,17 +187,25 @@
             },
             refreshData() {
                 this.loadingData = true;
-                this.getContacts().then(() => {
-                    this.getOpportunities()
-                        .then(() => {
-                            api.get(`point/get/opportunity/${this.opportunityId}`)
-                                .then(res => {
-                                        this.contactPoints = res.data.sort(compareContactPoints);
-                                    }
-                                ).catch(err => alert(err))
-                                .then(() => this.loadingData = false);
-                        });
-                });
+                this.getContacts();
+                this.getOpportunities().then(() => {
+                    this.getContactPointsOfOpportunity()
+                })
+            },
+            getContactPointsOfOpportunity() {
+                api.get(`point/get/opportunity/${this.opportunityId}`)
+                    .then(res => {
+                        this.contactPoints = res.data.sort(compareTimelineItems);
+                        this.companyName = this.contactPoints[0].contact.company.name;
+                        this.defineTimelineItems();
+                    }).catch(err => alert(err))
+            },
+            defineTimelineItems() {
+                this.timelineItems = this.contactPoints
+                    .concat(this.opportunity.progress)
+                    .sort(compareTimelineItems);
+
+                this.loadingData = false;
             },
             dateFormatted(date) {
                 return datefns.format(date, 'DD.MM.YYYY', {locale: de});
@@ -243,7 +254,7 @@
         }
     }
 
-    function compareContactPoints(a, b) {
+    function compareTimelineItems(a, b) {
         if (datefns.compareAsc(a.date, b.date) === 0) {
             if (a.id < b.id)
                 return 1;
