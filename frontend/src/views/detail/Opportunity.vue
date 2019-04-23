@@ -55,10 +55,13 @@
                                 v-bind:key="timelineItems.indexOf(item)">
                             <template v-slot:opposite v-if="item.hasOwnProperty('contact')">
                                 <span class="font-italic">
-                                    {{ dateFormatted(item.date) }} mit
-                                    <span :class="`${getStateColor(item.opportunityState)}--text`">
+                                    {{ dateFormatted(item.date) }}
+                                    <p class="mb-0">
+                                        mit
+                                        <span :class="`${getStateColor(item.opportunityState)}--text`">
                                         {{ item.contact.name }}
-                                    </span>
+                                        </span>
+                                    </p>
                                 </span>
                                 <p class="font-italic ma-0">
                                     via
@@ -73,11 +76,18 @@
                                 <span class="font-italic">
                                     {{ dateFormatted(item.date) }}
                                 </span>
-                                <p class="font-italic ma-0">
-                                    Status zu
-                                    <span :class="`${getStateColor(item.opportunityState)}--text`">
-                                        {{ item.opportunityState }}
-                                    </span> geändert
+                                <p class="font-italic mb-0">
+                                    <span v-if="getOppositeText(item)"
+                                          :class="`${getStateColor(item.opportunityState)}--text`">
+                                        {{ getOppositeText(item) }}
+                                    </span>
+                                    <span v-else>
+                                        Status zu
+                                        <span :class="`${getStateColor(item.opportunityState)}--text`">
+                                        {{item.opportunityState }}
+                                        </span>
+                                        geändert
+                                    </span>
                                 </p>
                             </template>
                             <v-hover v-if="item.hasOwnProperty('contact')">
@@ -100,15 +110,24 @@
                                 </v-card>
                             </v-hover>
                             <v-hover v-else>
-                                <v-card slot-scope="{ hover }"
-                                        :color="`${hover ? '#616161' : ''}`">
-                                    <v-tooltip top max-width="750" v-show="item.progressText">
-                                        <v-container slot="activator">
-                                        <span class="marked"
-                                              v-html="truncatedDescription(item.progressText)"/>
-                                        </v-container>
-                                        <span v-html="markdownify(item.progressText)"/>
-                                    </v-tooltip>
+                                <v-card slot-scope="{ hover }">
+                                    <v-card-title v-if="item.progressText"
+                                                  :class="`${getStateColor(item.opportunityState)}--text`">
+                                        <v-tooltip top max-width="750"
+                                                   v-if="markdownify(item.progressText).length > 300">
+                                            <div slot="activator">
+                                                <span class="marked"
+                                                      v-html="truncatedDescription(item.progressText)"/>
+                                            </div>
+                                            <span v-html="markdownify(item.progressText)"/>
+                                        </v-tooltip>
+                                        <span v-else class="marked"
+                                              v-html="markdownify(item.progressText)"/>
+                                    </v-card-title>
+                                    <v-card-title v-else
+                                                  :class="`${getStateColor(item.opportunityState)}--text title font-italic font-weight-regular`">
+                                        Status geändert
+                                    </v-card-title>
                                 </v-card>
                             </v-hover>
                         </v-timeline-item>
@@ -265,6 +284,20 @@
 
                 let lastIndexOfSpace = markedValue.substr(0, 300).lastIndexOf(' ');
                 return markedValue.substr(0, lastIndexOfSpace) + "...";
+            },
+            getOppositeText(item) {
+                let index = this.timelineItems.indexOf(item);
+
+                if (this.timelineItems.length > index + 1) {
+                    let previousItem = this.timelineItems[index + 1];
+
+                    if (previousItem.opportunityState === item.opportunityState) {
+                        return 'Fortschritt hinzugefügt'
+                    } else {
+                        return undefined;
+                    }
+                }
+
             }
         }
     }
