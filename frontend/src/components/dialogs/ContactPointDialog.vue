@@ -312,7 +312,7 @@
                     id: this.editedContactPoint.id,
                     date: datefns.parse(this.date).getTime(),
                     comment: this.editedContactPoint.comment,
-                    opportunityState: this.getOpportunityState(),
+                    opportunityState: this.getOpportunityStateForContactPoint(),
                     types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels,
                     creator: this.username
@@ -323,7 +323,7 @@
                         api.put(`opportunity/submit/${contactPointId}`, {
                             id: this.editedOpportunity.id,
                             title: this.editedOpportunity.title,
-                            state: this.editedOpportunity.state,
+                            state: this.getOpportunityState(),
                             description: this.editedOpportunity.description,
                             progress: this.editedOpportunity.progress
                         }).then(() => {
@@ -382,11 +382,20 @@
                     editedOpportunity: Object.assign({}, opp ? opp : this.defaultOpportunity)
                 });
             },
-            getOpportunityState() {
+            getOpportunityStateForContactPoint() {
                 if (this.opportunityMenu || this.opportunity) return this.editedOpportunity.state;
                 if (this.editedContactPoint.id > 0) return this.editedContactPoint.opportunityState;
 
                 return "Lead";
+            },
+            getOpportunityState() {
+                if (this.opportunityMenu) return this.editedOpportunity.state;
+
+                if (datefns.compareDesc(this.date, this.opportunity.lastProgress) === 1) {
+                    return this.opportunity.state;
+                } else {
+                    return this.editedOpportunity.state;
+                }
             },
             getStateColor(state) {
                 switch (state) {
