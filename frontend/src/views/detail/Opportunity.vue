@@ -19,7 +19,7 @@
                                 <v-list class="py-0">
                                     <v-list-tile @click="addProgress()">
                                         <v-icon color="primary" class="mr-2">timeline</v-icon>
-                                        <v-list-tile-title>Status ändern</v-list-tile-title>
+                                        <v-list-tile-title>Fortschritt hinzufügen</v-list-tile-title>
                                     </v-list-tile>
                                     <v-list-tile @click="addContactPoint()">
                                         <v-icon color="light-green accent-2" class="mr-2">forum</v-icon>
