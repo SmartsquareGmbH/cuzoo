@@ -111,8 +111,7 @@
                             </v-hover>
                             <v-hover v-else>
                                 <v-card slot-scope="{ hover }">
-                                    <v-card-title v-if="item.progressText"
-                                                  :class="`${getStateColor(item.opportunityState)}--text`">
+                                    <v-card-title v-if="item.progressText">
                                         <v-tooltip top max-width="750"
                                                    v-if="markdownify(item.progressText).length > 300">
                                             <div slot="activator">
@@ -293,11 +292,8 @@
 
                     if (previousItem.opportunityState === item.opportunityState) {
                         return 'Fortschritt hinzugefügt'
-                    } else {
-                        return undefined;
                     }
                 }
-
             }
         }
     }
