@@ -49,42 +49,65 @@
                     <v-timeline>
                         <v-timeline-item
                                 fill-dot
-                                icon="forum"
-                                :color="`${getStateColor(contactPoint.opportunityState)}`"
-                                v-for="contactPoint in contactPoints"
-                                v-bind:key="contactPoint.id">
-                            <template v-slot:opposite>
+                                :icon="`${item.hasOwnProperty('contact') ? 'forum' : 'bubble_chart' }`"
+                                :color="`${getStateColor(item.opportunityState)}`"
+                                v-for="item in timelineItems"
+                                v-bind:key="timelineItems.indexOf(item)">
+                            <template v-slot:opposite v-if="item.hasOwnProperty('contact')">
                                 <span class="font-italic">
-                                    {{ dateFormatted(contactPoint.date) }} mit
-                                    <span :class="`${getStateColor(contactPoint.opportunityState)}--text`">
-                                        {{ contactPoint.contact.name }}
+                                    {{ dateFormatted(item.date) }} mit
+                                    <span :class="`${getStateColor(item.opportunityState)}--text`">
+                                        {{ item.contact.name }}
                                     </span>
                                 </span>
                                 <p class="font-italic ma-0">
                                     via
-                                    <span v-for="type in contactPoint.types"
+                                    <span v-for="type in item.types"
                                           v-bind:key="type.id"
-                                          :class="`${getStateColor(contactPoint.opportunityState)}--text`">
+                                          :class="`${getStateColor(item.opportunityState)}--text`">
                                         {{ type.title }}
                                     </span>
                                 </p>
                             </template>
-                            <v-hover>
+                            <template v-slot:opposite v-else>
+                                <span class="font-italic">
+                                    {{ dateFormatted(item.date) }}
+                                </span>
+                                <p class="font-italic ma-0">
+                                    Status zu
+                                    <span :class="`${getStateColor(item.opportunityState)}--text`">
+                                        {{ item.opportunityState }}
+                                    </span> geändert
+                                </p>
+                            </template>
+                            <v-hover v-if="item.hasOwnProperty('contact')">
                                 <v-card slot-scope="{ hover }"
                                         class="clickable"
-                                        @click="viewContactPoint(contactPoint)"
+                                        @click="viewContactPoint(item)"
                                         :color="`${hover ? '#616161' : ''}`">
                                     <v-card-title style="background-color: #616161;"
-                                                  :class="`${getStateColor(contactPoint.opportunityState)}
+                                                  :class="`${getStateColor(item.opportunityState)}
                                         headline white--text font-weight-light`">
-                                        {{ contactPoint.title }}
+                                        {{ item.title }}
                                     </v-card-title>
-                                    <v-tooltip top max-width="750" v-show="contactPoint.comment">
+                                    <v-tooltip top max-width="750" v-show="item.comment">
                                         <v-container slot="activator">
                                         <span class="marked"
-                                              v-html="truncatedDescription(contactPoint.comment)"/>
+                                              v-html="truncatedDescription(item.comment)"/>
                                         </v-container>
-                                        <span v-html="markdownify(contactPoint.comment)"/>
+                                        <span v-html="markdownify(item.comment)"/>
+                                    </v-tooltip>
+                                </v-card>
+                            </v-hover>
+                            <v-hover v-else>
+                                <v-card slot-scope="{ hover }"
+                                        :color="`${hover ? '#616161' : ''}`">
+                                    <v-tooltip top max-width="750" v-show="item.progressText">
+                                        <v-container slot="activator">
+                                        <span class="marked"
+                                              v-html="truncatedDescription(item.progressText)"/>
+                                        </v-container>
+                                        <span v-html="markdownify(item.progressText)"/>
                                     </v-tooltip>
                                 </v-card>
                             </v-hover>
@@ -94,13 +117,11 @@
                 </v-flex>
             </v-layout>
         </v-fade-transition>
-        <v-fade-transition>
-            <v-layout v-if="loadingData">
-                <v-flex xs12 class="text-xs-center">
-                    <v-progress-circular :size="128" color="primary" indeterminate/>
-                </v-flex>
-            </v-layout>
-        </v-fade-transition>
+        <v-layout v-if="loadingData">
+            <v-flex xs12 class="text-xs-center">
+                <v-progress-circular :size="128" color="primary" indeterminate/>
+            </v-flex>
+        </v-layout>
         <opp-progress-dialog
                 v-model="oppProgressDialogState"
                 @refresh="refreshData()"/>
@@ -153,13 +174,7 @@
         computed: {
             ...mapGetters(['opportunities', 'contacts']),
             opportunity() {
-                return this.opportunities.find(it => {
-                        return it.id == this.opportunityId;
-                    }
-                );
-            },
-            companyName() {
-                return this.contactPoints[0].contact.company.name;
+                return this.opportunities.find(it => it.id == this.opportunityId)
             }
         },
         beforeMount() {
@@ -168,23 +183,6 @@
         methods: {
             ...mapMutations(['storeEditedOpportunityDetails']),
             ...mapActions(['getOpportunities', 'getContacts']),
-            getStateColor(state) {
-                switch (state) {
-                    case 'Lead':
-                        return 'error';
-                    case 'Prospect':
-                        return 'warning';
-                    case 'Quote':
-                        return 'success';
-                    case 'Win':
-                        return 'primary';
-                    case 'Lose':
-                        return '#616161';
-                }
-            },
-            viewContactPoint(contactPoint) {
-                this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`);
-            },
             refreshData() {
                 this.loadingData = true;
                 this.getContacts();
@@ -229,6 +227,23 @@
                     .map(it => it.name)
                     .sort();
                 this.contactPointDialogState = true;
+            },
+            getStateColor(state) {
+                switch (state) {
+                    case 'Lead':
+                        return 'error';
+                    case 'Prospect':
+                        return 'warning';
+                    case 'Quote':
+                        return 'success';
+                    case 'Win':
+                        return 'primary';
+                    case 'Lose':
+                        return '#616161';
+                }
+            },
+            viewContactPoint(contactPoint) {
+                this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`);
             },
             openConfirmDialog() {
                 this.confirmDialogState = true;
