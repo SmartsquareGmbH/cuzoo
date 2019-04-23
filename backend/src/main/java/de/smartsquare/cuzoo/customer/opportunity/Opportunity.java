@@ -28,7 +28,7 @@ public class Opportunity {
     private String description;
     private Date lastProgress;
 
-    @ElementCollection(targetClass = Opportunity.Progress.class, fetch = FetchType.LAZY)
+    @ElementCollection
     private List<Progress> progress;
 
     @OneToMany(mappedBy = "opportunity", cascade = CascadeType.REMOVE)
@@ -130,10 +130,10 @@ public class Opportunity {
             this.date = new Date();
         }
 
-        String getOpportunityState() { return this.opportunityState; }
+        public String getOpportunityState() { return this.opportunityState; }
 
-        String getProgressText() { return this.progressText; }
+        public String getProgressText() { return this.progressText; }
 
-        Date getDate() { return this.date; }
+        public Date getDate() { return this.date; }
     }
 }
