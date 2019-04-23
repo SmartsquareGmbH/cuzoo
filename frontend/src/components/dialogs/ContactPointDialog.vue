@@ -324,7 +324,8 @@
                             id: this.editedOpportunity.id,
                             title: this.editedOpportunity.title,
                             state: this.editedOpportunity.state,
-                            description: this.editedOpportunity.description
+                            description: this.editedOpportunity.description,
+                            progress: this.editedOpportunity.progress
                         }).then(() => {
                             this.$emit('refresh');
                             this.closeDialog();
