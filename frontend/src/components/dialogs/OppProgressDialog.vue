@@ -75,17 +75,32 @@
                     v => !!v || "Bitte geben Sie einen Titel an",
                     this.opportunityMenu === true
                 ],
+                opportunityId: this.$route.params.opportunityId
             }
         },
         computed: {
             ...mapGetters({
+                opportunities: 'opportunities',
                 editedIndex: 'editedContactPointIndex',
                 editedOpportunity: 'editedOpportunity'
             }),
+            opportunity() {
+                return this.opportunities.find(it => it.id == this.opportunityId)
+            }
         },
         methods: {
             closeDialog() {
+                this.clearDialog();
                 this.$emit('input');
+            },
+            clearDialog() {
+                this.$refs.form.reset();
+
+                setTimeout(() => {
+                    this.editedOpportunity.title = this.opportunity.title;
+                    this.editedOpportunity.state = this.opportunity.state;
+                    this.progressText = '';
+                });
             },
             submitProgress() {
                 api.put(`opportunity/submit/progress/${this.editedOpportunity.id}`, {
