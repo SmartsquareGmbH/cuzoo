@@ -44,6 +44,18 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
             "AND l.contacts IS NOT EMPTY")
     List<Label> findAllOfContactByPartOfTitle(@Param("input") String input);
 
+    @Query("SELECT l FROM Label l WHERE l.contactPointsWithLabels IS NOT EMPTY")
+    List<Label> findAllOfContactPointLabels();
+
+    @Query("SELECT l FROM Label l WHERE l.contactPointsWithTypes IS NOT EMPTY")
+    List<Label> findAllOfContactPointTypes();
+
+    @Query("SELECT l FROM Label l WHERE l.companies IS NOT EMPTY")
+    List<Label> findAllOfCompany();
+
+    @Query("SELECT l FROM Label l WHERE l.contacts IS NOT EMPTY")
+    List<Label> findAllOfContact();
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Label l " +

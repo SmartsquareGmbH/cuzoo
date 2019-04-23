@@ -148,4 +148,13 @@ public class CompanyController {
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/get/labels")
+    public final ResponseEntity<List<String>> getCompanyLabels() {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfCompany()
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
 }

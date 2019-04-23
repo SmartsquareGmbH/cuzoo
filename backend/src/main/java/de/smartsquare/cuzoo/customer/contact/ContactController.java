@@ -198,4 +198,13 @@ public class ContactController {
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/get/labels")
+    public final ResponseEntity<List<String>> getContactLabels() {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfContact()
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
 }

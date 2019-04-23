@@ -185,10 +185,28 @@ public class ContactPointController {
                 .collect(Collectors.toList()));
     }
 
+    @GetMapping("/get/labels")
+    public final ResponseEntity<List<String>> getContactPointLabels() {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfContactPointLabels()
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
+
     @GetMapping("/get/types/{input}")
     public final ResponseEntity<List<String>> getContactPointTypesWithInput(@PathVariable String input) {
         return ResponseEntity.ok(labelRepository
                 .findAllOfContactPointTypesByPartOfTitle(input)
+                .stream()
+                .map(Label::getTitle)
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/get/types")
+    public final ResponseEntity<List<String>> getContactPointTypes() {
+        return ResponseEntity.ok(labelRepository
+                .findAllOfContactPointTypes()
                 .stream()
                 .map(Label::getTitle)
                 .collect(Collectors.toList()));
