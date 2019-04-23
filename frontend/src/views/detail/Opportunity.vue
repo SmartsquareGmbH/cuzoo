@@ -49,7 +49,7 @@
                     <v-timeline>
                         <v-timeline-item
                                 fill-dot
-                                :icon="`${item.hasOwnProperty('contact') ? 'forum' : 'bubble_chart' }`"
+                                :icon="`${getTimelineIcon(item)}`"
                                 :color="`${getStateColor(item.opportunityState)}`"
                                 v-for="item in timelineItems"
                                 v-bind:key="timelineItems.indexOf(item)">
@@ -77,16 +77,15 @@
                                     {{ dateFormatted(item.date) }}
                                 </span>
                                 <p class="font-italic mb-0">
-                                    <span v-if="getOppositeText(item)"
-                                          :class="`${getStateColor(item.opportunityState)}--text`">
-                                        {{ getOppositeText(item) }}
-                                    </span>
-                                    <span v-else>
+                                    <span v-if="stateChangedToPrevious(item)">
                                         Status zu
                                         <span :class="`${getStateColor(item.opportunityState)}--text`">
-                                        {{item.opportunityState }}
+                                        {{ item.opportunityState }}
                                         </span>
                                         geändert
+                                    </span>
+                                    <span v-else :class="`${getStateColor(item.opportunityState)}--text`">
+                                        Fortschritt hinzugefügt
                                     </span>
                                 </p>
                             </template>
@@ -284,15 +283,22 @@
                 let lastIndexOfSpace = markedValue.substr(0, 300).lastIndexOf(' ');
                 return markedValue.substr(0, lastIndexOfSpace) + "...";
             },
-            getOppositeText(item) {
+            getTimelineIcon(item) {
+                if (item.hasOwnProperty('contact')) return 'forum';
+
+                if (this.stateChangedToPrevious(item)) {
+                    return 'bubble_chart';
+                } else {
+                    return 'timeline';
+                }
+            },
+            stateChangedToPrevious(item) {
                 let index = this.timelineItems.indexOf(item);
 
                 if (this.timelineItems.length > index + 1) {
                     let previousItem = this.timelineItems[index + 1];
 
-                    if (previousItem.opportunityState === item.opportunityState) {
-                        return 'Fortschritt hinzugefügt'
-                    }
+                    return !(previousItem.opportunityState === item.opportunityState);
                 }
             }
         }
