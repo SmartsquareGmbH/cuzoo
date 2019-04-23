@@ -1,5 +1,6 @@
 <template>
     <v-combobox
+            slot="activator"
             v-model="labels"
             :items="responseLabels"
             :search-input.sync="labelBoxInput"
@@ -37,8 +38,8 @@
 </template>
 
 <script>
-    import api from '../../utils/http-common';
-    import debounce from 'lodash.debounce';
+    import api from '../../utils/http-common'
+    import debounce from 'lodash.debounce'
 
     const debouncedLabelApiCall = debounce(getLabelsByInput, 150, {leading: true});
 
@@ -49,10 +50,8 @@
             responseLabels: [],
             labelBoxInput: ''
         }),
-        computed: {
-            temporaryLabels() {
-                return this.labels;
-            }
+        beforeMount() {
+            this.getLabels();
         },
         watch: {
             currentLabels() {
@@ -86,7 +85,7 @@
                 this.passCurrentLabels();
 
                 this.labelBoxInput = '';
-                this.responseLabels = [];
+                this.getLabels();
             },
             passCurrentLabels() {
                 this.$emit('label-added', this.labels);
@@ -95,6 +94,9 @@
                 this.labels.splice(this.labels.indexOf(item), 1);
                 this.labels = [...this.labels]
             },
+            getLabels() {
+                api.get(`${this.apiPath}`).then(res => this.responseLabels = res.data);
+            }
         }
     }
 
