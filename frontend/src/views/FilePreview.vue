@@ -7,7 +7,11 @@
             </v-btn>
         </v-flex>
         <v-flex xs6>
-            <pdf v-if="isPDF()" :src="getPDFSource()"/>
+            <pdf v-if="isPDF()"
+                 :src="getPDFSource()"
+                 v-for="page in pageCount"
+                 :key="page"
+                 :page="page" class="mb-3"/>
             <v-img v-else :src="this.url"/>
         </v-flex>
         <v-flex xs3></v-flex>
@@ -25,7 +29,8 @@
         data() {
             return {
                 contactPointId: this.$route.params.contactPointId,
-                fileName: this.$route.params.fileName
+                fileName: this.$route.params.fileName,
+                pageCount: 0
             }
         },
         computed: {
@@ -34,6 +39,10 @@
                 return `${process.env.VUE_APP_API_SCHEME}://${process.env.VUE_APP_API_HOSTNAME}:` +
                     `${process.env.VUE_APP_API_PORT}/api/file/download/${this.contactPointId}/${this.fileName}`
             }
+        },
+        mounted() {
+            pdf.createLoadingTask(this.getPDFSource())
+                .then(it => this.pageCount = it.numPages);
         },
         methods: {
             isPDF() {
