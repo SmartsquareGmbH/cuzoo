@@ -16,10 +16,8 @@ import java.util.List;
 public class TodoReminder {
     private final JavaMailSender sender;
     private final TaskScheduler taskScheduler;
-
     private final TodoRepository todoRepository;
 
-    @Autowired
     public TodoReminder(JavaMailSender sender, TaskScheduler taskScheduler, TodoRepository todoRepository) {
         this.sender = sender;
         this.taskScheduler = taskScheduler;
