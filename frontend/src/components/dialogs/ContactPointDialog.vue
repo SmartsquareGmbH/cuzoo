@@ -305,12 +305,16 @@
                 }, 300)
             },
             submitContactPoint() {
+                let currentDate = new Date().toISOString().substr(0, 10);
+
+                console.log(this.getDateWithCurrentTimeInMillis(this.date));
+
                 let contact = this.contacts.find(it => it.name.includes(this.editedContactPoint.contact.name));
 
                 api.put(`point/submit/${contact.id}`, {
                     title: this.editedContactPoint.title,
                     id: this.editedContactPoint.id,
-                    date: datefns.parse(this.date).getTime(),
+                    date: this.getDateWithCurrentTimeInMillis(this.date),
                     comment: this.editedContactPoint.comment,
                     opportunityState: this.getOpportunityStateForContactPoint(),
                     types: this.editedContactPoint.types,
@@ -396,6 +400,15 @@
                 } else {
                     return this.editedOpportunity.state;
                 }
+            },
+            getDateWithCurrentTimeInMillis(date) {
+                let selectedDateInMillis = datefns.parse(date).getTime();
+                let secondsInMillis = new Date().getSeconds() * 1000;
+                let minutesInMillis = new Date().getMinutes() * 60000;
+                let hoursInMillis = new Date().getHours() * 3600000;
+                let millisecondsOfToday = hoursInMillis + minutesInMillis + secondsInMillis + new Date().getMilliseconds();
+
+                return selectedDateInMillis + millisecondsOfToday;
             },
             getStateColor(state) {
                 switch (state) {
