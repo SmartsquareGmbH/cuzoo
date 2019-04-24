@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +53,7 @@ public class OpportunityController {
             contactPoint.setOpportunity(savedOpportunity);
             contactPointRepository.save(contactPoint);
 
-            savedOpportunity.setLastProgress(
-                    contactPointRepository
-                            .findFirstByOpportunityIdOrderByDateDesc(savedOpportunity.getId())
-                            .getDate()
-            );
-
+            savedOpportunity.setLastProgress(getLastProgress(savedOpportunity.getId()));
             opportunityRepository.save(savedOpportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -76,8 +72,6 @@ public class OpportunityController {
                                                              BindingResult bindingResult) {
         Optional<Opportunity> maybeOpportunity = opportunityRepository.findById(opportunityId);
 
-        System.out.println(progressForm.getProgressText() + progressForm.getOpportunityState());
-
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Fortschritte von Opportunities benötigen einen Status");
         }
@@ -93,7 +87,11 @@ public class OpportunityController {
         try {
             opportunity.addProgress(progress);
             opportunity.setState(progress.getOpportunityState());
-            opportunityRepository.save(opportunity);
+
+            Opportunity savedOpportunity = opportunityRepository.save(opportunity);
+
+            savedOpportunity.setLastProgress(getLastProgress(savedOpportunity.getId()));
+            opportunityRepository.save(savedOpportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -103,6 +101,21 @@ public class OpportunityController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    private Date getLastProgress(Long opportunityId) {
+        Date lastContactPointDate = contactPointRepository
+                .findFirstByOpportunityIdOrderByDateDesc(opportunityId).getDate();
+        List<Date> lastProgressDates = opportunityRepository
+                .findAllProgressDatesByOpportunityIdOrderByDateDesc(opportunityId);
+
+        if (lastProgressDates.size() < 1) return lastContactPointDate;
+
+        if (lastContactPointDate.after(lastProgressDates.get(0))) {
+            return lastContactPointDate;
+        }
+
+        return lastProgressDates.get(0);
     }
 
     @DeleteMapping("/delete/{opportunityId}")
