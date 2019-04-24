@@ -68,7 +68,7 @@ public class TodoReminder {
 
         return "Hey " + firstname + "!\n\n" +
                 "Dein TODO für das Unternehmen " + companyName + " ist am " + faelligkeitsdatum + " fällig!\n\n" +
-                "Beschreibung:\n" + todo.getDescription() + "\n\nMit freundlichen Grüßen\nFriendly Reminder :)\n\n" +
+                "Beschreibung:\n" + todo.getDescription() + "\n\nLiebe Grüße\nFriendly Reminder :)\n\n" +
                 "https://cuzoo.smartsquare.de";
     }
 
