@@ -1,19 +1,21 @@
 <template>
-    <picker set="apple"
-            title="Kontaktpunkt bewerten"
-            emoji="speech_balloon"
-            :i18n="i18n"
-            @select="passEmoji"/>
+    <nimble-picker @select="passEmoji"
+                   set="messenger"
+                   :data="emojiSet"
+                   :i18n="i18n"/>
 </template>
 
 <script>
-    import {Picker} from "emoji-mart-vue"
+    import {NimblePicker} from "emoji-mart-vue-fast";
+    import messenger from 'emoji-mart-vue-fast/data/messenger.json'
 
     export default {
         components: {
-            Picker
+            NimblePicker
         },
         data: () => ({
+            emojiSet: messenger,
+            loading: true,
             i18n: {
                 search: 'Suche...',
                 notfound: 'Nichts gefunden...',
@@ -25,7 +27,7 @@
                     foods: 'Essen & Trinken',
                     activity: 'Aktivität',
                     places: 'Reisen & Orte',
-                    objects: 'Objekte',
+                    objects: 'Objeke',
                     symbols: 'Symbole',
                     flags: 'Flaggen',
                     custom: 'Benutzerdefiniert',
