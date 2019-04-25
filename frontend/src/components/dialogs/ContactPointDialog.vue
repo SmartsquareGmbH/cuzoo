@@ -152,7 +152,17 @@
                         </v-list>
                     </v-menu>
                 </div>
-                <v-spacer></v-spacer>
+                <v-spacer v-if="!opportunity"/>
+                <v-menu top offset-y
+                        open-on-hover
+                        :close-on-content-click="false">
+                    <v-btn flat slot="activator">
+                        Bewerten
+                        <emoji emoji="smiley" class="ml-2" :size="20"></emoji>
+                    </v-btn>
+                    <emoji-picker/>
+                </v-menu>
+                <v-spacer/>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
                 <v-btn color="primary" flat v-on:click="submitContactPoint()" :disabled="!valid">Speichern</v-btn>
@@ -162,10 +172,12 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex';
-    import api from '../../utils/http-common';
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import api from '../../utils/http-common'
 
-    import LabelBox from "../core/LabelBox.vue";
+    import LabelBox from "../core/LabelBox.vue"
+    import EmojiPicker from "../core/EmojiPicker.vue"
+    import {Emoji} from "emoji-mart-vue"
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -173,7 +185,9 @@
     export default {
         props: ["value", "contactNames", "opportunity"],
         components: {
-            LabelBox
+            LabelBox,
+            EmojiPicker,
+            Emoji
         },
         data() {
             return {
