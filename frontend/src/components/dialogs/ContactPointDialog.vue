@@ -159,7 +159,8 @@
                         :value="emojiMenuState">
                     <v-btn flat slot="activator">
                         {{ editedContactPoint.rating ? 'Bewertung:' : 'Bewerten'}}
-                        <emoji :emoji="`${editedContactPoint.rating ? editedContactPoint.rating : ':smiley:'}`" class="ml-2" :size="20"></emoji>
+                        <emoji :emoji="`${editedContactPoint.rating ? editedContactPoint.rating : ':smiley:'}`"
+                               :size="20" class="ml-2"/>
                     </v-btn>
                     <emoji-picker @emoji-chosen="addEmoji"/>
                 </v-menu>
