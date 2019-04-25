@@ -77,13 +77,14 @@ public class ContactPoint {
         this.types = new ArrayList<>();
     }
 
-    public ContactPoint(@NotNull @NotBlank String title, @NotNull Long date,
-                        @NotNull Contact contact, String comment, String opportunityState) {
+    public ContactPoint(@NotNull @NotBlank String title, @NotNull Long date, @NotNull Contact contact,
+                        String comment, String opportunityState, String rating) {
         this.title = title;
         this.contact = contact;
         this.date = new Date(date);
         this.comment = comment;
         this.opportunityState = opportunityState;
+        this.rating = rating;
 
         this.files = new ArrayList<>();
         this.labels = new ArrayList<>();

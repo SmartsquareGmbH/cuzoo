@@ -49,7 +49,7 @@ public class ContactPointRepositoryTest {
 
     @Test
     public final void that_saves_contact_point_correctly() {
-        ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "", "");
+        ContactPoint contactPoint = new ContactPoint("Beratung", 0L, contact, "", "", "");
         contactPoint.setCreator(user);
 
         contactPointRepository.save(contactPoint);

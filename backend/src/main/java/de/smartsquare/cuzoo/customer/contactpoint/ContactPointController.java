@@ -100,13 +100,15 @@ public class ContactPointController {
             contactPoint.setContact(contactPointsContact);
             contactPoint.setComment(contactPointForm.getComment());
             contactPoint.setOpportunityState(contactPointForm.getOpportunityState());
+            contactPoint.setRating(contactPointForm.getRating());
         } else {
             contactPoint = new ContactPoint(
                     contactPointForm.getTitle(),
                     contactPointForm.getDate(),
                     contactPointsContact,
                     contactPointForm.getComment(),
-                    contactPointForm.getOpportunityState());
+                    contactPointForm.getOpportunityState(),
+                    contactPointForm.getRating());
         }
         return contactPoint;
     }

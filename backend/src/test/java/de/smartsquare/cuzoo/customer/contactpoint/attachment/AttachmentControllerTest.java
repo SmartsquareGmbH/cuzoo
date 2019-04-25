@@ -70,7 +70,7 @@ public class AttachmentControllerTest {
         contactRepository.save(contact);
 
         file = new MockMultipartFile("file", "TestCompanies.csv", "text/plain", Files.readAllBytes(path));
-        contactPoint = new ContactPoint("Besprechung", 0L, contact, "", "");
+        contactPoint = new ContactPoint("Besprechung", 0L, contact, "", "", "");
         contactPoint.setCreator(user);
         contactPointRepository.save(contactPoint);
     }
