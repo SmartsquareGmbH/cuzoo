@@ -158,8 +158,8 @@
                         :close-on-content-click="false"
                         :value="emojiMenuState">
                     <v-btn flat slot="activator">
-                        {{ contactPointRating ? 'Bewertung:' : 'Bewerten'}}
-                        <emoji :emoji="`${contactPointRating ? contactPointRating : ':smiley:'}`" class="ml-2" :size="20"></emoji>
+                        {{ editedContactPoint.rating ? 'Bewertung:' : 'Bewerten'}}
+                        <emoji :emoji="`${editedContactPoint.rating ? editedContactPoint.rating : ':smiley:'}`" class="ml-2" :size="20"></emoji>
                     </v-btn>
                     <emoji-picker @emoji-chosen="addEmoji"/>
                 </v-menu>
@@ -198,7 +198,6 @@
                 menu: false,
                 valid: false,
                 emojiMenuState: undefined,
-                contactPointRating: undefined,
                 compulsory: [v => !!v || 'Bitte geben Sie etwas ein'],
                 contactRules: [
                     v => !!v || 'Bitte geben Sie einen Ansprechpartner an',
@@ -225,6 +224,7 @@
                     date: '',
                     comment: '',
                     opportunityState: '',
+                    rating: '',
                     types: [],
                     labels: []
                 },
@@ -303,7 +303,7 @@
                 let tempContactName = this.editedContactPoint.contact.name;
                 this.$refs.form.reset();
                 this.editedContactPoint.contact.name = tempContactName;
-                this.contactPointRating = undefined;
+                this.editedContactPoint.rating = undefined;
 
                 setTimeout(() => {
                     this.date = new Date().toISOString().substr(0, 10);
@@ -321,7 +321,7 @@
                     });
 
                     this.resetEditedOpportunity();
-                    this.contactPointRating = undefined;
+                    this.editedContactPoint.rating = undefined;
 
                     this.opportunityMenu = false;
                 }, 300)
@@ -336,6 +336,7 @@
                     date: this.getDateWithCurrentTimeInMillis(this.date),
                     comment: this.editedContactPoint.comment,
                     opportunityState: this.getOpportunityStateForContactPoint(),
+                    rating: this.editedContactPoint.rating,
                     types: this.editedContactPoint.types,
                     labels: this.editedContactPoint.labels,
                     creator: this.username
@@ -430,7 +431,7 @@
                 return selectedDateInMillis + millisecondsOfToday;
             },
             addEmoji(emoji) {
-                this.contactPointRating = emoji.colons;
+                this.editedContactPoint.rating = emoji.colons;
                 this.emojiMenuState = false;
             },
             getStateColor(state) {

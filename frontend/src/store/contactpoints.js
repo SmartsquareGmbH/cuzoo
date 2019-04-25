@@ -12,12 +12,13 @@ export default {
         editedContactPoint: {
             value: false,
             id: 0,
-            title: "",
+            title: '',
             contact: {},
-            contactName: "",
-            date: "",
-            comment: "",
-            opportunityState: "",
+            contactName: '',
+            date: '',
+            comment: '',
+            opportunityState: '',
+            rating: '',
             types: [],
             labels: []
         }
@@ -34,7 +35,7 @@ export default {
         },
         storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
-                state.editedContactPoint = payload.editedContactPoint
+            state.editedContactPoint = payload.editedContactPoint
         }
     },
     actions: {
