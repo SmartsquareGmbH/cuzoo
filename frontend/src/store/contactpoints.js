@@ -26,9 +26,7 @@ export default {
         contactPoints: state => state.contactPoints,
         contactNames: state => state.contactNames,
         editedContactPoint: state => state.editedContactPoint,
-        editedContactPointIndex: state => state.editedIndex,
-        contactPointLabels: state => state.labels,
-        contactPointTypes: state => state.types
+        editedContactPointIndex: state => state.editedIndex
     },
     mutations: {
         storeContactPoints(state, payload) {
@@ -37,12 +35,6 @@ export default {
         storeEditedContactPointDetails(state, payload) {
             state.editedIndex = payload.editedIndex,
                 state.editedContactPoint = payload.editedContactPoint
-        },
-        storeContactPointLabels(state, payload) {
-            state.labels = payload.labels
-        },
-        storeContactPointTypes(state, payload) {
-            state.types = payload.types
         }
     },
     actions: {
@@ -61,7 +53,6 @@ export default {
 
                     contactPoint.creator = contactPoint.creator.username;
                 });
-
 
                 this.commit({
                     type: 'storeContactPoints',
