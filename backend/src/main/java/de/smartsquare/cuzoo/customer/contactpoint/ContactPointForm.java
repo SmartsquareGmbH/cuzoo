@@ -21,6 +21,7 @@ public class ContactPointForm {
     private String creator;
     private String comment;
     private String opportunityState;
+    private String rating;
 
     public Long getId() {
         return id;
@@ -42,7 +43,13 @@ public class ContactPointForm {
         return comment;
     }
 
-    public String getOpportunityState() { return opportunityState; }
+    public String getOpportunityState() {
+        return opportunityState;
+    }
+
+    public String getRating() {
+        return rating;
+    }
 
     public String getCreator() {
         return creator;

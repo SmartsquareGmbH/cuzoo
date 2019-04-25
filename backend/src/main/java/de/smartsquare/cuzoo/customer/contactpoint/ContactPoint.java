@@ -69,6 +69,7 @@ public class ContactPoint {
     private Opportunity opportunity;
 
     private String opportunityState;
+    private String rating;
 
     public ContactPoint() {
         this.files = new ArrayList<>();
@@ -179,5 +180,13 @@ public class ContactPoint {
 
     public void setOpportunityState(String opportunityState) {
         this.opportunityState = opportunityState;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 }
