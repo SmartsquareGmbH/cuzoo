@@ -577,6 +577,14 @@
     core-js "^2.5.7"
     regenerator-runtime "^0.12.0"
 
+"@babel/polyfill@^7.2.5":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.4.3.tgz#332dc6f57b718017c3a8b37b4eea8aa6eeac1187"
+  integrity sha512-rkv8WIvJshA5Ev8iNMGgz5WZkRtgtiPexiT7w5qevGTuT7ZBfM3de9ox1y9JR5/OXb/sWGBbWlHNa7vQKqku3Q==
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
 "@babel/preset-env@^7.0.0":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.3.1.tgz#389e8ca6b17ae67aaf9a2111665030be923515db"
@@ -640,6 +648,13 @@
   integrity sha512-7jGW8ppV0ant637pIqAcFfQDDH1orEPGJb8aXfUozuCU3QqX7rX4DA8iwrbPrR1hcH0FTTHz47yQnk+bl5xHQA==
   dependencies:
     regenerator-runtime "^0.12.0"
+
+"@babel/runtime@^7.3.4":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.3.tgz#79888e452034223ad9609187a0ad1fe0d2ad4bdc"
+  integrity sha512-9lsJwJLxDh/T3Q3SZszfWOTkk3pHbkmH+3KY+zwIDmsNlxsumuhS2TH3NIpktU4kNvfzy+k3eLT7aTJSPTo0OA==
+  dependencies:
+    regenerator-runtime "^0.13.2"
 
 "@babel/template@^7.1.0", "@babel/template@^7.1.2", "@babel/template@^7.2.2":
   version "7.2.2"
@@ -2549,6 +2564,11 @@ core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7, core-js@^2.6.3:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.4.tgz#b8897c062c4d769dd30a0ac5c73976c47f92ea0d"
   integrity sha512-05qQ5hXShcqGkPZpXEFLIpxayZscVD2kuMBZewxiIPPEagukO4mqgPA9CWhUvFBJfy3ODdK2p9xyHh7FTU9/7A==
 
+core-js@^2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
+  integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
+
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -3261,6 +3281,15 @@ elliptic@^6.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
+
+emoji-mart-vue-fast@^5.4.11:
+  version "5.4.11"
+  resolved "https://registry.yarnpkg.com/emoji-mart-vue-fast/-/emoji-mart-vue-fast-5.4.11.tgz#58b5c329eee8db7286552e877f263cc229bb7637"
+  integrity sha512-7oCx4NSgkIElB24jgR8vczfmOuA+kP2X4xWvaRyO2va2HEnTJxZEtP401cAMuu8L2oTiDnziLQU9ObpPY7EFAA==
+  dependencies:
+    "@babel/polyfill" "^7.2.5"
+    "@babel/runtime" "^7.3.4"
+    vue-virtual-scroller "^1.0.0-beta.5"
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -5959,6 +5988,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+marked@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.6.2.tgz#c574be8b545a8b48641456ca1dbe0e37b6dccc1a"
+  integrity sha512-LqxwVH3P/rqKX4EKGz7+c2G9r98WeM/SW34ybhgNGhUQNKtf1GmmSkJ6cDGJ/t6tiyae49qRkpyTw2B9HOrgUA==
+
 marker-clusterer-plus@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/marker-clusterer-plus/-/marker-clusterer-plus-2.1.4.tgz#f8eff74d599dab3b7d0e3fed5264ea0e704f5d67"
@@ -7707,6 +7741,11 @@ regenerator-runtime@^0.12.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
   integrity sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
 
+regenerator-runtime@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.2.tgz#32e59c9a6fb9b1a4aff09b4930ca2d4477343447"
+  integrity sha512-S/TQAZJO+D3m9xeN1WTI8dLKBBiRgXBlTJvbWjCThHWZj9EvHK70Ff50/tYj2J/fvBY6JtFVwRuazHN2E7M9BA==
+
 regenerator-transform@^0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/regenerator-transform/-/regenerator-transform-0.13.3.tgz#264bd9ff38a8ce24b06e0636496b2c856b57bcbb"
@@ -8063,6 +8102,11 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
+
+scrollparent@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/scrollparent/-/scrollparent-2.0.1.tgz#715d5b9cc57760fb22bdccc3befb5bfe06b1a317"
+  integrity sha1-cV1bnMV3YPsivczDvvtb/gaxoxc=
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -9257,6 +9301,11 @@ vue-loader@^15.6.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-observe-visibility@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.3.tgz#b2694a83c94b274f566e03a497df51540e2daedc"
+  integrity sha512-YyyO3a5OUkgpmC0NEf+xWJR0jVdFWzVbKRDzUumOVMhfr3+jxXEycYNHCM3rEO5lcj3ZNJpDomZEYEx0Wqqh9A==
+
 vue-pdf@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/vue-pdf/-/vue-pdf-4.0.6.tgz#6432e68aded8c551f4ce058c81119d7fdd97f2ff"
@@ -9271,6 +9320,11 @@ vue-resize-sensor@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/vue-resize-sensor/-/vue-resize-sensor-2.0.0.tgz#3a587fd6802e1688709cf2c5aadae7a0075952bf"
   integrity sha512-W+y2EAI/BxS4Vlcca9scQv8ifeBFck56DRtSwWJ2H4Cw1GLNUYxiZxUHHkuzuI5JPW/cYtL1bPO5xPyEXx4LmQ==
+
+vue-resize@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
+  integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
 
 vue-router@^3.0.1:
   version "3.0.2"
@@ -9302,6 +9356,15 @@ vue-truncate-filter@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/vue-truncate-filter/-/vue-truncate-filter-1.1.7.tgz#e365fd2d4520c017293308e0ecbb1dd6176c3af2"
   integrity sha512-kFmUDsDFIj5vArdK6hX84v80fTWJIMrsYF5keCluy9hMiaKGL8NyApnMbWavZeDod24YeYMVQ9jjd7MkRn3AAg==
+
+vue-virtual-scroller@^1.0.0-beta.5:
+  version "1.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/vue-virtual-scroller/-/vue-virtual-scroller-1.0.0-rc.2.tgz#b03828496c87889641bdacc75510e5b1bf5bda7f"
+  integrity sha512-4YFx1a+QDP4f6HW/HBI/qHcmSTlh7BMH6IjEH8WC3ylt499cErl0LpvLLAx9yo3c6NtuK/XvjYXi0vvdxFB5dw==
+  dependencies:
+    scrollparent "^2.0.1"
+    vue-observe-visibility "^0.4.3"
+    vue-resize "^0.4.5"
 
 vue2-google-maps@^0.10.2:
   version "0.10.6"
