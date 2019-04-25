@@ -1,6 +1,5 @@
 package de.smartsquare.cuzoo.customer.todo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.TaskScheduler;
