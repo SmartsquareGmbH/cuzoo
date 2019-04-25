@@ -155,12 +155,13 @@
                 <v-spacer v-if="!opportunity"/>
                 <v-menu top offset-y
                         open-on-hover
-                        :close-on-content-click="false">
+                        :close-on-content-click="false"
+                        :value="emojiMenuState">
                     <v-btn flat slot="activator">
-                        Bewerten
-                        <emoji emoji="smiley" class="ml-2" :size="20"></emoji>
+                        {{ contactPointRating ? 'Bewertung:' : 'Bewerten'}}
+                        <emoji :emoji="`${contactPointRating ? contactPointRating : ':smiley:'}`" class="ml-2" :size="20"></emoji>
                     </v-btn>
-                    <emoji-picker/>
+                    <emoji-picker @emoji-chosen="addEmoji"/>
                 </v-menu>
                 <v-spacer/>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
@@ -196,7 +197,9 @@
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 valid: false,
-                compulsory: [v => !!v || "Bitte geben Sie etwas ein"],
+                emojiMenuState: undefined,
+                contactPointRating: undefined,
+                compulsory: [v => !!v || 'Bitte geben Sie etwas ein'],
                 contactRules: [
                     v => !!v || 'Bitte geben Sie einen Ansprechpartner an',
                     v => this.contactNames.includes(v) || 'Dieser Ansprechpartner existiert nicht'
@@ -258,6 +261,9 @@
                         this.companyOpportunities = [];
                     }
                 }
+            },
+            emojiMenuState() {
+                setTimeout(() => this.emojiMenuState = undefined);
             }
         },
         computed: {
@@ -297,6 +303,7 @@
                 let tempContactName = this.editedContactPoint.contact.name;
                 this.$refs.form.reset();
                 this.editedContactPoint.contact.name = tempContactName;
+                this.contactPointRating = undefined;
 
                 setTimeout(() => {
                     this.date = new Date().toISOString().substr(0, 10);
@@ -314,6 +321,7 @@
                     });
 
                     this.resetEditedOpportunity();
+                    this.contactPointRating = undefined;
 
                     this.opportunityMenu = false;
                 }, 300)
@@ -420,6 +428,10 @@
                 let millisecondsOfToday = hoursInMillis + minutesInMillis + secondsInMillis + new Date().getMilliseconds();
 
                 return selectedDateInMillis + millisecondsOfToday;
+            },
+            addEmoji(emoji) {
+                this.contactPointRating = emoji.colons;
+                this.emojiMenuState = false;
             },
             getStateColor(state) {
                 switch (state) {

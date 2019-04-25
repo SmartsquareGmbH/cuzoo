@@ -2,7 +2,8 @@
     <picker set="apple"
             title="Kontaktpunkt bewerten"
             emoji="speech_balloon"
-            :i18n="i18n"/>
+            :i18n="i18n"
+            @select="passEmoji"/>
 </template>
 
 <script>
@@ -30,6 +31,11 @@
                     custom: 'Benutzerdefiniert',
                 }
             }
-        })
+        }),
+        methods: {
+            passEmoji(emoji) {
+                this.$emit("emoji-chosen", emoji);
+            }
+        }
     }
 </script>
