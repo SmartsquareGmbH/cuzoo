@@ -198,40 +198,40 @@
                 valid: false,
                 compulsory: [v => !!v || "Bitte geben Sie etwas ein"],
                 contactRules: [
-                    v => !!v || "Bitte geben Sie einen Ansprechpartner an",
-                    v => this.contactNames.includes(v) || "Dieser Ansprechpartner existiert nicht"
+                    v => !!v || 'Bitte geben Sie einen Ansprechpartner an',
+                    v => this.contactNames.includes(v) || 'Dieser Ansprechpartner existiert nicht'
                 ],
                 newOpportunity: false,
                 companyOpportunities: [],
                 oppStatuses: ['Lose', 'Lead', 'Prospect', 'Quote', 'Win'],
                 oppStatusRules: [
-                    v => !!v || "Bitte geben Sie einen Status an",
-                    v => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
+                    v => !!v || 'Bitte geben Sie einen Status an',
+                    v => this.oppStatuses.includes(v) || 'Dieser Status existiert nicht',
                     this.opportunityMenu === true
                 ],
                 oppTitleRules: [
-                    v => !!v || "Bitte geben Sie einen Titel an",
+                    v => !!v || 'Bitte geben Sie einen Titel an',
                     this.opportunityMenu === true
                 ],
                 defaultContactPoint: {
                     value: false,
                     id: 0,
-                    title: "",
+                    title: '',
                     contact: {},
-                    contactName: "",
-                    date: "",
-                    comment: "",
-                    opportunityState: "",
+                    contactName: '',
+                    date: '',
+                    comment: '',
+                    opportunityState: '',
                     types: [],
                     labels: []
                 },
                 defaultOpportunity: {
                     value: false,
                     id: 0,
-                    title: "",
-                    state: "Lead",
-                    description: "",
-                    lastProgress: ""
+                    title: '',
+                    state: '',
+                    description: '',
+                    lastProgress: ''
                 }
             }
         },
@@ -320,9 +320,6 @@
             },
             submitContactPoint() {
                 let currentDate = new Date().toISOString().substr(0, 10);
-
-                console.log(this.getDateWithCurrentTimeInMillis(this.date));
-
                 let contact = this.contacts.find(it => it.name.includes(this.editedContactPoint.contact.name));
 
                 api.put(`point/submit/${contact.id}`, {
