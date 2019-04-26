@@ -18,7 +18,13 @@
             emoji() {
                 let emoji = emojiIndex.findEmoji(this.value);
 
-                let style = `background-position: ${emoji.getPosition()}; background-image: url(${this.messengerSheet}); width: 24px; height: 24px; display: inline-block; background-size: 5200%`;
+                let style = `
+                    background-position: ${emoji.getPosition()};
+                    background-image: url(${this.messengerSheet});
+                    background-size: 5200%;
+                    width: 24px; height: 24px;
+                    display: inline-block;
+                `;
 
                 return `<div class='emoji' style="${style}"></div>`;
             }
