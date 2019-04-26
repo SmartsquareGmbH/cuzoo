@@ -23,7 +23,8 @@
                 </v-flex>
                 <contact-point-dialog
                         v-model="contactPointDialogState"
-                        :contactNames="this.contactNames"/>
+                        :contactNames="this.contactNames"
+                        @input="contactPointDialogState = false"/>
                 <v-flex xs3>
                     <v-btn id="upload-btn" @click="uploadFiles()" flat small>
                         <v-icon size="22px" class="mr-1" dark>publish</v-icon>

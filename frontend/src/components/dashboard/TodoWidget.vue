@@ -37,7 +37,8 @@
                     <todo-dialog
                             v-model="todoDialogState"
                             :companyNames="this.companyNames"
-                            @refresh="refreshTodos()"/>
+                            @refresh="refreshTodos()"
+                            @input="todoDialogState = false"/>
                 </v-flex>
                 <v-flex xs6>
                     <v-text-field

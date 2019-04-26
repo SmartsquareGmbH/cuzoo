@@ -37,7 +37,8 @@
                     <contact-point-dialog
                             v-model="contactPointDialogState"
                             :contactNames="contactNames"
-                            @refresh="refreshContactPoints()"/>
+                            @refresh="refreshContactPoints()"
+                            @input="contactPointDialogState = false"/>
                 </v-flex>
                 <v-flex xs6>
                     <v-text-field

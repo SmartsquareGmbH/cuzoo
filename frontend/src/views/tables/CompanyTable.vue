@@ -39,7 +39,8 @@
                     <span>Unternehmen hinzufügen</span>
                 </v-tooltip>
             </v-btn>
-            <company-dialog v-model="companyDialogState"/>
+            <company-dialog v-model="companyDialogState"
+                            @input="companyDialogState = false"/>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"

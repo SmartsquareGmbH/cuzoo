@@ -27,7 +27,8 @@
             </v-btn>
             <contact-dialog
                     v-model="contactDialogState"
-                    :companyNames="this.companyNames"/>
+                    :companyNames="this.companyNames"
+                    @input="contactDialogState = false"/>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"

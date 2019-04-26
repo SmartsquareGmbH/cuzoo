@@ -20,7 +20,8 @@
                     Unternehmen editieren
                 </v-btn>
             </v-flex>
-            <company-dialog v-model="companyDialogState"/>
+            <company-dialog v-model="companyDialogState"
+                            @input="companyDialogState = false"/>
             <v-flex xs1>
                 <v-btn slot="activator" small flat @click="openContactDialog()">
                     <v-icon size="22px" class="mr-1" dark>add</v-icon>
@@ -44,7 +45,8 @@
             </v-flex>
             <contact-dialog
                     v-model="contactDialogState"
-                    :companyNames="[this.company.name]"/>
+                    :companyNames="[this.company.name]"
+                    @input="contactDialogState = false"/>
             <v-flex xs6>
                 <v-layout row wrap>
                     <v-flex xs2>
