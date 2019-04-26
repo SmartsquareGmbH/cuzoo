@@ -232,8 +232,30 @@ public class CompanyControllerTest {
                 .isTrue();
     }
 
-    private String getCompanyWithLabelsInJson() {
-        return "{\"id\":\"0\", \"name\":\"Fidea Development\", \"labels\": [\"ABC\", \"DEF\"]}";
+    @Test
+    public void that_getting_labels_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/company/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getCompanyWithLabelsInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/company/get/labels")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .contains("ABC"))
+                .isTrue();
     }
 
     @Test
