@@ -3,6 +3,19 @@
         <v-card>
             <v-card-title class="headline primary" primary-title>
                 {{ formTitle }}
+                <v-spacer/>
+                <v-menu top offset-x
+                        open-on-hover
+                        :close-on-content-click="false"
+                        :value="emojiMenuState">
+                    <v-btn small color="secondary" slot="activator">
+                        <span class="headline"
+                              v-if="!editedContactPoint.rating">+ 😃</span>
+                        <emoji v-else size="24"
+                               :value="editedContactPoint.rating"/>
+                    </v-btn>
+                    <emoji-picker @emoji-chosen="addEmoji"/>
+                </v-menu>
             </v-card-title>
             <v-card-text class="text-xs-right primary--text">
                 <v-form ref="form" v-model="valid">
@@ -152,21 +165,6 @@
                         </v-list>
                     </v-menu>
                 </div>
-                <v-spacer v-if="!opportunity"/>
-                <v-menu top offset-y
-                        open-on-hover
-                        :close-on-content-click="false"
-                        :value="emojiMenuState">
-                    <v-btn flat slot="activator">
-                        {{ editedContactPoint.rating ? 'Bewertung:' : 'Bewerten'}}
-                        <emoji v-if="editedContactPoint.rating"
-                               :value="editedContactPoint.rating"
-                               class="ml-1"/>
-                        <emoji v-else value=":grin:"
-                               class="ml-1"/>
-                    </v-btn>
-                    <emoji-picker @emoji-chosen="addEmoji"/>
-                </v-menu>
                 <v-spacer/>
                 <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
                 <v-btn color="primary" flat v-on:click="clearDialog()">Zurücksetzen</v-btn>
