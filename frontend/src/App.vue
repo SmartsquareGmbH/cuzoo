@@ -108,11 +108,15 @@
                 companies: 'companies'
             })
         },
-        beforeMount() {
-            this.getCompanies().then(() => {
-                this.companyNames = this.companies.map(it => it.name);
-                this.loadingCompanies = false;
-            })
+        watch: {
+            authorized(value) {
+                if (value) {
+                    this.getCompanies().then(() => {
+                        this.companyNames = this.companies.map(it => it.name);
+                        this.loadingCompanies = false;
+                    })
+                }
+            }
         },
         methods: {
             ...mapMutations(['storeLogData', 'storeSelectedCompany']),
