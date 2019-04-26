@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 24px; width: 24px;"
+    <div :style="`height: ${size}px; width: ${size}px;`"
          v-html="emoji"></div>
 </template>
 
@@ -10,7 +10,7 @@
     const emojiIndex = new EmojiIndex(data);
 
     export default {
-        props: ['value'],
+        props: ['value', 'size'],
         data: () => ({
             messengerSheet: require('@/assets/messenger-emoji-sheet-64.png')
         }),
@@ -22,7 +22,7 @@
                     background-position: ${emoji.getPosition()};
                     background-image: url(${this.messengerSheet});
                     background-size: 5200%;
-                    width: 24px; height: 24px;
+                    width: ${this.size}px; height: ${this.size}px;
                     display: inline-block;
                 `;
 

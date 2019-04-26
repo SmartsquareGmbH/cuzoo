@@ -29,7 +29,7 @@
                         <span class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
                     </v-tooltip>
                     <chip v-if="contactPoint.rating">
-                        <emoji :value="contactPoint.rating"/>
+                        <emoji size="20" :value="contactPoint.rating"/>
                     </chip>
                     <v-spacer></v-spacer>
                     <v-icon>person</v-icon>
