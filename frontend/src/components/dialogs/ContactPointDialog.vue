@@ -159,8 +159,11 @@
                         :value="emojiMenuState">
                     <v-btn flat slot="activator">
                         {{ editedContactPoint.rating ? 'Bewertung:' : 'Bewerten'}}
-                        <emoji :emoji="`${editedContactPoint.rating ? editedContactPoint.rating : ':smiley:'}`"
-                               :size="20" class="ml-2"/>
+                        <emoji v-if="editedContactPoint.rating"
+                               :value="editedContactPoint.rating"
+                               class="ml-1"/>
+                        <emoji v-else value=":grin:"
+                               class="ml-1"/>
                     </v-btn>
                     <emoji-picker @emoji-chosen="addEmoji"/>
                 </v-menu>
@@ -173,13 +176,15 @@
     </v-dialog>
 </template>
 
-<script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
-    import api from '../../utils/http-common'
 
+<script>
+    import api from '../../utils/http-common'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
+
+    import Chip from "../core/Chip.vue"
     import LabelBox from "../core/LabelBox.vue"
+    import Emoji from "../core/Emoji.vue"
     import EmojiPicker from "../core/EmojiPicker.vue"
-    import {Emoji} from "emoji-mart-vue"
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
@@ -187,9 +192,10 @@
     export default {
         props: ["value", "contactNames", "opportunity"],
         components: {
+            Chip,
             LabelBox,
-            EmojiPicker,
-            Emoji
+            Emoji,
+            EmojiPicker
         },
         data() {
             return {
