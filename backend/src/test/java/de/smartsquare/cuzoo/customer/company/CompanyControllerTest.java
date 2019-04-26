@@ -136,7 +136,7 @@ public class CompanyControllerTest {
     }
 
     private String getUpdatedCompanyInJson() {
-        return "{\"id\":\"1\", \"name\":\"Smartsquare GmbH\", \"status\":\"Bestandskunde\"}";
+        return "{\"id\":\"1005\", \"name\":\"Smartsquare GmbH\", \"status\":\"Bestandskunde\"}";
     }
 
     @Test
