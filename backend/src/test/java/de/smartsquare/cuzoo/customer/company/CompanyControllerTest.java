@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.company;
 
 import de.smartsquare.cuzoo.customer.contact.ContactControllerTest;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -36,10 +38,13 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private LabelRepository labelRepository;
 
     @After
     public void tearDown() throws Exception {
         companyRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Test
@@ -111,14 +116,16 @@ public class CompanyControllerTest {
                         .characterEncoding("UTF-8")
                         .content(getOutdatedCompanyInJson());
 
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String id = result.getResponse().getContentAsString();
+
         MockHttpServletRequestBuilder updatedBuilder =
                 MockMvcRequestBuilders.put("/api/company/submit")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getUpdatedCompanyInJson());
+                        .content(getUpdatedCompanyInJson(id));
 
-        this.mockMvc.perform(builder);
         this.mockMvc.perform(updatedBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
@@ -132,11 +139,11 @@ public class CompanyControllerTest {
     }
 
     private String getOutdatedCompanyInJson() {
-        return "{\"id\":\"1\", \"name\":\"Smartsquare GmbH\", \"status\":\"Lead\"}";
+        return "{\"id\":\"0\", \"name\":\"Smartsquare GmbH\", \"status\":\"Lead\"}";
     }
 
-    private String getUpdatedCompanyInJson() {
-        return "{\"id\":\"1005\", \"name\":\"Smartsquare GmbH\", \"status\":\"Bestandskunde\"}";
+    private String getUpdatedCompanyInJson(String id) {
+        return "{\"id\":\"" + id + "\", \"name\":\"Smartsquare GmbH\", \"status\":\"Bestandskunde\"}";
     }
 
     @Test
@@ -203,6 +210,30 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_company_labels_got_registered() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/company/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getCompanyWithLabelsInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(labelRepository.findAll()
+                .stream()
+                .anyMatch(label -> label.getTitle().equals("DEF")))
+                .isTrue();
+    }
+
+    private String getCompanyWithLabelsInJson() {
+        return "{\"id\":\"0\", \"name\":\"Fidea Development\", \"labels\": [\"ABC\", \"DEF\"]}";
     }
 
 }

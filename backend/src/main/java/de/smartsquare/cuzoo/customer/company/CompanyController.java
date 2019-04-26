@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,6 +54,7 @@ public class CompanyController {
         }
 
         Company company = getOrCreateCompany(companyForm);
+        Company savedCompany;
 
         Long companyIdBeforeSaving = companyForm.getId();
 
@@ -63,14 +63,14 @@ public class CompanyController {
                 submitLabels(companyForm.getLabels(), company);
             }
 
-            companyRepository.save(company);
+            savedCompany = companyRepository.save(company);
             labelRepository.deleteAllReferenceless();
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (companyIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(savedCompany.getId(), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
