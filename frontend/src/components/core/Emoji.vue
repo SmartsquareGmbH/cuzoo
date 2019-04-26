@@ -1,5 +1,6 @@
 <template>
-    <div v-html="emoji"/>
+    <div style="height: 24px; width: 24px;"
+         v-html="emoji"></div>
 </template>
 
 <script>
@@ -11,7 +12,6 @@
     export default {
         props: ['value'],
         data: () => ({
-            emojiIndex: emojiIndex,
             messengerSheet: require('@/assets/messenger-emoji-sheet-64.png')
         }),
         computed: {
