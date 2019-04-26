@@ -7,7 +7,7 @@
     import {EmojiIndex} from "emoji-mart-vue-fast"
     import data from "emoji-mart-vue-fast/data/all.json";
 
-    let emojiIndex = new EmojiIndex(data);
+    const emojiIndex = new EmojiIndex(data);
 
     export default {
         props: ['value'],
