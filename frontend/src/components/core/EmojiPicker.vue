@@ -1,20 +1,17 @@
 <template>
-    <nimble-picker @select="passEmoji"
-                   set="messenger"
-                   :data="emojiSet"
-                   :i18n="i18n"/>
+    <picker @select="passEmoji"
+            set="messenger"
+            :i18n="i18n"/>
 </template>
 
 <script>
-    import {NimblePicker} from "emoji-mart-vue-fast";
-    import messenger from 'emoji-mart-vue-fast/data/messenger.json'
+    import { Picker } from "emoji-mart-vue-fast"
 
     export default {
         components: {
-            NimblePicker
+            Picker
         },
         data: () => ({
-            emojiSet: messenger,
             loading: true,
             i18n: {
                 search: 'Suche...',
