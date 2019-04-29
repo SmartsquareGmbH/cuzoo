@@ -99,6 +99,11 @@
                                         headline white--text font-weight-light`">
                                         {{ item.title }}
                                     </v-card-title>
+                                    <v-avatar v-if="item.rating" :size="36"
+                                              class="emoji-container">
+                                        <emoji :emoji="item.rating" :size="24"
+                                               set="messenger"/>
+                                    </v-avatar>
                                     <v-tooltip top max-width="750" v-show="item.comment">
                                         <v-container slot="activator">
                                         <span class="marked"
@@ -159,6 +164,8 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import marked from 'marked';
 
+    import {Emoji} from "emoji-mart-vue-fast"
+
     import Chip from '../../components/core/Chip.vue'
     import OppProgressDialog from '../../components/dialogs/OppProgressDialog.vue'
     import ContactPointDialog from '../../components/dialogs/ContactPointDialog.vue'
@@ -169,6 +176,7 @@
 
     export default {
         components: {
+            Emoji,
             Chip,
             OppProgressDialog,
             ContactPointDialog,
@@ -318,6 +326,13 @@
 </script>
 
 <style scoped>
+    .emoji-container {
+        background-color: #555;
+        position: absolute;
+        right: 16px;
+        bottom: -12px;
+    }
+
     .marked {
         white-space: pre-wrap;
     }
