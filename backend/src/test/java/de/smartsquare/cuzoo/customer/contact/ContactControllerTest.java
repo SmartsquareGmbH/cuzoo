@@ -203,6 +203,25 @@ public class ContactControllerTest {
     }
 
     @Test
+    public void that_submitting_invalid_manager_for_contact_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/contact/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getInvalidManagerInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private String getInvalidManagerInJson() {
+        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Azubi\", \"manager\":\"Fridolin\"}";
+    }
+
+    @Test
     public void that_freelancer_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.put("/api/contact/submit")
