@@ -111,11 +111,13 @@
         watch: {
             authorized(value) {
                 if (value) {
-                    this.getCompanies().then(() => {
-                        this.companyNames = this.companies.map(it => it.name);
-                        this.loadingCompanies = false;
-                    })
+                    this.getCompanyNames();
                 }
+            }
+        },
+        beforeMount() {
+            if (this.authorized) {
+                this.getCompanyNames();
             }
         },
         methods: {
@@ -131,6 +133,12 @@
             },
             companySelected() {
                 this.storeSelectedCompany({selectedCompanyOnDash: this.selectedCompany});
+            },
+            getCompanyNames() {
+                this.getCompanies().then(() => {
+                    this.companyNames = this.companies.map(it => it.name);
+                    this.loadingCompanies = false;
+                });
             }
         }
     }
