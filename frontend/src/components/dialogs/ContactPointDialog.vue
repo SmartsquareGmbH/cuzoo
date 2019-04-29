@@ -9,10 +9,13 @@
                         :close-on-content-click="false"
                         :value="emojiMenuState">
                     <v-btn small color="secondary" slot="activator">
-                        <span class="headline"
+                        <span class="title font-weight-medium"
                               v-if="!editedContactPoint.rating">+ 😃</span>
-                        <emoji v-else size="24"
-                               :value="editedContactPoint.rating"/>
+                        <emoji v-else
+                               :emoji="editedContactPoint.rating"
+                               :size="24"
+                               set="messenger"
+                               class="emoji-on-dialog"/>
                     </v-btn>
                     <emoji-picker @emoji-chosen="addEmoji"/>
                 </v-menu>
@@ -181,7 +184,7 @@
 
     import Chip from "../core/Chip.vue"
     import LabelBox from "../core/LabelBox.vue"
-    import Emoji from "../core/Emoji.vue"
+    import { Emoji } from "emoji-mart-vue-fast"
     import EmojiPicker from "../core/EmojiPicker.vue"
 
     const datefns = require('date-fns');
@@ -452,3 +455,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .emoji-on-dialog {
+        padding-top: 2px !important;
+        padding-bottom: 0px !important;
+    }
+</style>

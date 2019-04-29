@@ -29,7 +29,10 @@
                         <span class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
                     </v-tooltip>
                     <chip v-if="contactPoint.rating">
-                        <emoji size="20" :value="contactPoint.rating"/>
+                        <emoji :emoji="contactPoint.rating"
+                               :size="20"
+                               set="messenger"
+                               class="pa-0"/>
                     </chip>
                     <v-spacer></v-spacer>
                     <v-icon>person</v-icon>
@@ -46,7 +49,7 @@
     import {mapGetters, mapMutations} from 'vuex';
 
     import Chip from "../core/Chip.vue";
-    import Emoji from "../core/Emoji.vue";
+    import { Emoji } from "emoji-mart-vue-fast";
 
     const datefns = require('date-fns');
     const de = require('date-fns/locale/de');
