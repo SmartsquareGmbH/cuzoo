@@ -6,6 +6,8 @@ import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contact.ContactRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.customer.opportunity.Opportunity;
+import de.smartsquare.cuzoo.customer.opportunity.OpportunityRepository;
 import de.smartsquare.cuzoo.user.User;
 import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
@@ -47,34 +49,40 @@ public class ContactPointControllerTest {
     private ContactPointRepository contactPointRepository;
     @Autowired
     private LabelRepository labelRepository;
+    @Autowired
+    private OpportunityRepository opportunityRepository;
 
     private User user;
     private Company company;
     private Contact contact;
     private ContactPoint contactPoint;
     private Label label;
+    private Opportunity opportunity;
 
     @Before
     public void initialize() {
         userRepository.deleteAll();
+
         user = new User("user", "", "", "");
-        userRepository.save(user);
-
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
-        companyRepository.save(company);
-
         contact = new Contact("Darius", "", "", "", "", "");
+        opportunity = new Opportunity("Moeglichkeit", "Prospect", "Eine Moeglichkeit!");
+        label = new Label("Cloud Flyer");
+
+        userRepository.save(user);
+        companyRepository.save(company);
         contact.setCompany(company);
         contact.setManager(user);
         contactRepository.save(contact);
 
-        contactPoint = new ContactPoint("Beratung", 0L, contact, "", "", "");
-        label = new Label("Cloud Flyer");
-
+        contactPoint = new ContactPoint("Beratung", 0L, contact, "JD$UTF%N&~", "", "");
         contactPoint.setCreator(user);
         contactPoint.addLabel(label);
         label.addContactPointWithLabel(contactPoint);
 
+        opportunity.addContactPoint(contactPoint);
+        contactPoint.setOpportunity(opportunity);
+        opportunityRepository.save(opportunity);
         contactPointRepository.save(contactPoint);
         labelRepository.save(label);
     }
@@ -452,5 +460,22 @@ public class ContactPointControllerTest {
         return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", " +
                 "\"date\":\"0\", \"creator\":\"user\"," +
                 "\"labels\": [\"JKL\"], \"types\":[\"Social Media\"]}";
+    }
+
+    @Test
+    public void that_getting_contact_points_of_opportunity_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/point/get/opportunity/" + opportunity.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .contains(contactPoint.getComment()))
+                .isTrue();
     }
 }
