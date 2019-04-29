@@ -1,7 +1,7 @@
 <template>
     <picker @select="passEmoji"
             set="messenger"
-            :default-skin="1"
+            :skin="1"
             :show-skin-tones="false"
             :i18n="i18n"
             title="Kontaktpunkt bewerten"
