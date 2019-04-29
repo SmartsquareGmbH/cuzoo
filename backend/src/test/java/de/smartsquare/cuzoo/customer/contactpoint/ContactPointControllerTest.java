@@ -369,4 +369,88 @@ public class ContactPointControllerTest {
                         .string("[\"Cloud Flyer\"]"))
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    public void that_getting_types_by_input_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointWithLabelsAndTypesInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/point/get/types/med")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .equals("[\"Social Media\"]"))
+                .isTrue();
+    }
+
+    @Test
+    public void that_getting_labels_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointWithLabelsAndTypesInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/point/get/labels")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .contains("JKL"))
+                .isTrue();
+    }
+
+    @Test
+    public void that_getting_types_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactPointWithLabelsAndTypesInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/point/get/types")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .contains("Social Media"))
+                .isTrue();
+    }
+
+    private String getContactPointWithLabelsAndTypesInJson() {
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", " +
+                "\"date\":\"0\", \"creator\":\"user\"," +
+                "\"labels\": [\"JKL\"], \"types\":[\"Social Media\"]}";
+    }
 }
