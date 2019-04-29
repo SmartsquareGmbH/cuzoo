@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -155,14 +156,16 @@ public class ContactControllerTest {
                         .characterEncoding("UTF-8")
                         .content(getOutdatedContactInJson());
 
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String id = result.getResponse().getContentAsString();
+
         MockHttpServletRequestBuilder updatedBuilder =
                 MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getUpdatedContactInJson());
+                        .content(getUpdatedContactInJson(id));
 
-        this.mockMvc.perform(builder);
         this.mockMvc.perform(updatedBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
@@ -176,11 +179,11 @@ public class ContactControllerTest {
     }
 
     private String getOutdatedContactInJson() {
-        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Azubi\", \"manager\":\"alex\"}";
+        return "{\"id\":\"0\", \"name\":\"Darius Tack\", \"role\":\"Azubi\", \"manager\":\"alex\"}";
     }
 
-    private String getUpdatedContactInJson() {
-        return "{\"id\":\"1\", \"name\":\"Darius Tack\", \"role\":\"Softwareentwickler\", \"manager\":\"alex\"}";
+    private String getUpdatedContactInJson(String id) {
+        return "{\"id\":\"" + id + "\", \"name\":\"Darius Tack\", \"role\":\"Softwareentwickler\", \"manager\":\"alex\"}";
     }
 
     @Test

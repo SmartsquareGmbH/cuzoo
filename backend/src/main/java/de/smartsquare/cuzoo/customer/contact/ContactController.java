@@ -82,6 +82,7 @@ public class ContactController {
         }
 
         Contact contact = getOrCreateContact(contactForm);
+        Contact savedContact;
         contact.setManager(manager.get());
 
         Long contactIdBeforeSaving = contactForm.getId();
@@ -95,13 +96,13 @@ public class ContactController {
                 submitLabels(contactForm.getLabels(), contact);
             }
 
-            contactRepository.save(contact);
+            savedContact = contactRepository.save(contact);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (contactIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(savedContact.getId(), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
