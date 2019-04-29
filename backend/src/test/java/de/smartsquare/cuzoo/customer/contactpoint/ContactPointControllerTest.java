@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -184,20 +185,22 @@ public class ContactPointControllerTest {
     @Test
     public void that_contact_point_is_getting_updated() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getName())
+                MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(getOutdatedContactPointInJson());
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String id = result.getResponse().getContentAsString();
 
         MockHttpServletRequestBuilder updatedBuilder =
                 MockMvcRequestBuilders.put("/api/point/submit/" + contact.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(getUpdatedContactPointInJson());
+                        .content(getUpdatedContactPointInJson(id));
 
-        this.mockMvc.perform(builder);
         this.mockMvc.perform(updatedBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
@@ -211,11 +214,11 @@ public class ContactPointControllerTest {
     }
 
     private String getOutdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
-    private String getUpdatedContactPointInJson() {
-        return "{\"id\":\"2\", \"title\":\"Auftrag\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
+    private String getUpdatedContactPointInJson(String id) {
+        return "{\"id\":\"" + id + "\", \"title\":\"Auftrag\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
     @Test

@@ -45,11 +45,11 @@ public class ContactPointController {
     }
 
     @PutMapping("/submit/{contactId}")
-    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactId") Long contactName,
+    public final ResponseEntity<?> submitContactPoint(@PathVariable("contactId") Long contactId,
                                                       @RequestBody @Valid ContactPointForm contactPointForm,
                                                       BindingResult bindingResult) {
         Optional<User> creator = userRepository.findMaybeByUsername(contactPointForm.getCreator());
-        Optional<Contact> contact = contactRepository.findMaybeById(contactName);
+        Optional<Contact> contact = contactRepository.findMaybeById(contactId);
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Kontaktpunkte benötigt einen Titel und ein Datum!");
@@ -62,6 +62,7 @@ public class ContactPointController {
         }
 
         ContactPoint contactPoint = getOrCreateContactPoint(contactPointForm, contact.get());
+        ContactPoint savedContactPoint;
 
         contactPoint.setCreator(creator.get());
         Long contactPointIdBeforeSaving = contactPointForm.getId();
@@ -75,16 +76,16 @@ public class ContactPointController {
                 submitLabels(contactPointForm.getLabels(), contactPoint, false);
             }
 
-            contactPointRepository.save(contactPoint);
+            savedContactPoint = contactPointRepository.save(contactPoint);
             labelRepository.deleteAllReferenceless();
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (contactPointIdBeforeSaving < 1) {
-            return new ResponseEntity<>(contactPoint.getId(), HttpStatus.CREATED);
+            return new ResponseEntity<>(savedContactPoint.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(contactPoint.getId(), HttpStatus.OK);
+            return new ResponseEntity<>(savedContactPoint.getId(), HttpStatus.OK);
         }
     }
 
