@@ -112,7 +112,7 @@ public class ContactPointControllerTest {
     @Test
     public void that_submitting_contact_point_without_existing_contact_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/point/submit/xxx")
+                MockMvcRequestBuilders.put("/api/point/submit/13337")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -125,7 +125,7 @@ public class ContactPointControllerTest {
     }
 
     private String getContactPointInJson() {
-        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"0\", \"types\":[\"Social Media\"], \"creator\":\"Fridolin\"}";
     }
 
     @Test
