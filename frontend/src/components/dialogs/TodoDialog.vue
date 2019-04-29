@@ -162,7 +162,6 @@
                     this.$emit('refresh');
                     this.closeDialog();
                 }).catch(error => {
-                    console.log(error);
                     alert(error);
                 });
             },
