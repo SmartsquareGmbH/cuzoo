@@ -68,24 +68,24 @@ public class ContactController {
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContact(@RequestBody @Valid ContactForm contactForm, BindingResult bindingResult,
                                                  @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
-        Optional<User> manager = userRepository.findMaybeByUsername(contactForm.getManager());
-        Optional<Company> company = companyRepository.findMaybeByName(maybeCompanyName);
-
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Ansprechpartner benötigen einen Namen und einen Manager!");
         }
+
+        Optional<User> manager = userRepository.findMaybeByUsername(contactForm.getManager());
         if (!manager.isPresent()) {
             return ResponseEntity.badRequest().body("Der angegebene Manager existiert nicht!");
         }
+        Optional<Company> company = companyRepository.findMaybeByName(maybeCompanyName);
         if (hasCompany(maybeCompanyName) && !company.isPresent()) {
             return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
         }
 
         Contact contact = getOrCreateContact(contactForm);
-        Contact savedContact;
         contact.setManager(manager.get());
 
         Long contactIdBeforeSaving = contactForm.getId();
+        Contact savedContact;
 
         if (hasCompany(maybeCompanyName)) {
             contact.setCompany(company.get());
@@ -109,28 +109,29 @@ public class ContactController {
     }
 
     private Contact getOrCreateContact(@RequestBody @Valid ContactForm contactForm) {
-        Contact contact;
-        Optional<Contact> byId = contactRepository.findById(contactForm.getId());
+        return contactRepository
+                .findById(contactForm.getId())
+                .map(c -> fillContactFromForm(c, contactForm))
+                .orElseGet(() -> newContact(contactForm));
+    }
 
-        if (byId.isPresent()) {
-            contact = byId.get();
+    private Contact newContact(ContactForm contactForm) {
+        return new Contact(
+                contactForm.getName(),
+                contactForm.getRole(),
+                contactForm.getMail(),
+                contactForm.getTelephone(),
+                contactForm.getMobile(),
+                contactForm.getComment());
+    }
 
-            contact.setName(contactForm.getName());
-            contact.setRole(contactForm.getRole());
-            contact.setMail(contactForm.getMail());
-            contact.setTelephone(contactForm.getTelephone());
-            contact.setMobile(contactForm.getMobile());
-            contact.setComment(contactForm.getComment());
-        } else {
-            contact = new Contact(
-                    contactForm.getName(),
-                    contactForm.getRole(),
-                    contactForm.getMail(),
-                    contactForm.getTelephone(),
-                    contactForm.getMobile(),
-                    contactForm.getComment());
-        }
-
+    private Contact fillContactFromForm(Contact contact, ContactForm contactForm) {
+        contact.setName(contactForm.getName());
+        contact.setRole(contactForm.getRole());
+        contact.setMail(contactForm.getMail());
+        contact.setTelephone(contactForm.getTelephone());
+        contact.setMobile(contactForm.getMobile());
+        contact.setComment(contactForm.getComment());
         return contact;
     }
 

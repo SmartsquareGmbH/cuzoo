@@ -107,12 +107,7 @@ public class ContactControllerTest {
         String companyName = "Smartsquare GmbH";
         companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
 
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), companyName);
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -131,12 +126,7 @@ public class ContactControllerTest {
         String companyName = "Smartsquare GmbH";
         manager.setId(1L);
 
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), companyName);
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -150,36 +140,45 @@ public class ContactControllerTest {
 
     @Test
     public void that_contact_is_getting_updated() throws Exception {
+        //given
         String companyName = "Smartsquare GmbH";
         companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
 
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getOutdatedContactInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getOutdatedContactInJson(), companyName);
 
         MvcResult result = this.mockMvc.perform(builder).andReturn();
         String id = result.getResponse().getContentAsString();
 
-        MockHttpServletRequestBuilder updatedBuilder =
-                MockMvcRequestBuilders.put("/api/contact/submit?companyName=" + companyName)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getUpdatedContactInJson(id));
+        //when
+        MockHttpServletRequestBuilder updatedBuilder = submitContact(getUpdatedContactInJson(id), companyName);
 
         this.mockMvc.perform(updatedBuilder)
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
+        //then
         assertThat(contactRepository.findAll()
                 .stream()
-                .anyMatch(contact -> contact.getRole()
-                        .equals("Softwareentwickler")))
-                .isTrue();
+                .map(Contact::getRole))
+                .containsOnly("Softwareentwickler");
+    }
+
+    private MockHttpServletRequestBuilder submitContact(String content, String companyName) {
+        String requestPath = "/api/contact/submit";
+        if (companyName != null && !companyName.isEmpty()) {
+            requestPath += "?companyName=" + companyName;
+        }
+
+        return MockMvcRequestBuilders.put(requestPath)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(content);
+    }
+
+    private MockHttpServletRequestBuilder submitContact(String content) {
+        return submitContact(content, "");
     }
 
     private String getOutdatedContactInJson() {
@@ -192,12 +191,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_submitting_invalid_contact_is_bad_request() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getInvalidContactInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getInvalidContactInJson());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -211,12 +205,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_submitting_invalid_manager_for_contact_is_bad_request() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getInvalidManagerInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getInvalidManagerInJson());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -230,12 +219,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_freelancer_is_getting_registered() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getFreelancerInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getFreelancerInJson());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -339,12 +323,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_contact_labels_got_registered() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactWithLabelsInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getContactWithLabelsInJson());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -359,12 +338,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_getting_labels_is_successfully() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactWithLabelsInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getContactWithLabelsInJson());
 
         this.mockMvc.perform(builder);
 
@@ -385,12 +359,7 @@ public class ContactControllerTest {
 
     @Test
     public void that_getting_labels_by_input_is_successfully() throws Exception {
-        MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/contact/submit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getContactWithLabelsInJson());
+        MockHttpServletRequestBuilder builder = submitContact(getContactWithLabelsInJson());
 
         this.mockMvc.perform(builder);
 
