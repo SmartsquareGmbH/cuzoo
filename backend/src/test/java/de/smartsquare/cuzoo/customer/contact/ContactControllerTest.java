@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import de.smartsquare.cuzoo.user.User;
 import de.smartsquare.cuzoo.user.UserRepository;
 import org.junit.After;
@@ -45,6 +46,8 @@ public class ContactControllerTest {
     private ContactRepository contactRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LabelRepository labelRepository;
 
     private User manager;
 
@@ -53,6 +56,7 @@ public class ContactControllerTest {
         userRepository.deleteAll();
         contactRepository.deleteAll();
         companyRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Before
@@ -331,6 +335,82 @@ public class ContactControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_contact_labels_got_registered() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/contact/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactWithLabelsInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(labelRepository.findAll()
+                .stream()
+                .anyMatch(label -> label.getTitle().equals("EJK")))
+                .isTrue();
+    }
+
+    @Test
+    public void that_getting_labels_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/contact/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactWithLabelsInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/contact/get/labels")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .contains("GHI"))
+                .isTrue();
+    }
+
+    @Test
+    public void that_getting_labels_by_input_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/contact/submit")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getContactWithLabelsInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/contact/get/labels/JK")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+
+        assertThat(result
+                .getResponse()
+                .getContentAsString()
+                .equals("[\"EJK\"]"))
+                .isTrue();
+    }
+
+    private String getContactWithLabelsInJson() {
+        return "{\"id\":\"0\", \"name\":\"Darius Tack\", \"role\":\"Azubi\", \"manager\":\"alex\", \"labels\": [\"GHI\", \"EJK\"]}";
     }
 
 }
