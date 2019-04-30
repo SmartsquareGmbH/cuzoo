@@ -63,7 +63,7 @@ public class TodoReminder {
         });
     }
 
-    private String getMailMessage(Todo todo) {
+    String getMailMessage(Todo todo) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.");
         String faelligkeitsdatum = format.format(todo.getExpiration());
         String firstname = todo.getCreator().getFullname().split(" ")[0];

@@ -7,8 +7,8 @@
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer/>
                         <v-img
-                                :src=logo
-                                max-width="128px"/>
+                                :src="logo"
+                                max-width="136px"/>
                     </v-toolbar>
                     <v-card-text>
                         <v-form>
