@@ -45,10 +45,12 @@ public class OpportunityController {
         }
 
         ContactPoint contactPoint = maybeContactPoint.get();
+
+        Opportunity savedOpportunity;
         Long opportunityIdBeforeSaving = opportunity.getId();
 
         try {
-            Opportunity savedOpportunity = opportunityRepository.save(opportunity);
+            savedOpportunity = opportunityRepository.save(opportunity);
 
             contactPoint.setOpportunity(savedOpportunity);
             contactPointRepository.save(contactPoint);
@@ -60,9 +62,9 @@ public class OpportunityController {
         }
 
         if (opportunityIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(savedOpportunity.getId(),HttpStatus.OK);
         }
     }
 
@@ -82,13 +84,14 @@ public class OpportunityController {
         Opportunity opportunity = maybeOpportunity.get();
         Opportunity.Progress progress = new Opportunity.Progress(progressForm.getProgressText(), progressForm.getOpportunityState());
 
+        Opportunity savedOpportunity;
         Long opportunityIdBeforeSaving = opportunity.getId();
 
         try {
             opportunity.addProgress(progress);
             opportunity.setState(progress.getOpportunityState());
 
-            Opportunity savedOpportunity = opportunityRepository.save(opportunity);
+            savedOpportunity = opportunityRepository.save(opportunity);
 
             savedOpportunity.setLastProgress(getLastProgress(savedOpportunity.getId()));
             opportunityRepository.save(savedOpportunity);
@@ -97,9 +100,9 @@ public class OpportunityController {
         }
 
         if (opportunityIdBeforeSaving < 1) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(savedOpportunity.getId(),HttpStatus.OK);
         }
     }
 
