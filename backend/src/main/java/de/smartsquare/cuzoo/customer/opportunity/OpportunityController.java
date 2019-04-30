@@ -100,24 +100,20 @@ public class OpportunityController {
     }
 
     private Date getLastProgress(Long opportunityId) {
-        Date lastContactPointDate = new Date();
+        Date lastContactPointDate;
         ContactPoint lastContactPoint = contactPointRepository
                 .findFirstByOpportunityIdOrderByDateDesc(opportunityId);
-
-        if (lastContactPoint != null) {
-            lastContactPointDate = lastContactPoint.getDate();
-        }
 
         List<Date> lastProgressDates = opportunityRepository
                 .findAllProgressDatesByOpportunityIdOrderByDateDesc(opportunityId);
 
-        if (lastProgressDates.size() < 1) return lastContactPointDate;
-
-        if (lastContactPointDate.after(lastProgressDates.get(0))) {
-            return lastContactPointDate;
+        if (lastContactPoint != null) {
+            lastContactPointDate = lastContactPoint.getDate();
+        } else {
+            return lastProgressDates.get(0);
         }
 
-        return lastProgressDates.get(0);
+        return lastContactPointDate;
     }
 
     @DeleteMapping("/delete/{opportunityId}")
