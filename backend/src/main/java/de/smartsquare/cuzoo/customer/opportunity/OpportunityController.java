@@ -100,8 +100,14 @@ public class OpportunityController {
     }
 
     private Date getLastProgress(Long opportunityId) {
-        Date lastContactPointDate = contactPointRepository
-                .findFirstByOpportunityIdOrderByDateDesc(opportunityId).getDate();
+        Date lastContactPointDate = new Date();
+        ContactPoint lastContactPoint = contactPointRepository
+                .findFirstByOpportunityIdOrderByDateDesc(opportunityId);
+
+        if (lastContactPoint != null) {
+            lastContactPointDate = lastContactPoint.getDate();
+        }
+
         List<Date> lastProgressDates = opportunityRepository
                 .findAllProgressDatesByOpportunityIdOrderByDateDesc(opportunityId);
 
