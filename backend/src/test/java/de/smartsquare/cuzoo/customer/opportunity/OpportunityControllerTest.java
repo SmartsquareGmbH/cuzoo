@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -94,6 +95,35 @@ public class OpportunityControllerTest {
                 .stream()
                 .map(Opportunity::getTitle))
                 .containsOnly("Moeglichkeit");
+    }
+
+    @Test
+    public void that_opportunity_is_getting_updated() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getOpportunityInJson());
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String id = result.getResponse().getContentAsString();
+
+        MockHttpServletRequestBuilder updatedBuilder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getUpdatedOpportunityInJson(id));
+
+        this.mockMvc.perform(updatedBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private String getUpdatedOpportunityInJson(String id) {
+        return "{\"id\":\"" + id + "\", \"title\":\"Moeglichkeit\", \"state\":\"Quote\"}";
     }
 
     @Test
