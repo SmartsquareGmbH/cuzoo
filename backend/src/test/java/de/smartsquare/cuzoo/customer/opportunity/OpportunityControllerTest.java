@@ -98,7 +98,7 @@ public class OpportunityControllerTest {
         assertThat(opportunityRepository.findAll()
                 .stream()
                 .map(Opportunity::getTitle))
-                .containsOnly("Moeglichkeit");
+                .contains("Moeglichkeit");
     }
 
     @Test
