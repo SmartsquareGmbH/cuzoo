@@ -1,11 +1,15 @@
 package de.smartsquare.cuzoo.customer.todo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,13 +21,15 @@ public class TodoReminder {
     private final TaskScheduler taskScheduler;
     private final TodoRepository todoRepository;
 
+    private static final Logger log = LoggerFactory.getLogger(TodoReminder.class);
+
     public TodoReminder(JavaMailSender sender, TaskScheduler taskScheduler, TodoRepository todoRepository) {
         this.sender = sender;
         this.taskScheduler = taskScheduler;
         this.todoRepository = todoRepository;
     }
 
-    private void send(String to, String subject, String text) throws Exception {
+    private void send(String to, String subject, String text) throws MailException, MessagingException {
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -49,8 +55,8 @@ public class TodoReminder {
 
                     try {
                         send(to, subject, getMailMessage(todo));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (MailException | MessagingException e) {
+                        log.error("Error sending mail", e);
                     }
                 }, todo.getReminder());
             }
