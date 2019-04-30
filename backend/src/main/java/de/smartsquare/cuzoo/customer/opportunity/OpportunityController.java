@@ -72,11 +72,11 @@ public class OpportunityController {
     public final ResponseEntity<?> submitOpportunityProgress(@PathVariable("opportunityId") Long opportunityId,
                                                              @RequestBody @Valid ProgressForm progressForm,
                                                              BindingResult bindingResult) {
-        Optional<Opportunity> maybeOpportunity = opportunityRepository.findById(opportunityId);
-
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Fortschritte von Opportunities benötigen einen Status");
         }
+
+        Optional<Opportunity> maybeOpportunity = opportunityRepository.findById(opportunityId);
         if (!maybeOpportunity.isPresent()) {
             return ResponseEntity.badRequest().body("Diese Opportunity existiert nicht!");
         }
