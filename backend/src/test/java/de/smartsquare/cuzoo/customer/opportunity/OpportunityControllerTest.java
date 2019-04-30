@@ -254,4 +254,36 @@ public class OpportunityControllerTest {
     private String getSecondProgressInJson() {
         return "{\"opportunityState\":\"Quote\", \"progressText\":\"Wieder eine Quote\"}";
     }
+
+    @Test
+    public void that_opportunity_got_deleted_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.delete("/api/opportunity/delete/" + opportunity.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository
+                .findAll()
+                .size()).isEqualTo(0);
+    }
+
+    @Test
+    public void that_deleting_non_existing_opportunity_is_not_found() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.delete("/api/opportunity/delete/1337")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }
