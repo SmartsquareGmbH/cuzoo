@@ -35,11 +35,11 @@ public class OpportunityController {
     public final ResponseEntity<?> submitOpportunity(@PathVariable("contactPointId") Long contactPointId,
                                                      @RequestBody @Valid Opportunity opportunity,
                                                      BindingResult bindingResult) {
-        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
-
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Opportunities benötigen einen Titel und einen Status");
         }
+
+        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
         if (!maybeContactPoint.isPresent()) {
             return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
