@@ -286,4 +286,18 @@ public class OpportunityControllerTest {
                         .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    public void that_getting_opportunities_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/opportunity/get/")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("CUZOO");
+    }
 }
