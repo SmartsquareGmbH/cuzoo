@@ -61,6 +61,21 @@ public class UserControllerTest {
                 .containsOnly("drs tck");
     }
 
+    @Test
+    public void that_submitting_user_information_for_non_existing_user_is_not_found() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/user/submit/info/XYZ")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getUserInformationInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
     private String getUserInformationInJson() {
         return "{\"fullname\": \"drs tck\", \"mail\": \"drs@t.ck\"}";
     }
