@@ -65,20 +65,20 @@ public class OpportunityControllerTest {
     public void initialize() throws Exception {
         user = new User("user", "", "", "");
         company = new Company("Smartsquare GmbH", "", "", "", "", "", "");
-        contact = new Contact("Darius", "", "", "", "", "");
-
         userRepository.save(user);
         companyRepository.save(company);
-        contact.setCompany(company);
+
+        contact = new Contact("Darius", company, "", "", "", "", "");
         contact.setManager(user);
         contactRepository.save(contact);
 
-        contactPoint = new ContactPoint("Beratung", 0L, contact, "JD$UTF%N&~", "", "");
-        contactPoint.setCreator(user);
-        contactPointRepository.save(contactPoint);
-
         opportunity = new Opportunity("CUZOO", "Quote", "over 9000");
         opportunityRepository.save(opportunity);
+
+        contactPoint = new ContactPoint("Beratung", 0L, contact, "JD$UTF%N&~", "", "");
+        contactPoint.setCreator(user);
+        contactPoint.setOpportunity(opportunity);
+        contactPointRepository.save(contactPoint);
     }
 
     @Test
@@ -296,6 +296,23 @@ public class OpportunityControllerTest {
                         .characterEncoding("UTF-8");
 
         MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("CUZOO");
+    }
+
+    @Test
+    public void that_getting_opportunities_of_company_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/opportunity/get/list/" + company.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc
+                .perform(builder)
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
         String response = result.getResponse().getContentAsString();
 
         assertThat(response).contains("CUZOO");
