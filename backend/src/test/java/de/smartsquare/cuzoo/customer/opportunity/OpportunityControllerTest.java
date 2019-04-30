@@ -320,4 +320,18 @@ public class OpportunityControllerTest {
 
         assertThat(response).contains("CUZOO");
     }
+
+    @Test
+    public void that_getting_opportunities_of_non_existing_company_is_not_found() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/opportunity/get/list/1337")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }
