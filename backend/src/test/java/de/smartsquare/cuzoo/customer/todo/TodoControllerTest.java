@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -146,9 +147,8 @@ public class TodoControllerTest {
         assertThat(todoRepository
                 .findAll()
                 .stream()
-                .anyMatch(todo -> todo.getDescription()
-                        .equals("Foo Bar") && todo.isDone()))
-                .isTrue();
+                .map(Todo::getDescription))
+                .containsOnly("Foo Bar");
     }
 
     private String getUndoneTodoInJson() {
@@ -182,6 +182,40 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_getting_todo_with_invalid_company_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/todo/get/FooBarGmbH")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getTodoInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void that_submitting_todo_with_invalid_binding_result_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/todo/submit?companyName=FooBarGmbH")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getInvalidTodoInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private String getInvalidTodoInJson() {
+        return "{\"id\":\"0\", \"reminder\":\"0\", \"creator\":\"user\", \"description\":\"ABC\"}";
     }
 
     @Test
