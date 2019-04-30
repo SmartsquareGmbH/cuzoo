@@ -96,6 +96,21 @@ public class OpportunityControllerTest {
                 .containsOnly("Moeglichkeit");
     }
 
+    @Test
+    public void that_submitting_opportunity_for_non_existing_contact_point_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/1337")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getOpportunityInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
     private String getOpportunityInJson() {
         return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
     }
