@@ -262,4 +262,27 @@ public class TodoControllerTest {
     private String getTodoWithInvalidCreatorInJson() {
         return "{\"description\":\"Muell rausbringen\", \"expiration\":\"0\", \"id\":\"0\", \"reminder\":\"0\", \"creator\":\"invalid user\"}";
     }
+
+    @Test
+    public void that_getting_todos_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getTodoInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
+                MockMvcRequestBuilders.get("/api/todo/get")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Muell rausbringen");
+    }
 }
