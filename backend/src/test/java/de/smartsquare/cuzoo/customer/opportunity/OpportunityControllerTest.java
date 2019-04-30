@@ -114,4 +114,23 @@ public class OpportunityControllerTest {
     private String getOpportunityInJson() {
         return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
     }
+
+    @Test
+    public void that_submitting_invalid_opportunity_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getInvalidOpportunityInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private String getInvalidOpportunityInJson() {
+        return "{\"id\":\"0\", \"title\":\"\", \"state\":\"\"}";
+    }
 }
