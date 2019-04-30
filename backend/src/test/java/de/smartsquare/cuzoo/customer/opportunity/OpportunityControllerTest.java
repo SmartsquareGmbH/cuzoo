@@ -50,6 +50,7 @@ public class OpportunityControllerTest {
     private Company company;
     private Contact contact;
     private ContactPoint contactPoint;
+    private Opportunity opportunity;
 
     @After
     public void tearDown() throws Exception {
@@ -75,6 +76,9 @@ public class OpportunityControllerTest {
         contactPoint = new ContactPoint("Beratung", 0L, contact, "JD$UTF%N&~", "", "");
         contactPoint.setCreator(user);
         contactPointRepository.save(contactPoint);
+
+        opportunity = new Opportunity("CUZOO", "Quote", "over 9000");
+        opportunityRepository.save(opportunity);
     }
 
     @Test
@@ -162,5 +166,30 @@ public class OpportunityControllerTest {
 
     private String getInvalidOpportunityInJson() {
         return "{\"id\":\"0\", \"title\":\"\", \"state\":\"\"}";
+    }
+
+    @Test
+    public void that_submitting_progress_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/progress/" + opportunity.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getProgressInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository
+                .findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .containsOnly("Win");
+    }
+
+    private String getProgressInJson() {
+        return "{\"opportunityState\":\"Win\", \"progressText\":\"\"}";
     }
 }
