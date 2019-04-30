@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,15 +23,10 @@ public class UserController {
 
     @PutMapping("/submit/info/{username}")
     public final ResponseEntity<?> submitCompany(@RequestBody UserInformationForm userInformationForm,
-                                                 @PathVariable String username, BindingResult bindingResult) {
+                                                 @PathVariable String username) {
         Optional<User> maybeUser = userRepository.findMaybeByUsername(username);
-
         if (!maybeUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dieser User wurde nicht gefunden!");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Die einzureichenden Informationen sind ungültig!");
         }
 
         User user = maybeUser.get();
