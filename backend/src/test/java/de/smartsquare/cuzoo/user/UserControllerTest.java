@@ -94,4 +94,18 @@ public class UserControllerTest {
 
         assertThat(response).contains("1234");
     }
+
+    @Test
+    public void that_getting_non_existing_user_is_not_found() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/user/get/XYZ")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }
