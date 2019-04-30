@@ -108,4 +108,18 @@ public class UserControllerTest {
                         .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    public void that_getting_usernames_is_successfully() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.get("/api/user/get/usernames")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("drs");
+    }
 }
