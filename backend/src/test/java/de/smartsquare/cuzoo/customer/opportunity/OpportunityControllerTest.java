@@ -226,4 +226,32 @@ public class OpportunityControllerTest {
     private String getInvalidProgressInJson() {
         return "{\"opportunityState\":\"\", \"progressText\":\"\"}";
     }
+
+    @Test
+    public void that_submitting_second_progress_sets_right_last_progress() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/progress/" + opportunity.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getProgressInJson());
+
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder secondBuilder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/progress/" + opportunity.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getSecondProgressInJson());
+
+        this.mockMvc.perform(secondBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isCreated())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private String getSecondProgressInJson() {
+        return "{\"opportunityState\":\"Quote\", \"progressText\":\"Wieder eine Quote\"}";
+    }
 }
