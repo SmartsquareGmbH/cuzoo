@@ -64,7 +64,7 @@ public class OpportunityController {
         if (opportunityIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(savedOpportunity.getId(),HttpStatus.OK);
+            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.OK);
         }
     }
 
@@ -84,14 +84,11 @@ public class OpportunityController {
         Opportunity opportunity = maybeOpportunity.get();
         Opportunity.Progress progress = new Opportunity.Progress(progressForm.getProgressText(), progressForm.getOpportunityState());
 
-        Opportunity savedOpportunity;
-        Long opportunityIdBeforeSaving = opportunity.getId();
-
         try {
             opportunity.addProgress(progress);
             opportunity.setState(progress.getOpportunityState());
 
-            savedOpportunity = opportunityRepository.save(opportunity);
+            Opportunity savedOpportunity = opportunityRepository.save(opportunity);
 
             savedOpportunity.setLastProgress(getLastProgress(savedOpportunity.getId()));
             opportunityRepository.save(savedOpportunity);
@@ -99,11 +96,7 @@ public class OpportunityController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (opportunityIdBeforeSaving < 1) {
-            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(savedOpportunity.getId(),HttpStatus.OK);
-        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     private Date getLastProgress(Long opportunityId) {
