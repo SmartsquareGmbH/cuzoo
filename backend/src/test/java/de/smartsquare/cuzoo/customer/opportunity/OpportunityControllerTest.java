@@ -229,6 +229,9 @@ public class OpportunityControllerTest {
 
     @Test
     public void that_submitting_second_progress_sets_right_last_progress() throws Exception {
+        Opportunity opportunity = new Opportunity("KOZOO", "Lead", "");
+        opportunityRepository.save(opportunity);
+
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.put("/api/opportunity/submit/progress/" + opportunity.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
