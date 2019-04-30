@@ -33,20 +33,21 @@ public class TodoController {
 
     @PutMapping("/submit")
     public final ResponseEntity<?> submitTodo(@RequestBody @Valid TodoForm todoForm,
-                                              @RequestParam("companyName") String companyName,
-                                              BindingResult bindingResult) {
-        Optional<User> creator = userRepository.findMaybeByUsername(todoForm.getCreator());
-        Optional<Company> company = companyRepository.findMaybeByName(companyName);
-
+                                              BindingResult bindingResult,
+                                              @RequestParam("companyName") String companyName) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest()
                     .body("Todos benötigen eine Beschreibung, sowie ein Fälligkeits- und ein Erinnerungsdatum!");
         }
-        if (!company.isPresent()) {
-            return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
-        }
+
+        Optional<User> creator = userRepository.findMaybeByUsername(todoForm.getCreator());
         if (!creator.isPresent()) {
             return ResponseEntity.badRequest().body("Der Ersteller existiert nicht!");
+        }
+
+        Optional<Company> company = companyRepository.findMaybeByName(companyName);
+        if (!company.isPresent()) {
+            return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
         }
 
         Todo todo = getOrCreateTodo(todoForm, company.get());
