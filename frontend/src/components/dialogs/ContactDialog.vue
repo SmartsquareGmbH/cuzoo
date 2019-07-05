@@ -284,7 +284,7 @@
                 }
             },
             encodeString(value) {
-                return value.replace("&", "%26").replace("|", "%7C");
+                return value.replace(/&/g, "%26").replace("|", "%7C");
             }
         }
     }
