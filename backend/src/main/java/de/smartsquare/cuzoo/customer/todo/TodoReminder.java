@@ -42,7 +42,7 @@ public class TodoReminder {
 
     @Scheduled(fixedRate = 1800000) // every 30 minutes
     void sendTodoReminder() {
-        List<Todo> undoneTodos = todoRepository.findAllByDoneFalse();
+        List<Todo> undoneTodos = todoRepository.findAllByDoneFalseAndScheduledFalse();
 
         undoneTodos.forEach(todo -> {
             Date now = new Date(System.currentTimeMillis());
@@ -60,6 +60,9 @@ public class TodoReminder {
                     }
                 }, todo.getReminder());
             }
+
+            todo.setScheduled(true);
+            todoRepository.save(todo);
         });
     }
 

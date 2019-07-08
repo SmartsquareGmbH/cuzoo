@@ -30,6 +30,7 @@ public class Todo {
     private Date reminder;
 
     private boolean done;
+    private boolean scheduled;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
@@ -104,5 +105,13 @@ public class Todo {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public boolean isScheduled() {
+        return scheduled;
+    }
+
+    public void setScheduled(boolean scheduled) {
+        this.scheduled = scheduled;
     }
 }
