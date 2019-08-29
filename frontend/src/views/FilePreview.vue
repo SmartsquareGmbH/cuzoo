@@ -6,11 +6,11 @@
         Zurück
       </v-btn>
     </v-flex>
-    <v-flex v-if="isPDF" xs6>
-      <pdf v-for="page in pageCount" :key="page" :src="getPDFSource()" :page="page" class="mb-3" />
-    </v-flex>
-    <v-flex v-else xs5>
-      <v-img :src="url" />
+    <v-flex xs6>
+      <div v-if="isPDF">
+        <pdf v-for="page in pageCount" :key="page" :page="page" :src="getPDFSource()" class="mb-3" />
+      </div>
+      <v-img v-else :src="url" />
     </v-flex>
     <v-flex xs3></v-flex>
   </v-layout>
@@ -40,7 +40,7 @@ export default {
       )
     },
     isPDF() {
-      return !!this.fileName.inludes("pdf")
+      return !!this.fileName.includes("pdf")
     },
   },
   mounted() {
