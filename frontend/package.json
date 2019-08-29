@@ -11,13 +11,11 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@vue/cli-plugin-babel": "^3.7.0",
-    "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "^3.7.0",
     "axios": "^0.18.0",
     "date-fns": "^1.30.1",
     "emoji-mart-vue-fast": "^5.4.12",
-    "eslint-plugin-prettier": "^3.0.1",
     "lodash.debounce": "^4.0.8",
     "marked": "^0.6.2",
     "material-design-icons-iconfont": "^4.0.5",
@@ -39,14 +37,18 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
-    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^4.0.0-beta.2",
     "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "^3.7.0",
-    "@vue/eslint-config-prettier": "^4.0.1",
+    "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "babel-plugin-transform-imports": "^1.5.1",
+    "eslint": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-vue": "^5.2.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-vuetify": "^0.5.0",
@@ -54,52 +56,5 @@
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2",
     "ws": "6.2.1"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/prettier"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
-    ],
-    "testURL": "http://localhost/"
   }
 }
