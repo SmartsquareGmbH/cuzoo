@@ -25,6 +25,7 @@
           v-model="contactPointDialogState"
           :contact-names="contactNames"
           @input="contactPointDialogState = false"
+          @refresh="refreshData"
         />
         <v-flex xs3>
           <v-btn id="upload-btn" flat small @click="uploadFiles()">
@@ -310,6 +311,8 @@ export default {
       this.confirmDialogState = true
     },
     refreshData() {
+      this.loading = true
+
       this.getCompanies()
         .then(this.getContacts)
         .then(this.getContactPoints)
