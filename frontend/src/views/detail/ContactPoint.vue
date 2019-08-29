@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-left fluid>
-    <v-fade-transition>
+    <v-fade-transition hide-on-leave>
       <v-layout v-if="!loading" row wrap>
         <v-flex xs1>
           <v-btn flat small @click="goPageBack()">
