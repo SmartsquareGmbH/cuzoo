@@ -1,125 +1,111 @@
 <template>
-    <v-layout row wrap v-resize="onResize">
-        <v-flex xs4>
-            <number-card
-                    class="opp-column-header"
-                    color="error"
-                    title="Leads"
-                    :number="leads.length"/>
-            <v-layout row wrap>
-                <perfect-scrollbar :options="settings">
-                    <v-flex xs12 class="pt-0"
-                            :style="`height: ${windowHeight * 0.70625}px`">
-                        <opportunity-card
-                                v-bind:key="opportunity.id"
-                                v-for="(opportunity, index) in leads"
-                                :opportunity="opportunity"
-                                :class="`mb-${index === leads.length -1 ? 0 : 2 }`"/>
-                    </v-flex>
-                </perfect-scrollbar>
-            </v-layout>
-        </v-flex>
-        <v-flex xs4>
-            <number-card
-                    class="opp-column-header"
-                    color="warning"
-                    title="Prospects"
-                    :number="prospects.length"/>
-            <v-layout row wrap>
-                <perfect-scrollbar :options="settings">
-                    <v-flex xs12 class="pt-0"
-                            :style="`height: ${windowHeight * 0.70625}px`">
-                        <opportunity-card
-                                v-bind:key="opportunity.id"
-                                v-for="(opportunity, index) in prospects"
-                                :opportunity="opportunity"
-                                :class="`mb-${index === prospects.length -1 ? 0 : 2 }`"/>
-                    </v-flex>
-                </perfect-scrollbar>
-            </v-layout>
-        </v-flex>
-        <v-flex xs4>
-            <number-card
-                    class="opp-column-header"
-                    color="success"
-                    title="Quotes"
-                    :number="quotes.length"/>
-            <v-layout row wrap>
-                <perfect-scrollbar :options="settings">
-                    <v-flex xs12 class="pt-0"
-                            :style="`height: ${windowHeight * 0.70625}px`">
-                        <opportunity-card
-                                v-bind:key="opportunity.id"
-                                v-for="(opportunity, index) in quotes"
-                                :opportunity="opportunity"
-                                :class="`mb-${index === quotes.length -1 ? 0 : 2 }`"/>
-                    </v-flex>
-                </perfect-scrollbar>
-            </v-layout>
-        </v-flex>
-    </v-layout>
+  <v-layout v-resize="onResize" row wrap>
+    <v-flex xs4>
+      <number-card class="opp-column-header" color="error" title="Leads" :number="leads.length" />
+      <v-layout row wrap>
+        <perfect-scrollbar :options="settings">
+          <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+            <opportunity-card
+              v-for="(opportunity, index) in leads"
+              :key="opportunity.id"
+              :opportunity="opportunity"
+              :class="`mb-${index === leads.length - 1 ? 0 : 2}`"
+            />
+          </v-flex>
+        </perfect-scrollbar>
+      </v-layout>
+    </v-flex>
+    <v-flex xs4>
+      <number-card class="opp-column-header" color="warning" title="Prospects" :number="prospects.length" />
+      <v-layout row wrap>
+        <perfect-scrollbar :options="settings">
+          <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+            <opportunity-card
+              v-for="(opportunity, index) in prospects"
+              :key="opportunity.id"
+              :opportunity="opportunity"
+              :class="`mb-${index === prospects.length - 1 ? 0 : 2}`"
+            />
+          </v-flex>
+        </perfect-scrollbar>
+      </v-layout>
+    </v-flex>
+    <v-flex xs4>
+      <number-card class="opp-column-header" color="success" title="Quotes" :number="quotes.length" />
+      <v-layout row wrap>
+        <perfect-scrollbar :options="settings">
+          <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+            <opportunity-card
+              v-for="(opportunity, index) in quotes"
+              :key="opportunity.id"
+              :opportunity="opportunity"
+              :class="`mb-${index === quotes.length - 1 ? 0 : 2}`"
+            />
+          </v-flex>
+        </perfect-scrollbar>
+      </v-layout>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "vuex"
 
-    import NumberCard from '../cards/NumberCard.vue';
-    import OpportunityCard from '../cards/OpportunityCard.vue'
+import NumberCard from "../cards/NumberCard.vue"
+import OpportunityCard from "../cards/OpportunityCard.vue"
 
-    export default {
-        data: () => ({
-            windowHeight: 0,
-            settings: {
-                maxScrollbarLength: 120,
-                wheelSpeed: 0.75,
-                suppressScrollX: true
-            }
-        }),
-        components: {
-            NumberCard,
-            OpportunityCard
-        },
-        computed: {
-            ...mapGetters(['opportunities']),
-            leads() {
-                return this.opportunities.filter(it => it.state === "Lead");
-            },
-            prospects() {
-                return this.opportunities.filter(it => it.state === "Prospect");
-            },
-            quotes() {
-                return this.opportunities.filter(it => it.state === "Quote");
-            }
-        },
-        beforeMount() {
-            this.getOpportunities();
-            this.onResize();
-        },
-        methods: {
-            ...mapActions(['getOpportunities']),
-            onResize() {
-                this.windowHeight = window.innerHeight;
-            }
-        }
-    }
+export default {
+  components: {
+    NumberCard,
+    OpportunityCard,
+  },
+  data: () => ({
+    windowHeight: 0,
+    settings: {
+      maxScrollbarLength: 120,
+      wheelSpeed: 0.75,
+      suppressScrollX: true,
+    },
+  }),
+  computed: {
+    ...mapGetters(["opportunities"]),
+    leads() {
+      return this.opportunities.filter((it) => it.state === "Lead")
+    },
+    prospects() {
+      return this.opportunities.filter((it) => it.state === "Prospect")
+    },
+    quotes() {
+      return this.opportunities.filter((it) => it.state === "Quote")
+    },
+  },
+  beforeMount() {
+    this.getOpportunities()
+    this.onResize()
+  },
+  methods: {
+    ...mapActions(["getOpportunities"]),
+    onResize() {
+      this.windowHeight = window.innerHeight
+    },
+  },
+}
 </script>
 
-
 <style scoped>
-    .fade-out-gradient {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        margin: 0;
-        padding: 6px 0;
+.fade-out-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 6px 0;
 
-        background-image: linear-gradient(to bottom, transparent, #333333);
-    }
+  background-image: linear-gradient(to bottom, transparent, #333333);
+}
 
-    .opp-column-header {
-        margin-bottom: 12px !important;
-    }
-
+.opp-column-header {
+  margin-bottom: 12px !important;
+}
 </style>
