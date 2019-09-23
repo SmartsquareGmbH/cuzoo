@@ -158,6 +158,7 @@
       v-model="contactPointDialogState"
       :contact-names="contactNames"
       :opportunity="opportunity"
+      @refresh="refreshData()"
       @input="contactPointDialogState = false"
     />
     <confirm-dialog
