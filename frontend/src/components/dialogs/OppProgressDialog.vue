@@ -88,7 +88,7 @@ export default {
       ],
       oppTitleRules: [(v) => !!v || "Bitte geben Sie einen Titel an", this.opportunityMenu === true],
       requireProgressTextDialog: false,
-      opportunityId: this.$route.params.opportunityId,
+      opportunityId: Number.parseInt(this.$route.params.opportunityId),
     }
   },
   computed: {
