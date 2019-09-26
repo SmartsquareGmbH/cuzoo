@@ -49,6 +49,11 @@
           <td>{{ props.item.telephone }}</td>
           <td>{{ props.item.mobile }}</td>
           <td>{{ props.item.manager }}</td>
+          <td>
+            <v-chip v-for="(label, index) in props.item.labels" :key="index" small>
+              {{ label }}
+            </v-chip>
+          </td>
           <td class="justify-center layout px-0">
             <v-icon size="22px" class="mr-0 mt-2" @click.stop="editContact(props.item)">
               edit
@@ -117,6 +122,7 @@ export default {
         { text: "Telefon", value: "telephone" },
         { text: "Mobil", value: "mobile" },
         { text: "Manager", value: "manager" },
+        { text: "Labels", value: "labels", sortable: false },
         { text: "Aktionen", value: "name", sortable: false },
       ],
       confirmDialogState: false,
