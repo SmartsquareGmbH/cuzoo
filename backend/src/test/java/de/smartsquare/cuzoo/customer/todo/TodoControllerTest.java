@@ -48,7 +48,7 @@ public class TodoControllerTest {
         userRepository.save(creator);
 
         company = new Company("Smartsquare", "", "", "", "", "", "");
-        companyRepository.save(company);
+        company = companyRepository.save(company);
     }
 
     @After
@@ -61,7 +61,7 @@ public class TodoControllerTest {
     @Test
     public void that_todo_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -82,7 +82,7 @@ public class TodoControllerTest {
     @Test
     public void that_todo_is_getting_updated() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -96,7 +96,7 @@ public class TodoControllerTest {
                 .findFirst().orElse(null);
 
         MockHttpServletRequestBuilder updateBuilder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -120,7 +120,7 @@ public class TodoControllerTest {
     @Test
     public void that_todo_gets_marked_as_done() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -172,7 +172,7 @@ public class TodoControllerTest {
     @Test
     public void that_submitting_todo_with_invalid_company_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=FooBarGmbH")
+                MockMvcRequestBuilders.put("/api/todo/submit/1337")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -202,7 +202,7 @@ public class TodoControllerTest {
     @Test
     public void that_submitting_todo_with_invalid_binding_result_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=FooBarGmbH")
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -221,7 +221,7 @@ public class TodoControllerTest {
     @Test
     public void that_getting_todos_of_company_succeeds() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -247,7 +247,7 @@ public class TodoControllerTest {
     @Test
     public void that_submitting_todo_with_invalid_user_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -266,7 +266,7 @@ public class TodoControllerTest {
     @Test
     public void that_getting_todos_is_successfully() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit?companyName=" + company.getName())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")

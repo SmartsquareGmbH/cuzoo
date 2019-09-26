@@ -31,10 +31,10 @@ public class TodoController {
         this.companyRepository = companyRepository;
     }
 
-    @PutMapping("/submit")
+    @PutMapping("/submit/{companyId}")
     public final ResponseEntity<?> submitTodo(@RequestBody @Valid TodoForm todoForm,
                                               BindingResult bindingResult,
-                                              @RequestParam("companyName") String companyName) {
+                                              @PathVariable("companyId") String companyId) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest()
                     .body("Todos benötigen eine Beschreibung, sowie ein Fälligkeits- und ein Erinnerungsdatum!");
@@ -45,7 +45,7 @@ public class TodoController {
             return ResponseEntity.badRequest().body("Der Ersteller existiert nicht!");
         }
 
-        Optional<Company> company = companyRepository.findMaybeByName(companyName);
+        Optional<Company> company = companyRepository.findMaybeById(Long.decode(companyId));
         if (!company.isPresent()) {
             return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
         }
