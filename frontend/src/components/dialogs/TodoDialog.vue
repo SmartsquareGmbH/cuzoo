@@ -65,13 +65,27 @@
               </v-flex>
               <v-flex xs12>
                 <v-combobox
-                  v-model="companyName"
-                  :items="companyNames"
+                  v-model="company"
+                  :items="companies"
+                  item-text="name"
+                  item-value="name"
+                  :search-input.sync="companyNameEntered"
                   :rules="companyRules"
                   prepend-icon="business"
                   suffix="*"
                   label="Unternehmen"
-                />
+                >
+                  <template slot="no-data">
+                    <v-list-tile>
+                      <v-list-tile-content max-height="700">
+                        <v-list-tile-title>
+                          Das Unternehmen "<strong class="primary--text">{{ companyNameEntered }}</strong
+                          >" wurde nicht gefunden.
+                        </v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </template>
+                </v-combobox>
               </v-flex>
             </v-layout>
           </v-container>
@@ -99,7 +113,7 @@ let expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
 let reminderDate = new Date()
 
 export default {
-  props: ["value", "companyNames"],
+  props: ["value", "companies"],
   data() {
     return {
       formTitle: "TODO hinzufügen",
@@ -108,13 +122,14 @@ export default {
       reminders: ["1 Tag vorher", "3 Tage vorher", "1 Woche vorher"],
       companyRules: [
         (v) => !!v || "Bitte geben Sie ein Unternehmen an",
-        (v) => this.companyNames.includes(v) || "Dieses Unternehmen existiert nicht",
+        (v) => this.companies.includes(v) || "Dieses Unternehmen existiert nicht",
       ],
       reminderRules: [(v) => !!v || "Bitte geben Sie an, wann Sie erinnert werden möchten"],
       descriptionRules: [(v) => !!v || "Bitte geben Sie eine Beschreibung an"],
       menu: false,
       valid: true,
-      companyName: "",
+      company: undefined,
+      companyNameEntered: "",
       defaultTodo: {
         id: 0,
         description: "",
@@ -146,7 +161,7 @@ export default {
     }),
     submitTodo() {
       api
-        .put(`todo/submit?companyName=${this.companyName.replace("&", "%26")}`, {
+        .put(`todo/submit/${this.company.id}`, {
           id: this.editedTodo.id,
           description: this.editedTodo.description,
           expiration: datefns.parse(this.date).getTime(),
@@ -176,11 +191,11 @@ export default {
     },
     clearDialog() {
       this.$refs.form.reset()
-      this.companyName = ""
+      this.company = {}
     },
     closeDialog() {
       this.$emit("input")
-      this.companyName = ""
+      this.company = {}
 
       setTimeout(() => {
         this.storeDetails({

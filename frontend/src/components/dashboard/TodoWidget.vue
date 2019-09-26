@@ -25,7 +25,7 @@
           </v-btn>
           <todo-dialog
             v-model="todoDialogState"
-            :company-names="companyNames"
+            :companies="mappedCompanies"
             @refresh="refreshTodos()"
             @input="todoDialogState = false"
           />
@@ -69,7 +69,7 @@ export default {
   },
   data: () => ({
     windowHeight: 0,
-    companyNames: [],
+    mappedCompanies: [],
     todoDialogState: false,
     searchTodos: "",
     settings: {
@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     addTODO() {
-      this.companyNames = this.companies.map((it) => it.name).sort()
+      this.mappedCompanies = this.companies.map((it) => Object.assign({}, { id: it.id, name: it.name })).sort()
       this.todoDialogState = true
     },
     onResize() {
@@ -125,10 +125,7 @@ export default {
 }
 
 .todo-results {
-  padding-left: 4px !important;
-  padding-top: 0 !important;
-  padding-right: 0 !important;
-  padding-bottom: 0 !important;
+  padding: 0 0 0 4px !important;
   margin: 0 !important;
 }
 </style>
