@@ -15,4 +15,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     Company findByName(@Param("companyName") String companyName);
 
     Optional<Company> findMaybeByName(String companyName);
+    Optional<Company> findMaybeById(Long companyId);
 }

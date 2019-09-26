@@ -67,7 +67,7 @@ public class ContactController {
 
     @PutMapping("/submit")
     public final ResponseEntity<?> submitContact(@RequestBody @Valid ContactForm contactForm, BindingResult bindingResult,
-                                                 @RequestParam(required = false, name = "companyName") String maybeCompanyName) {
+                                                 @RequestParam(required = false, name = "companyId") Long maybeCompanyId) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Ansprechpartner benötigen einen Namen und einen Manager!");
         }
@@ -76,8 +76,8 @@ public class ContactController {
         if (!manager.isPresent()) {
             return ResponseEntity.badRequest().body("Der angegebene Manager existiert nicht!");
         }
-        Optional<Company> company = companyRepository.findMaybeByName(maybeCompanyName);
-        if (hasCompany(maybeCompanyName) && !company.isPresent()) {
+        Optional<Company> company = companyRepository.findMaybeById(maybeCompanyId);
+        if (hasCompany(maybeCompanyId) && !company.isPresent()) {
             return ResponseEntity.badRequest().body("Das angegebene Unternehmen existiert nicht!");
         }
 
@@ -87,7 +87,7 @@ public class ContactController {
         Long contactIdBeforeSaving = contactForm.getId();
         Contact savedContact;
 
-        if (hasCompany(maybeCompanyName)) {
+        if (hasCompany(maybeCompanyId)) {
             contact.setCompany(company.get());
         }
 
@@ -155,8 +155,8 @@ public class ContactController {
         }
     }
 
-    private boolean hasCompany(String maybeCompanyName) {
-        return maybeCompanyName != null;
+    private boolean hasCompany(Long maybeCompanyId) {
+        return maybeCompanyId != null;
     }
 
     @DeleteMapping("/delete/{contactId}")

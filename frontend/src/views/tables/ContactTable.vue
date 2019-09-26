@@ -20,7 +20,7 @@
           <span>Ansprechpartner hinzufügen</span>
         </v-tooltip>
       </v-btn>
-      <contact-dialog v-model="contactDialogState" :company-names="companyNames" @input="contactDialogState = false" />
+      <contact-dialog v-model="contactDialogState" :companies="mappedCompanies" @input="contactDialogState = false" />
       <v-spacer></v-spacer>
       <v-text-field v-model="search" append-icon="search" label="Suche ..." single-line hide-details />
     </v-card-title>
@@ -106,7 +106,7 @@ export default {
     return {
       file: "",
       search: "",
-      companyNames: [],
+      mappedCompanies: [],
       loading: true,
       contactDialogState: false,
       headers: [
@@ -133,7 +133,7 @@ export default {
     ...mapActions(["getContacts", "getCompanies"]),
     ...mapMutations({
       storeEditedDetails: "storeEditedContactDetails",
-      storeCompanyName: "storeEditedCompanyName",
+      storeCompany: "storeEditedContactCompany",
     }),
     handleUpload() {
       this.loading = true
@@ -160,7 +160,9 @@ export default {
     refreshTable() {
       this.getCompanies().then(() => {
         this.getContacts().then(() => {
-          this.companyNames = this.companies.map((company) => company.name).sort()
+          this.mappedCompanies = this.companies
+            .map((company) => Object.assign({}, { id: company.id, name: company.name }))
+            .sort()
           this.loading = false
         })
       })
@@ -172,7 +174,7 @@ export default {
       })
 
       if (item.company) {
-        this.storeCompanyName({ editedCompanyName: item.company.name })
+        this.storeCompany({ editedCompany: item.company })
       }
 
       this.openContactDialog()

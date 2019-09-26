@@ -34,10 +34,12 @@
               </v-flex>
               <v-flex xs12>
                 <v-combobox
-                  v-model="companyName"
+                  v-model="company"
+                  :items="companies"
+                  item-text="name"
+                  item-value="name"
                   :search-input.sync="companyNameEntered"
                   :disabled="!companyFieldEnabled"
-                  :items="companyNames"
                   label="Unternehmen"
                   prepend-icon="business"
                   hide-details
@@ -109,7 +111,7 @@ export default {
     LabelBox,
     ConfirmDialog,
   },
-  props: ["value", "companyNames"],
+  props: ["value", "companies"],
   data() {
     return {
       valid: false,
@@ -120,7 +122,7 @@ export default {
         (v) => !!v || "Bitte geben Sie einen Manager an!",
         (v) => this.usernames.includes(v) || "Der Manager existiert nicht!",
       ],
-      companyName: "",
+      company: "",
       companyNameEntered: "",
       defaultContact: {
         value: false,
@@ -141,7 +143,7 @@ export default {
     ...mapGetters({
       editedIndex: "editedContactIndex",
       editedContact: "editedContact",
-      editedCompanyName: "editedCompanyName",
+      editedCompany: "editedContactCompany",
       username: "username",
       usernames: "usernames",
     }),
@@ -153,16 +155,16 @@ export default {
     value() {
       this.$refs.form.resetValidation()
     },
-    editedCompanyName() {
-      this.companyName = this.editedCompanyName
+    editedCompany(company) {
+      this.company = company
     },
-    companyNames() {
-      if (this.companyNames.length === 1) {
-        this.companyName = this.companyNames[0]
+    companies() {
+      if (this.companies.length === 1) {
+        this.company = this.companies[0]
         this.companyFieldEnabled = false
       } else {
         this.companyFieldEnabled = true
-        this.companyName = ""
+        this.company = undefined
       }
     },
   },
@@ -174,7 +176,7 @@ export default {
     ...mapActions(["getUsernames"]),
     ...mapMutations({
       storeContactDetails: "storeEditedContactDetails",
-      storeCompanyName: "storeEditedCompanyName",
+      storeCompany: "storeEditedContactCompany",
     }),
     closeDialog() {
       this.$emit("input")
@@ -185,9 +187,7 @@ export default {
           editedContact: Object.assign({}, this.defaultContact),
         })
 
-        this.storeCompanyName({ editedCompanyName: "" })
-
-        this.companyName = ""
+        this.storeCompany({})
         this.editedContact.manager = this.username
       }, 300)
     },
@@ -195,7 +195,7 @@ export default {
       this.$refs.form.reset()
 
       if (this.$route.name === "companyView") {
-        setTimeout(() => (this.companyName = this.getCompanyName()))
+        setTimeout(() => (this.company = this.getCompany()))
       }
 
       this.editedContact.manager = this.username
@@ -216,7 +216,7 @@ export default {
       }, 10)
     },
     submitContact() {
-      let maybeCompany = this.companyName ? `?companyName=${this.encodeString(this.companyName)}` : ""
+      let maybeCompany = this.company ? `?companyId=${this.company.id}` : ""
 
       api
         .put(`contact/submit${maybeCompany}`, {
@@ -264,12 +264,12 @@ export default {
     setContactLabels(labels) {
       this.editedContact.labels = labels
     },
-    getCompanyName() {
+    getCompany() {
       if (this.editedContact.company) {
-        return this.editedContact.company.name
+        return this.editedContact.company
       } else if (this.companyNames.length === 1) {
         this.companyFieldEnabled = false
-        return this.companyNames[0]
+        return this.companies[0]
       } else {
         return null
       }
