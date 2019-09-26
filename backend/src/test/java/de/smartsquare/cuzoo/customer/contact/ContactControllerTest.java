@@ -104,10 +104,9 @@ public class ContactControllerTest {
 
     @Test
     public void that_contact_of_company_is_getting_registered() throws Exception {
-        String companyName = "Smartsquare GmbH";
-        companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
+        Company newCompany = companyRepository.save(new Company("Smartsquare GmbH", "", "", "", "", "", ""));
 
-        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), companyName);
+        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), newCompany.getId());
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -123,10 +122,10 @@ public class ContactControllerTest {
 
     @Test
     public void that_contact_does_not_get_registered_when_company_does_not_exists() throws Exception {
-        String companyName = "Smartsquare GmbH";
+        Long companyId = 2349345L;
         manager.setId(1L);
 
-        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), companyName);
+        MockHttpServletRequestBuilder builder = submitContact(getContactInJson(), companyId);
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -141,16 +140,15 @@ public class ContactControllerTest {
     @Test
     public void that_contact_is_getting_updated() throws Exception {
         //given
-        String companyName = "Smartsquare GmbH";
-        companyRepository.save(new Company(companyName, "", "", "", "", "", ""));
+        Company newCompany = companyRepository.save(new Company("Smartsquare GmbH", "", "", "", "", "", ""));
 
-        MockHttpServletRequestBuilder builder = submitContact(getOutdatedContactInJson(), companyName);
+        MockHttpServletRequestBuilder builder = submitContact(getOutdatedContactInJson(), newCompany.getId());
 
         MvcResult result = this.mockMvc.perform(builder).andReturn();
         String id = result.getResponse().getContentAsString();
 
         //when
-        MockHttpServletRequestBuilder updatedBuilder = submitContact(getUpdatedContactInJson(id), companyName);
+        MockHttpServletRequestBuilder updatedBuilder = submitContact(getUpdatedContactInJson(id), newCompany.getId());
 
         this.mockMvc.perform(updatedBuilder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -164,10 +162,10 @@ public class ContactControllerTest {
                 .containsOnly("Softwareentwickler");
     }
 
-    private MockHttpServletRequestBuilder submitContact(String content, String companyName) {
+    private MockHttpServletRequestBuilder submitContact(String content, Long companyId) {
         String requestPath = "/api/contact/submit";
-        if (companyName != null && !companyName.isEmpty()) {
-            requestPath += "?companyName=" + companyName;
+        if (companyId != null) {
+            requestPath += "?companyId=" + companyId;
         }
 
         return MockMvcRequestBuilders.put(requestPath)
@@ -178,7 +176,7 @@ public class ContactControllerTest {
     }
 
     private MockHttpServletRequestBuilder submitContact(String content) {
-        return submitContact(content, "");
+        return submitContact(content, null);
     }
 
     private String getOutdatedContactInJson() {
