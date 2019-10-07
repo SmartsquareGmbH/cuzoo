@@ -3,7 +3,7 @@
     <v-content v-if="!authorized">
       <login></login>
     </v-content>
-    <v-container v-else>
+    <v-container v-else fluid>
       <v-toolbar class="elevation-0" light clipped-left fixed app>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn color="primary" href="#/dashboard">
