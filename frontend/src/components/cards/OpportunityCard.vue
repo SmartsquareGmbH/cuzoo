@@ -14,7 +14,7 @@
           <v-icon class="mx-1">business</v-icon>
           <v-tooltip top>
             <chip slot="activator">
-              {{ getCompanyName() | truncate(30) }}
+              {{ getCompanyName() | truncate(25) }}
             </chip>
             <span class="subheading">{{ getCompanyName() }}</span>
           </v-tooltip>
