@@ -10,7 +10,7 @@
           </v-sheet>
         </v-flex>
         <v-flex xs2 class="more-padding-top">
-          <span class="headline font-weight-light pl-3">
+          <span v-show="breakpoint.width > 1680" class="headline font-weight-light pl-3">
             Kontaktpunkte
           </span>
         </v-flex>
@@ -81,6 +81,9 @@ export default {
   }),
   computed: {
     ...mapGetters(["companies", "contacts", "contactPoints", "selectedCompany", "searchResults"]),
+    breakpoint() {
+      return this.$vuetify.breakpoint
+    },
   },
   watch: {
     selectedCompany() {
