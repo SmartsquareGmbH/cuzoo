@@ -3,14 +3,16 @@
     <v-flex xs4>
       <number-card class="opp-column-header" color="error" title="Leads" :number="leads.length" />
       <v-layout row wrap>
-        <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+        <v-flex xs12 class="pt-0">
           <perfect-scrollbar :options="settings">
-            <opportunity-card
-              v-for="(opportunity, index) in leads"
-              :key="opportunity.id"
-              :opportunity="opportunity"
-              :class="`mb-${index === leads.length - 1 ? 0 : 2}`"
-            />
+            <div :style="`height: ${columnHeight}px`">
+              <opportunity-card
+                v-for="(opportunity, index) in leads"
+                :key="opportunity.id"
+                :opportunity="opportunity"
+                :class="`mb-${index === leads.length - 1 ? 0 : 2}`"
+              />
+            </div>
           </perfect-scrollbar>
         </v-flex>
       </v-layout>
@@ -18,14 +20,16 @@
     <v-flex xs4>
       <number-card class="opp-column-header" color="warning" title="Prospects" :number="prospects.length" />
       <v-layout row wrap>
-        <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+        <v-flex xs12 class="pt-0">
           <perfect-scrollbar :options="settings">
-            <opportunity-card
-              v-for="(opportunity, index) in prospects"
-              :key="opportunity.id"
-              :opportunity="opportunity"
-              :class="`mb-${index === prospects.length - 1 ? 0 : 2} mr-0`"
-            />
+            <div :style="`height: ${columnHeight}px`">
+              <opportunity-card
+                v-for="(opportunity, index) in prospects"
+                :key="opportunity.id"
+                :opportunity="opportunity"
+                :class="`mb-${index === prospects.length - 1 ? 0 : 2} mr-0`"
+              />
+            </div>
           </perfect-scrollbar>
         </v-flex>
       </v-layout>
@@ -33,14 +37,16 @@
     <v-flex xs4>
       <number-card class="opp-column-header" color="success" title="Quotes" :number="quotes.length" />
       <v-layout row wrap>
-        <v-flex xs12 class="pt-0" :style="`height: ${windowHeight * 0.70625}px`">
+        <v-flex xs12 class="pt-0">
           <perfect-scrollbar :options="settings">
-            <opportunity-card
-              v-for="(opportunity, index) in quotes"
-              :key="opportunity.id"
-              :opportunity="opportunity"
-              :class="`mb-${index === quotes.length - 1 ? 0 : 2}`"
-            />
+            <div :style="`height: ${columnHeight}px`">
+              <opportunity-card
+                v-for="(opportunity, index) in quotes"
+                :key="opportunity.id"
+                :opportunity="opportunity"
+                :class="`mb-${index === quotes.length - 1 ? 0 : 2}`"
+              />
+            </div>
           </perfect-scrollbar>
         </v-flex>
       </v-layout>
@@ -77,6 +83,12 @@ export default {
     },
     quotes() {
       return this.opportunities.filter((it) => it.state === "Quote")
+    },
+    columnHeight() {
+      const breakpoint = this.$vuetify.breakpoint
+
+      if (breakpoint.lg || breakpoint.xl) return this.windowHeight * 0.70625
+      else return 430
     },
   },
   beforeMount() {

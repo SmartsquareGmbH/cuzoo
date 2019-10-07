@@ -2,10 +2,10 @@
   <v-container grid-list-md fluid>
     <v-fade-transition>
       <v-layout v-if="!loadingData" row wrap>
-        <v-flex xs7>
+        <v-flex md12 lg7>
           <opportunity-widget class="mr-1" />
         </v-flex>
-        <v-flex xs5 class="pt-0">
+        <v-flex md12 lg5 class="pt-0">
           <todo-widget class="mb-4 pb-2" />
           <contact-point-widget />
         </v-flex>

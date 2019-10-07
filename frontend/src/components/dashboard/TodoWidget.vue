@@ -1,6 +1,6 @@
 <template>
   <v-flex xs12>
-    <v-card class="pl-0 mb-3" elevation="6" height="75">
+    <v-card :class="`pl-0 mb-3 mt-${!(breakpoint.lg || breakpoint.xl) ? '4' : '0'}`" elevation="6" height="75">
       <v-layout row wrap text-xs-left>
         <v-flex xs2>
           <v-sheet elevation="8" class="v-sheet--offset text-xs-center" height="75" width="100" color="primary">
