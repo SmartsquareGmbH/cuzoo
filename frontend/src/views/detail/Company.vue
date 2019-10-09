@@ -10,7 +10,7 @@
         </v-flex>
         <v-flex xs5 text-xs-right>
           <v-tooltip top>
-            <v-btn slot="activator" disabled flat small @click="viewContactPoints()">
+            <v-btn v-show="false" slot="activator" disabled flat small @click="viewContactPoints()">
               <v-icon size="22px" class="mr-1" dark>forum</v-icon>
               Kontaktpunktliste
             </v-btn>
@@ -22,13 +22,13 @@
           </v-btn>
         </v-flex>
         <company-dialog v-model="companyDialogState" @input="companyDialogState = false" />
-        <v-flex xs1>
+        <v-flex xs2>
           <v-btn slot="activator" small flat @click="openContactDialog()">
             <v-icon size="22px" class="mr-1" dark>add</v-icon>
             Ansprechpartner hinzufügen
           </v-btn>
         </v-flex>
-        <v-flex xs5 text-xs-right>
+        <v-flex xs4 text-xs-right>
           <v-tooltip top>
             <v-btn slot="activator" small flat @click="downloadInfo(contactsOfCompany[contactsOfCompany.contact])">
               <v-icon dark size="22px" style="transform: rotate(180deg)">publish</v-icon>
@@ -52,7 +52,7 @@
           :companies="[Object.assign({}, { id: company.id, name: company.name })]"
           @input="contactDialogState = false"
         />
-        <v-flex xs6>
+        <v-flex md12 lg6>
           <v-layout row wrap>
             <v-flex xs2>
               <v-card dark color="green">
@@ -168,7 +168,7 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex xs6>
+        <v-flex md12 lg6>
           <v-tabs
             v-if="contactsOfCompany.length > 0"
             v-model="contactsOfCompany.contact"
@@ -223,7 +223,7 @@
                   </v-flex>
                   <v-flex xs4>
                     <v-card dark>
-                      <v-card-text v-if="contact.telephone" class="headline text-xs-left font-weight-light">
+                      <v-card-text v-if="contact.telephone" class="headline text-xs-left font-weight-light text-truncate">
                         {{ contact.telephone }}
                       </v-card-text>
                       <v-card-text v-else class="headline text-xs-left font-weight-light font-italic error--text">
@@ -240,7 +240,7 @@
                   </v-flex>
                   <v-flex xs4>
                     <v-card dark>
-                      <v-card-text v-if="contact.mobile" class="headline text-xs-left font-weight-light">
+                      <v-card-text v-if="contact.mobile" class="headline text-xs-left font-weight-light text-truncate">
                         {{ contact.mobile }}
                       </v-card-text>
                       <v-card-text v-else class="headline text-xs-left font-weight-light font-italic error--text">
@@ -426,5 +426,9 @@ function download(content, name) {
 
 .marked > p {
   margin-bottom: 16px !important;
+}
+
+.text-truncate {
+  line-height: 1.3 !important;
 }
 </style>

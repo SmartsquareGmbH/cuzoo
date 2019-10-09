@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-fade-transition>
       <v-layout v-if="!loadingData" row wrap text-xs-left>
         <v-flex xs12 class="ma-0 pa-0">

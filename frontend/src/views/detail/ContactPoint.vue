@@ -10,7 +10,7 @@
         </v-flex>
         <v-flex xs5 class="text-xs-right">
           <v-tooltip top>
-            <v-btn slot="activator" disabled flat small @click="viewContactPoints()">
+            <v-btn v-show="false" slot="activator" disabled flat small @click="viewContactPoints()">
               <v-icon size="22px" class="mr-1" dark>forum</v-icon>
               Kontaktpunktliste
             </v-btn>
@@ -44,7 +44,7 @@
             @confirmed="deleteContactPoint()"
           />
         </v-flex>
-        <v-flex xs6>
+        <v-flex md12 lg6>
           <v-layout row wrap>
             <v-flex xs2>
               <v-card dark color="green">
@@ -161,7 +161,7 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex xs6>
+        <v-flex md12 lg6>
           <v-layout row wrap>
             <v-flex xs2>
               <v-card dark color="info" height="100%" class="centered">
