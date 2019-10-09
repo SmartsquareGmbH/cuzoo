@@ -35,7 +35,7 @@
             clearable
             :loading="loadingCompanies"
             :items="companyNames"
-            class="search-bar"
+            class="search-bar hidden-md-and-down"
             prepend-icon="search"
             label="Suche nach Unternehmen ..."
             hide-details
