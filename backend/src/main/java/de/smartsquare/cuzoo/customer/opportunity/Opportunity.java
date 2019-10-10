@@ -124,7 +124,7 @@ public class Opportunity {
 
         public Progress() { }
 
-        Progress(String progressText, @NotNull @NotBlank String opportunityState) {
+        public Progress(String progressText, @NotNull @NotBlank String opportunityState) {
             this.progressText = progressText;
             this.opportunityState = opportunityState;
             this.date = new Date();
