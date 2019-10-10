@@ -34,7 +34,7 @@ public class DemoDataLoader implements InitializingBean {
     private final TodoRepository todoRepository;
 
     private String password = "$2a$10$yRmPPUfZTDcmg32qsYrF5ORqjOVGip.H98Gi8u94u4VIucOYOWvpS";
-    private User demoUser = new User("demoUser", password, "Demo Benutzer", "demo@cuzoo.de");
+    private User demoUser = new User("demoUser", password, "Demo Benutzer", "");
 
     public DemoDataLoader(
             UserRepository userRepository,
@@ -370,7 +370,7 @@ public class DemoDataLoader implements InitializingBean {
         contact1.setManager(demoUser);
         contactRepository.save(contact1);
 
-        ContactPoint contactPoint1 = new ContactPoint("Anfrage zum Programm für Fallstudie", this.getTodayIncrementedBy(-2), contact1, "Frau Fall hört sich um, benötigen Software zur Umsetzung einer Fallstudie.", "Lead", "");
+        ContactPoint contactPoint1 = new ContactPoint("Anfrage zum Programm für Fallstudie", this.getTodayIncrementedBy(-3), contact1, "Frau Fall hört sich um, benötigen Software zur Umsetzung einer Fallstudie.", "Lead", "");
         contactPoint1.setCreator(demoUser);
         Label type1 = new Label("E-Mail");
         type1.addContactPointTypes(contactPoint1);
