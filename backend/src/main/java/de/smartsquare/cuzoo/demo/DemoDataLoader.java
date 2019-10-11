@@ -34,7 +34,7 @@ public class DemoDataLoader implements InitializingBean {
     private final TodoRepository todoRepository;
 
     private String password = "$2a$10$yRmPPUfZTDcmg32qsYrF5ORqjOVGip.H98Gi8u94u4VIucOYOWvpS";
-    private User demoUser = new User("demoUser", password, "Demo Benutzer", "");
+    private User demo = new User("demo", password, "Demo Benutzer", "");
 
     public DemoDataLoader(
             UserRepository userRepository,
@@ -59,7 +59,7 @@ public class DemoDataLoader implements InitializingBean {
     }
 
     private void loadData() {
-        userRepository.save(demoUser);
+        userRepository.save(demo);
 
         this.loadMaSchinenKG();
         this.loadMuellerGmbH();
@@ -81,14 +81,14 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Eduard Schinen", company, "Geschäftsführung", "schinen@ma-schinen.kg", "01234 5678910", "01234 5678910", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
         Contact contact2 = new Contact("Emilia Ma", company, "Geschäftsführung", "ma@ma-schinen.kg", "09876 543210", "09876 543210", "");
-        contact2.setManager(demoUser);
+        contact2.setManager(demo);
         contactRepository.save(contact2);
 
         ContactPoint contactPoint1 = new ContactPoint("Erstkontakt mit Herrn Schinen", this.getTodayIncrementedBy(-14), contact1, "Herr Schinen am Messestand seines Unternehmens kennengelernt, sehr aufgeschlossen gegenüber einen Workshop zur Digitalisierung und Automatisierung von Geschäftsprozessen, Nummern ausgetauscht", "Lead", ":thumbsup:");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Messe");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -101,7 +101,7 @@ public class DemoDataLoader implements InitializingBean {
         contactPointRepository.save(contactPoint1);
 
         ContactPoint contactPoint2 = new ContactPoint("Telefonat mit Frau Ma", this.getTodayIncrementedBy(-12), contact2, "Terminvereinbarung für Workshop zur Digitalisierung", "Prospect", "");
-        contactPoint2.setCreator(demoUser);
+        contactPoint2.setCreator(demo);
         Label type2 = new Label("Telefon");
         type2.addContactPointTypes(contactPoint2);
         labelRepository.save(type2);
@@ -110,7 +110,7 @@ public class DemoDataLoader implements InitializingBean {
         contactPointRepository.save(contactPoint2);
 
         ContactPoint contactPoint3 = new ContactPoint("Workshop mit Frau Ma", this.getTodayIncrementedBy(-7), contact2, "Workshop gut verlaufen, Frau Ma möchte sich mit Organisationsteam absprechen und dann zurückrufen", "Prospect", ":slightly_smiling_face:");
-        contactPoint3.setCreator(demoUser);
+        contactPoint3.setCreator(demo);
         Label type3 = new Label("Persönlich");
         type3.addContactPointTypes(contactPoint3);
         labelRepository.save(type3);
@@ -123,7 +123,7 @@ public class DemoDataLoader implements InitializingBean {
         opportunityRepository.save(opportunity1);
 
         Todo todo1 = new Todo("Frau Ma bzgl. des Worskshops kontaktieren", company, this.getTodayIncrementedBy(-2), this.getTodayIncrementedBy(-1));
-        todo1.setCreator(demoUser);
+        todo1.setCreator(demo);
         todoRepository.save(todo1);
     }
 
@@ -132,14 +132,14 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Bernard Mueller", company, "Geschäftsführung", "bm@mueller-gmbh.kg", "09876 543210", "09876 543210", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
         Contact contact2 = new Contact("Theo Logen", company, "Entwicklung", "tl@ma-schinen.kg", "09876 543210", "09876 543210", "");
-        contact2.setManager(demoUser);
+        contact2.setManager(demo);
         contactRepository.save(contact2);
 
         ContactPoint contactPoint1 = new ContactPoint("Erstkontakt mit Herrn Mueller", this.getTodayIncrementedBy(-7), contact1, "Herr Mueller hat in der Firma angerufen und sich zur möglichen Umsetzung seiner Idee für eine Betriebssoftware erkundigt, Nummer des Entwicklungsleiters erhalten.", "Lead", ":thumbsup:");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Telefon");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -152,7 +152,7 @@ public class DemoDataLoader implements InitializingBean {
         contactPointRepository.save(contactPoint1);
 
         ContactPoint contactPoint2 = new ContactPoint("Gesprächstermin vereinbart", this.getTodayIncrementedBy(-5), contact2, "Termin zum persönlichen Gespräch mit Herrn Logen vereinbart.", "Prospect", "");
-        contactPoint2.setCreator(demoUser);
+        contactPoint2.setCreator(demo);
         Label type2 = new Label("Telefon");
         type2.addContactPointTypes(contactPoint2);
         labelRepository.save(type2);
@@ -164,7 +164,7 @@ public class DemoDataLoader implements InitializingBean {
         opportunityRepository.save(opportunity1);
 
         ContactPoint contactPoint3 = new ContactPoint("Gespräch zur Betriebssoftware", this.getTodayIncrementedBy(-3), contact2, "Er _glaubt_ mit uns ist die Umsetzung möglich und ist zuversichtlich, dass wir deren Anforderungen erfüllen können. Nach erneuter Anforderungsanalyse und Bestandsaufnahme möchte er sich melden.", "Quote", ":relaxed:");
-        contactPoint3.setCreator(demoUser);
+        contactPoint3.setCreator(demo);
         Label type3 = new Label("Persönlich");
         type3.addContactPointTypes(contactPoint3);
         labelRepository.save(type3);
@@ -178,11 +178,11 @@ public class DemoDataLoader implements InitializingBean {
 
 
         Todo todo1 = new Todo("Bei Herrn Logen nachhaken", company, this.getTodayIncrementedBy(3), this.getTodayIncrementedBy(2));
-        todo1.setCreator(demoUser);
+        todo1.setCreator(demo);
         todoRepository.save(todo1);
 
         Todo todo2 = new Todo("Angebot zur Betriebssoftware für Mueller GmbH erstellen", company, this.getTodayIncrementedBy(9), this.getTodayIncrementedBy(6));
-        todo2.setCreator(demoUser);
+        todo2.setCreator(demo);
         todoRepository.save(todo2);
     }
 
@@ -191,11 +191,11 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Alfred Berrewald", company, "Geschäftsführung", "alfred@decide.shop", "01234 5678910", "01234 5678910", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         ContactPoint contactPoint1 = new ContactPoint("Kontaktformular von Herrn Berrewald", this.getTodayIncrementedBy(-21), contact1, "Herr Berrewald möchte seinen Shop \"Vision-Decide\" neu aufsetzen und erkundigt sich über Preiskonzept", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Kontaktformular");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -214,11 +214,11 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Susanne Weger", company, "Geschäftsführung", "weger@xyz.ag", "01234 5678910", "01234 5678910", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         ContactPoint contactPoint1 = new ContactPoint("Telefonischer Erstkontakt mit Frau Weger", this.getTodayIncrementedBy(-17), contact1, "Frau Weger vergleicht Preise für Rechnungssoftware", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Telefon");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -237,11 +237,11 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Fridolin Frei", company, "Geschäftsführung", "ffrei@freedolin.org", "04321 1098765", "04321 1098765", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         ContactPoint contactPoint1 = new ContactPoint("Nachfrage von Herrn Frei bzgl. unserer Technologie", this.getTodayIncrementedBy(-9), contact1, "Herr Frei erkundigt sich für ein kompatibles Feature ihrer Java 8 Software, möchte noch andere Firmen befragen.", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Telefon");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -255,7 +255,7 @@ public class DemoDataLoader implements InitializingBean {
         contactPointRepository.save(contactPoint1);
 
         Todo todo1 = new Todo("Herrn Frei wegen Freedolin Feature kontaktieren", company, this.getTodayIncrementedBy(14), this.getTodayIncrementedBy(11));
-        todo1.setCreator(demoUser);
+        todo1.setCreator(demo);
         todoRepository.save(todo1);
     }
 
@@ -264,19 +264,19 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Dietrich Drechsel", company, "Geschäftsführung", "drechsel@d&r.de", "01234 5678910", "01234 5678910", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         Contact contact2 = new Contact("Rudolf Rummel", company, "Entwicklung", "rummel@d&r.de", "0123 45678910", "0123 45678910", "");
-        contact2.setManager(demoUser);
+        contact2.setManager(demo);
         contactRepository.save(contact2);
 
         Contact contact3 = new Contact("Bettina Beschrud", company, "Buchhaltung", "info@d&r.de", "02304 1056789", "02304 1056789", "");
-        contact3.setManager(demoUser);
+        contact3.setManager(demo);
         contactRepository.save(contact3);
 
         ContactPoint contactPoint1 = new ContactPoint("Erstkontakt mit Herrn Drechsel", this.getTodayIncrementedBy(-14), contact1, "Herrn Drechsel beim Abendessen auf der Messe kennengelernt, sucht Partner für Automationssoftware", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Messe");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -296,7 +296,7 @@ public class DemoDataLoader implements InitializingBean {
         opportunityRepository.save(opportunity1);
 
         Todo todo1 = new Todo("Frau Beschrud wegen des Termins zurückrufen", company, this.getTodayIncrementedBy(2), this.getTodayIncrementedBy(1));
-        todo1.setCreator(demoUser);
+        todo1.setCreator(demo);
         todoRepository.save(todo1);
     }
 
@@ -305,15 +305,15 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Jon Snow", company, "Geschäftsführung", "jon@snow-gmbh.kg", "0432 1098762", "0432 1098762", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         Contact contact2 = new Contact("Arya Stark", company, "Buchhaltung", "info@snow-gmbh.kg", "0204 1056789", "0204 1056789", "");
-        contact2.setManager(demoUser);
+        contact2.setManager(demo);
         contactRepository.save(contact2);
 
         ContactPoint contactPoint1 = new ContactPoint("Erstkontakt mit Snow GmbH & Co. KG", this.getTodayIncrementedBy(-4), contact2, "Frau Stark rief in der Firma an, sucht Entwicklung für Logisitiksoftware, Gesprächstermin vereinbart", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("Telefon");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -326,7 +326,7 @@ public class DemoDataLoader implements InitializingBean {
         contactPointRepository.save(contactPoint1);
 
         ContactPoint contactPoint2 = new ContactPoint("Persönliches Gespräch mit Herrn Snow", this.getTodayIncrementedBy(-2), contact1, "Persönliches Gespräch verlief gut, Hr. Snow ist angetan von unserem Geschäftskonzept und meldet sich nächste Woche", "Prospect", ":thumbsup:");
-        contactPoint2.setCreator(demoUser);
+        contactPoint2.setCreator(demo);
         Label type2 = new Label("Persönlich");
         type2.addContactPointTypes(contactPoint2);
         labelRepository.save(type2);
@@ -344,11 +344,11 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Dr. Franz Leif", company, "Geschäftsführung", "fleif@madrigal.gmbh", "0321 9998765", "0321 9998765", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         ContactPoint contactPoint1 = new ContactPoint("Anfrage zur Umfragen-Auswertung von Dr. Leif", this.getTodayIncrementedBy(-1), contact1, "Herr Leif macht eine Umfrage, möchte Ergebnis-Auswertung automatisieren.", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("E-Mail");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
@@ -367,11 +367,11 @@ public class DemoDataLoader implements InitializingBean {
         companyRepository.save(company);
 
         Contact contact1 = new Contact("Klara Fall", company, "Sekretariat", "", "0221 4994762", "0221 4994762", "");
-        contact1.setManager(demoUser);
+        contact1.setManager(demo);
         contactRepository.save(contact1);
 
         ContactPoint contactPoint1 = new ContactPoint("Anfrage zum Programm für Fallstudie", this.getTodayIncrementedBy(-3), contact1, "Frau Fall hört sich um, benötigen Software zur Umsetzung einer Fallstudie.", "Lead", "");
-        contactPoint1.setCreator(demoUser);
+        contactPoint1.setCreator(demo);
         Label type1 = new Label("E-Mail");
         type1.addContactPointTypes(contactPoint1);
         labelRepository.save(type1);
