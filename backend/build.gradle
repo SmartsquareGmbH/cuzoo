@@ -38,10 +38,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation "net.sf.jsefa:jsefa:$jsefaVersion"
-	//implementation "org.flywaydb:flyway-core"
+	implementation "org.flywaydb:flyway-core"
 
 	runtime 'com.h2database:h2'
-	//runtime 'org.postgresql:postgresql'
+	runtime 'org.postgresql:postgresql'
 	
 	runtime 'org.springframework.boot:spring-boot-devtools'
 	testRuntime 'com.h2database:h2'
