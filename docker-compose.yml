@@ -3,6 +3,7 @@ version: "3.7"
 services:
   cuzoo-frontend:
     image: cuzoo/frontend:latest
+    build: "frontend"
     container_name: cuzoo-frontend
     links:
       - cuzoo-backend
@@ -11,6 +12,7 @@ services:
 
   cuzoo-backend:
     image: cuzoo/backend:latest
+    build: "backend"
     container_name: cuzoo-backend
     depends_on:
       - "postgre-db"
