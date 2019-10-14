@@ -35,7 +35,7 @@
             clearable
             :loading="loadingCompanies"
             :items="companyNames"
-            class="search-bar"
+            class="search-bar hidden-md-and-down"
             prepend-icon="search"
             label="Suche nach Unternehmen ..."
             hide-details
@@ -67,7 +67,7 @@
         <router-view></router-view>
       </v-content>
       <v-footer class="justify-center" dark app>
-        &copy; 2019 Smartsquare GmbH
+        &copy; 2019<a class="ml-1" href="https://smartsquare.de" target="_blank">Smartsquare GmbH</a>
       </v-footer>
     </v-container>
   </v-app>

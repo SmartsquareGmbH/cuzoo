@@ -5,8 +5,23 @@
       <v-card-text class="text-xs-left primary--text">
         <v-container>
           <span class="subheading">Persönliche Informationen</span>
-          <v-text-field v-model="user.fullname" class="mt-3" prepend-icon="person" name="username" label="Name" />
-          <v-text-field v-model="user.mail" prepend-icon="mail" name="password" label="E-Mail" />
+          <v-text-field
+            v-model="user.fullname"
+            :disabled="isDemo"
+            class="mt-3"
+            prepend-icon="person"
+            name="username"
+            label="Name"
+          />
+          <v-text-field
+            v-model="user.mail"
+            :disabled="isDemo"
+            persistent-hint
+            hint="An diese Adresse werden Erinnerungen für TODOs gesendet"
+            prepend-icon="mail"
+            name="password"
+            label="E-Mail"
+          />
         </v-container>
       </v-card-text>
       <v-card-actions>
@@ -31,6 +46,9 @@ export default {
     ...mapGetters(["username", "user"]),
     userInformation() {
       return [this.user.fullname, this.user.mail]
+    },
+    isDemo() {
+      return this.username === "demo"
     },
   },
   watch: {
