@@ -32,11 +32,10 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn outline color="primary" @click.native="doDemoLogin">Demo</v-btn>
+            <v-btn disabled outline color="primary" @click.native="doDemoLogin">Demo</v-btn>
             <v-btn color="primary" class="secondary--text" @click.native="doLogin">Login</v-btn>
           </v-card-actions>
         </v-card>
-        <span><strong>Hinweis:</strong> CuZoo ist nicht zum Gebrauch mit dem Smartphone geeignet!</span>
         <v-snackbar v-model="loginFailed" color="error" bottom>
           {{ loginFailedMessage }}
           <v-btn dark flat @click="wrongCredentials = false">
