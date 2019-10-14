@@ -47,7 +47,7 @@
       <v-layout v-resize="onResize" row wrap>
         <div class="dash">
           <perfect-scrollbar :options="settings">
-            <v-flex xs12 class="todo-results" :style="`height: ${windowHeight / 5.54}px`">
+            <v-flex xs12 class="todo-results" :style="`height: ${widgetHeight}px`">
               <todo-results :search="searchTodos" />
             </v-flex>
           </perfect-scrollbar>
@@ -82,6 +82,14 @@ export default {
     ...mapGetters(["companies", "todos", "selectedCompany"]),
     breakpoint() {
       return this.$vuetify.breakpoint
+    },
+    widgetHeight() {
+      const height = this.windowHeight / 5.54
+      const cardHeight = 54
+      const excess = height % cardHeight
+
+      if (excess < cardHeight / 2) return height - excess
+      else return height + (cardHeight - excess)
     },
   },
   watch: {

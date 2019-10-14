@@ -48,7 +48,7 @@
       <v-layout v-resize="onResize" row wrap>
         <div class="dash">
           <perfect-scrollbar :options="settings">
-            <v-flex xs12 class="pa-0" :style="`height: ${windowHeight / 2.5725}px`">
+            <v-flex xs12 class="pa-0" :style="`height: ${widgetHeight}px`">
               <contact-point-results :search="searchContactPoints" :on-dashboard="true" />
             </v-flex>
           </perfect-scrollbar>
@@ -83,6 +83,14 @@ export default {
     ...mapGetters(["companies", "contacts", "contactPoints", "selectedCompany", "searchResults"]),
     breakpoint() {
       return this.$vuetify.breakpoint
+    },
+    widgetHeight() {
+      const height = this.windowHeight / 2.5725
+      const cardHeight = 89
+      const excess = height % cardHeight
+
+      if (excess < cardHeight / 2) return height - excess
+      else return height + (cardHeight - excess)
     },
   },
   watch: {
