@@ -85,7 +85,7 @@ export default {
     },
     widgetHeight() {
       const height = this.windowHeight / 5.54
-      const cardHeight = 54
+      const cardHeight = 55
       const excess = height % cardHeight
 
       if (excess < cardHeight / 2) return height - excess
