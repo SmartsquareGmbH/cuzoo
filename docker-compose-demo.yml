@@ -4,7 +4,6 @@ services:
   cuzoo-frontend:
     image: cuzoo/frontend:latest
     build: "frontend"
-    container_name: cuzoo-frontend
     links:
       - cuzoo-backend
     ports:
@@ -13,7 +12,6 @@ services:
   cuzoo-backend:
     image: cuzoo/backend:latest
     build: "backend"
-    container_name: cuzoo-backend
     ports:
       - "127.0.0.1:8085:5000"
     command:
