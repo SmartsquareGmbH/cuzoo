@@ -2,6 +2,7 @@
 # Builder Container
 #
 FROM node:11-alpine as builder
+ARG mode=production
 WORKDIR /app
 
 # copy both 'package.json' and 'package-lock.json' (if available)
@@ -13,7 +14,7 @@ RUN yarn
 
 COPY . .
 
-RUN yarn build
+RUN yarn build --mode ${mode}
 
 #
 # Run Container

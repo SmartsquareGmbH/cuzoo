@@ -3,7 +3,10 @@ version: "3.7"
 services:
   cuzoo-frontend:
     image: cuzoo/frontend:latest
-    build: "frontend"
+    build:
+      context: "frontend"
+      args:
+        mode: demo
     links:
       - cuzoo-backend
     ports:
