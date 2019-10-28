@@ -8,6 +8,7 @@ import "roboto-fontface/css/roboto/roboto-fontface.css"
 import "material-design-icons-iconfont/dist/material-design-icons.css"
 import "emoji-mart-vue-fast/css/emoji-mart.css"
 import "vuetify/src/stylus/app.styl"
+import "plugins/hotjar"
 
 import VueTruncateFilter from "vue-truncate-filter"
 import VueClip from "vue-clip"
