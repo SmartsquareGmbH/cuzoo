@@ -5,13 +5,14 @@
         <v-icon size="32px">people</v-icon>
         ANSPRECHPARTNER
       </h1>
-      <input id="file" ref="file" class="input-file" type="file" @change="handleUpload()" />
+      <input v-if="!isDemo" id="file" ref="file" class="input-file" type="file" @change="handleUpload()" />
       <label for="file">
         <v-tooltip top>
-          <v-icon slot="activator" x-large color="primary">
+          <v-icon slot="activator" :color="isDemo ? 'grey' : 'primary'" x-large>
             publish
           </v-icon>
           <span>CSV Import</span>
+          <span v-show="isDemo" class="font-italic"> (deaktiviert)</span>
         </v-tooltip>
       </label>
       <v-btn depressed fab light small color="transparent" flat @click="openContactDialog()">
@@ -131,6 +132,9 @@ export default {
   },
   computed: {
     ...mapGetters(["companies", "contacts"]),
+    isDemo() {
+      return process.env.VUE_APP_ENV_MODE === "demo"
+    },
   },
   beforeMount() {
     this.refreshTable()

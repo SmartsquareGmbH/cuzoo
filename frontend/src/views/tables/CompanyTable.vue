@@ -5,13 +5,14 @@
         <v-icon size="32px">business</v-icon>
         UNTERNEHMEN
       </h1>
-      <input id="file" ref="file" class="input-file" type="file" @change="handleUpload()" />
+      <input v-if="!isDemo" id="file" ref="file" class="input-file" type="file" @change="handleUpload()" />
       <label for="file">
         <v-tooltip top>
-          <v-icon slot="activator" color="primary" x-large>
+          <v-icon slot="activator" :color="isDemo ? 'grey' : 'primary'" x-large>
             publish
           </v-icon>
           <span>CSV Import</span>
+          <span v-show="isDemo" class="font-italic"> (deaktiviert)</span>
         </v-tooltip>
       </label>
       <v-btn color="transparent" depressed fab flat small @click="openCompanyDialog()">
@@ -118,6 +119,9 @@ export default {
   },
   computed: {
     ...mapGetters(["companies"]),
+    isDemo() {
+      return process.env.VUE_APP_ENV_MODE === "demo"
+    },
   },
   mounted() {
     this.refreshTable()
