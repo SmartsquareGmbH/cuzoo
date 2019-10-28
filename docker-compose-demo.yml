@@ -7,7 +7,7 @@ services:
     links:
       - cuzoo-backend
     ports:
-      - "127.0.01:8084:80"
+      - "127.0.0.1:8084:80"
 
   cuzoo-backend:
     image: cuzoo/backend:latest
