@@ -33,7 +33,13 @@
           <v-card-actions>
             <v-spacer />
             <v-btn outline color="primary" @click.native="doDemoLogin">Demo</v-btn>
-            <v-btn color="primary" class="secondary--text" @click.native="doLogin(username, password)">Login</v-btn>
+            <v-btn
+              :disabled="isDemo"
+              color="primary"
+              class="secondary--text"
+              @click.native="doLogin(username, password)"
+              >Login</v-btn
+            >
           </v-card-actions>
         </v-card>
         <v-snackbar v-model="loginFailed" color="error" bottom>
@@ -61,6 +67,11 @@ export default {
     loginFailedMessage: "Die Anmeldedaten sind ungültig!",
     logo: require("@/assets/sq_white.png"),
   }),
+  computed: {
+    isDemo() {
+      return process.env.VUE_APP_ENV_MODE === "demo"
+    },
+  },
   methods: {
     ...mapMutations(["storeLogData"]),
     doLogin(username, password) {
@@ -96,7 +107,8 @@ export default {
         })
     },
     doDemoLogin() {
-      this.doLogin("demo", "password")
+      if (this.isDemo) this.doLogin("demo", "password")
+      else window.open("https://cuzoo-demo.smartsquare.de/")
     },
   },
 }
