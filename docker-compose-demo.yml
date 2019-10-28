@@ -8,14 +8,14 @@ services:
     links:
       - cuzoo-backend
     ports:
-      - "127.0.01:8082:80"
+      - "127.0.01:8084:80"
 
   cuzoo-backend:
     image: cuzoo/backend:latest
     build: "backend"
     container_name: cuzoo-backend
     ports:
-      - "127.0.0.1:8083:5000"
+      - "127.0.0.1:8085:5000"
     command:
       ["java", "-jar", "/app/app.jar",
        "--spring.datasource.url=jdbc:h2:mem:testdb",
