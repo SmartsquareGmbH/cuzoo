@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   cuzoo-frontend:
-    image: cuzoo/frontend:latest
+    image: cuzoo/frontend:demo
     build:
       context: "frontend"
       args:
@@ -13,7 +13,7 @@ services:
       - "127.0.0.1:8084:80"
 
   cuzoo-backend:
-    image: cuzoo/backend:latest
+    image: cuzoo/backend:demo
     build: "backend"
     ports:
       - "127.0.0.1:8085:5000"
