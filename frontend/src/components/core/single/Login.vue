@@ -32,8 +32,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn disabled outline color="primary" @click.native="doDemoLogin">Demo</v-btn>
-            <v-btn color="primary" class="secondary--text" @click.native="doLogin">Login</v-btn>
+            <v-btn outline color="primary" @click.native="doDemoLogin">Demo</v-btn>
+            <v-btn color="primary" class="secondary--text" @click.native="doLogin(username, password)">Login</v-btn>
           </v-card-actions>
         </v-card>
         <v-snackbar v-model="loginFailed" color="error" bottom>
@@ -63,23 +63,23 @@ export default {
   }),
   methods: {
     ...mapMutations(["storeLogData"]),
-    doLogin() {
+    doLogin(username, password) {
       api
         .post(
           "security/login",
           {},
           {
             auth: {
-              username: this.username,
-              password: this.password,
+              username: username,
+              password: password,
             },
           }
         )
         .then(() => {
           this.storeLogData({
             authorized: true,
-            username: this.username,
-            password: this.password,
+            username: username,
+            password: password,
           })
         })
         .then(() => {
@@ -96,36 +96,7 @@ export default {
         })
     },
     doDemoLogin() {
-      api
-        .post(
-          "security/login",
-          {},
-          {
-            auth: {
-              username: "demo",
-              password: "password",
-            },
-          }
-        )
-        .then(() => {
-          this.storeLogData({
-            authorized: true,
-            username: "demo",
-            password: "password",
-          })
-        })
-        .then(() => {
-          this.$router.replace("/dashboard")
-        })
-        .catch((error) => {
-          if (error.message === "Request failed with status code 401") {
-            this.loginFailedMessage = "Die Anmeldedaten sind ungültig!"
-          } else {
-            this.loginFailedMessage = "Es konnte keine Verbindung zum Server hergestellt werden"
-          }
-
-          this.loginFailed = true
-        })
+      this.doLogin("demo", "password")
     },
   },
 }
