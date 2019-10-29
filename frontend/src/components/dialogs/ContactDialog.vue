@@ -204,8 +204,8 @@ export default {
       this.$refs.nameField.focus()
 
       setTimeout(() => {
-        if (this.companyName) {
-          if (this.companyNames.includes(this.companyName)) {
+        if (this.companyNameEntered) {
+          if (this.companies.some((it) => it.name === this.companyNameEntered)) {
             this.submitContact()
           } else {
             this.confirmDialogState = true
@@ -215,8 +215,8 @@ export default {
         }
       }, 10)
     },
-    submitContact() {
-      let maybeCompany = this.company ? `?companyId=${this.company.id}` : ""
+    submitContact(savedCompanyId) {
+      let maybeCompany = this.company.hasOwnProperty("id") ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
 
       api
         .put(`contact/submit${maybeCompany}`, {
@@ -243,7 +243,7 @@ export default {
     submitCompany() {
       api
         .put("company/submit", {
-          name: this.companyName,
+          name: this.companyNameEntered,
           id: -1,
           street: "",
           zipcode: "",
@@ -253,8 +253,8 @@ export default {
           other: "",
           labels: [],
         })
-        .then(() => {
-          this.submitContact()
+        .then((response) => {
+          this.submitContact(response.data)
         })
         .catch((error) => {
           console.log(error)
