@@ -1,8 +1,13 @@
 package de.smartsquare.cuzoo.customer.opportunity;
 
+import de.smartsquare.cuzoo.customer.company.Company;
+import de.smartsquare.cuzoo.customer.company.CompanyController;
+import de.smartsquare.cuzoo.customer.company.CompanyForm;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
+import de.smartsquare.cuzoo.customer.label.Label;
+import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -14,6 +19,7 @@ import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/opportunity")
@@ -21,14 +27,17 @@ public class OpportunityController {
     private final OpportunityRepository opportunityRepository;
     private final ContactPointRepository contactPointRepository;
     private final CompanyRepository companyRepository;
+    private final LabelRepository labelRepository;
 
     @Autowired
     public OpportunityController(final ContactPointRepository contactPointRepository,
                                  final OpportunityRepository opportunityRepository,
-                                 final CompanyRepository companyRepository) {
+                                 final CompanyRepository companyRepository,
+                                 final LabelRepository labelRepository) {
         this.opportunityRepository = opportunityRepository;
         this.contactPointRepository = contactPointRepository;
         this.companyRepository = companyRepository;
+        this.labelRepository = labelRepository;
     }
 
     @PutMapping("/submit/{contactPointId}")
@@ -97,6 +106,73 @@ public class OpportunityController {
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/submit")
+    public final ResponseEntity<?> submitOpportunity(@RequestBody @Valid OpportunityForm opportunityForm,
+                                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Opportunity nicht vorhanden!");
+        }
+
+        Opportunity opportunity = getOrCreateOpportunity(opportunityForm);
+        Opportunity savedOpportunity;
+
+        Long opportunityIdBeforeSaving = opportunityForm.getId();
+
+        try {
+            savedOpportunity = opportunityRepository.save(opportunity);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (opportunityIdBeforeSaving < 1) {
+            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/submit/{opportunityId}")
+    public final ResponseEntity<?> submitCompany(@PathVariable("opportunityId") Long opportunityId,
+            @RequestBody @Valid OpportunityForm opportunityForm,
+                                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Eine Opportunity kann nicht ohne Namen eingereicht werden!");
+        }
+
+        Opportunity opportunity = getOrCreateOpportunity(opportunityForm);
+        Opportunity savedOpportunity;
+
+        try {
+            savedOpportunity = opportunityRepository.save(opportunity);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (opportunityId < 1) {
+            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private Opportunity getOrCreateOpportunity(@RequestBody @Valid OpportunityForm opportunityForm) {
+        Opportunity opportunity;
+        Optional<Opportunity> byId = opportunityRepository.findById(opportunityForm.getId());
+        if (byId.isPresent()) {
+            opportunity= byId.get();
+
+            opportunity.setTitle(opportunityForm.getTitle());
+            opportunity.setState(opportunityForm.getState());
+            opportunity.setDescription(opportunityForm.getDescription());
+        } else {
+            opportunity = new Opportunity(
+                    opportunityForm.getTitle(),
+                            opportunityForm.getState(),
+                            opportunityForm.getDescription()
+                    );
+        }
+        return opportunity;
     }
 
     private Date getLastProgress(Long opportunityId) {

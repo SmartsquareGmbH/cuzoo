@@ -13,7 +13,7 @@
       :items="opportunities"
       :loading="loading"
       :search="search"
-      rows-per-page-text="Unternehmen pro Seite"
+      rows-per-page-text="Opportunities pro Seite"
       :rows-per-page-items="[10, 25, 50, 100]"
       dark
     >
@@ -23,7 +23,7 @@
           v-if="!!props.item"
           style="cursor: pointer;"
           class="text-xs-left vertical-center"
-          @click="viewOpportunity(props.item.id)"
+          @click="viewOpportunity(props.item)"
         >
           <td>{{ props.item.title }}</td>
           <td>
@@ -40,6 +40,12 @@
           </v-tooltip>
           <td v-else>{{ props.item.description }}</td>
           <td>
+            <v-tooltip top>
+              <v-icon slot="activator" size="22px" color="white" @click.stop="editOpportunity(props.item)">
+                edit
+              </v-icon>
+              Opportunity bearbeiten
+            </v-tooltip>
             <v-tooltip top>
               <v-icon slot="activator" size="22px" color="red lighten-1" @click.stop="openConfirmDialog(props.item)">
                 delete
@@ -61,23 +67,30 @@
       :question-to-be-confirmed="deleteOpportunityMessage"
       @confirmed="deleteOpportunity()"
     />
+    <opportunity-dialog v-model="opportunityDialogState" @input="opportunityDialogState = false" />
   </v-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex"
+import { mapActions, mapGetters, mapMutations } from "vuex"
 import api from "../../utils/http-common"
+
 import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue"
+import OpportunityDialog from "../../components/dialogs/OpportunityDialog.vue"
 
 export default {
   components: {
+    OpportunityDialog,
     ConfirmDialog,
   },
   data() {
     return {
+      opportunityDialogState: false,
       confirmDialogState: false,
-      deleteOpportunityMessage: "Bist du dir sicher, dass du diese Opportunity entgültig löschen willst?",
+      editOpportunityMessage: "Opportunity editieren?",
+      deleteOpportunityMessage: "Bist du dir sicher, dass du diese Opportunity endgültig löschen willst?",
       search: "",
+      file: "",
       loading: true,
       headers: [
         { text: "Titel", value: "title", align: "left" },
@@ -85,18 +98,51 @@ export default {
         { text: "Beschreibung", value: "description" },
         { text: "Aktionen", value: "name", sortable: false },
       ],
+      defaultOpportunity: {
+        value: false,
+        id: 0,
+        title: "",
+        state: "",
+        description: "",
+        lastProgress: "",
+        labels: [],
+        progress: [],
+      },
     }
   },
   computed: {
-    ...mapGetters(["opportunities"]),
+    ...mapGetters({
+      opportunities: "opportunities",
+    }),
+    isDemo() {
+      return process.env.VUE_APP_ENV_MODE === "demo"
+    },
   },
   mounted() {
     this.refreshTable()
   },
   methods: {
-    ...mapActions(["getOpportunities"]),
+    ...mapActions({
+      getOpportunities: "getOpportunities",
+    }),
+    ...mapMutations({
+      storeOpportunityDetails: "storeEditedOpportunityDetails",
+    }),
+    closeDialog() {
+      this.$emit("input")
+
+      setTimeout(() => {
+        this.storeOpportunityDetails({
+          editedIndex: -1,
+          editedOpportunity: Object.assign({}, this.defaultOpportunity),
+        })
+      }, 300)
+    },
     refreshTable() {
       this.getOpportunities().then(() => (this.loading = false))
+    },
+    clearDialog() {
+      this.$refs.form.reset()
     },
     deleteOpportunity() {
       api
@@ -109,13 +155,25 @@ export default {
           alert(error)
         })
     },
+    editOpportunity(item) {
+      this.storeOpportunityDetails({
+        editedIndex: this.opportunities.indexOf(item),
+        editedOpportunity: Object.assign({}, item),
+      })
+      this.openOpportunityDialog()
+    },
+    openOpportunityDialog(item) {
+      this.editedOpportunity = Object.assign({}, item)
+
+      this.opportunityDialogState = true
+    },
     openConfirmDialog(item) {
       this.editedOpportunity = Object.assign({}, item)
 
       this.confirmDialogState = true
     },
-    viewOpportunity(id) {
-      this.$router.push("/opportunities/" + id)
+    viewOpportunity(item) {
+      this.$router.push("/opportunities/" + item.id)
     },
     getStateColor(state) {
       switch (state) {

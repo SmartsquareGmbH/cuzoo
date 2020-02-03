@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
+import de.smartsquare.cuzoo.customer.opportunity.Opportunity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -58,7 +59,7 @@ public class Label {
             mappedBy = "labels")
     private List<Contact> contacts;
 
-    Label() {
+    public Label() {
         this.contactPointsWithLabels = new ArrayList<>();
         this.contactPointsWithTypes = new ArrayList<>();
         this.companies = new ArrayList<>();

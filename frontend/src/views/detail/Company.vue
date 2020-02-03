@@ -364,7 +364,6 @@ export default {
         editedIndex: this.companies.indexOf(this.company),
         editedCompany: Object.assign({}, this.company),
       })
-
       this.openCompanyDialog()
     },
     editContact(item) {

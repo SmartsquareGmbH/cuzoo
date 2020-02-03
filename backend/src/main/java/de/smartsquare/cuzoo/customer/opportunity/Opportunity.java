@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.opportunity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
+import de.smartsquare.cuzoo.customer.label.Label;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,9 @@ public class Opportunity {
     @OneToMany(mappedBy = "opportunity", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ContactPoint> contactPoints;
+
+    @ManyToMany
+    private List<Label> labels;
 
     public Opportunity(@NotNull @NotBlank String title, @NotNull @NotBlank String state, String description) {
         this.title = title;
@@ -113,6 +117,18 @@ public class Opportunity {
         this.progress.add(progress);
     }
 
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
+    }
+
+    public void addLabel(Label label) {
+        this.labels.add(label);
+    }
+
     @Embeddable
     public static class Progress {
 
@@ -132,8 +148,14 @@ public class Opportunity {
 
         public String getOpportunityState() { return this.opportunityState; }
 
+        public void setOpportunityState(String opportunityState) { this.opportunityState = opportunityState; }
+
         public String getProgressText() { return this.progressText; }
 
+        public void setProgressText(String progressText) { this.progressText = progressText; }
+
         public Date getDate() { return this.date; }
+
+        public void setDate(Date date) { this.date = date; }
     }
 }

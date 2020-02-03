@@ -27,11 +27,16 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
+              <v-btn flat small @click.stop="editOpportunity()">
+                <v-icon size="22px" class="mr-1" dark>edit</v-icon>
+                Opportunity bearbeiten
+              </v-btn>
               <v-btn flat small @click="openConfirmDialog()">
                 <v-icon size="22px" class="mr-1" dark>delete</v-icon>
                 Opportunity löschen
               </v-btn>
             </v-flex>
+            <opportunity-dialog v-model="opportunityDialogState" @input="opportunityDialogState = false" />
           </v-layout>
           <v-divider />
         </v-flex>
@@ -180,6 +185,7 @@ import Chip from "../../components/core/Chip.vue"
 import OppProgressDialog from "../../components/dialogs/OppProgressDialog.vue"
 import ContactPointDialog from "../../components/dialogs/ContactPointDialog.vue"
 import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue"
+import OpportunityDialog from "../../components/dialogs/OpportunityDialog"
 
 const datefns = require("date-fns")
 const de = require("date-fns")
@@ -191,13 +197,15 @@ export default {
     OppProgressDialog,
     ContactPointDialog,
     ConfirmDialog,
+    OpportunityDialog,
   },
   data() {
     return {
       loadingData: true,
       opportunityId: parseInt(this.$route.params.opportunityId),
       confirmDialogState: false,
-      deleteOpportunityMessage: "Bist du dir sicher, dass du diese Opportunity entgültig löschen willst?",
+      opportunityDialogState: false,
+      deleteOpportunityMessage: "Bist du dir sicher, dass du diese Opportunity endgültig löschen willst?",
       oppProgressDialogState: false,
       contactPointDialogState: false,
       contactPoints: [],
@@ -208,18 +216,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["opportunities", "contacts"]),
+    ...mapGetters(["opportunities"]),
     opportunity() {
       return this.opportunities.find((it) => it.id === this.opportunityId)
     },
   },
   beforeMount() {
-    this.refreshData()
+    this.refreshTable()
   },
   methods: {
-    ...mapMutations(["storeEditedOpportunityDetails"]),
-    ...mapActions(["getOpportunities", "getContacts"]),
-    refreshData() {
+    ...mapActions({
+      getOpportunities: "getOpportunities",
+      getContacts: "getContacts",
+    }),
+    ...mapMutations({
+      storeOpportunityDetails: "storeEditedOpportunityDetails",
+      storeContactDetails: "storeEditedContactDetails",
+    }),
+    goPageBack() {
+      this.$router.go(-1)
+    },
+    refreshTable() {
       this.loadingData = true
       this.getContacts()
       this.getOpportunities().then(() => {
@@ -284,10 +301,35 @@ export default {
     openConfirmDialog() {
       this.confirmDialogState = true
     },
+    openOpportunityDialog() {
+      this.opportunityDialogState = true
+    },
+    editOpportunity() {
+      this.storeOpportunityDetails({
+        editedIndex: this.opportunities.indexOf(this.opportunity),
+        editedOpportunity: Object.assign({}, this.opportunity),
+      })
+      this.openOpportunityDialog()
+    },
     deleteOpportunity() {
       api
         .delete(`opportunity/delete/${this.opportunityId}`)
         .then(() => this.$router.go(-1))
+        .catch((error) => {
+          console.log(error)
+          alert(error)
+        })
+    },
+    submitOpportunity() {
+      api
+        .put(`opportunity/submit`, {
+          title: this.editedOpportunity.title,
+          state: this.editedOpportunity.state,
+          description: this.editedOpportunity.description,
+        })
+        .then(() => {
+          this.refreshTable()
+        })
         .catch((error) => {
           console.log(error)
           alert(error)

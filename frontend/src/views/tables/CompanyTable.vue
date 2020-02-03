@@ -127,7 +127,9 @@ export default {
     this.refreshTable()
   },
   methods: {
-    ...mapActions(["getCompanies"]),
+    ...mapActions({
+      getCompanies: "getCompanies",
+    }),
     ...mapMutations({
       storeCompanyDetails: "storeEditedCompanyDetails",
     }),
@@ -161,7 +163,6 @@ export default {
         editedIndex: this.companies.indexOf(item),
         editedCompany: Object.assign({}, item),
       })
-
       this.openCompanyDialog()
     },
     deleteCompany() {
