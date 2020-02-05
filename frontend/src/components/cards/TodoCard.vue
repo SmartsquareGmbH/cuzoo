@@ -1,74 +1,98 @@
 <template>
-  <v-hover>
-    <v-card
-      slot-scope="{ hover }"
-      :color="`${hover || expandMenu ? '#616161' : ''}`"
-      class="clickable elevation-0"
-      @click="expandMenu = !expandMenu"
-    >
-      <v-card-title class="white--text subheading text-xs-left low-padding-bottom">
-        <v-layout row wrap>
-          <v-flex xs8>
-            <p :class="`mb-0 ${fullDescription ? `` : `text-truncate`}`">
-              {{ todo.description }}
-            </p>
-          </v-flex>
-          <v-flex xs4 class="text-xs-right">
-            <v-icon
-              :style="`transform: rotate(${hover ? 0 : 0}deg)`"
-              class="mr-1"
-              :color="`${dateIsExpired(todo.expiration) ? 'error' : 'white'}`"
-            >
-              timer
-            </v-icon>
-            <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
-              {{ distanceInWords }}
-            </chip>
-          </v-flex>
-        </v-layout>
-      </v-card-title>
-      <v-expand-transition>
-        <div v-if="expandMenu" color="success">
-          <v-card-title class="title font-weight-light todo-footer">
-            <v-icon class="mr-1">business</v-icon>
-            <v-tooltip top>
-              <chip slot="activator" font-color="primary">
-                {{ todo.company.name | truncate(30) }}
+  <v-flex xs12>
+    <v-hover>
+      <v-card
+        slot-scope="{ hover }"
+        :color="`${hover || expandMenu ? '#616161' : ''}`"
+        class="clickable elevation-0"
+        @click="expandMenu = !expandMenu"
+      >
+        <v-card-title class="white--text subheading text-xs-left low-padding-bottom">
+          <v-layout row wrap>
+            <v-flex xs8>
+              <p :class="`mb-0 ${fullDescription ? `` : `text-truncate`}`">
+                {{ todo.description }}
+              </p>
+            </v-flex>
+            <v-flex xs4 class="text-xs-right">
+              <v-icon
+                :style="`transform: rotate(${hover ? 0 : 0}deg)`"
+                class="mr-1"
+                :color="`${dateIsExpired(todo.expiration) ? 'error' : 'white'}`"
+              >
+                timer
+              </v-icon>
+              <chip class="mb-2" :font-color="getUrgency(todo.expiration)">
+                {{ distanceInWords }}
               </chip>
-              <span class="title font-weight-light">{{ todo.company.name }}</span>
-            </v-tooltip>
-            <v-icon class="ml-1">person</v-icon>
-            <chip font-color="primary">
-              {{ todo.creator }}
-            </chip>
-            <v-spacer />
-            <v-btn small color="success" @click="taskIsDone(todo)">
-              <v-icon size="24px" class="ml-0">done</v-icon>
-            </v-btn>
-          </v-card-title>
-        </div>
-      </v-expand-transition>
-      <slot />
-    </v-card>
-  </v-hover>
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+        <v-expand-transition>
+          <div v-if="expandMenu" color="success">
+            <v-card-title class="title font-weight-light todo-footer">
+              <v-icon class="mr-1">business</v-icon>
+              <v-tooltip top>
+                <chip slot="activator" font-color="primary">
+                  {{ todo.company.name | truncate(30) }}
+                </chip>
+                <span class="title font-weight-light">{{ todo.company.name }}</span>
+              </v-tooltip>
+              <v-icon class="ml-1">person</v-icon>
+              <chip font-color="primary">
+                {{ todo.creator }}
+              </chip>
+              <v-spacer />
+              <v-btn small color="cyan darken-1" @click="editToDo(todo)">
+                <v-icon size="24px">edit</v-icon>
+              </v-btn>
+              <v-btn small color="success" @click="taskIsDone(todo)">
+                <v-icon size="24px" class="ml-0">done</v-icon>
+              </v-btn>
+            </v-card-title>
+          </div>
+        </v-expand-transition>
+        <slot />
+      </v-card>
+    </v-hover>
+    <edit-todo-dialog
+      v-model="todoDialogState"
+      :companies="mappedCompanies"
+      @refresh="refreshTodos()"
+      @input="todoDialogState = false"
+    ></edit-todo-dialog>
+  </v-flex>
 </template>
 
 <script>
 import api from "../../utils/http-common"
 
 import Chip from "../core/Chip.vue"
+import { mapActions, mapGetters, mapMutations } from "vuex"
+import EditTodoDialog from "../dialogs/EditTodoDialog.vue"
 
 const datefns = require("date-fns")
 const de = require("date-fns/locale/de")
 
 export default {
-  components: { Chip },
+  components: { EditTodoDialog, Chip },
   props: ["todo"],
   data: () => ({
+    mappedCompanies: [],
     expandMenu: false,
     fullDescription: false,
+    todoDialogState: false,
+    defaultToDo: {
+      value: false,
+      id: 0,
+      description: "",
+      expiration: 0,
+      reminder: 0,
+      creator: "",
+    },
   }),
   computed: {
+    ...mapGetters(["companies", "todos", "selectedCompany"]),
     distanceInWords() {
       if (this.expandMenu) return this.expirationDate
       if (this.dateIsExpired(this.todo.expiration)) return "Abgelaufen"
@@ -91,6 +115,20 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["getCompanies", "getContacts", "getContactPoints", "getOpportunities", "getTodos"]),
+    ...mapMutations({
+      storeEditedTodoDetails: "storeEditedTodoDetails",
+    }),
+    closeDialog() {
+      this.$emit("input")
+
+      setTimeout(() => {
+        this.storeDetails({
+          editedIndex: -1,
+          editedToDo: Object.assign({}, this.defaultToDo),
+        })
+      }, 300)
+    },
     taskIsDone(todo) {
       todo.done = true
       api.put(`todo/done/${this.todo.id}`)
@@ -108,6 +146,26 @@ export default {
     },
     dateIsExpired(date) {
       return datefns.isPast(date)
+    },
+    editToDo(todo) {
+      this.storeEditedTodoDetails({
+        creator: this.todos.username,
+        editedIndex: this.todos.indexOf(todo),
+        editedTodo: Object.assign({}, todo),
+      })
+      this.mappedCompanies = this.companies.map((it) => Object.assign({}, { id: it.id, name: it.name })).sort()
+      this.todoDialogState = true
+    },
+    refreshTodos() {
+      this.refreshData()
+    },
+    refreshData() {
+      this.getCompanies()
+      this.getContacts()
+      this.getContactPoints().then(() => {
+        this.getOpportunities()
+        this.getTodos()
+      })
     },
   },
 }
