@@ -144,6 +144,7 @@ export default {
   computed: {
     ...mapGetters({
       username: "username",
+      company: "company",
       editedIndex: "editedTodoIndex",
       editedTodo: "editedTodo",
     }),

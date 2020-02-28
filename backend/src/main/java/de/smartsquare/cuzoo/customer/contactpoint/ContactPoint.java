@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.contactpoint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.attachment.Attachment;
 import de.smartsquare.cuzoo.customer.label.Label;
@@ -63,6 +64,10 @@ public class ContactPoint {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @ManyToOne
     @JoinColumn(name = "opportunity_id")
@@ -187,7 +192,9 @@ public class ContactPoint {
         return rating;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
+    public void setRating(String rating) { this.rating = rating; }
+
+    public Company getCompany() { return company; }
+
+    public void setCompany(Company company) { this.company = company; }
 }

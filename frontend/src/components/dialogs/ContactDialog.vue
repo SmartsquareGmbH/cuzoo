@@ -114,6 +114,7 @@ export default {
   props: ["value", "companies"],
   data() {
     return {
+      mappedCompanies: [],
       valid: false,
       companyFieldEnabled: true,
       confirmDialogState: false,
@@ -154,6 +155,7 @@ export default {
   watch: {
     value() {
       this.$refs.form.resetValidation()
+      this.name = this.editedContact.name
     },
     editedCompany(company) {
       this.company = company
@@ -171,9 +173,10 @@ export default {
   beforeMount() {
     this.getUsernames()
     this.editedContact.manager = this.username
+    this.refreshData()
   },
   methods: {
-    ...mapActions(["getUsernames"]),
+    ...mapActions(["getUsernames", "getContacts", "getCompanies"]),
     ...mapMutations({
       storeContactDetails: "storeEditedContactDetails",
       storeCompany: "storeEditedContactCompany",
@@ -216,7 +219,11 @@ export default {
       }, 10)
     },
     submitContact(savedCompanyId) {
-      let maybeCompany = this.company.hasOwnProperty("id") ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+      let maybeCompany = this.company.hasOwnProperty("id")
+        ? `?companyId=${this.company.id}`
+        : savedCompanyId
+        ? `?companyId=${savedCompanyId}`
+        : ""
 
       api
         .put(`contact/submit${maybeCompany}`, {
@@ -232,7 +239,7 @@ export default {
           labels: this.editedContact.labels,
         })
         .then(() => {
-          this.$parent.refreshTable()
+          this.refreshContactPoints
           this.closeDialog()
         })
         .catch((error) => {
@@ -277,6 +284,15 @@ export default {
     encodeString(value) {
       return value.replace(/&/g, "%26").replace(/\|/g, "%7C")
     },
+  },
+  refreshContactPoints() {
+    this.getCompanies().then(() => {
+      this.getContacts().then(() => {
+        this.mappedCompanies = this.companies
+          .map((company) => Object.assign({}, { id: company.id, name: company.name }))
+          .sort()
+      })
+    })
   },
 }
 </script>

@@ -40,7 +40,7 @@ public class OpportunityController {
         this.labelRepository = labelRepository;
     }
 
-    @PutMapping("/submit/{contactPointId}")
+    @PutMapping("/submit/contact/{contactPointId}")
     public final ResponseEntity<?> submitOpportunity(@PathVariable("contactPointId") Long contactPointId,
                                                      @RequestBody @Valid Opportunity opportunity,
                                                      BindingResult bindingResult) {

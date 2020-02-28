@@ -1,8 +1,11 @@
 package de.smartsquare.cuzoo.customer.company;
 
 import de.smartsquare.cuzoo.customer.CSVConverter;
+import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
+import de.smartsquare.cuzoo.customer.contactpoint.ContactPointRepository;
 import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
+import de.smartsquare.cuzoo.customer.opportunity.Opportunity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,15 +25,17 @@ import java.util.stream.Collectors;
 public class CompanyController {
 
     private final CompanyRepository companyRepository;
+    private final ContactPointRepository contactPointRepository;
     private final LabelRepository labelRepository;
     private final CSVConverter csvConverter;
 
     @Autowired
     public CompanyController(final CompanyRepository companyRepository, CSVConverter csvConverter,
-                             final LabelRepository labelRepository) {
+                             final LabelRepository labelRepository, final ContactPointRepository contactPointRepository) {
         this.companyRepository = companyRepository;
         this.labelRepository = labelRepository;
         this.csvConverter = csvConverter;
+        this.contactPointRepository = contactPointRepository;
     }
 
     @PostMapping("/import")
@@ -120,6 +125,42 @@ public class CompanyController {
             this.title = title;
         }
     }
+
+    @PutMapping("/submit/{contactPointId}")
+    public final ResponseEntity<?> submitCompany(@PathVariable("contactPointId") Long contactPointId,
+                                                     @RequestBody @Valid Company company,
+                                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Unternehmen benötigen einen Titel und eine Anschrift!");
+        }
+
+        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointId);
+        if (!maybeContactPoint.isPresent()) {
+            return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
+        }
+
+        ContactPoint contactPoint = maybeContactPoint.get();
+
+        Company savedCompany;
+        Long opportunityIdBeforeSaving = company.getId();
+
+        try {
+            savedCompany = companyRepository.save(company);
+            contactPoint.setCompany(savedCompany);
+            contactPointRepository.save(contactPoint);
+
+            companyRepository.save(savedCompany);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (opportunityIdBeforeSaving < 1) {
+            return new ResponseEntity<>(savedCompany.getId(), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(savedCompany.getId(), HttpStatus.OK);
+        }
+    }
+
 
     @DeleteMapping("/delete/{companyId}")
     public final ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
