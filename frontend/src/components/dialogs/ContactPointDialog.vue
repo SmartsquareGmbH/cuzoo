@@ -345,7 +345,7 @@ export default {
 
           if (this.opportunityMenu || this.opportunity) {
             api
-              .put(`opportunity/submit/${contactPointId}`, {
+              .put(`opportunity/submit/contactpoint/${contactPointId}`, {
                 id: this.editedOpportunity.id,
                 title: this.editedOpportunity.title,
                 state: this.getOpportunityState(),

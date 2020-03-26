@@ -84,7 +84,7 @@ public class OpportunityControllerTest {
     @Test
     public void that_opportunity_is_getting_registered() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/" + contactPoint.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -104,7 +104,7 @@ public class OpportunityControllerTest {
     @Test
     public void that_opportunity_is_getting_updated() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/" + contactPoint.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -114,7 +114,7 @@ public class OpportunityControllerTest {
         String id = result.getResponse().getContentAsString();
 
         MockHttpServletRequestBuilder updatedBuilder =
-                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/" + contactPoint.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -133,7 +133,7 @@ public class OpportunityControllerTest {
     @Test
     public void that_submitting_opportunity_for_non_existing_contact_point_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/opportunity/submit/1337")
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/1337")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -152,7 +152,7 @@ public class OpportunityControllerTest {
     @Test
     public void that_submitting_invalid_opportunity_is_bad_request() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/opportunity/submit/" + contactPoint.getId())
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/" + contactPoint.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
