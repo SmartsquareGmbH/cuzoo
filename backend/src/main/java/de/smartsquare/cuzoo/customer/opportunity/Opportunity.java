@@ -36,7 +36,14 @@ public class Opportunity {
     @JsonIgnore
     private List<ContactPoint> contactPoints;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "opportunity_labels",
+            joinColumns = {@JoinColumn(name = "opportunity_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")})
     private List<Label> labels;
 
     public Opportunity(@NotNull @NotBlank String title, @NotNull @NotBlank String state, String description) {
