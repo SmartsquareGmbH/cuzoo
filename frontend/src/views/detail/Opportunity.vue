@@ -216,7 +216,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["opportunities"]),
+    ...mapGetters(["opportunities", "contacts"]),
     opportunity() {
       return this.opportunities.find((it) => it.id === this.opportunityId)
     },
@@ -262,7 +262,7 @@ export default {
       return datefns.format(date, "DD.MM.YYYY", { locale: de })
     },
     addProgress() {
-      this.storeEditedOpportunityDetails({
+      this.storeOpportunityDetails({
         editedIndex: this.opportunity.id,
         editedOpportunity: Object.assign({}, this.opportunity),
       })
@@ -270,7 +270,7 @@ export default {
       this.oppProgressDialogState = true
     },
     addContactPoint() {
-      this.storeEditedOpportunityDetails({
+      this.storeOpportunityDetails({
         editedIndex: this.opportunity.id,
         editedOpportunity: Object.assign({}, this.opportunity),
       })
