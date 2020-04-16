@@ -156,14 +156,14 @@
     </v-layout>
     <opp-progress-dialog
       v-model="oppProgressDialogState"
-      @refresh="refreshData()"
+      @refresh="refreshTable()"
       @input="oppProgressDialogState = false"
     />
     <contact-point-dialog
       v-model="contactPointDialogState"
       :contact-names="contactNames"
       :opportunity="opportunity"
-      @refresh="refreshData()"
+      @refresh="refreshTable()"
       @input="contactPointDialogState = false"
     />
     <confirm-dialog
