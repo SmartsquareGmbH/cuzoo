@@ -163,6 +163,7 @@
       v-model="contactPointDialogState"
       :contact-names="contactNames"
       :opportunity="opportunity"
+      :companies="[Object.assign({}, { id: this.company.id, name: this.company.name })]"
       @refresh="refreshTable()"
       @input="contactPointDialogState = false"
     />
@@ -213,6 +214,7 @@ export default {
       companyName: "",
       progress: [],
       timelineItems: [],
+      company: ""
     }
   },
   computed: {
@@ -249,6 +251,7 @@ export default {
         .then((res) => {
           this.contactPoints = res.data.sort(compareTimelineItems)
           this.companyName = this.contactPoints[0].contact.company.name
+          this.company = this.contactPoints[0].contact.company
           this.defineTimelineItems()
         })
         .catch((err) => alert(err))

@@ -26,6 +26,7 @@
           <contact-point-dialog
             v-model="contactPointDialogState"
             :contact-names="contactNames"
+            :companies="companies.map((company) => Object.assign({}, { id: company.id, name: company.name })).sort()"
             @refresh="refreshContactPoints()"
             @input="contactPointDialogState = false"
           />
