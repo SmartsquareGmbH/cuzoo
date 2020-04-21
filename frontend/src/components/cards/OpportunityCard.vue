@@ -63,7 +63,7 @@ export default {
       storeDetails: "storeEditedOpportunityDetails",
     }),
     getCompanyName() {
-      return this.oppContactPoints[0].contact.company.name
+      return this.oppContactPoints[0].contact.company ? this.oppContactPoints[0].contact.company.name : ""
     },
     getStateColor() {
       switch (this.opportunity.state) {

@@ -56,7 +56,7 @@
             <v-flex xs10>
               <v-card dark>
                 <v-tooltip bottom>
-                  <v-card-text slot="activator" class="headline text-xs-left font-weight-light">
+                  <v-card-text v-if="contactPoint.contact.company" slot="activator" class="headline text-xs-left font-weight-light">
                     {{ contactPoint.contact.company.name | truncate(60) }}
                   </v-card-text>
                   <span class="headline font-weight-light">{{ company.name }}</span>
@@ -229,7 +229,7 @@ export default {
   data() {
     return {
       contactPointId: parseInt(this.$route.params.contactPointId),
-      companyId: parseInt(this.$route.params.companyId),
+      companyId: this.$route.params.companyId ? parseInt(this.$route.params.companyId) : "",
       fileUploadDialogState: false,
       fileNames: [],
       contactPointDialogState: false,
@@ -245,7 +245,8 @@ export default {
       return this.contactPoints.find((it) => it.id === this.contactPointId)
     },
     company() {
-      return this.companies.find((it) => it.id === this.companyId)
+      if (this.companyId) return this.companies.find((it) => it.id === this.companyId)
+      else return ""
     },
     dateFormatted() {
       return datefns.format(this.contactPoint.date, "DD.MM.YY", { locale: de })

@@ -163,7 +163,7 @@
       v-model="contactPointDialogState"
       :contact-names="contactNames"
       :opportunity="opportunity"
-      :companies="[Object.assign({}, { id: this.company.id, name: this.company.name })]"
+      :companies="[Object.assign({}, { id: company.id, name: company.name })]"
       @refresh="refreshTable()"
       @input="contactPointDialogState = false"
     />
@@ -214,7 +214,7 @@ export default {
       companyName: "",
       progress: [],
       timelineItems: [],
-      company: ""
+      company: "",
     }
   },
   computed: {
@@ -250,8 +250,10 @@ export default {
         .get(`point/get/opportunity/${this.opportunityId}`)
         .then((res) => {
           this.contactPoints = res.data.sort(compareTimelineItems)
-          this.companyName = this.contactPoints[0].contact.company.name
           this.company = this.contactPoints[0].contact.company
+          if (this.company) {
+            this.companyName = this.contactPoints[0].contact.company.name
+          }
           this.defineTimelineItems()
         })
         .catch((err) => alert(err))
@@ -299,7 +301,7 @@ export default {
       }
     },
     viewContactPoint(contactPoint) {
-      this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`)
+      contactPoint.contact.company ? this.$router.push(`/contactpoints/${contactPoint.id}/${contactPoint.contact.company.id}`) : this.$router.push(`/contactpoints/${contactPoint.id}`)
     },
     openConfirmDialog() {
       this.confirmDialogState = true

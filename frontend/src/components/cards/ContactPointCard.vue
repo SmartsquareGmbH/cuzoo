@@ -21,10 +21,10 @@
           </chip>
           <v-icon class="mx-1">business</v-icon>
           <v-tooltip top>
-            <chip slot="activator" font-color="primary">
+            <chip v-if="contactPoint.contact.company" slot="activator" font-color="primary">
               {{ contactPoint.contact.company.name | truncate(25) }}
             </chip>
-            <span class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
+            <span v-if="contactPoint.contact.company" class="title font-weight-light">{{ contactPoint.contact.company.name }}</span>
           </v-tooltip>
           <chip v-if="contactPoint.rating">
             <emoji :emoji="contactPoint.rating" :size="20" set="messenger" class="pa-0" />
@@ -79,7 +79,7 @@ export default {
       storeDetails: "storeEditedContactPointDetails",
     }),
     viewContactPoint(contactPoint) {
-      this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`)
+      contactPoint.contact.company ? this.$router.push(`/contactpoints/${contactPoint.id}/${contactPoint.contact.company.id}`) : this.$router.push(`/contactpoints/${contactPoint.id}`)
     },
     refreshData() {
       api

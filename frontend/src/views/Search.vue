@@ -89,9 +89,12 @@ export default {
 
         this.$router.push("/companies/" + companyId)
       } else {
-        let companyId = this.companies.find((company) => company.id === this.searchResults[0].contact.company.id).id
-
-        this.$router.push(`/${companyId}/${this.searchResults[0].id}`)
+        if (this.searchResults[0].contact.company) {
+          let companyId = this.companies.find((company) => company.id === this.searchResults[0].contact.company.id).id
+          this.$router.push(`/contactpoints/${this.searchResults[0].id}/${companyId}`)
+        } else {
+          this.$router.push(`/contactpoints/${this.searchResults[0].id}`)
+        }
       }
     },
     refreshData() {

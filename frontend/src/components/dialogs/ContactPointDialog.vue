@@ -178,7 +178,9 @@
       <v-card-actions>
         <div v-if="!opportunity">
           <v-btn
-            v-if="companyOpportunities.length === 0 || (opportunityMenu && newOpportunity)"
+            v-if="
+             (!contactNameEntered || getContactCompany(editedContactPoint.contact.name) || companyNameEntered) &&
+             (companyOpportunities.length === 0 || (opportunityMenu && newOpportunity))"
             color="success"
             flat
             @click.native="createOpportunity()"
@@ -187,7 +189,7 @@
             <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
             <v-icon v-if="!opportunityMenu">keyboard_arrow_down</v-icon>
           </v-btn>
-          <v-menu v-else top offset-y>
+          <v-menu v-else-if="getContactCompany(editedContactPoint.contact.name)" top offset-y>
             <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
               {{ opportunityButtonTitle }}
               <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
@@ -335,12 +337,16 @@ export default {
         this.opportunityMenu = false
 
         let contact
-        if (value && (contact = this.contacts.find((it) => it.name === value))) {
-          // todo contact.company is null
+        if (value && (contact = this.contacts.find((it) => it.name === value)) && contact.company) {
           this.getOpportunities(contact.company.id)
         } else {
           this.newOpportunity = true
           this.companyOpportunities = []
+        }
+
+        if (this.companyNameEntered && (!value || contact)) {
+          this.companyNameEntered = ""
+          this.company = ""
         }
       }
     },
@@ -573,6 +579,13 @@ export default {
       let millisecondsOfToday = hoursInMillis + minutesInMillis + secondsInMillis + new Date().getMilliseconds()
 
       return selectedDateInMillis + millisecondsOfToday
+    },
+    getContactCompany(contactName){
+      let contact = this.contacts.find((it) => it.name.includes(contactName))
+      if(contact && contact.company)
+        return contact.company.name
+      else
+        return ''
     },
     addEmoji(emoji) {
       this.editedContactPoint.rating = emoji.colons
