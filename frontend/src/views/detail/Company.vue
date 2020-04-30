@@ -338,7 +338,7 @@ export default {
     },
     contactsOfCompany() {
       return this.contacts.filter((contact) => {
-        if (contact.company !== null && this.company.id === contact.company.id) {
+        if (contact.company?.id === this.company.id) {
           return contact
         }
       })

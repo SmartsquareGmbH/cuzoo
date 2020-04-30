@@ -443,7 +443,7 @@ export default {
       let maybeCompany = ""
 
       if (!this.opportunity) {
-        maybeCompany = this.company && this.company.hasOwnProperty("id") ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+        maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
       } else {
         maybeCompany = `?companyId=${this.companies[0].id}`
       }

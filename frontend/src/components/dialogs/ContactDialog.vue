@@ -216,7 +216,7 @@ export default {
       }, 10)
     },
     submitContact(savedCompanyId) {
-      let maybeCompany = (this.company && this.company.hasOwnProperty("id")) ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+      const maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
 
       api
         .put(`contact/submit${maybeCompany}`, {

@@ -279,11 +279,7 @@ export default {
     },
     getContactsOfCompany() {
       return this.contacts.filter((contact) => {
-        if (contact.company != null) {
-          return contact.company.name === this.company.name
-        } else {
-          return null
-        }
+        return contact.company?.name === this.company.name
       })
     },
     editContactPoint() {

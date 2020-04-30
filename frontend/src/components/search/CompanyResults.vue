@@ -72,16 +72,12 @@ export default {
     },
     getContactsOfCompany(company) {
       return this.contacts.filter((contact) => {
-        if (contact.company) {
-          return contact.company.name === company
-        }
+        return contact.company?.name === company
       })
     },
     getContactPointsOfCompany(company) {
       return this.contactPoints.filter((contactPoint) => {
-        if (contactPoint.contact.company) {
-          return contactPoint.contact.company.name === company
-        }
+        return contactPoint.contact.company?.name === company
       })
     },
   },

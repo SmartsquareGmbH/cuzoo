@@ -251,9 +251,7 @@ export default {
         .then((res) => {
           this.contactPoints = res.data.sort(compareTimelineItems)
           this.company = this.contactPoints[0].contact.company
-          if (this.company) {
-            this.companyName = this.contactPoints[0].contact.company.name
-          }
+          this.companyName = this.contactPoints[0].contact.company?.name
           this.defineTimelineItems()
         })
         .catch((err) => alert(err))
