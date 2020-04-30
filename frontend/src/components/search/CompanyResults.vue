@@ -48,8 +48,8 @@ export default {
     defineSearchTerms(company) {
       this.searchTerms = []
 
-      let contactsOfCompany = this.getContactsOfCompany(company.name)
-      let contactPointsOfCompany = this.getContactPointsOfCompany(company.name)
+      const contactsOfCompany = this.getContactsOfCompany(company.name)
+      const contactPointsOfCompany = this.getContactPointsOfCompany(company.name)
 
       contactsOfCompany.forEach((contact) => {
         this.searchTerms.push(contact.manager)

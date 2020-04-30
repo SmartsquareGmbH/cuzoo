@@ -201,19 +201,15 @@ export default {
       this.editedContact.manager = this.username
     },
     submit() {
-      this.$refs.nameField.focus()
-
-      setTimeout(() => {
-        if (this.companyNameEntered) {
-          if (this.companies.some((it) => it.name === this.companyNameEntered)) {
-            this.submitContact()
-          } else {
-            this.confirmDialogState = true
-          }
-        } else {
+      if (this.companyNameEntered) {
+        if (this.companies.some((it) => it.name === this.companyNameEntered)) {
           this.submitContact()
+        } else {
+          this.confirmDialogState = true
         }
-      }, 10)
+      } else {
+        this.submitContact()
+      }
     },
     submitContact(savedCompanyId) {
       const maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")

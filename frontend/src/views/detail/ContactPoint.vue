@@ -56,7 +56,11 @@
             <v-flex xs10>
               <v-card dark>
                 <v-tooltip bottom>
-                  <v-card-text v-if="contactPoint.contact.company" slot="activator" class="headline text-xs-left font-weight-light">
+                  <v-card-text
+                    v-if="contactPoint.contact.company"
+                    slot="activator"
+                    class="headline text-xs-left font-weight-light"
+                  >
                     {{ contactPoint.contact.company.name | truncate(60) }}
                   </v-card-text>
                   <span class="headline font-weight-light">{{ company.name }}</span>
@@ -229,7 +233,7 @@ export default {
   data() {
     return {
       contactPointId: parseInt(this.$route.params.contactPointId),
-      companyId: this.$route.params.companyId ? parseInt(this.$route.params.companyId) : "",
+      companyId: this.$route.params.companyId ? parseInt(this.$route.params.companyId) : null,
       fileUploadDialogState: false,
       fileNames: [],
       contactPointDialogState: false,

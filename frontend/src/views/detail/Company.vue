@@ -223,7 +223,10 @@
                   </v-flex>
                   <v-flex xs4>
                     <v-card dark>
-                      <v-card-text v-if="contact.telephone" class="headline text-xs-left font-weight-light text-truncate">
+                      <v-card-text
+                        v-if="contact.telephone"
+                        class="headline text-xs-left font-weight-light text-truncate"
+                      >
                         {{ contact.telephone }}
                       </v-card-text>
                       <v-card-text v-else class="headline text-xs-left font-weight-light font-italic error--text">
@@ -368,7 +371,7 @@ export default {
     },
     editContact(item) {
       this.storeContactDetails({
-        editedIndex: this.companies.indexOf(item),
+        editedIndex: this.contactsOfCompany.indexOf(item),
         editedContact: Object.assign({}, item),
       })
 

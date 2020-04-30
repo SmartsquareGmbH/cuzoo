@@ -62,7 +62,6 @@ export default new Router({
       path: "/contactpoints/:contactPointId/:companyId?/:fileName",
       name: "filePreview",
       component: FilePreview,
-      // TODO Muss hier noch die companyId übergeben werden und explizit genannt? Fehler in AttachmentCard wenn File angucken will.
     },
   ],
 })

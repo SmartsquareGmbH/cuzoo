@@ -88,15 +88,7 @@
                   </v-date-picker>
                 </v-menu>
               </v-flex>
-              <v-flex
-                v-if="
-                  !opportunity &&
-                    contactNameEntered &&
-                    !contacts.find((it) => it.name.includes(editedContactPoint.contact.name)) &&
-                    editedIndex === -1
-                "
-                xs12
-              >
+              <v-flex v-if="companyFieldEnabled" xs12>
                 <v-combobox
                   v-model="company"
                   :items="companies"
@@ -177,19 +169,12 @@
       </v-card-text>
       <v-card-actions>
         <div v-if="!opportunity">
-          <v-btn
-            v-if="
-             (!contactNameEntered || getContactCompany(editedContactPoint.contact.name) || companyNameEntered) &&
-             (companyOpportunities.length === 0 || (opportunityMenu && newOpportunity))"
-            color="success"
-            flat
-            @click.native="createOpportunity()"
-          >
+          <v-btn v-if="newOpportunityButton" color="success" flat @click.native="createOpportunity()">
             Neue Opportunity
             <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
             <v-icon v-if="!opportunityMenu">keyboard_arrow_down</v-icon>
           </v-btn>
-          <v-menu v-else-if="getContactCompany(editedContactPoint.contact.name)" top offset-y>
+          <v-menu v-else-if="existingOppotunityButton" top offset-y>
             <v-btn slot="activator" color="success" flat @click="opportunityList = !opportunityList">
               {{ opportunityButtonTitle }}
               <v-icon v-if="opportunityList">keyboard_arrow_down</v-icon>
@@ -320,6 +305,31 @@ export default {
     opportunityButtonTitle() {
       return this.companyOpportunities.length + " Opportunities"
     },
+    companyName() {
+      return this.company.name
+    },
+    companyFieldEnabled() {
+      return (
+        !this.opportunity &&
+        this.editedIndex === -1 &&
+        this.contactNameEntered &&
+        !this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
+      )
+    },
+    newOpportunityButton() {
+      return (
+        (!this.contactNameEntered ||
+          this.getContactCompany(this.editedContactPoint.contact.name) ||
+          this.companyNameEntered) &&
+        (this.companyOpportunities.length === 0 || (this.opportunityMenu && this.newOpportunity))
+      )
+    },
+    existingOppotunityButton() {
+      return (
+        this.getContactCompany(this.editedContactPoint.contact.name) ||
+        this.companies?.find((it) => it.name === this.companyNameEntered)
+      )
+    },
   },
   watch: {
     value() {
@@ -350,6 +360,17 @@ export default {
         }
       }
     },
+    companyName(value) {
+      if (!this.opportunity) {
+        let optionalCompany
+        if (value && (optionalCompany = this.companies?.find((it) => it.name === value))) {
+          this.getOpportunities(optionalCompany.id)
+        } else {
+          this.newOpportunity = true
+          this.companyOpportunities = []
+        }
+      }
+    },
     emojiMenuState() {
       setTimeout(() => (this.emojiMenuState = undefined))
     },
@@ -361,7 +382,7 @@ export default {
       storeOpportunityDetails: "storeEditedOpportunityDetails",
     }),
     clearDialog() {
-      let tempContactName = this.editedContactPoint.contact.name
+      const tempContactName = this.editedContactPoint.contact.name
       this.$refs.form.reset()
       this.editedContactPoint.contact.name = tempContactName
       this.editedContactPoint.rating = undefined
@@ -389,32 +410,29 @@ export default {
     },
 
     submit() {
-      setTimeout(() => {
-        if (this.contactNameEntered) {
-          if (this.contacts.some((it) => it.name === this.contactNameEntered)) {
-            this.submitContactPoint()
-          } else {
-            if (!this.opportunity) {
-              if (this.companyNameEntered && !this.companies.some((it) => it.name === this.companyNameEntered)) {
-                this.createContactMessage =
-                  "Der angegebene Ansprechpartner und das angegebene Unternehmen existieren nicht, möchtest du beide anlegen?"
-              } else {
-                this.createContactMessage = "Der angegebene Ansprechpartner existiert nicht, möchtest du ihn anlegen?"
-              }
-            } else {
-              this.createContactMessage =
-                `Der angegebene Ansprechpartner existiert nicht, möchtest du ihn anlegen? Er wird dem Unternehmen ${this.companies[0].name} zugeornet.`
-            }
-            this.confirmDialogState = true
-          }
-        } else {
+      if (this.contactNameEntered) {
+        if (this.contacts.some((it) => it.name === this.contactNameEntered)) {
           this.submitContactPoint()
+        } else {
+          if (!this.opportunity) {
+            if (this.companyNameEntered && !this.companies.some((it) => it.name === this.companyNameEntered)) {
+              this.createContactMessage =
+                "Der angegebene Ansprechpartner und das angegebene Unternehmen existieren nicht, möchtest du beide anlegen?"
+            } else {
+              this.createContactMessage = "Der angegebene Ansprechpartner existiert nicht, möchtest du ihn anlegen?"
+            }
+          } else {
+            this.createContactMessage = `Der angegebene Ansprechpartner existiert nicht, möchtest du ihn anlegen? Er wird dem Unternehmen ${this.companies[0].name} zugeornet.`
+          }
+          this.confirmDialogState = true
         }
-      }, 10)
+      } else {
+        this.submitContactPoint()
+      }
     },
 
     submitCompany() {
-      if (this.companyNameEntered && !(this.companies.some((it) => it.name === this.companyNameEntered))) {
+      if (this.companyNameEntered && !this.companies.some((it) => it.name === this.companyNameEntered)) {
         api
           .put("company/submit", {
             name: this.companyNameEntered,
@@ -472,8 +490,8 @@ export default {
     },
 
     submitContactPoint(submitedContactId) {
-      let contact = this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
-      let contactId = contact ? contact.id : (submitedContactId ? submitedContactId : "")
+      const contact = this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
+      const contactId = contact ? contact.id : (submitedContactId ? submitedContactId : "")
 
       api
         .put(`point/submit/${contactId}`, {
@@ -488,7 +506,7 @@ export default {
           creator: this.username,
         })
         .then((res) => {
-          let contactPointId = res.data
+          const contactPointId = res.data
 
           if (this.opportunityMenu || this.opportunity) {
             api
@@ -580,12 +598,9 @@ export default {
 
       return selectedDateInMillis + millisecondsOfToday
     },
-    getContactCompany(contactName){
-      let contact = this.contacts.find((it) => it.name.includes(contactName))
-      if(contact && contact.company)
-        return contact.company.name
-      else
-        return ''
+    getContactCompany(contactName) {
+      const contact = this.contacts.find((it) => it.name.includes(contactName))
+      return contact?.company?.name || ""
     },
     addEmoji(emoji) {
       this.editedContactPoint.rating = emoji.colons

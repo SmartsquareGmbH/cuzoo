@@ -299,7 +299,11 @@ export default {
       }
     },
     viewContactPoint(contactPoint) {
-      contactPoint.contact.company ? this.$router.push(`/contactpoints/${contactPoint.id}/${contactPoint.contact.company.id}`) : this.$router.push(`/contactpoints/${contactPoint.id}`)
+      if (contactPoint.contact.company) {
+        this.$router.push(`/contactpoints/${contactPoint.id}/${contactPoint.contact.company.id}`)
+      } else {
+        this.$router.push(`/contactpoints/${contactPoint.id}`)
+      }
     },
     openConfirmDialog() {
       this.confirmDialogState = true
@@ -359,7 +363,7 @@ export default {
       }
     },
     stateChangedToPrevious(item) {
-      let index = this.timelineItems.indexOf(item)
+      const index = this.timelineItems.indexOf(item)
 
       if (this.timelineItems.length > index + 1) {
         let previousItem = this.timelineItems[index + 1]
