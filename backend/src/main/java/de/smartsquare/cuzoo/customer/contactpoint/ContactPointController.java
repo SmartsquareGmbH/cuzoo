@@ -130,7 +130,6 @@ public class ContactPointController {
                 contactPointLabels.add(label.get());
             } else {
                 Label labelToSave = new Label(title);
-                labelRepository.save(labelToSave);
 
                 if (mediaTypes) {
                     labelToSave.addContactPointTypes(contactPoint);
