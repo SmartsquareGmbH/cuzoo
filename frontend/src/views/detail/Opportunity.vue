@@ -156,14 +156,15 @@
     </v-layout>
     <opp-progress-dialog
       v-model="oppProgressDialogState"
-      @refresh="refreshData()"
+      @refresh="refreshTable()"
       @input="oppProgressDialogState = false"
     />
     <contact-point-dialog
       v-model="contactPointDialogState"
       :contact-names="contactNames"
       :opportunity="opportunity"
-      @refresh="refreshData()"
+      :companies="[Object.assign({}, { id: company.id, name: company.name })]"
+      @refresh="refreshTable()"
       @input="contactPointDialogState = false"
     />
     <confirm-dialog
@@ -213,10 +214,11 @@ export default {
       companyName: "",
       progress: [],
       timelineItems: [],
+      company: "",
     }
   },
   computed: {
-    ...mapGetters(["opportunities"]),
+    ...mapGetters(["opportunities", "contacts"]),
     opportunity() {
       return this.opportunities.find((it) => it.id === this.opportunityId)
     },
@@ -248,7 +250,8 @@ export default {
         .get(`point/get/opportunity/${this.opportunityId}`)
         .then((res) => {
           this.contactPoints = res.data.sort(compareTimelineItems)
-          this.companyName = this.contactPoints[0].contact.company.name
+          this.company = this.contactPoints[0].contact.company
+          this.companyName = this.contactPoints[0].contact.company?.name
           this.defineTimelineItems()
         })
         .catch((err) => alert(err))
@@ -262,7 +265,7 @@ export default {
       return datefns.format(date, "DD.MM.YYYY", { locale: de })
     },
     addProgress() {
-      this.storeEditedOpportunityDetails({
+      this.storeOpportunityDetails({
         editedIndex: this.opportunity.id,
         editedOpportunity: Object.assign({}, this.opportunity),
       })
@@ -270,7 +273,7 @@ export default {
       this.oppProgressDialogState = true
     },
     addContactPoint() {
-      this.storeEditedOpportunityDetails({
+      this.storeOpportunityDetails({
         editedIndex: this.opportunity.id,
         editedOpportunity: Object.assign({}, this.opportunity),
       })
@@ -296,7 +299,11 @@ export default {
       }
     },
     viewContactPoint(contactPoint) {
-      this.$router.push(`/${contactPoint.contact.company.id}/${contactPoint.id}`)
+      if (contactPoint.contact.company) {
+        this.$router.push(`/contactpoints/${contactPoint.id}/${contactPoint.contact.company.id}`)
+      } else {
+        this.$router.push(`/contactpoints/${contactPoint.id}`)
+      }
     },
     openConfirmDialog() {
       this.confirmDialogState = true
@@ -356,7 +363,7 @@ export default {
       }
     },
     stateChangedToPrevious(item) {
-      let index = this.timelineItems.indexOf(item)
+      const index = this.timelineItems.indexOf(item)
 
       if (this.timelineItems.length > index + 1) {
         let previousItem = this.timelineItems[index + 1]

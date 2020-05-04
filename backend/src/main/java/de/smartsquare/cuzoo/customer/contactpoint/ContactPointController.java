@@ -82,7 +82,7 @@ public class ContactPointController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (contactPointIdBeforeSaving < 1) {
+        if (contactPointIdBeforeSaving == null || contactPointIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedContactPoint.getId(), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(savedContactPoint.getId(), HttpStatus.OK);
@@ -90,11 +90,17 @@ public class ContactPointController {
     }
 
     private ContactPoint getOrCreateContactPoint(@RequestBody @Valid ContactPointForm contactPointForm, Contact contactPointsContact) {
-        Optional<ContactPoint> maybeContactPoint = contactPointRepository.findById(contactPointForm.getId());
         ContactPoint contactPoint;
+        Optional<ContactPoint> byId;
 
-        if (maybeContactPoint.isPresent()) {
-            contactPoint = maybeContactPoint.get();
+        if (contactPointForm.getId() != null) {
+            byId = contactPointRepository.findById(contactPointForm.getId());
+        } else {
+            byId = Optional.empty();
+        }
+
+        if (byId.isPresent()) {
+            contactPoint = byId.get();
 
             contactPoint.setTitle(contactPointForm.getTitle());
             contactPoint.setDate(contactPointForm.getDate());

@@ -101,7 +101,7 @@ public class ContactController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (contactIdBeforeSaving < 1) {
+        if (contactIdBeforeSaving == null || contactIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedContact.getId(), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -109,10 +109,15 @@ public class ContactController {
     }
 
     private Contact getOrCreateContact(@RequestBody @Valid ContactForm contactForm) {
-        return contactRepository
-                .findById(contactForm.getId())
-                .map(c -> fillContactFromForm(c, contactForm))
-                .orElseGet(() -> newContact(contactForm));
+
+        if (contactForm.getId() != null) {
+            return contactRepository
+                    .findById(contactForm.getId())
+                    .map(c -> fillContactFromForm(c, contactForm))
+                    .orElseGet(() -> newContact(contactForm));
+        } else {
+            return newContact(contactForm);
+        }
     }
 
     private Contact newContact(ContactForm contactForm) {

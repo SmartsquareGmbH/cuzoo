@@ -20,14 +20,14 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader("WWW-Authenticate", "Basic realm=" + getRealmName());
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401: " + authException.getMessage());
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         setRealmName("CUZOO");
         super.afterPropertiesSet();
     }

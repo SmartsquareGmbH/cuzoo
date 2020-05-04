@@ -53,7 +53,7 @@ public class ContactPoint {
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
-                    CascadeType.MERGE
+                    CascadeType.MERGE,
             })
     @JoinTable(name = "contactPoint_types",
             joinColumns = {@JoinColumn(name = "contactPoint_id")},

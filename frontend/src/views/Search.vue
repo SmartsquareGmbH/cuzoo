@@ -85,13 +85,15 @@ export default {
       const isCompany = containsKey(this.searchResults[0], "name")
 
       if (isCompany) {
-        let companyId = this.companies.find((company) => company.id === this.searchResults[0].id).id
-
+        const companyId = this.companies.find((company) => company.id === this.searchResults[0].id).id
         this.$router.push("/companies/" + companyId)
       } else {
-        let companyId = this.companies.find((company) => company.id === this.searchResults[0].contact.company.id).id
-
-        this.$router.push(`/${companyId}/${this.searchResults[0].id}`)
+        if (this.searchResults[0].contact.company) {
+          const companyId = this.companies.find((company) => company.id === this.searchResults[0].contact.company.id).id
+          this.$router.push(`/contactpoints/${this.searchResults[0].id}/${companyId}`)
+        } else {
+          this.$router.push(`/contactpoints/${this.searchResults[0].id}`)
+        }
       }
     },
     refreshData() {

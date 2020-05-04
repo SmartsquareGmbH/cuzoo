@@ -48,8 +48,8 @@ export default {
     defineSearchTerms(company) {
       this.searchTerms = []
 
-      let contactsOfCompany = this.getContactsOfCompany(company.name)
-      let contactPointsOfCompany = this.getContactPointsOfCompany(company.name)
+      const contactsOfCompany = this.getContactsOfCompany(company.name)
+      const contactPointsOfCompany = this.getContactPointsOfCompany(company.name)
 
       contactsOfCompany.forEach((contact) => {
         this.searchTerms.push(contact.manager)
@@ -72,14 +72,12 @@ export default {
     },
     getContactsOfCompany(company) {
       return this.contacts.filter((contact) => {
-        if (contact.company) {
-          return contact.company.name === company
-        }
+        return contact.company?.name === company
       })
     },
     getContactPointsOfCompany(company) {
       return this.contactPoints.filter((contactPoint) => {
-        return contactPoint.contact.company.name === company
+        return contactPoint.contact.company?.name === company
       })
     },
   },

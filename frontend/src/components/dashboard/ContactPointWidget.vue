@@ -26,6 +26,7 @@
           <contact-point-dialog
             v-model="contactPointDialogState"
             :contact-names="contactNames"
+            :companies="transformedCompanies"
             @refresh="refreshContactPoints()"
             @input="contactPointDialogState = false"
           />
@@ -92,6 +93,9 @@ export default {
       if (excess < cardHeight / 2) return height - excess
       else return height + (cardHeight - excess)
     },
+    transformedCompanies() {
+      return this.companies.map((company) => Object.assign({}, { id: company.id, name: company.name })).sort()
+    },
   },
   watch: {
     selectedCompany() {
@@ -109,9 +113,12 @@ export default {
       this.contactPointDialogState = true
     },
     goToFirstResult() {
-      let companyId = this.companies.find((it) => it.id === this.searchResults[0].contact.company.id).id
-
-      this.$router.push(`/${companyId}/${this.searchResults[0].id}`)
+      if (this.searchResults[0].contact.company) {
+        const companyId = this.companies.find((it) => it.id === this.searchResults[0].contact.company.id).id
+        this.$router.push(`/contactpoints/${this.searchResults[0].id}/${companyId}`)
+      } else {
+        this.$router.push(`/contactpoints/${this.searchResults[0].id}`)
+      }
     },
     onResize() {
       this.windowHeight = window.innerHeight

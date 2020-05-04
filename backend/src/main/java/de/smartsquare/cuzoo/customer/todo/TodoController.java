@@ -71,11 +71,17 @@ public class TodoController {
     }
 
     private Todo getOrCreateTodo(@RequestBody @Valid TodoForm todoForm, Company company) {
-        Optional<Todo> maybeTodo = todoRepository.findById(todoForm.getId());
         Todo todo;
+        Optional<Todo> byId;
 
-        if (maybeTodo.isPresent()) {
-            todo = maybeTodo.get();
+        if (todoForm.getId() != null) {
+            byId = todoRepository.findById(todoForm.getId());
+        } else {
+            byId = Optional.empty();
+        }
+
+        if (byId.isPresent()) {
+            todo = byId.get();
 
             todo.setDescription(todoForm.getDescription());
             todo.setCompany(company);

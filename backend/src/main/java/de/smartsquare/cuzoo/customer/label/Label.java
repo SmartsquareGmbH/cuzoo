@@ -25,37 +25,21 @@ public class Label {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
             mappedBy = "labels")
     private List<ContactPoint> contactPointsWithLabels;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
             mappedBy = "types")
     private List<ContactPoint> contactPointsWithTypes;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
             mappedBy = "labels")
     private List<Company> companies;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
             mappedBy = "labels")
     private List<Contact> contacts;
 

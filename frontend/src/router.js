@@ -54,12 +54,12 @@ export default new Router({
       component: Opportunity,
     },
     {
-      path: "/:companyId/:contactPointId",
+      path: "/contactpoints/:contactPointId/:companyId?",
       name: "contactPointView",
       component: ContactPoint,
     },
     {
-      path: "/:companyId/:contactPointId/:fileName",
+      path: "/contactpoints/:contactPointId/:companyId?/:fileName",
       name: "filePreview",
       component: FilePreview,
     },
