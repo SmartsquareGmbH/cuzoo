@@ -436,7 +436,6 @@ export default {
         api
           .put("company/submit", {
             name: this.companyNameEntered,
-            id: -1,
             street: "",
             zipcode: "",
             place: "",
@@ -469,7 +468,6 @@ export default {
       api
         .put(`contact/submit${maybeCompany}`, {
           name: this.contactNameEntered,
-          id: -1,
           role: "",
           address: "",
           mail: "",

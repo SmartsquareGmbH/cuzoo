@@ -240,7 +240,6 @@ export default {
       api
         .put("company/submit", {
           name: this.companyNameEntered,
-          id: -1,
           street: "",
           zipcode: "",
           place: "",

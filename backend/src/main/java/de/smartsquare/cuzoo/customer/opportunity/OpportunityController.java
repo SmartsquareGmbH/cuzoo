@@ -61,7 +61,7 @@ public class OpportunityController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (opportunityIdBeforeSaving < 1) {
+        if (opportunityIdBeforeSaving == null || opportunityIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.OK);
@@ -117,7 +117,7 @@ public class OpportunityController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (opportunityIdBeforeSaving < 1) {
+        if (opportunityIdBeforeSaving == null || opportunityIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
         }
 
@@ -149,7 +149,14 @@ public class OpportunityController {
 
     private Opportunity getOrCreateOpportunity(@RequestBody @Valid OpportunityForm opportunityForm) {
         Opportunity opportunity;
-        Optional<Opportunity> byId = opportunityRepository.findById(opportunityForm.getId());
+        Optional<Opportunity> byId;
+
+        if (opportunityForm.getId() != null) {
+            byId = opportunityRepository.findById(opportunityForm.getId());
+        } else {
+            byId = Optional.empty();
+        }
+
         if (byId.isPresent()) {
             opportunity = byId.get();
 

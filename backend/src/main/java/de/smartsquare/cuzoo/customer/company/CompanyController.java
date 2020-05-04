@@ -69,7 +69,7 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (companyIdBeforeSaving < 1) {
+        if (companyIdBeforeSaving == null || companyIdBeforeSaving < 1) {
             return new ResponseEntity<>(savedCompany.getId(), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
@@ -77,7 +77,14 @@ public class CompanyController {
 
     private Company getOrCreateCompany(@RequestBody @Valid CompanyForm companyForm) {
         Company company;
-        Optional<Company> byId = companyRepository.findById(companyForm.getId());
+        Optional<Company> byId;
+
+        if (companyForm.getId() != null) {
+            byId = companyRepository.findById(companyForm.getId());
+        } else {
+            byId = Optional.empty();
+        }
+
         if (byId.isPresent()) {
             company = byId.get();
 
