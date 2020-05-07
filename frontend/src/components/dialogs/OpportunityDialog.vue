@@ -15,16 +15,19 @@
                   prepend-icon="business_center"
                   hide-details
                   suffix="*"
-                  :rules="opportunityFieldRules"
+                  :rules="oppTitleRules"
                 ></v-text-field>
               </v-flex>
               <v-flex xs6>
-                <v-text-field
+                <v-combobox
                   v-model="editedOpportunity.state"
                   label="Status"
-                  prepend-icon="place"
+                  prepend-icon="bubble_chart"
                   hide-details
-                ></v-text-field>
+                  suffix="*"
+                  :items="oppStatuses"
+                  :rules="oppStatusRules"
+                />
               </v-flex>
               <v-flex xs12>
                 <v-textarea
@@ -60,25 +63,28 @@ export default {
   data() {
     return {
       valid: false,
-      opportunityFieldRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
+      oppTitleRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
+      oppStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
+      oppStatusRules: [
+        (v) => !!v || "Bitte geben Sie einen Status an",
+        (v) => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
+      ],
       defaultOpportunity: {
         value: false,
         id: 0,
         title: "",
-        state: "",
+        state: "Lead",
         description: "",
         lastProgress: "",
-        progress: [],
       },
     }
   },
   computed: {
     ...mapGetters({
       editedOpportunity: "editedOpportunity",
-      editedIndex: "editedOpportunityIndex",
     }),
     formTitle() {
-      return this.editedIndex === -1 ? "Opportunity hinzufügen" : "Opportunity bearbeiten"
+      return "Opportunity bearbeiten"
     },
   },
   watch: {
@@ -103,6 +109,7 @@ export default {
     },
     clearDialog() {
       this.$refs.form.reset()
+      this.editedOpportunity.description = ""
     },
     submitOpportunity() {
       api
