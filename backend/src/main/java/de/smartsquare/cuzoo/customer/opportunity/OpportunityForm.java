@@ -10,6 +10,8 @@ public class OpportunityForm {
   @NotBlank
   private String title;
 
+  @NotNull
+  @NotBlank
   private String state;
   private String description;
 

@@ -33,7 +33,7 @@ public class OpportunityController {
 
     @PutMapping("/submit/contactpoint/{contactPointId}")
     public final ResponseEntity<?> submitOpportunity(@PathVariable("contactPointId") Long contactPointId,
-                                                     @RequestBody @Valid Opportunity opportunity,
+                                                     @RequestBody @Valid OpportunityForm opportunityForm,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("Opportunities benötigen einen Titel und einen Status");
@@ -43,11 +43,12 @@ public class OpportunityController {
         if (!maybeContactPoint.isPresent()) {
             return ResponseEntity.badRequest().body("Der Kontaktpunkt existiert nicht!");
         }
-
         ContactPoint contactPoint = maybeContactPoint.get();
 
+        Opportunity opportunity = getOrCreateOpportunity(opportunityForm);
+
         Opportunity savedOpportunity;
-        Long opportunityIdBeforeSaving = opportunity.getId();
+        Long opportunityIdBeforeSaving = opportunityForm.getId();
 
         try {
             savedOpportunity = opportunityRepository.save(opportunity);
@@ -100,50 +101,27 @@ public class OpportunityController {
     }
 
     @PutMapping("/submit")
-    public final ResponseEntity<?> submitOpportunity(@RequestBody @Valid OpportunityForm opportunityForm,
+    public final ResponseEntity<?> editOpportunity(@RequestBody @Valid OpportunityForm opportunityForm,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Opportunity nicht vorhanden!");
+            return ResponseEntity.badRequest().body("Opportunities benötigen einen Titel und einen Status!");
+        }
+
+        Optional<Opportunity> byId;
+        byId = opportunityRepository.findById(opportunityForm.getId());
+
+        if (!byId.isPresent()) {
+            return ResponseEntity.badRequest().body("Diese Opportunity wurde nicht gefunden!");
         }
 
         Opportunity opportunity = getOrCreateOpportunity(opportunityForm);
-        Opportunity savedOpportunity;
-
-        Long opportunityIdBeforeSaving = opportunityForm.getId();
 
         try {
-            savedOpportunity = opportunityRepository.save(opportunity);
+            opportunityRepository.save(opportunity);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (opportunityIdBeforeSaving == null || opportunityIdBeforeSaving < 1) {
-            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PutMapping("/submit/{opportunityId}")
-    public final ResponseEntity<?> submitCompany(@PathVariable("opportunityId") Long opportunityId,
-                                                 @RequestBody @Valid OpportunityForm opportunityForm,
-                                                 BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Eine Opportunity kann nicht ohne Namen eingereicht werden!");
-        }
-
-        Opportunity opportunity = getOrCreateOpportunity(opportunityForm);
-        Opportunity savedOpportunity;
-
-        try {
-            savedOpportunity = opportunityRepository.save(opportunity);
-        } catch (DataAccessException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        if (opportunityId < 1) {
-            return new ResponseEntity<>(savedOpportunity.getId(), HttpStatus.CREATED);
-        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
