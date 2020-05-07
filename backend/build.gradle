@@ -54,10 +54,6 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-//checkstyle {
-//	checkstyleTest.enabled = false
-//}
-
 pmd {
 	pmdTest.enabled = false
 	ruleSets = [
@@ -91,4 +87,24 @@ tasks.withType(Pmd) {
 pmd {
 	ignoreFailures = true
 	pmdTest.enabled = false
+}
+
+spotbugs {
+	ignoreFailures = false
+	showProgress = true
+	reportsDir = file("$buildDir/spotbugs")
+	includeFilter = file("config/spotbugs/filter.xml")
+
+}
+spotbugsMain {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+spotbugsTest {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
 }

@@ -77,13 +77,15 @@ public class CSVConverter {
                         null,
                         csvContact.getComment());
             } else {
-                if (companyRepository != null && !companyRepository.existsByName(csvContact.getCompany())) {
+
+                if (companyRepository.existsByName(csvContact.getCompany())) {
+                    companyOfContact = companyRepository.findByName(csvContact.getCompany());
+                } else {
                     companyOfContact = new Company(csvContact.getCompany().trim(), "", "", "", "", "", "");
                     companyOfContact.setStatus("Lead");
-                } else {
-                    companyOfContact = companyRepository.findByName(csvContact.getCompany());
                 }
                 companyRepository.save(companyOfContact);
+
                 contact = new Contact(
                         csvContact.getName(),
                         companyOfContact,

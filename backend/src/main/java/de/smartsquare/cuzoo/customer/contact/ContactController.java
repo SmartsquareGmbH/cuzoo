@@ -150,7 +150,7 @@ public class ContactController {
         contact.setLabels(companyLabels);
     }
 
-    class Tuple {
+    static class Tuple {
         final Optional<Label> optionalLabel;
         final String title;
 

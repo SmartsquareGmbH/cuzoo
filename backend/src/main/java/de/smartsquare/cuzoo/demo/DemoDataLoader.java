@@ -85,7 +85,7 @@ public class DemoDataLoader implements InitializingBean {
     }
 
     private Long getTodayIncrementedBy(int increment) {
-        return new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000 * increment).getTime();
+        return new Date(System.currentTimeMillis() + 24L * 60 * 60 * 1000 * increment).getTime();
     }
 
     private void loadMaSchinenKG() {
