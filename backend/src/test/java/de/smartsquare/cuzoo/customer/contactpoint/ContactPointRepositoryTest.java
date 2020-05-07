@@ -27,7 +27,6 @@ public class ContactPointRepositoryTest {
 
     private User user;
     private Contact contact;
-    private ContactPoint contactPoint;
 
     @Before
     public void initialize() {

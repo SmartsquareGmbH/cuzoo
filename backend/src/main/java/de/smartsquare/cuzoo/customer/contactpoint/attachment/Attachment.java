@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Entity
 public class Attachment {
@@ -62,11 +63,11 @@ public class Attachment {
     }
 
     public byte[] getContent() {
-        return content;
+        return Arrays.copyOf(content, content.length);
     }
 
     public void setContent(byte[] content) {
-        this.content = content;
+        this.content = Arrays.copyOf(content, content.length);
     }
 
     public LocalDate getUploadDate() {
