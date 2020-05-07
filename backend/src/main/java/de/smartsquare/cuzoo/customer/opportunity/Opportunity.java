@@ -2,7 +2,6 @@ package de.smartsquare.cuzoo.customer.opportunity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
-import de.smartsquare.cuzoo.customer.label.Label;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -35,16 +34,6 @@ public class Opportunity {
     @OneToMany(mappedBy = "opportunity", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ContactPoint> contactPoints;
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "opportunity_labels",
-            joinColumns = {@JoinColumn(name = "opportunity_id")},
-            inverseJoinColumns = {@JoinColumn(name = "label_id")})
-    private List<Label> labels;
 
     public Opportunity(@NotNull @NotBlank String title, @NotNull @NotBlank String state, String description) {
         this.title = title;
@@ -122,18 +111,6 @@ public class Opportunity {
 
     public void addProgress(Progress progress) {
         this.progress.add(progress);
-    }
-
-    public List<Label> getLabels() {
-        return labels;
-    }
-
-    public void setLabels(List<Label> labels) {
-        this.labels = labels;
-    }
-
-    public void addLabel(Label label) {
-        this.labels.add(label);
     }
 
     @Embeddable
