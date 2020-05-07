@@ -579,10 +579,16 @@ export default {
       return "Lead"
     },
     getOpportunityState() {
-      if (this.opportunityMenu) return this.editedOpportunity.state
+      let currentOpportunity
 
-      if (datefns.compareDesc(this.date, this.opportunity.lastProgress) === 1) {
-        return this.opportunity.state
+      if (this.opportunityMenu && this.companyOpportunities.length !== 0) {
+        currentOpportunity = this.companyOpportunities.find((it) => it.id === this.editedOpportunity.id)
+      } else {
+        currentOpportunity = this.opportunity
+      }
+
+      if (datefns.compareDesc(this.date, datefns.format(currentOpportunity?.lastProgress, "YYYY-MM-DD")) === 1) {
+        return currentOpportunity.state
       } else {
         return this.editedOpportunity.state
       }
