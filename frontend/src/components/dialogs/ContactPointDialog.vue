@@ -130,7 +130,7 @@
                     <v-flex xs8>
                       <v-text-field
                         v-model="editedOpportunity.title"
-                        :rules="oppTitleRules"
+                        :rules="opportunityTitleRules"
                         suffix="*"
                         prepend-icon="title"
                         label="Opportunity-Titel"
@@ -140,8 +140,8 @@
                     <v-flex xs4>
                       <v-combobox
                         v-model="editedOpportunity.state"
-                        :items="oppStatuses"
-                        :rules="oppStatusRules"
+                        :items="opportunityStatuses"
+                        :rules="opportunityStatusesRules"
                         suffix="*"
                         prepend-icon="bubble_chart"
                         label="Status"
@@ -244,13 +244,13 @@ export default {
       ],
       newOpportunity: false,
       companyOpportunities: [],
-      oppStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
-      oppStatusRules: [
+      opportunityStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
+      opportunityStatusesRules: [
         (v) => !!v || "Bitte geben Sie einen Status an",
-        (v) => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
+        (v) => this.opportunityStatuses.includes(v) || "Dieser Status existiert nicht",
         this.opportunityMenu === true,
       ],
-      oppTitleRules: [(v) => !!v || "Bitte geben Sie einen Titel an", this.opportunityMenu === true],
+      opportunityTitleRules: [(v) => !!v || "Bitte geben Sie einen Titel an", this.opportunityMenu === true],
       confirmDialogState: false,
       contactNameEntered: "",
       createContactMessage: "",
@@ -579,15 +579,9 @@ export default {
       return "Lead"
     },
     getOpportunityState() {
-      let currentOpportunity
+      const currentOpportunity = this.getCurrentOpportunity()
 
-      if (this.opportunityMenu && this.companyOpportunities.length !== 0) {
-        currentOpportunity = this.companyOpportunities.find((it) => it.id === this.editedOpportunity.id)
-      } else {
-        currentOpportunity = this.opportunity
-      }
-
-      if (datefns.compareDesc(this.date, datefns.format(currentOpportunity?.lastProgress, "YYYY-MM-DD")) === 1) {
+      if (datefns.isBefore(this.date, datefns.format(currentOpportunity?.lastProgress, "YYYY-MM-DD"))) {
         return currentOpportunity.state
       } else {
         return this.editedOpportunity.state
@@ -601,6 +595,13 @@ export default {
       let millisecondsOfToday = hoursInMillis + minutesInMillis + secondsInMillis + new Date().getMilliseconds()
 
       return selectedDateInMillis + millisecondsOfToday
+    },
+    getCurrentOpportunity() {
+      if (this.opportunityMenu && this.companyOpportunities.length !== 0) {
+        return this.companyOpportunities.find((it) => it.id === this.editedOpportunity.id)
+      } else {
+        return this.opportunity
+      }
     },
     getContactCompany(contactName) {
       const contact = this.contacts.find((it) => it.name.includes(contactName))

@@ -15,7 +15,7 @@
                   prepend-icon="business_center"
                   hide-details
                   suffix="*"
-                  :rules="oppTitleRules"
+                  :rules="opportunityTitleRules"
                 ></v-text-field>
               </v-flex>
               <v-flex xs6>
@@ -25,8 +25,8 @@
                   prepend-icon="bubble_chart"
                   hide-details
                   suffix="*"
-                  :items="oppStatuses"
-                  :rules="oppStatusRules"
+                  :items="opportunityStatuses"
+                  :rules="opportunityStatusRules"
                 />
               </v-flex>
               <v-flex xs12>
@@ -63,11 +63,11 @@ export default {
   data() {
     return {
       valid: false,
-      oppTitleRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
-      oppStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
-      oppStatusRules: [
+      opportunityTitleRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
+      opportunityStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
+      opportunityStatusRules: [
         (v) => !!v || "Bitte geben Sie einen Status an",
-        (v) => this.oppStatuses.includes(v) || "Dieser Status existiert nicht",
+        (v) => this.opportunityStatuses.includes(v) || "Dieser Status existiert nicht",
       ],
       defaultOpportunity: {
         value: false,
@@ -77,15 +77,13 @@ export default {
         description: "",
         lastProgress: "",
       },
+      formTitle: "Opportunity bearbeiten",
     }
   },
   computed: {
     ...mapGetters({
       editedOpportunity: "editedOpportunity",
     }),
-    formTitle() {
-      return "Opportunity bearbeiten"
-    },
   },
   watch: {
     value() {

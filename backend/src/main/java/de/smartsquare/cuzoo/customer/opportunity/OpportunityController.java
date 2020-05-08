@@ -107,8 +107,7 @@ public class OpportunityController {
             return ResponseEntity.badRequest().body("Opportunities benötigen einen Titel und einen Status!");
         }
 
-        Optional<Opportunity> byId;
-        byId = opportunityRepository.findById(opportunityForm.getId());
+        Optional<Opportunity> byId = opportunityRepository.findById(opportunityForm.getId());
 
         if (!byId.isPresent()) {
             return ResponseEntity.badRequest().body("Diese Opportunity wurde nicht gefunden!");

@@ -124,6 +124,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .contains("Prospect");
     }
 
     @Test
@@ -149,10 +154,15 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .contains("Prospect");
     }
 
     private String getUpdatedOpportunityInJson(String id) {
-        return "{\"id\":\"" + id + "\", \"title\":\"Moeglichkeit\", \"state\":\"Quote\"}";
+        return "{\"id\":\"" + id + "\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
     }
 
     @Test
@@ -169,6 +179,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("Moeglichkeit");
     }
 
     private String nonExistingOpportunityInJson() {
@@ -188,10 +203,15 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("Moeglichkeit");
     }
 
     private String getOpportunityInJson() {
-        return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
+        return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Lead\"}";
     }
 
     @Test
@@ -207,6 +227,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("");
     }
 
     @Test
@@ -222,6 +247,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("");
     }
 
     private String getInvalidOpportunityInJson() {
@@ -266,6 +296,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .doesNotContain("Win");
     }
 
     @Test
@@ -281,6 +316,12 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository
+                .findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .doesNotContain("");
     }
 
     private String getInvalidProgressInJson() {
