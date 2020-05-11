@@ -124,10 +124,70 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .contains("Prospect");
+    }
+
+    @Test
+    public void that_opportunity_is_getting_updated_when_edited() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/contactpoint/" + contactPoint.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getOpportunityInJson());
+
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String id = result.getResponse().getContentAsString();
+
+        MockHttpServletRequestBuilder updatedBuilder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getUpdatedOpportunityInJson(id));
+
+        this.mockMvc.perform(updatedBuilder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .contains("Prospect");
     }
 
     private String getUpdatedOpportunityInJson(String id) {
-        return "{\"id\":\"" + id + "\", \"title\":\"Moeglichkeit\", \"state\":\"Quote\"}";
+        return "{\"id\":\"" + id + "\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
+    }
+
+    @Test
+    public void that_updating_non_existing_opportunity_is_not_found() throws Exception {
+
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(nonExistingOpportunityInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("Moeglichkeit");
+    }
+
+    private String nonExistingOpportunityInJson() {
+        return "{\"id\":\"1337\",, \"title\":\"Moeglichkeit\", \"state\":\"Quote\"}";
     }
 
     @Test
@@ -143,10 +203,15 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("Moeglichkeit");
     }
 
     private String getOpportunityInJson() {
-        return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Prospect\"}";
+        return "{\"id\":\"0\", \"title\":\"Moeglichkeit\", \"state\":\"Lead\"}";
     }
 
     @Test
@@ -162,6 +227,31 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("");
+    }
+
+    @Test
+    public void that_submitting_invalid_edited_opportunity_is_bad_request() throws Exception {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/api/opportunity/submit/")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(getInvalidOpportunityInJson());
+
+        this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getTitle))
+                .doesNotContain("");
     }
 
     private String getInvalidOpportunityInJson() {
@@ -206,6 +296,11 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository.findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .doesNotContain("Win");
     }
 
     @Test
@@ -221,6 +316,12 @@ public class OpportunityControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(opportunityRepository
+                .findAll()
+                .stream()
+                .map(Opportunity::getState))
+                .doesNotContain("");
     }
 
     private String getInvalidProgressInJson() {

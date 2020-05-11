@@ -87,7 +87,6 @@ export default {
     return {
       opportunityDialogState: false,
       confirmDialogState: false,
-      editOpportunityMessage: "Opportunity editieren?",
       deleteOpportunityMessage: "Bist du dir sicher, dass du diese Opportunity endgültig löschen willst?",
       search: "",
       file: "",
@@ -128,21 +127,8 @@ export default {
     ...mapMutations({
       storeOpportunityDetails: "storeEditedOpportunityDetails",
     }),
-    closeDialog() {
-      this.$emit("input")
-
-      setTimeout(() => {
-        this.storeOpportunityDetails({
-          editedIndex: -1,
-          editedOpportunity: Object.assign({}, this.defaultOpportunity),
-        })
-      }, 300)
-    },
     refreshTable() {
       this.getOpportunities().then(() => (this.loading = false))
-    },
-    clearDialog() {
-      this.$refs.form.reset()
     },
     deleteOpportunity() {
       api

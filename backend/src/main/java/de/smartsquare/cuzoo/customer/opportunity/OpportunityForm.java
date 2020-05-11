@@ -2,7 +2,6 @@ package de.smartsquare.cuzoo.customer.opportunity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 public class OpportunityForm {
 
@@ -11,10 +10,10 @@ public class OpportunityForm {
   @NotBlank
   private String title;
 
+  @NotNull
+  @NotBlank
   private String state;
   private String description;
-
-  private List<String> labels;
 
   public Long getId() {
     return id;
@@ -30,9 +29,5 @@ public class OpportunityForm {
 
   public String getDescription() {
     return description;
-  }
-
-  public List<String> getLabels() {
-    return labels;
   }
 }

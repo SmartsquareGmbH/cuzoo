@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.contact.Contact;
 import de.smartsquare.cuzoo.customer.contactpoint.ContactPoint;
-import de.smartsquare.cuzoo.customer.opportunity.Opportunity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

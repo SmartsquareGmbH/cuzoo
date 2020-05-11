@@ -327,21 +327,6 @@ export default {
           alert(error)
         })
     },
-    submitOpportunity() {
-      api
-        .put(`opportunity/submit`, {
-          title: this.editedOpportunity.title,
-          state: this.editedOpportunity.state,
-          description: this.editedOpportunity.description,
-        })
-        .then(() => {
-          this.refreshTable()
-        })
-        .catch((error) => {
-          console.log(error)
-          alert(error)
-        })
-    },
     markdownify(value) {
       return marked(value, { sanitize: true }).trim()
     },
