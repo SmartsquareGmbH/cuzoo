@@ -23,6 +23,20 @@ public class ContactPointForm {
     private String opportunityState;
     private String rating;
 
+    public ContactPointForm(Long id, @NotNull @NotBlank String title, @NotNull Long date, @NotNull List<String> types,
+                            List<String> labels, @NotNull @NotBlank String creator, String comment,
+                            String opportunityState, String rating) {
+        this.id = id;
+        this.title = title;
+        this.date = date;
+        this.types = types;
+        this.labels = labels;
+        this.creator = creator;
+        this.comment = comment;
+        this.opportunityState = opportunityState;
+        this.rating = rating;
+    }
+
     public Long getId() {
         return id;
     }

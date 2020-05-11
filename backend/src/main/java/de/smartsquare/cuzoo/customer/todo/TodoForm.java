@@ -1,10 +1,7 @@
 package de.smartsquare.cuzoo.customer.todo;
 
-import de.smartsquare.cuzoo.user.User;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 public class TodoForm {
     private Long id;
@@ -24,6 +21,16 @@ public class TodoForm {
     @NotNull
     @NotBlank
     private String creator;
+
+    public TodoForm(Long id, @NotNull @NotBlank String description, @NotNull Long expiration, @NotNull Long reminder,
+                    boolean done, @NotNull @NotBlank String creator) {
+        this.id = id;
+        this.description = description;
+        this.expiration = expiration;
+        this.reminder = reminder;
+        this.done = done;
+        this.creator = creator;
+    }
 
     public Long getId() {
         return id;

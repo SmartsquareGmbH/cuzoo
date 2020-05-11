@@ -20,6 +20,19 @@ public class CompanyForm {
 
     private List<String> labels;
 
+    public CompanyForm(Long id, @NotNull @NotBlank String name, String street, String zipcode, String place,
+                       String homepage, String description, String other, List<String> labels) {
+        this.id = id;
+        this.name = name;
+        this.street = street;
+        this.zipcode = zipcode;
+        this.place = place;
+        this.homepage = homepage;
+        this.description = description;
+        this.other = other;
+        this.labels = labels;
+    }
+
     public Long getId() {
         return id;
     }

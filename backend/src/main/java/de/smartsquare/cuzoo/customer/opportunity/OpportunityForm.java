@@ -15,6 +15,14 @@ public class OpportunityForm {
   private String state;
   private String description;
 
+  public OpportunityForm(Long id, @NotNull @NotBlank String title, @NotNull @NotBlank String state,
+                         String description) {
+    this.id = id;
+    this.title = title;
+    this.state = state;
+    this.description = description;
+  }
+
   public Long getId() {
     return id;
   }

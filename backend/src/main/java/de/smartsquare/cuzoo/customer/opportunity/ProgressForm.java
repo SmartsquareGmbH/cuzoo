@@ -11,6 +11,11 @@ public class ProgressForm {
 
     private String progressText;
 
+    public ProgressForm(@NotNull @NotBlank String opportunityState, String progressText) {
+        this.opportunityState = opportunityState;
+        this.progressText = progressText;
+    }
+
     public String getOpportunityState() {
         return opportunityState;
     }

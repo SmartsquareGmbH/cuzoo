@@ -23,6 +23,19 @@ public class ContactForm {
 
     private List<String> labels;
 
+    public ContactForm(Long id, @NotNull @NotBlank String name, @NotNull @NotBlank String manager, String role,
+                       String mail, String telephone, String mobile, String comment, List<String> labels) {
+        this.id = id;
+        this.name = name;
+        this.manager = manager;
+        this.role = role;
+        this.mail = mail;
+        this.telephone = telephone;
+        this.mobile = mobile;
+        this.comment = comment;
+        this.labels = labels;
+    }
+
     public Long getId() {
         return id;
     }
