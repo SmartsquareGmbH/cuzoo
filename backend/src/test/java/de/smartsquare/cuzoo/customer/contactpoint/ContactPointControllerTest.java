@@ -112,9 +112,8 @@ public class ContactPointControllerTest {
 
         assertThat(contactPointRepository.findAll()
                 .stream()
-                .anyMatch(point -> point.getTitle()
-                        .equals("Beratungsgespraech")))
-                .isTrue();
+                .map(ContactPoint::getTitle))
+                .contains("Beratungsgespraech");
     }
 
     @Test
@@ -130,6 +129,11 @@ public class ContactPointControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactPointRepository.findAll()
+                .stream()
+                .map(ContactPoint::getTitle))
+                .doesNotContain("Beratungsgespraech");
     }
 
     private String getContactPointInJson() {
@@ -149,6 +153,11 @@ public class ContactPointControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactPointRepository.findAll()
+                .stream()
+                .map(ContactPoint::getTitle))
+                .doesNotContain("");
     }
 
     private String getInvalidTitleContactPointInJson() {
@@ -168,10 +177,15 @@ public class ContactPointControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactPointRepository.findAll()
+                .stream()
+                .map(ContactPoint::getTitle))
+                .doesNotContain("Beratungsgespraech");
     }
 
     private String getInvalidDateContactPointInJson() {
-        return "{\"id\":\"0\", \"title\":\"Beratung\", \"date\":\"\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
+        return "{\"id\":\"0\", \"title\":\"Beratungsgespraech\", \"date\":\"\", \"types\":[\"Social Media\"], \"creator\":\"user\"}";
     }
 
     @Test
@@ -187,6 +201,11 @@ public class ContactPointControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactPointRepository.findAll()
+                .stream()
+                .map(ContactPoint::getTitle))
+                .doesNotContain("Beratungsgespraech");
     }
 
     private String getContactPointWithInvalidCreatorInJson() {
@@ -209,9 +228,8 @@ public class ContactPointControllerTest {
 
         assertThat(labelRepository.findAll()
                 .stream()
-                .anyMatch(label -> label.getTitle()
-                        .equals("Weihnachtskarte")))
-                .isTrue();
+                .map(Label::getTitle))
+                .contains("Weihnachtskarte");
     }
 
     private String getContactPointInJsonWithNonExistingLabels() {
@@ -273,9 +291,8 @@ public class ContactPointControllerTest {
 
         assertThat(contactPointRepository.findAll()
                 .stream()
-                .anyMatch(point -> point.getTitle()
-                        .equals("Auftrag")))
-                .isTrue();
+                .map(ContactPoint::getTitle))
+                .contains("Auftrag");
     }
 
     private String getOutdatedContactPointInJson() {
@@ -328,10 +345,10 @@ public class ContactPointControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Beratung");
     }
 
     @Test
@@ -342,10 +359,10 @@ public class ContactPointControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Beratung");
     }
 
     @Test

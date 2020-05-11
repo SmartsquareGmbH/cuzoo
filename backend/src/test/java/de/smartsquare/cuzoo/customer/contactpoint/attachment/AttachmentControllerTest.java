@@ -105,6 +105,8 @@ public class AttachmentControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(attachmentRepository.findAll().size()).isEqualTo(0);
     }
 
     @Test

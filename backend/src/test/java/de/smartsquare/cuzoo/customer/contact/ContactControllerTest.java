@@ -2,6 +2,7 @@ package de.smartsquare.cuzoo.customer.contact;
 
 import de.smartsquare.cuzoo.customer.company.Company;
 import de.smartsquare.cuzoo.customer.company.CompanyRepository;
+import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import de.smartsquare.cuzoo.user.User;
 import de.smartsquare.cuzoo.user.UserRepository;
@@ -100,6 +101,8 @@ public class ContactControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactRepository.findAll().size()).isEqualTo(0);
     }
 
     @Test
@@ -115,9 +118,8 @@ public class ContactControllerTest {
 
         assertThat(contactRepository.findAll()
                 .stream()
-                .anyMatch(contact -> contact.getName()
-                        .equals("Freddy Faulig")))
-                .isTrue();
+                .map(Contact::getName))
+                .contains("Freddy Faulig");
     }
 
     @Test
@@ -131,6 +133,11 @@ public class ContactControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactRepository.findAll()
+                .stream()
+                .map(Contact::getName))
+                .doesNotContain("Freddy Faulig");
     }
 
     private String getContactInJson() {
@@ -195,6 +202,11 @@ public class ContactControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactRepository.findAll()
+                .stream()
+                .map(Contact::getRole))
+                .doesNotContain("Azubi");
     }
 
     private String getInvalidContactInJson() {
@@ -209,6 +221,11 @@ public class ContactControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(contactRepository.findAll()
+                .stream()
+                .map(Contact::getName))
+                .doesNotContain("Darius Tack");
     }
 
     private String getInvalidManagerInJson() {
@@ -226,10 +243,8 @@ public class ContactControllerTest {
 
         assertThat(contactRepository.findAll()
                 .stream()
-                .filter(contact -> contact.getName()
-                        .equals("Fred Feuerstein"))
-                .count())
-                .isEqualTo(1);
+                .map(Contact::getName))
+                .containsOnlyOnce("Fred Feuerstein");
     }
 
     private String getFreelancerInJson() {
@@ -285,10 +300,10 @@ public class ContactControllerTest {
                         .accept(MediaType.APPLICATION_OCTET_STREAM_VALUE)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Tom");
     }
 
     @Test
@@ -307,16 +322,19 @@ public class ContactControllerTest {
 
     @Test
     public void that_getting_contacts_is_successfully() throws Exception {
-        MockHttpServletRequestBuilder builder =
+        MockHttpServletRequestBuilder builder = submitContact(getContactInJson());
+        this.mockMvc.perform(builder);
+
+        MockHttpServletRequestBuilder getBuilder =
                 MockMvcRequestBuilders.get("/api/contact/get")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Freddy Faulig");
     }
 
     @Test
@@ -330,8 +348,8 @@ public class ContactControllerTest {
 
         assertThat(labelRepository.findAll()
                 .stream()
-                .anyMatch(label -> label.getTitle().equals("EJK")))
-                .isTrue();
+                .map(Label::getTitle))
+                .contains("EJK");
     }
 
     @Test

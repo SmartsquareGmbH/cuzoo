@@ -75,6 +75,11 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(userRepository.findAll()
+                .stream()
+                .map(User::getFullname))
+                .doesNotContain("drs tck");
     }
 
     private String getUserInformationInJson() {
