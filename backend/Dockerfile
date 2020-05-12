@@ -1,4 +1,4 @@
-FROM gradle:5.1-jdk8-alpine AS build
+FROM gradle:6.4.0-jdk8 AS build
 
 WORKDIR /workspace
 USER root
