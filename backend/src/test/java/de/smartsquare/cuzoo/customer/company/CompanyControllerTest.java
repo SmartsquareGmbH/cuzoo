@@ -1,6 +1,7 @@
 package de.smartsquare.cuzoo.customer.company;
 
 import de.smartsquare.cuzoo.customer.contact.ContactControllerTest;
+import de.smartsquare.cuzoo.customer.label.Label;
 import de.smartsquare.cuzoo.customer.label.LabelRepository;
 import org.junit.After;
 import org.junit.Test;
@@ -80,6 +81,8 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(companyRepository.findAll()).isEmpty();
     }
 
     @Test
@@ -98,9 +101,8 @@ public class CompanyControllerTest {
 
         assertThat(companyRepository.findAll()
                 .stream()
-                .anyMatch(company -> company.getName()
-                        .equals("Fidea Development")))
-                .isTrue();
+                .map(Company::getName))
+                .contains("Fidea Development");
     }
 
     private String getCompanyInJson() {
@@ -133,9 +135,8 @@ public class CompanyControllerTest {
 
         assertThat(companyRepository.findAll()
                 .stream()
-                .anyMatch(company -> company.getName()
-                        .equals("Smartsquare GmbH")))
-                .isTrue();
+                .map(Company::getName))
+                .contains("Smartsquare GmbH");
     }
 
     private String getOutdatedCompanyInJson() {
@@ -159,6 +160,11 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(companyRepository.findAll()
+                .stream()
+                .map(Company::getName))
+                .doesNotContain("");
     }
 
     private String getInvalidCompanyInJson() {
@@ -200,16 +206,18 @@ public class CompanyControllerTest {
 
     @Test
     public void that_getting_companies_is_successfully() throws Exception {
+        companyRepository.save(new Company("Fidea UG", "", "", "", "", "", ""));
+
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.get("/api/company/get")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(builder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Fidea UG");
     }
 
     @Test
@@ -228,8 +236,8 @@ public class CompanyControllerTest {
 
         assertThat(labelRepository.findAll()
                 .stream()
-                .anyMatch(label -> label.getTitle().equals("DEF")))
-                .isTrue();
+                .map(Label::getTitle))
+                .contains("DEF");
     }
 
     @Test

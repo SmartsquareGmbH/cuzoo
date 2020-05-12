@@ -372,9 +372,7 @@ public class OpportunityControllerTest {
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(opportunityRepository
-                .findAll()
-                .size()).isEqualTo(0);
+        assertThat(opportunityRepository.findAll()).isEmpty();
     }
 
     @Test

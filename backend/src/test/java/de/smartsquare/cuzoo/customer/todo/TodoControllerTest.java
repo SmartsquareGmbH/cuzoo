@@ -74,9 +74,8 @@ public class TodoControllerTest {
 
         assertThat(todoRepository.findAll()
                 .stream()
-                .anyMatch(todo -> todo.getDescription()
-                        .equals("Muell rausbringen")))
-                .isTrue();
+                .map(Todo::getDescription))
+                .contains("Muell rausbringen");
     }
 
     @Test
@@ -167,6 +166,11 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isNotFound())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(todoRepository.findAll()
+                .stream()
+                .map(Todo::isDone))
+                .doesNotContain(true);
     }
 
     @Test
@@ -182,6 +186,11 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(todoRepository.findAll()
+                .stream()
+                .map(Todo::getDescription))
+                .doesNotContain("Muell rausbringen");
     }
 
     @Test
@@ -190,8 +199,7 @@ public class TodoControllerTest {
                 MockMvcRequestBuilders.get("/api/todo/get/FooBarGmbH")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(getTodoInJson());
+                        .characterEncoding("UTF-8");
 
         this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status()
@@ -212,6 +220,11 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(todoRepository.findAll()
+                .stream()
+                .map(Todo::getDescription))
+                .doesNotContain("ABC");
     }
 
     private String getInvalidTodoInJson() {
@@ -221,11 +234,13 @@ public class TodoControllerTest {
     @Test
     public void that_getting_todos_of_company_succeeds() throws Exception {
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/api/todo/submit" + company.getId())
+                MockMvcRequestBuilders.put("/api/todo/submit/" + company.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(getTodoInJson());
+
+        this.mockMvc.perform(builder);
 
         MockHttpServletRequestBuilder getBuilder =
                 MockMvcRequestBuilders.get("/api/todo/get/" + company.getName())
@@ -233,11 +248,10 @@ public class TodoControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");
 
-        this.mockMvc.perform(builder);
-        this.mockMvc.perform(getBuilder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = this.mockMvc.perform(getBuilder).andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        assertThat(response).contains("Muell rausbringen");
     }
 
     private String getTodoInJson() {
@@ -257,6 +271,11 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.status()
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
+
+        assertThat(todoRepository.findAll()
+                .stream()
+                .map(Todo::getDescription))
+                .doesNotContain("Muell rausbringen");
     }
 
     private String getTodoWithInvalidCreatorInJson() {
