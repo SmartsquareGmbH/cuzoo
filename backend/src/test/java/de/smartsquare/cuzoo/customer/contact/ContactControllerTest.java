@@ -102,7 +102,7 @@ public class ContactControllerTest {
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(contactRepository.findAll().size()).isEqualTo(0);
+        assertThat(contactRepository.findAll()).isEmpty();
     }
 
     @Test

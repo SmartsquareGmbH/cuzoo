@@ -82,7 +82,7 @@ public class CompanyControllerTest {
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(companyRepository.findAll().size()).isEqualTo(0);
+        assertThat(companyRepository.findAll()).isEmpty();
     }
 
     @Test

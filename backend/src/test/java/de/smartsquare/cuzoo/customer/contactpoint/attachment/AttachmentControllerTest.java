@@ -106,7 +106,7 @@ public class AttachmentControllerTest {
                         .isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(attachmentRepository.findAll().size()).isEqualTo(0);
+        assertThat(attachmentRepository.findAll()).isEmpty();
     }
 
     @Test
@@ -174,7 +174,7 @@ public class AttachmentControllerTest {
                         .isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        assertThat(attachmentRepository.findAll().size()).isEqualTo(0);
+        assertThat(attachmentRepository.findAll()).isEmpty();
     }
 
     @Test
