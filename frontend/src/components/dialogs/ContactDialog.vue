@@ -189,6 +189,7 @@ export default {
 
         this.storeCompany({})
         this.editedContact.manager = this.username
+        this.company = ""
       }, 300)
     },
     clearDialog() {

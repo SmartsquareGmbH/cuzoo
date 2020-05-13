@@ -112,7 +112,7 @@
                 </v-combobox>
               </v-flex>
               <v-flex xs12>
-                <v-textarea v-model="editedContactPoint.comment" prepend-icon="comment" label="Kommentar" rows="5" />
+                <v-textarea ref="commentarField" v-model="editedContactPoint.comment" prepend-icon="comment" label="Kommentar" rows="5" />
               </v-flex>
               <v-flex xs12>
                 <label-box
@@ -313,7 +313,7 @@ export default {
         !this.opportunity &&
         this.editedIndex === -1 &&
         this.contactNameEntered &&
-        !this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
+        !this.contacts.find((it) => it.name === this.editedContactPoint.contact.name)
       )
     },
     newOpportunityButton() {
@@ -404,6 +404,8 @@ export default {
 
         this.resetEditedOpportunity()
         this.editedContactPoint.rating = undefined
+        this.editedContactPoint.contact.name = ""
+        this.company = ""
 
         this.opportunityMenu = false
       }, 300)
