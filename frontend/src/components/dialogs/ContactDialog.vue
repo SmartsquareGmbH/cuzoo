@@ -166,7 +166,7 @@ export default {
       this.company = company
     },
     companies() {
-      if (this.companies.length === 1) {
+      if (this.$route.name === "companyView") {
         this.company = this.companies[0]
         this.companyFieldEnabled = false
       } else {
@@ -273,13 +273,11 @@ export default {
       this.editedContact.labels = labels
     },
     getCompany() {
-      if (this.editedContact.company) {
-        return this.editedContact.company
-      } else if (this.companyNames.length === 1) {
+      if (this.$route.name === "companyView") {
         this.companyFieldEnabled = false
         return this.companies[0]
       } else {
-        return null
+        return ""
       }
     },
     encodeString(value) {
