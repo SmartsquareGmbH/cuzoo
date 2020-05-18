@@ -31,7 +31,7 @@
                   suffix="*"
                   :items="opportunityStatuses"
                   :rules="opportunityStatusRules"
-                  :disabled="loading"
+                  disabled
                 />
               </v-flex>
               <v-flex xs12>
@@ -71,11 +71,6 @@ export default {
       valid: false,
       loading: false,
       opportunityTitleRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
-      opportunityStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
-      opportunityStatusRules: [
-        (v) => !!v || "Bitte geben Sie einen Status an",
-        (v) => this.opportunityStatuses.includes(v) || "Dieser Status existiert nicht",
-      ],
       defaultOpportunity: {
         value: false,
         id: 0,
@@ -113,8 +108,10 @@ export default {
       }, 300)
     },
     clearDialog() {
+      const tempState = this.editedOpportunity.state
       this.$refs.form.reset()
       this.editedOpportunity.description = ""
+      setTimeout(() => this.editedOpportunity.state = tempState)
     },
     submitOpportunity() {
       this.loading = true
