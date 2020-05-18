@@ -5,6 +5,9 @@
         <v-card-title class="headline font-weight-light primary">
           Fortschritt hinzufügen
         </v-card-title>
+        <div v-if="loading">
+          <v-progress-linear slot="progress" color="blue" indeterminate style="margin-top: 0" />
+        </div>
         <v-card-text class="text-xs-right primary--text">
           <v-form ref="form" v-model="valid">
             <v-container grid-list-md>
@@ -17,6 +20,7 @@
                     prepend-icon="title"
                     label="Opportunity-Titel"
                     hide-details
+                    :disabled="loading"
                   />
                 </v-flex>
                 <v-flex xs4>
@@ -28,6 +32,7 @@
                     prepend-icon="bubble_chart"
                     label="Status"
                     hide-details
+                    :disabled="loading"
                   />
                 </v-flex>
                 <v-expand-transition>
@@ -38,6 +43,7 @@
                       label="Fortschritt"
                       rows="5"
                       hide-details
+                      :disabled="loading"
                     />
                   </v-flex>
                 </v-expand-transition>
@@ -48,9 +54,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
-          <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-          <v-btn color="primary" flat :disabled="!valid" @click="submitProgress()">Speichern</v-btn>
+          <v-btn color="primary" flat :disabled="loading" @click.native="closeDialog()">Abbrechen</v-btn>
+          <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+          <v-btn color="primary" flat :disabled="!valid || loading" @click="submitProgress()">Speichern</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -80,6 +86,7 @@ export default {
     return {
       confirmDialog: false,
       valid: false,
+      loading: false,
       progressText: "",
       oppStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
       oppStatusRules: [
@@ -119,12 +126,14 @@ export default {
       if (this.editedOpportunity.state === this.opportunity.state && this.progressText === "") {
         this.requireProgressTextDialog = true
       } else {
+        this.loading = true
         api
           .put(`opportunity/submit/progress/${this.editedOpportunity.id}`, {
             opportunityState: this.editedOpportunity.state,
             progressText: this.progressText,
           })
           .then(() => {
+            this.loading = false
             this.$emit("refresh")
             this.closeDialog()
           })

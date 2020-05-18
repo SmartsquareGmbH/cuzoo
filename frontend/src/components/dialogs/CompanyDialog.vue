@@ -4,6 +4,9 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
+      <div v-if="loading">
+        <v-progress-linear slot="progress" color="blue" indeterminate style="margin-top: 0" />
+      </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
           <v-container grid-list-md>
@@ -16,6 +19,7 @@
                   hide-details
                   suffix="*"
                   :rules="companyFieldRules"
+                  :disabled="loading"
                 ></v-text-field>
               </v-flex>
               <v-flex xs6>
@@ -24,6 +28,7 @@
                   label="Straße &amp; Hsnr."
                   prepend-icon="place"
                   hide-details
+                  :disabled="loading"
                 ></v-text-field>
               </v-flex>
               <v-flex xs3>
@@ -34,13 +39,14 @@
                   mask="#####"
                   counter
                   min="5"
+                  :disabled="loading"
                 ></v-text-field>
               </v-flex>
               <v-flex xs3>
-                <v-text-field v-model="editedCompany.place" label="Ort" hide-details></v-text-field>
+                <v-text-field v-model="editedCompany.place" label="Ort" hide-details :disabled="loading"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="editedCompany.homepage" label="Homepage" prepend-icon="home"></v-text-field>
+                <v-text-field v-model="editedCompany.homepage" label="Homepage" prepend-icon="home" :disabled="loading"></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-textarea
@@ -50,6 +56,7 @@
                   name="input-7-4"
                   label="Beschreibung"
                   rows="3"
+                  :disabled="loading"
                 ></v-textarea>
               </v-flex>
               <v-flex xs12>
@@ -60,6 +67,7 @@
                   name="input-7-4"
                   label="Sonstiges"
                   rows="3"
+                  :disabled="loading"
                 ></v-textarea>
               </v-flex>
               <v-flex xs12>
@@ -68,6 +76,7 @@
                   api-path="company/get/labels"
                   type="Labels"
                   @label-added="setCompanyLabels"
+                  :disabled="loading"
                 />
               </v-flex>
             </v-layout>
@@ -77,9 +86,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-        <v-btn color="primary" flat :disabled="!valid" @click="submitCompany()">Speichern</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="closeDialog()">Abbrechen</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+        <v-btn color="primary" flat :disabled="!valid || loading" @click="submitCompany()">Speichern</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -97,6 +106,7 @@ export default {
   data() {
     return {
       valid: false,
+      loading: false,
       labelBoxInput: "",
       companyFieldRules: [(v) => !!v || "Bitte geben Sie ein Unternehmen an"],
       defaultCompany: {
@@ -146,6 +156,7 @@ export default {
       this.$refs.form.reset()
     },
     submitCompany() {
+      this.loading = true
       api
         .put("company/submit", {
           name: this.editedCompany.name,
@@ -159,10 +170,12 @@ export default {
           labels: this.editedCompany.labels,
         })
         .then(() => {
+          this.loading = false
           this.$parent.refreshTable()
           this.closeDialog()
         })
         .catch((error) => {
+          this.loading = false
           console.log(error)
           alert(error)
         })
