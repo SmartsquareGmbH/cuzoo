@@ -196,17 +196,18 @@ export default {
 
         this.storeCompany({})
         this.editedContact.manager = this.username
-        this.company = ""
+        this.company = this.getCompany()
       }, 300)
     },
     clearDialog() {
       this.$refs.form.reset()
 
-      if (this.$route.name === "companyView") {
-        setTimeout(() => (this.company = this.getCompany()))
-      }
-
-      this.editedContact.manager = this.username
+      setTimeout(() => {
+        if (this.$route.name === "companyView") {
+          this.company = this.getCompany()
+        }
+        this.editedContact.manager = this.username
+      })
     },
     submit() {
       if (this.companyNameEntered) {

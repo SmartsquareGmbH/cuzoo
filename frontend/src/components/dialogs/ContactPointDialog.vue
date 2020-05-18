@@ -327,7 +327,7 @@ export default {
         !this.opportunity &&
         this.editedIndex === -1 &&
         this.contactNameEntered &&
-        !this.contacts.find((it) => it.name === this.editedContactPoint.contact.name)
+        !this.contacts.find((it) => it.name === this.contactNameEntered)
       )
     },
     newOpportunityButton() {
@@ -396,12 +396,14 @@ export default {
       storeOpportunityDetails: "storeEditedOpportunityDetails",
     }),
     clearDialog() {
-      const tempContactName = this.editedContactPoint.contact.name
+      const tempContactName =  this.$route.name === "contactPointView" ? this.editedContactPoint.contact.name : ""
+
       this.$refs.form.reset()
-      this.editedContactPoint.contact.name = tempContactName
       this.editedContactPoint.rating = undefined
+      this.company = ""
 
       setTimeout(() => {
+        this.editedContactPoint.contact.name = tempContactName
         this.date = new Date().toISOString().substr(0, 10)
         this.editedOpportunity.state = "Lead"
         this.opportunityMenu = false
@@ -409,6 +411,11 @@ export default {
     },
     closeDialog() {
       this.$emit("input")
+
+      if (this.$route.name !== "contactPointView") {
+        this.editedContactPoint.contact.name = ""
+      }
+      this.company = ""
 
       setTimeout(() => {
         this.storeContactPointDetails({
@@ -418,8 +425,6 @@ export default {
 
         this.resetEditedOpportunity()
         this.editedContactPoint.rating = undefined
-        this.editedContactPoint.contact.name = ""
-        this.company = ""
 
         this.opportunityMenu = false
       }, 300)
@@ -629,7 +634,7 @@ export default {
       }
     },
     getContactCompany(contactName) {
-      const contact = this.contacts.find((it) => it.name.includes(contactName))
+      const contact = this.contacts.find((it) => it.name === contactName)
       return contact?.company?.name || ""
     },
     addEmoji(emoji) {
