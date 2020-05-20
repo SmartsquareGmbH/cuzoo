@@ -6,6 +6,7 @@ export default {
   state: {
     todos: [],
     editedIndex: -1,
+    editedCompany: {},
     editedTodo: {
       id: 0,
       description: "",
@@ -19,6 +20,7 @@ export default {
     todos: (state) => state.todos,
     editedTodo: (state) => state.editedTodo,
     editedTodoIndex: (state) => state.editedIndex,
+    editedTodoCompany: (state) => state.editedCompany,
   },
   mutations: {
     storeTodos(state, payload) {
@@ -27,6 +29,9 @@ export default {
     storeEditedTodoDetails(state, payload) {
       state.editedIndex = payload.editedIndex
       state.editedTodo = payload.editedTodo
+    },
+    storeEditedTodoCompany(state, payload) {
+      state.editedCompany = payload.editedCompany
     },
   },
   actions: {
