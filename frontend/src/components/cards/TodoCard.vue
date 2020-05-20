@@ -55,12 +55,12 @@
         <slot />
       </v-card>
     </v-hover>
-    <edit-todo-dialog
+    <todo-dialog
       v-model="todoDialogState"
       :companies="mappedCompanies"
       @refresh="refreshTodos()"
       @input="todoDialogState = false"
-    ></edit-todo-dialog>
+    ></todo-dialog>
   </v-flex>
 </template>
 
@@ -69,13 +69,16 @@ import api from "../../utils/http-common"
 
 import Chip from "../core/Chip.vue"
 import { mapActions, mapGetters, mapMutations } from "vuex"
-import EditTodoDialog from "../dialogs/EditTodoDialog.vue"
+import TodoDialog from "../dialogs/TodoDialog.vue"
 
 const datefns = require("date-fns")
 const de = require("date-fns/locale/de")
 
 export default {
-  components: { EditTodoDialog, Chip },
+  components: {
+    TodoDialog,
+    Chip,
+  },
   props: ["todo"],
   data: () => ({
     mappedCompanies: [],
