@@ -6,7 +6,7 @@
           Fortschritt hinzufügen
         </v-card-title>
         <div v-if="loading">
-          <v-progress-linear slot="progress" color="blue" indeterminate style="margin-top: 0" />
+          <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
         </div>
         <v-card-text class="text-xs-right primary--text">
           <v-form ref="form" v-model="valid">
