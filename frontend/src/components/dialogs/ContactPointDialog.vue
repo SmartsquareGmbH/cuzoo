@@ -528,6 +528,7 @@ export default {
           const contactPointId = res.data
 
           if (this.opportunityMenu || this.opportunity) {
+            this.loading = true
             api
               .put(`opportunity/submit/contactpoint/${contactPointId}`, {
                 id: this.editedOpportunity.id,
@@ -537,15 +538,14 @@ export default {
                 progress: this.editedOpportunity.progress,
               })
               .then(() => {
-                this.loading = false
                 this.$emit("refresh")
                 this.closeDialog()
               })
               .catch((error) => {
-                this.loading = false
                 console.log(error)
                 alert(error)
               })
+              .finally(() => this.loading = false)
           } else {
             this.loading = false
             this.$emit("refresh")

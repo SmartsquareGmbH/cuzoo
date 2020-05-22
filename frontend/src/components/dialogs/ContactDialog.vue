@@ -237,15 +237,14 @@ export default {
           labels: this.editedContact.labels,
         })
         .then(() => {
-          this.loading = false
           this.$parent.refreshTable()
           this.closeDialog()
         })
         .catch((error) => {
-          this.loading = false
           console.log(error)
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
     submitCompany() {
       this.loading = true

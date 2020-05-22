@@ -133,10 +133,10 @@ export default {
             progressText: this.progressText,
           })
           .then(() => {
-            this.loading = false
             this.$emit("refresh")
             this.closeDialog()
           })
+          .finally(() => this.loading = false)
       }
     },
   },

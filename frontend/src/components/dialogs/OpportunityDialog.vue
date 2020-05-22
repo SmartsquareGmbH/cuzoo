@@ -31,6 +31,7 @@
                   suffix="*"
                   :items="opportunityStatuses"
                   :rules="opportunityStatusRules"
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs12>
@@ -125,15 +126,14 @@ export default {
           description: this.editedOpportunity.description,
         })
         .then(() => {
-          this.loading = false
           this.$parent.refreshTable()
           this.closeDialog()
         })
         .catch((error) => {
-          this.loading = false
           console.log(error)
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
   },
 }

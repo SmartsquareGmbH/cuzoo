@@ -179,14 +179,13 @@ export default {
           creator: this.username,
         })
         .then(() => {
-          this.loading = false
           this.$emit("refresh")
           this.closeDialog()
         })
         .catch((error) => {
-          this.loading = false
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
     getReminderDate() {
       switch (this.editedTodo.reminder) {
