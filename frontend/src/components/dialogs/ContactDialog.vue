@@ -187,7 +187,7 @@ export default {
     closeDialog() {
       this.$emit("input")
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.storeContactDetails({
           editedIndex: -1,
           editedContact: Object.assign({}, this.defaultContact),
@@ -196,12 +196,12 @@ export default {
         this.storeCompany({})
         this.editedContact.manager = this.username
         this.company = this.getCompany()
-      }, 300)
+      })
     },
     clearDialog() {
       this.$refs.form.reset()
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         if (this.selectedCompany) {
           this.company = this.getCompany()
         }

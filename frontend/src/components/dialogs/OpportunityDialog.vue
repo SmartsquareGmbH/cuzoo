@@ -109,7 +109,7 @@ export default {
       const tempState = this.editedOpportunity.state
       this.$refs.form.reset()
       this.editedOpportunity.description = ""
-      setTimeout(() => this.editedOpportunity.state = tempState)
+      this.$nextTick(() => this.editedOpportunity.state = tempState)
     },
     submitOpportunity() {
       this.loading = true

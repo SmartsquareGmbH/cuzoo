@@ -402,7 +402,7 @@ export default {
       this.editedContactPoint.rating = undefined
       this.company = ""
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.editedContactPoint.contact.name = tempContactName
         this.date = new Date().toISOString().substr(0, 10)
         this.editedOpportunity.state = "Lead"
@@ -417,7 +417,7 @@ export default {
       }
       this.company = ""
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.storeContactPointDetails({
           editedIndex: -1,
           editedContactPoint: Object.assign({}, this.defaultContactPoint),
@@ -427,7 +427,7 @@ export default {
         this.editedContactPoint.rating = undefined
 
         this.opportunityMenu = false
-      }, 300)
+      })
     },
 
     submit() {

@@ -116,7 +116,7 @@ export default {
     clearDialog() {
       this.$refs.form.reset()
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.editedOpportunity.title = this.opportunity.title
         this.editedOpportunity.state = this.opportunity.state
         this.progressText = ""

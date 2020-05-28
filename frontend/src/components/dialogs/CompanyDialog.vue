@@ -145,12 +145,12 @@ export default {
     closeDialog() {
       this.$emit("input")
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.storeCompanyDetails({
           editedIndex: -1,
           editedCompany: Object.assign({}, this.defaultCompany),
         })
-      }, 300)
+      })
     },
     clearDialog() {
       this.$refs.form.reset()

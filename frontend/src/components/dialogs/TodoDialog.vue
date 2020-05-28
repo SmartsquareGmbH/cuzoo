@@ -262,7 +262,7 @@ export default {
     },
     clearDialog() {
       this.$refs.form.reset()
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.company = ""
         this.date = new Date().toISOString().substr(0, 10)
       })
@@ -270,13 +270,13 @@ export default {
     closeDialog() {
       this.$emit("input")
 
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.storeDetails({
           editedIndex: -1,
           editedTodo: Object.assign({}, this.defaultTodo),
         })
         this.storeCompany({})
-      }, 300)
+      })
     },
   },
 }
