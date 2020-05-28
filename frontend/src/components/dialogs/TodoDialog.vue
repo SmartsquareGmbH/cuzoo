@@ -4,8 +4,8 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
-      <div v-if="loading" >
-        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      <div v-if="loading">
+        <v-progress-linear slot="progress" class="mt-0" color="blue" indeterminate />
       </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
@@ -47,7 +47,13 @@
                     suffix="*"
                     :disabled="loading"
                   />
-                  <v-date-picker v-model="date" :min="new Date().toISOString()" scrollable locale="de" :disabled="loading">
+                  <v-date-picker
+                    v-model="date"
+                    :min="new Date().toISOString()"
+                    scrollable
+                    locale="de"
+                    :disabled="loading"
+                  >
                     <v-spacer />
                     <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
                     <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -208,7 +214,10 @@ export default {
       if (this.reminders.includes(this.editedTodo.reminder)) {
         reminderAsDate = this.getReminderDate()
       } else {
-        if (this.editedTodo.expiration && !datefns.isSameDay(datefns.parse(this.editedTodo.expiration), datefns.parse(this.date))) {
+        if (
+          this.editedTodo.expiration &&
+          !datefns.isSameDay(datefns.parse(this.editedTodo.expiration), datefns.parse(this.date))
+        ) {
           // If the expiration date is changed, the reminder date has to be adjusted
           this.editedTodo.reminder = this.getDateAsReminder()
           reminderAsDate = this.getReminderDate()
@@ -233,7 +242,7 @@ export default {
         .catch((error) => {
           alert(error)
         })
-        .finally(() => this.loading = false)
+        .finally(() => (this.loading = false))
     },
     getReminderDate() {
       switch (this.editedTodo.reminder) {
@@ -252,11 +261,11 @@ export default {
       const expirationDate = datefns.parse(this.editedTodo.expiration)
       const convertedReminder = datefns.parse(new Date(this.editedTodo.reminder))
 
-      if (datefns.isSameDay(datefns.subDays(expirationDate,1), convertedReminder)) {
+      if (datefns.isSameDay(datefns.subDays(expirationDate, 1), convertedReminder)) {
         return this.reminders[0]
-      } else if (datefns.isSameDay(datefns.subDays(expirationDate,3), convertedReminder)) {
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate, 3), convertedReminder)) {
         return this.reminders[1]
-      } else if (datefns.isSameDay(datefns.subDays(expirationDate,7), convertedReminder)) {
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate, 7), convertedReminder)) {
         return this.reminders[2]
       }
     },

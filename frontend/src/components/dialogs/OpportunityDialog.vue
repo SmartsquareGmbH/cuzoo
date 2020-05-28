@@ -5,7 +5,7 @@
         {{ formTitle }}
       </v-card-title>
       <div v-if="loading">
-        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+        <v-progress-linear slot="progress" class="mt-0" color="blue" indeterminate />
       </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
@@ -109,7 +109,7 @@ export default {
       const tempState = this.editedOpportunity.state
       this.$refs.form.reset()
       this.editedOpportunity.description = ""
-      this.$nextTick(() => this.editedOpportunity.state = tempState)
+      this.$nextTick(() => (this.editedOpportunity.state = tempState))
     },
     submitOpportunity() {
       this.loading = true
@@ -128,7 +128,7 @@ export default {
           console.log(error)
           alert(error)
         })
-        .finally(() => this.loading = false)
+        .finally(() => (this.loading = false))
     },
   },
 }

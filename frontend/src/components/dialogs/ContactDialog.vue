@@ -4,8 +4,8 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
-      <div v-if="loading" >
-        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      <div v-if="loading">
+        <v-progress-linear slot="progress" class="mt-0" color="blue" indeterminate />
       </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
@@ -62,27 +62,57 @@
                 </v-combobox>
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.mail" prepend-icon="mail" label="E-Mail" hide-details :disabled="loading" />
+                <v-text-field
+                  v-model="editedContact.mail"
+                  prepend-icon="mail"
+                  label="E-Mail"
+                  hide-details
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.role" label="Rolle" prepend-icon="work" hide-details :disabled="loading" />
+                <v-text-field
+                  v-model="editedContact.role"
+                  label="Rolle"
+                  prepend-icon="work"
+                  hide-details
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.telephone" prepend-icon="call" label="Telefon" hide-details :disabled="loading" />
+                <v-text-field
+                  v-model="editedContact.telephone"
+                  prepend-icon="call"
+                  label="Telefon"
+                  hide-details
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.mobile" prepend-icon="smartphone" label="Mobil" hide-details :disabled="loading" />
+                <v-text-field
+                  v-model="editedContact.mobile"
+                  prepend-icon="smartphone"
+                  label="Mobil"
+                  hide-details
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs12>
-                <v-textarea v-model="editedContact.comment" name="input-7-4" label="Bemerkung" rows="3" :disabled="loading" />
+                <v-textarea
+                  v-model="editedContact.comment"
+                  name="input-7-4"
+                  label="Bemerkung"
+                  rows="3"
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs12>
                 <label-box
                   :current-labels="editedContact.labels"
                   api-path="contact/get/labels"
                   type="Labels"
-                  @label-added="setContactLabels"
                   :disabled="loading"
+                  @label-added="setContactLabels"
                 />
               </v-flex>
             </v-layout>
@@ -172,7 +202,7 @@ export default {
     selectedCompany() {
       this.companyFieldEnabled = false
       this.company = this.selectedCompany
-    }
+    },
   },
   beforeMount() {
     this.getUsernames()
@@ -220,7 +250,11 @@ export default {
       }
     },
     submitContact(savedCompanyId) {
-      const maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+      const maybeCompany = this.company?.id
+        ? `?companyId=${this.company.id}`
+        : savedCompanyId
+        ? `?companyId=${savedCompanyId}`
+        : ""
       this.loading = true
 
       api
@@ -244,7 +278,7 @@ export default {
           console.log(error)
           alert(error)
         })
-        .finally(() => this.loading = false)
+        .finally(() => (this.loading = false))
     },
     submitCompany() {
       this.loading = true

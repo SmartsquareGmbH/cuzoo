@@ -13,7 +13,7 @@
         </v-menu>
       </v-card-title>
       <div v-if="loading">
-        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+        <v-progress-linear slot="progress" class="mt-0" color="blue" indeterminate />
       </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
@@ -36,8 +36,8 @@
                   api-path="point/get/types"
                   type="Art"
                   hide-details=""
-                  @label-added="setContactPointTypes"
                   :disabled="loading"
+                  @label-added="setContactPointTypes"
                 />
               </v-flex>
               <v-flex xs7>
@@ -89,7 +89,13 @@
                     hide-details
                     :disabled="loading"
                   />
-                  <v-date-picker v-model="date" :max="new Date().toISOString()" scrollable locale="de" :disabled="loading">
+                  <v-date-picker
+                    v-model="date"
+                    :max="new Date().toISOString()"
+                    scrollable
+                    locale="de"
+                    :disabled="loading"
+                  >
                     <v-spacer />
                     <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
                     <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -121,7 +127,13 @@
                 </v-combobox>
               </v-flex>
               <v-flex xs12>
-                <v-textarea v-model="editedContactPoint.comment" prepend-icon="comment" label="Kommentar" rows="5" :disabled="loading" />
+                <v-textarea
+                  v-model="editedContactPoint.comment"
+                  prepend-icon="comment"
+                  label="Kommentar"
+                  rows="5"
+                  :disabled="loading"
+                />
               </v-flex>
               <v-flex xs12>
                 <label-box
@@ -130,8 +142,8 @@
                   type="Labels"
                   hide-details
                   :class="`mb-${opportunityMenu ? 2 : 0}`"
-                  @label-added="setContactPointLabels"
                   :disabled="loading"
+                  @label-added="setContactPointLabels"
                 />
               </v-flex>
               <v-flex xs12>
@@ -254,7 +266,10 @@ export default {
       compulsory: [(v) => !!v || "Bitte geben Sie etwas ein"],
       contactRules: [
         (v) => !!v || "Bitte geben Sie einen Ansprechpartner an",
-        (v) => (this.editedIndex !== -1 && this.contactNames.includes(v)) || this.editedIndex === -1 || "Dieser Ansprechpartner existiert nicht",
+        (v) =>
+          (this.editedIndex !== -1 && this.contactNames.includes(v)) ||
+          this.editedIndex === -1 ||
+          "Dieser Ansprechpartner existiert nicht",
       ],
       newOpportunity: false,
       companyOpportunities: [],
@@ -483,7 +498,11 @@ export default {
       let maybeCompany = ""
 
       if (!this.opportunity) {
-        maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+        maybeCompany = this.company?.id
+          ? `?companyId=${this.company.id}`
+          : savedCompanyId
+          ? `?companyId=${savedCompanyId}`
+          : ""
       } else {
         maybeCompany = `?companyId=${this.companies[0].id}`
       }
@@ -514,7 +533,7 @@ export default {
 
     submitContactPoint(submitedContactId) {
       const contact = this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
-      const contactId = contact ? contact.id : (submitedContactId ? submitedContactId : "")
+      const contactId = contact ? contact.id : submitedContactId ? submitedContactId : ""
 
       this.loading = true
       api
@@ -550,7 +569,7 @@ export default {
                 console.log(error)
                 alert(error)
               })
-              .finally(() => this.loading = false)
+              .finally(() => (this.loading = false))
           } else {
             this.loading = false
             this.$emit("refresh")

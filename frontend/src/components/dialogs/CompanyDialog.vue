@@ -5,7 +5,7 @@
         {{ formTitle }}
       </v-card-title>
       <div v-if="loading">
-        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+        <v-progress-linear slot="progress" class="mt-0" color="blue" indeterminate />
       </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
@@ -46,7 +46,12 @@
                 <v-text-field v-model="editedCompany.place" label="Ort" hide-details :disabled="loading"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="editedCompany.homepage" label="Homepage" prepend-icon="home" :disabled="loading"></v-text-field>
+                <v-text-field
+                  v-model="editedCompany.homepage"
+                  label="Homepage"
+                  prepend-icon="home"
+                  :disabled="loading"
+                ></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-textarea
@@ -75,8 +80,8 @@
                   :current-labels="editedCompany.labels"
                   api-path="company/get/labels"
                   type="Labels"
-                  @label-added="setCompanyLabels"
                   :disabled="loading"
+                  @label-added="setCompanyLabels"
                 />
               </v-flex>
             </v-layout>
@@ -177,7 +182,7 @@ export default {
           console.log(error)
           alert(error)
         })
-        .finally(() => this.loading = false)
+        .finally(() => (this.loading = false))
     },
     setCompanyLabels(labels) {
       this.editedCompany.labels = labels
