@@ -49,7 +49,7 @@
         </v-flex>
         <contact-dialog
           v-model="contactDialogState"
-          :companies="[Object.assign({}, { id: company.id, name: company.name })]"
+          :selected-company="Object.assign({}, { id: company.id, name: company.name })"
           @input="contactDialogState = false"
         />
         <v-flex md12 lg6>

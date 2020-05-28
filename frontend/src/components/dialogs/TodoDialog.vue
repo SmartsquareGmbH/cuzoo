@@ -4,6 +4,9 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
+      <div v-if="loading" >
+        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
           <v-container grid-list-md>
@@ -19,6 +22,7 @@
                   label="TODO"
                   rows="3"
                   suffix="*"
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs3>
@@ -32,6 +36,7 @@
                   offset-y
                   full-width
                   min-width="290px"
+                  :disabled="loading"
                 >
                   <v-text-field
                     slot="activator"
@@ -40,8 +45,9 @@
                     prepend-icon="event"
                     label="Fällig am"
                     suffix="*"
+                    :disabled="loading"
                   />
-                  <v-date-picker v-model="date" :min="new Date().toISOString()" scrollable locale="de">
+                  <v-date-picker v-model="date" :min="new Date().toISOString()" scrollable locale="de" :disabled="loading">
                     <v-spacer />
                     <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
                     <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -56,6 +62,7 @@
                   prepend-icon="notifications"
                   label="Erinnerung"
                   suffix="*"
+                  :disabled="loading"
                 >
                   <template slot="item" slot-scope="data">
                     {{ data.item }}
@@ -73,6 +80,7 @@
                   prepend-icon="business"
                   suffix="*"
                   label="Unternehmen"
+                  :disabled="loading"
                 >
                   <template slot="no-data">
                     <v-list-tile>
@@ -93,9 +101,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-        <v-btn color="primary" flat :disabled="!valid" @click="submitTodo()">Speichern</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click.native="closeDialog()">Abbrechen</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+        <v-btn color="primary" flat :disabled="!valid || loading" @click="submitTodo()">Speichern</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -115,6 +123,7 @@ export default {
   props: ["value", "companies"],
   data() {
     return {
+      loading: false,
       date: expirationDate.toISOString().substr(0, 10),
       dateRules: [(v) => !!v || "Bitte geben Sie ein Fälligkeitsdatum an"],
       reminders: ["1 Tag vorher", "3 Tage vorher", "1 Woche vorher"],
@@ -208,6 +217,7 @@ export default {
         }
       }
 
+      this.loading = true
       api
         .put(`todo/submit/${this.company.id}`, {
           id: this.editedTodo.id,
@@ -223,6 +233,7 @@ export default {
         .catch((error) => {
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
     getReminderDate() {
       switch (this.editedTodo.reminder) {

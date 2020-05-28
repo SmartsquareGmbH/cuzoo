@@ -4,6 +4,9 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
+      <div v-if="loading" >
+        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
           <v-container grid-list-md>
@@ -18,6 +21,7 @@
                   required
                   :rules="[(v) => !!v || 'Bitte geben Sie einen Namen an']"
                   hide-details
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs6>
@@ -30,6 +34,7 @@
                   required
                   :rules="managerRules"
                   hide-details
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs12>
@@ -39,7 +44,7 @@
                   item-text="name"
                   item-value="name"
                   :search-input.sync="companyNameEntered"
-                  :disabled="!companyFieldEnabled"
+                  :disabled="!companyFieldEnabled || loading"
                   label="Unternehmen"
                   prepend-icon="business"
                   hide-details
@@ -57,19 +62,19 @@
                 </v-combobox>
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.mail" prepend-icon="mail" label="E-Mail" hide-details />
+                <v-text-field v-model="editedContact.mail" prepend-icon="mail" label="E-Mail" hide-details :disabled="loading" />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.role" label="Rolle" prepend-icon="work" hide-details />
+                <v-text-field v-model="editedContact.role" label="Rolle" prepend-icon="work" hide-details :disabled="loading" />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.telephone" prepend-icon="call" label="Telefon" hide-details />
+                <v-text-field v-model="editedContact.telephone" prepend-icon="call" label="Telefon" hide-details :disabled="loading" />
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="editedContact.mobile" prepend-icon="smartphone" label="Mobil" hide-details />
+                <v-text-field v-model="editedContact.mobile" prepend-icon="smartphone" label="Mobil" hide-details :disabled="loading" />
               </v-flex>
               <v-flex xs12>
-                <v-textarea v-model="editedContact.comment" name="input-7-4" label="Bemerkung" rows="3" />
+                <v-textarea v-model="editedContact.comment" name="input-7-4" label="Bemerkung" rows="3" :disabled="loading" />
               </v-flex>
               <v-flex xs12>
                 <label-box
@@ -77,6 +82,7 @@
                   api-path="contact/get/labels"
                   type="Labels"
                   @label-added="setContactLabels"
+                  :disabled="loading"
                 />
               </v-flex>
             </v-layout>
@@ -86,9 +92,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-        <v-btn color="primary" flat :disabled="!valid" @click="submit()">Speichern</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="closeDialog()">Abbrechen</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+        <v-btn color="primary" flat :disabled="!valid || loading" @click="submit()">Speichern</v-btn>
       </v-card-actions>
     </v-card>
     <confirm-dialog
@@ -111,9 +117,10 @@ export default {
     LabelBox,
     ConfirmDialog,
   },
-  props: ["value", "companies"],
+  props: ["value", "companies", "selectedCompany"],
   data() {
     return {
+      loading: false,
       valid: false,
       companyFieldEnabled: true,
       confirmDialogState: false,
@@ -159,14 +166,13 @@ export default {
       this.company = company
     },
     companies() {
-      if (this.companies.length === 1) {
-        this.company = this.companies[0]
-        this.companyFieldEnabled = false
-      } else {
-        this.companyFieldEnabled = true
-        this.company = undefined
-      }
+      this.companyFieldEnabled = true
+      this.company = undefined
     },
+    selectedCompany() {
+      this.companyFieldEnabled = false
+      this.company = this.selectedCompany
+    }
   },
   beforeMount() {
     this.getUsernames()
@@ -189,20 +195,21 @@ export default {
 
         this.storeCompany({})
         this.editedContact.manager = this.username
-        this.company = ""
+        this.company = this.getCompany()
       }, 300)
     },
     clearDialog() {
       this.$refs.form.reset()
 
-      if (this.$route.name === "companyView") {
-        setTimeout(() => (this.company = this.getCompany()))
-      }
-
-      this.editedContact.manager = this.username
+      setTimeout(() => {
+        if (this.selectedCompany) {
+          this.company = this.getCompany()
+        }
+        this.editedContact.manager = this.username
+      })
     },
     submit() {
-      if (this.companyNameEntered) {
+      if (!this.selectedCompany && this.companyNameEntered) {
         if (this.companies.some((it) => it.name === this.companyNameEntered)) {
           this.submitContact()
         } else {
@@ -214,6 +221,7 @@ export default {
     },
     submitContact(savedCompanyId) {
       const maybeCompany = this.company?.id ? `?companyId=${this.company.id}` : (savedCompanyId ? `?companyId=${savedCompanyId}` : "")
+      this.loading = true
 
       api
         .put(`contact/submit${maybeCompany}`, {
@@ -236,8 +244,10 @@ export default {
           console.log(error)
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
     submitCompany() {
+      this.loading = true
       api
         .put("company/submit", {
           name: this.companyNameEntered,
@@ -253,6 +263,7 @@ export default {
           this.submitContact(response.data)
         })
         .catch((error) => {
+          this.loading = false
           console.log(error)
           alert(error)
         })
@@ -261,13 +272,11 @@ export default {
       this.editedContact.labels = labels
     },
     getCompany() {
-      if (this.editedContact.company) {
-        return this.editedContact.company
-      } else if (this.companyNames.length === 1) {
+      if (this.selectedCompany) {
         this.companyFieldEnabled = false
-        return this.companies[0]
+        return this.selectedCompany
       } else {
-        return null
+        return ""
       }
     },
     encodeString(value) {

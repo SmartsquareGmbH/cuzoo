@@ -4,14 +4,17 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
         <v-spacer />
-        <v-menu top offset-x open-on-hover :close-on-content-click="false" :value="emojiMenuState">
-          <v-btn slot="activator" small color="secondary">
+        <v-menu top offset-x open-on-hover :close-on-content-click="false" :value="emojiMenuState" :disabled="loading">
+          <v-btn slot="activator" small color="secondary" :disabled="loading">
             <span v-if="!editedContactPoint.rating" class="title font-weight-medium">+ 😃</span>
             <emoji v-else :emoji="editedContactPoint.rating" :size="24" set="messenger" class="emoji-on-dialog" />
           </v-btn>
           <emoji-picker @emoji-chosen="addEmoji" />
         </v-menu>
       </v-card-title>
+      <div v-if="loading">
+        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
           <v-container grid-list-md>
@@ -24,6 +27,7 @@
                   label="Titel"
                   suffix="*"
                   hide-details
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs5>
@@ -33,6 +37,7 @@
                   type="Art"
                   hide-details=""
                   @label-added="setContactPointTypes"
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs7>
@@ -45,6 +50,7 @@
                   label="Ansprechpartner"
                   hide-details
                   :search-input.sync="contactNameEntered"
+                  :disabled="loading"
                 >
                   <template v-if="editedIndex === -1" slot="no-data">
                     <v-list-tile>
@@ -70,6 +76,7 @@
                   full-width
                   min-width="290px"
                   hide-details
+                  :disabled="loading"
                 >
                   <v-text-field
                     slot="activator"
@@ -80,8 +87,9 @@
                     suffix="*"
                     readonly
                     hide-details
+                    :disabled="loading"
                   />
-                  <v-date-picker v-model="date" :max="new Date().toISOString()" scrollable locale="de">
+                  <v-date-picker v-model="date" :max="new Date().toISOString()" scrollable locale="de" :disabled="loading">
                     <v-spacer />
                     <v-btn flat color="primary" @click="menu = false">Abbrechen</v-btn>
                     <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -98,6 +106,7 @@
                   label="Unternehmen"
                   prepend-icon="business"
                   hide-details
+                  :disabled="loading"
                 >
                   <template slot="no-data">
                     <v-list-tile>
@@ -112,7 +121,7 @@
                 </v-combobox>
               </v-flex>
               <v-flex xs12>
-                <v-textarea ref="commentarField" v-model="editedContactPoint.comment" prepend-icon="comment" label="Kommentar" rows="5" />
+                <v-textarea v-model="editedContactPoint.comment" prepend-icon="comment" label="Kommentar" rows="5" :disabled="loading" />
               </v-flex>
               <v-flex xs12>
                 <label-box
@@ -122,6 +131,7 @@
                   hide-details
                   :class="`mb-${opportunityMenu ? 2 : 0}`"
                   @label-added="setContactPointLabels"
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs12>
@@ -135,6 +145,7 @@
                         prepend-icon="title"
                         label="Opportunity-Titel"
                         hide-details
+                        :disabled="loading"
                       />
                     </v-flex>
                     <v-flex xs4>
@@ -146,6 +157,7 @@
                         prepend-icon="bubble_chart"
                         label="Status"
                         hide-details
+                        :disabled="loading"
                       />
                     </v-flex>
                     <v-expand-transition>
@@ -156,6 +168,7 @@
                           label="Kurzbeschreibung"
                           rows="5"
                           hide-details
+                          :disabled="loading"
                         />
                       </v-flex>
                     </v-expand-transition>
@@ -168,7 +181,7 @@
         <div class="mr-2">* Pflichtfelder</div>
       </v-card-text>
       <v-card-actions>
-        <div v-if="!opportunity">
+        <div v-if="!opportunity && !loading">
           <v-btn v-if="newOpportunityButton" color="success" flat @click.native="createOpportunity()">
             Neue Opportunity
             <v-icon v-if="opportunityMenu">keyboard_arrow_up</v-icon>
@@ -196,9 +209,9 @@
           </v-menu>
         </div>
         <v-spacer />
-        <v-btn color="primary" flat @click.native="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-        <v-btn color="primary" flat :disabled="!valid" @click="submit()">Speichern</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click.native="closeDialog()">Abbrechen</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+        <v-btn color="primary" flat :disabled="!valid || loading" @click="submit()">Speichern</v-btn>
       </v-card-actions>
     </v-card>
     <confirm-dialog
@@ -231,6 +244,7 @@ export default {
   props: ["value", "contactNames", "opportunity", "companies"],
   data() {
     return {
+      loading: false,
       opportunityMenu: false,
       opportunityList: false,
       date: new Date().toISOString().substr(0, 10),
@@ -240,7 +254,7 @@ export default {
       compulsory: [(v) => !!v || "Bitte geben Sie etwas ein"],
       contactRules: [
         (v) => !!v || "Bitte geben Sie einen Ansprechpartner an",
-        (v) => (this.editedIndex != -1 && this.contactNames.includes(v)) || this.editedIndex === -1 || "Dieser Ansprechpartner existiert nicht",
+        (v) => (this.editedIndex !== -1 && this.contactNames.includes(v)) || this.editedIndex === -1 || "Dieser Ansprechpartner existiert nicht",
       ],
       newOpportunity: false,
       companyOpportunities: [],
@@ -313,7 +327,7 @@ export default {
         !this.opportunity &&
         this.editedIndex === -1 &&
         this.contactNameEntered &&
-        !this.contacts.find((it) => it.name === this.editedContactPoint.contact.name)
+        !this.contacts.find((it) => it.name === this.contactNameEntered)
       )
     },
     newOpportunityButton() {
@@ -382,12 +396,14 @@ export default {
       storeOpportunityDetails: "storeEditedOpportunityDetails",
     }),
     clearDialog() {
-      const tempContactName = this.editedContactPoint.contact.name
+      const tempContactName = this.editedIndex !== -1 ? this.editedContactPoint.contact.name : ""
+
       this.$refs.form.reset()
-      this.editedContactPoint.contact.name = tempContactName
       this.editedContactPoint.rating = undefined
+      this.company = ""
 
       setTimeout(() => {
+        this.editedContactPoint.contact.name = tempContactName
         this.date = new Date().toISOString().substr(0, 10)
         this.editedOpportunity.state = "Lead"
         this.opportunityMenu = false
@@ -395,6 +411,11 @@ export default {
     },
     closeDialog() {
       this.$emit("input")
+
+      if (this.editedIndex === -1) {
+        this.editedContactPoint.contact.name = ""
+      }
+      this.company = ""
 
       setTimeout(() => {
         this.storeContactPointDetails({
@@ -404,8 +425,6 @@ export default {
 
         this.resetEditedOpportunity()
         this.editedContactPoint.rating = undefined
-        this.editedContactPoint.contact.name = ""
-        this.company = ""
 
         this.opportunityMenu = false
       }, 300)
@@ -435,6 +454,7 @@ export default {
 
     submitCompany() {
       if (this.companyNameEntered && !this.companies.some((it) => it.name === this.companyNameEntered)) {
+        this.loading = true
         api
           .put("company/submit", {
             name: this.companyNameEntered,
@@ -450,6 +470,7 @@ export default {
             this.submitContact(response.data)
           })
           .catch((error) => {
+            this.loading = false
             console.log(error)
             alert(error)
           })
@@ -467,6 +488,7 @@ export default {
         maybeCompany = `?companyId=${this.companies[0].id}`
       }
 
+      this.loading = true
       api
         .put(`contact/submit${maybeCompany}`, {
           name: this.contactNameEntered,
@@ -484,6 +506,7 @@ export default {
           this.submitContactPoint(response.data)
         })
         .catch((error) => {
+          this.loading = false
           console.log(error)
           alert(error)
         })
@@ -493,6 +516,7 @@ export default {
       const contact = this.contacts.find((it) => it.name.includes(this.editedContactPoint.contact.name))
       const contactId = contact ? contact.id : (submitedContactId ? submitedContactId : "")
 
+      this.loading = true
       api
         .put(`point/submit/${contactId}`, {
           title: this.editedContactPoint.title,
@@ -509,6 +533,7 @@ export default {
           const contactPointId = res.data
 
           if (this.opportunityMenu || this.opportunity) {
+            this.loading = true
             api
               .put(`opportunity/submit/contactpoint/${contactPointId}`, {
                 id: this.editedOpportunity.id,
@@ -525,12 +550,15 @@ export default {
                 console.log(error)
                 alert(error)
               })
+              .finally(() => this.loading = false)
           } else {
+            this.loading = false
             this.$emit("refresh")
             this.closeDialog()
           }
         })
         .catch((error) => {
+          this.loading = false
           console.log(error)
           alert(error)
         })
@@ -606,7 +634,7 @@ export default {
       }
     },
     getContactCompany(contactName) {
-      const contact = this.contacts.find((it) => it.name.includes(contactName))
+      const contact = this.contacts.find((it) => it.name === contactName)
       return contact?.company?.name || ""
     },
     addEmoji(emoji) {

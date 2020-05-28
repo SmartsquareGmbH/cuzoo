@@ -12,6 +12,7 @@
     multiple
     solo
     :hide-details="hideDetails"
+    :disabled="disabled"
     @change="resetLabels()"
   >
     <template slot="selection" slot-scope="label" tabindex="-1">
@@ -39,7 +40,7 @@ import debounce from "lodash.debounce"
 const debouncedLabelApiCall = debounce(getLabelsByInput, 150, { leading: true })
 
 export default {
-  props: ["apiPath", "type", "currentLabels", "hideDetails"],
+  props: ["apiPath", "type", "currentLabels", "hideDetails", "disabled"],
   data: () => ({
     labels: [],
     responseLabels: [],
