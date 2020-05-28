@@ -29,8 +29,6 @@
                   prepend-icon="bubble_chart"
                   hide-details
                   suffix="*"
-                  :items="opportunityStatuses"
-                  :rules="opportunityStatusRules"
                   disabled
                 />
               </v-flex>
