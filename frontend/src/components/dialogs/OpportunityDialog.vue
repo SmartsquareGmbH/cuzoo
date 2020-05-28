@@ -4,6 +4,9 @@
       <v-card-title class="headline primary" primary-title>
         {{ formTitle }}
       </v-card-title>
+      <div v-if="loading">
+        <v-progress-linear class="mt-0" slot="progress" color="blue" indeterminate />
+      </div>
       <v-card-text class="text-xs-right primary--text">
         <v-form ref="form" v-model="valid">
           <v-container grid-list-md>
@@ -16,6 +19,7 @@
                   hide-details
                   suffix="*"
                   :rules="opportunityTitleRules"
+                  :disabled="loading"
                 ></v-text-field>
               </v-flex>
               <v-flex xs6>
@@ -27,6 +31,7 @@
                   suffix="*"
                   :items="opportunityStatuses"
                   :rules="opportunityStatusRules"
+                  :disabled="loading"
                 />
               </v-flex>
               <v-flex xs12>
@@ -37,6 +42,7 @@
                   name="input-7-4"
                   label="Beschreibung"
                   rows="3"
+                  :disabled="loading"
                 ></v-textarea>
               </v-flex>
             </v-layout>
@@ -46,9 +52,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click="closeDialog()">Abbrechen</v-btn>
-        <v-btn color="primary" flat @click="clearDialog()">Zurücksetzen</v-btn>
-        <v-btn color="primary" flat :disabled="!valid" @click="submitOpportunity()">Speichern</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="closeDialog()">Abbrechen</v-btn>
+        <v-btn color="primary" flat :disabled="loading" @click="clearDialog()">Zurücksetzen</v-btn>
+        <v-btn color="primary" flat :disabled="!valid || loading" @click="submitOpportunity()">Speichern</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -63,6 +69,7 @@ export default {
   data() {
     return {
       valid: false,
+      loading: false,
       opportunityTitleRules: [(v) => !!v || "Bitte geben Sie eine Opportunity an"],
       opportunityStatuses: ["Lose", "Lead", "Prospect", "Quote", "Win"],
       opportunityStatusRules: [
@@ -110,6 +117,7 @@ export default {
       this.editedOpportunity.description = ""
     },
     submitOpportunity() {
+      this.loading = true
       api
         .put(`opportunity/submit`, {
           id: this.editedOpportunity.id,
@@ -125,6 +133,7 @@ export default {
           console.log(error)
           alert(error)
         })
+        .finally(() => this.loading = false)
     },
   },
 }
