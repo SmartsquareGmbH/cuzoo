@@ -117,7 +117,7 @@ export default {
     LabelBox,
     ConfirmDialog,
   },
-  props: ["value", "companies"],
+  props: ["value", "companies", "selectedCompany"],
   data() {
     return {
       loading: false,
@@ -166,14 +166,13 @@ export default {
       this.company = company
     },
     companies() {
-      if (this.$route.name === "companyView") {
-        this.company = this.companies[0]
-        this.companyFieldEnabled = false
-      } else {
-        this.companyFieldEnabled = true
-        this.company = undefined
-      }
+      this.companyFieldEnabled = true
+      this.company = undefined
     },
+    selectedCompany() {
+      this.companyFieldEnabled = false
+      this.company = this.selectedCompany
+    }
   },
   beforeMount() {
     this.getUsernames()
@@ -203,14 +202,14 @@ export default {
       this.$refs.form.reset()
 
       setTimeout(() => {
-        if (this.$route.name === "companyView") {
+        if (this.selectedCompany) {
           this.company = this.getCompany()
         }
         this.editedContact.manager = this.username
       })
     },
     submit() {
-      if (this.companyNameEntered) {
+      if (!this.selectedCompany && this.companyNameEntered) {
         if (this.companies.some((it) => it.name === this.companyNameEntered)) {
           this.submitContact()
         } else {
@@ -273,9 +272,9 @@ export default {
       this.editedContact.labels = labels
     },
     getCompany() {
-      if (this.$route.name === "companyView") {
+      if (this.selectedCompany) {
         this.companyFieldEnabled = false
-        return this.companies[0]
+        return this.selectedCompany
       } else {
         return ""
       }
