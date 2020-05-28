@@ -227,25 +227,25 @@ export default {
     getReminderDate() {
       switch (this.editedTodo.reminder) {
         case this.reminders[0]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 1)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 1)
           return reminderDate.getTime()
         case this.reminders[1]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 3)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 3)
           return reminderDate.getTime()
         case this.reminders[2]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 7)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 7)
           return reminderDate.getTime()
       }
     },
     getDateAsReminder() {
-      const expirationDate = datefns.parse(this.editedTodo.expiration).getDate()
+      const expirationDate = datefns.parse(this.editedTodo.expiration)
       const convertedReminder = datefns.parse(new Date(this.editedTodo.reminder))
 
-      if (datefns.isSameDay(datefns.parse(new Date().setDate(expirationDate - 1)), convertedReminder)) {
+      if (datefns.isSameDay(datefns.subDays(expirationDate,1), convertedReminder)) {
         return this.reminders[0]
-      } else if (datefns.isSameDay(datefns.parse(new Date().setDate(expirationDate - 3)), convertedReminder)) {
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate,3), convertedReminder)) {
         return this.reminders[1]
-      } else if (datefns.isSameDay(datefns.parse(new Date().setDate(expirationDate - 7)), convertedReminder)) {
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate,7), convertedReminder)) {
         return this.reminders[2]
       }
     },
