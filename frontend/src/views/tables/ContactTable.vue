@@ -167,15 +167,13 @@ export default {
           console.log(error)
         })
     },
-    refreshTable() {
-      this.getCompanies().then(() => {
-        this.getContacts().then(() => {
-          this.mappedCompanies = this.companies
-            .map((company) => Object.assign({}, { id: company.id, name: company.name }))
-            .sort()
-          this.loading = false
-        })
-      })
+    async refreshTable() {
+      await this.getCompanies()
+      await this.getContacts()
+      this.mappedCompanies = this.companies
+        .map((company) => Object.assign({}, { id: company.id, name: company.name }))
+        .sort()
+      this.loading = false
     },
     editContact(item) {
       this.storeEditedDetails({
