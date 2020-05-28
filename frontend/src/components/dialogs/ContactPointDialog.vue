@@ -254,7 +254,7 @@ export default {
       compulsory: [(v) => !!v || "Bitte geben Sie etwas ein"],
       contactRules: [
         (v) => !!v || "Bitte geben Sie einen Ansprechpartner an",
-        (v) => (this.editedIndex != -1 && this.contactNames.includes(v)) || this.editedIndex === -1 || "Dieser Ansprechpartner existiert nicht",
+        (v) => (this.editedIndex !== -1 && this.contactNames.includes(v)) || this.editedIndex === -1 || "Dieser Ansprechpartner existiert nicht",
       ],
       newOpportunity: false,
       companyOpportunities: [],
@@ -396,7 +396,7 @@ export default {
       storeOpportunityDetails: "storeEditedOpportunityDetails",
     }),
     clearDialog() {
-      const tempContactName =  this.$route.name === "contactPointView" ? this.editedContactPoint.contact.name : ""
+      const tempContactName = this.editedIndex !== -1 ? this.editedContactPoint.contact.name : ""
 
       this.$refs.form.reset()
       this.editedContactPoint.rating = undefined
@@ -412,7 +412,7 @@ export default {
     closeDialog() {
       this.$emit("input")
 
-      if (this.$route.name !== "contactPointView") {
+      if (this.editedIndex === -1) {
         this.editedContactPoint.contact.name = ""
       }
       this.company = ""
