@@ -148,14 +148,10 @@ export default {
       this.mappedCompanies = this.companies.map((it) => Object.assign({}, { id: it.id, name: it.name })).sort()
       this.todoDialogState = true
     },
-    refreshTodos() {
-      this.getCompanies().then(() => {
-        this.getTodos().then(() => {
-          this.mappedCompanies = this.companies.map((company) =>
-            Object.assign({}, { id: company.id, name: company.name })
-          )
-        })
-      })
+    async refreshTodos() {
+      await this.getCompanies()
+      await this.getTodos()
+      this.mappedCompanies = this.companies.map((company) => Object.assign({}, { id: company.id, name: company.name }))
     },
   },
 }

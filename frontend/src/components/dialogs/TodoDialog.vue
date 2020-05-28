@@ -200,7 +200,7 @@ export default {
         reminderAsDate = this.getReminderDate()
       } else {
         if (this.editedTodo.expiration && !datefns.isSameDay(datefns.parse(this.editedTodo.expiration), datefns.parse(this.date))) {
-          // Wenn expiration date geändert wurde, muss das reminder date angepasst werden
+          // If the expiration date is changed, the reminder date has to be adjusted
           this.editedTodo.reminder = this.getDateAsReminder()
           reminderAsDate = this.getReminderDate()
         } else {
