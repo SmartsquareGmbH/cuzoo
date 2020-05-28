@@ -45,7 +45,6 @@
                     prepend-icon="event"
                     label="Fällig am"
                     suffix="*"
-                    readonly
                     :disabled="loading"
                   />
                   <v-date-picker v-model="date" :min="new Date().toISOString()" scrollable locale="de" :disabled="loading">
@@ -57,10 +56,10 @@
               </v-flex>
               <v-flex xs9>
                 <v-combobox
-                  v-model="editedTodo.reminder"
+                  v-model="editedTodoReminder"
                   :items="reminders"
                   :rules="reminderRules"
-                  prepend-icon="timer"
+                  prepend-icon="notifications"
                   label="Erinnerung"
                   suffix="*"
                   :disabled="loading"
@@ -125,19 +124,21 @@ export default {
   data() {
     return {
       loading: false,
-      formTitle: "TODO hinzufügen",
       date: expirationDate.toISOString().substr(0, 10),
       dateRules: [(v) => !!v || "Bitte geben Sie ein Fälligkeitsdatum an"],
       reminders: ["1 Tag vorher", "3 Tage vorher", "1 Woche vorher"],
       companyRules: [
         (v) => !!v || "Bitte geben Sie ein Unternehmen an",
-        (v) => this.companies.includes(v) || "Dieses Unternehmen existiert nicht",
+        (v) => this.companies.some((it) => it.name === v?.name) || "Dieses Unternehmen existiert nicht",
       ],
-      reminderRules: [(v) => !!v || "Bitte geben Sie an, wann Sie erinnert werden möchten"],
+      reminderRules: [
+        (v) => !!v || "Bitte geben Sie an, wann Sie erinnert werden möchten",
+        (v) => this.reminders.includes(v) || "Wählen Sie bitte einen gültigen Zeitpunkt aus",
+      ],
       descriptionRules: [(v) => !!v || "Bitte geben Sie eine Beschreibung an"],
       menu: false,
       valid: true,
-      company: undefined,
+      company: "",
       companyNameEntered: "",
       defaultTodo: {
         id: 0,
@@ -154,28 +155,75 @@ export default {
       username: "username",
       editedIndex: "editedTodoIndex",
       editedTodo: "editedTodo",
+      editedCompany: "editedTodoCompany",
     }),
-    dateFormatted() {
-      return datefns.format(this.date, "DD.MM.YY", { locale: de })
+    formTitle() {
+      return this.editedIndex === -1 ? "TODO hinzufügen" : "TODO bearbeiten"
+    },
+    dateFormatted: {
+      get() {
+        return datefns.format(this.date, "DD.MM.YY", { locale: de })
+      },
+      set(newDate) {
+        this.date = newDate
+      },
+    },
+    editedTodoReminder: {
+      get() {
+        if (this.editedTodo.reminder) {
+          if (!this.reminders.includes(this.editedTodo.reminder)) {
+            return this.getDateAsReminder()
+          }
+          return this.editedTodo.reminder
+        } else {
+          return ""
+        }
+      },
+      set(reminder) {
+        this.editedTodo.reminder = reminder
+      },
     },
   },
   watch: {
     value() {
       this.$refs.form.resetValidation()
+
+      if (this.editedTodo.expiration) {
+        this.date = datefns.format(this.editedTodo.expiration, "YYYY-MM-DD", { locale: de })
+      } else {
+        this.date = new Date().toISOString().substr(0, 10)
+      }
+    },
+    editedCompany(company) {
+      this.company = company
     },
   },
   methods: {
     ...mapMutations({
       storeDetails: "storeEditedTodoDetails",
+      storeCompany: "storeEditedTodoCompany",
     }),
     submitTodo() {
+      let reminderAsDate
+      if (this.reminders.includes(this.editedTodo.reminder)) {
+        reminderAsDate = this.getReminderDate()
+      } else {
+        if (this.editedTodo.expiration && !datefns.isSameDay(datefns.parse(this.editedTodo.expiration), datefns.parse(this.date))) {
+          // If the expiration date is changed, the reminder date has to be adjusted
+          this.editedTodo.reminder = this.getDateAsReminder()
+          reminderAsDate = this.getReminderDate()
+        } else {
+          reminderAsDate = datefns.parse(this.editedTodo.reminder).getTime()
+        }
+      }
+
       this.loading = true
       api
         .put(`todo/submit/${this.company.id}`, {
           id: this.editedTodo.id,
           description: this.editedTodo.description,
           expiration: datefns.parse(this.date).getTime(),
-          reminder: this.getReminderDate(),
+          reminder: reminderAsDate,
           creator: this.username,
         })
         .then(() => {
@@ -190,29 +238,44 @@ export default {
     getReminderDate() {
       switch (this.editedTodo.reminder) {
         case this.reminders[0]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 1)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 1)
           return reminderDate.getTime()
         case this.reminders[1]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 3)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 3)
           return reminderDate.getTime()
         case this.reminders[2]:
-          reminderDate.setDate(datefns.parse(this.date).getDate() - 7)
+          reminderDate = datefns.subDays(datefns.parse(this.date), 7)
           return reminderDate.getTime()
+      }
+    },
+    getDateAsReminder() {
+      const expirationDate = datefns.parse(this.editedTodo.expiration)
+      const convertedReminder = datefns.parse(new Date(this.editedTodo.reminder))
+
+      if (datefns.isSameDay(datefns.subDays(expirationDate,1), convertedReminder)) {
+        return this.reminders[0]
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate,3), convertedReminder)) {
+        return this.reminders[1]
+      } else if (datefns.isSameDay(datefns.subDays(expirationDate,7), convertedReminder)) {
+        return this.reminders[2]
       }
     },
     clearDialog() {
       this.$refs.form.reset()
-      this.company = {}
+      setTimeout(() => {
+        this.company = ""
+        this.date = new Date().toISOString().substr(0, 10)
+      })
     },
     closeDialog() {
       this.$emit("input")
-      this.company = {}
 
       setTimeout(() => {
         this.storeDetails({
           editedIndex: -1,
           editedTodo: Object.assign({}, this.defaultTodo),
         })
+        this.storeCompany({})
       }, 300)
     },
   },

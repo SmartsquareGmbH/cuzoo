@@ -129,7 +129,7 @@ public class DemoDataLoader implements InitializingBean {
         opportunity1.setLastProgress(contactPoint3.getDate());
         opportunityRepository.save(opportunity1);
 
-        Todo todo1 = new Todo("Frau Ma bzgl. des Worskshops kontaktieren", company, this.getTodayIncrementedBy(-2), this.getTodayIncrementedBy(-1));
+        Todo todo1 = new Todo("Frau Ma bzgl. des Worskshops kontaktieren", company, this.getTodayIncrementedBy(-2), this.getTodayIncrementedBy(-3));
         todo1.setCreator(demo);
         todoRepository.save(todo1);
     }

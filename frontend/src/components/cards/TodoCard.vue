@@ -55,12 +55,12 @@
         <slot />
       </v-card>
     </v-hover>
-    <edit-todo-dialog
+    <todo-dialog
       v-model="todoDialogState"
       :companies="mappedCompanies"
       @refresh="refreshTodos()"
       @input="todoDialogState = false"
-    ></edit-todo-dialog>
+    ></todo-dialog>
   </v-flex>
 </template>
 
@@ -69,27 +69,22 @@ import api from "../../utils/http-common"
 
 import Chip from "../core/Chip.vue"
 import { mapActions, mapGetters, mapMutations } from "vuex"
-import EditTodoDialog from "../dialogs/EditTodoDialog.vue"
+import TodoDialog from "../dialogs/TodoDialog.vue"
 
 const datefns = require("date-fns")
 const de = require("date-fns/locale/de")
 
 export default {
-  components: { EditTodoDialog, Chip },
+  components: {
+    TodoDialog,
+    Chip,
+  },
   props: ["todo"],
   data: () => ({
     mappedCompanies: [],
     expandMenu: false,
     fullDescription: false,
     todoDialogState: false,
-    defaultToDo: {
-      value: false,
-      id: 0,
-      description: "",
-      expiration: 0,
-      reminder: 0,
-      creator: "",
-    },
   }),
   computed: {
     ...mapGetters(["companies", "todos", "selectedCompany"]),
@@ -114,21 +109,15 @@ export default {
       }
     },
   },
+  beforeMount() {
+    this.refreshTodos()
+  },
   methods: {
-    ...mapActions(["getCompanies", "getContacts", "getContactPoints", "getOpportunities", "getTodos"]),
+    ...mapActions(["getCompanies", "getTodos"]),
     ...mapMutations({
       storeEditedTodoDetails: "storeEditedTodoDetails",
+      storeEditedTodoCompany: "storeEditedTodoCompany",
     }),
-    closeDialog() {
-      this.$emit("input")
-
-      setTimeout(() => {
-        this.storeDetails({
-          editedIndex: -1,
-          editedToDo: Object.assign({}, this.defaultToDo),
-        })
-      }, 300)
-    },
     taskIsDone(todo) {
       todo.done = true
       api.put(`todo/done/${this.todo.id}`)
@@ -153,19 +142,16 @@ export default {
         editedIndex: this.todos.indexOf(todo),
         editedTodo: Object.assign({}, todo),
       })
+      this.storeEditedTodoCompany({
+        editedCompany: Object.assign({}, { id: todo.company.id, name: todo.company.name }),
+      })
       this.mappedCompanies = this.companies.map((it) => Object.assign({}, { id: it.id, name: it.name })).sort()
       this.todoDialogState = true
     },
-    refreshTodos() {
-      this.refreshData()
-    },
-    refreshData() {
-      this.getCompanies()
-      this.getContacts()
-      this.getContactPoints().then(() => {
-        this.getOpportunities()
-        this.getTodos()
-      })
+    async refreshTodos() {
+      await this.getCompanies()
+      await this.getTodos()
+      this.mappedCompanies = this.companies.map((company) => Object.assign({}, { id: company.id, name: company.name }))
     },
   },
 }
