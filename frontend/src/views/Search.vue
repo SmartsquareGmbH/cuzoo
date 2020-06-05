@@ -96,15 +96,12 @@ export default {
         }
       }
     },
-    refreshData() {
-      this.getCompanies().then(() => {
-        this.getContacts().then(() => {
-          this.getContactPoints().then(() => {
-            this.loading = false
-            this.doFocus()
-          })
-        })
-      })
+    async refreshData() {
+      await this.getCompanies()
+      await this.getContacts()
+      await this.getContactPoints()
+      this.loading = false
+      this.doFocus()
     },
     searchResultsToContactPoint() {
       setTimeout(() => (this.searchForContactPoints = true), 300)
