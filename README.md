@@ -64,6 +64,9 @@ Additionally it provides a list view for companies, contacts and opportunities.
     </tbody>
 </table>
 
+### Lifecycle of an Opportunity
+![](opportunity_lifecycle.png)
+
 ## Project components
 Backend: Java, Spring Boot  
 Frontend: Vue.js, Vuetify  
