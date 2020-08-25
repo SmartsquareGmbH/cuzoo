@@ -1,1 +1,1 @@
-DROP TABLE "OPPORTUNITY_LABELS";
+DROP TABLE opportunity_labels;
